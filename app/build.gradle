@@ -1,0 +1,98 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+
+android {
+    namespace 'com.iw.android.prayerapp'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.iw.android.prayerapp"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures{
+        viewBinding true
+        dataBinding true
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    //CircularTimerView
+    implementation 'com.mikhaellopez:circularprogressbar:3.1.0'
+
+    //Adhan
+    implementation("com.batoulapps.adhan:adhan2:0.0.4")
+
+    //Permission
+    implementation 'com.guolindev.permissionx:permissionx:1.7.1'
+
+    //Dots Indicator
+    implementation("com.tbuonomo:dotsindicator:5.0")
+
+    //SSP
+    implementation 'com.intuit.ssp:ssp-android:1.1.0'
+
+    //SDP
+    implementation 'com.intuit.sdp:sdp-android:1.1.0'
+
+    def nav_version = "2.7.6"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    //ExpandableLayout
+    implementation "com.github.skydoves:expandablelayout:1.0.7"
+
+    //gson
+    implementation 'com.google.code.gson:gson:2.8.9'
+
+    // GPS dependencies
+    implementation("org.greenrobot:eventbus:3.3.1")
+    implementation 'com.google.android.gms:play-services-location:21.0.0'
+
+
+    def lifecycle_version = "2.6.2"
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
+    // Saved state module for ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+
+    // Annotation processor
+    kapt "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/prayer_screen"
+        android:icon="@drawable/bottom_selector_prayer"
+        android:title="Prayers" />
+
+    <item
+        android:id="@+id/time_screen"
+        android:icon="@drawable/bottom_selector_time"
+        android:title="Times" />
+
+    <item
+        android:id="@+id/qibla_screen"
+        android:icon="@drawable/bottom_selector_qibla"
+        android:title="Qibla" />
+
+    <item
+        android:id="@+id/setting_screen"
+        android:icon="@drawable/bottom_selector_setting"
+        android:title="Settings" />
+
+    <item
+        android:id="@+id/more_screen"
+        android:icon="@drawable/bottom_selector_more"
+        android:title="More" />
+</menu>

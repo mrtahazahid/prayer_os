@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Prayer App</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="assalamu_alaikum">Assalamu Alaikum!</string>
+    <string name="skip">Skip</string>
+    <string name="first_sub_heading">Pray Watch is a simple, modern prayer app that leverages the latest technologies in an elegant interface.</string>
+    <string name="first_bottom_text">First things first, let\'s help you personalize your settings!</string>
+    <string name="center_image">Center Image</string>
+    <string name="prayer_reminders">Prayer Reminders</string>
+    <string name="prayer_reminder_sb_heading">With Pray Watch, you can customize your notification alerts, setup pre-Adhan reminders, and even snooze the alerts for later so you never miss a prayer!</string>
+    <string name="get_started">Get Started</string>
+    <string name="enable_notifications">Enable Notifications</string>
+    <string name="not_now">Not now</string>
+    <string name="third_sc_sub_heading">To calculate the prayer times accurately for your city, we need your location while using the app, Precise location is not required.</string>
+    <string name="third_sc_heading">Prayer Times</string>
+    <string name="third_sc_bottom_text">Your location data stays on your device. We never collect or store it anywhere else.</string>
+    <string name="fourth_sc_sub_heading">Ensure that prayer notifications are scheduled during device maintenance or charging times.</string>
+    <string name="fourth_screen_bottom_text">Background App Refresh is enabled</string>
+    <string name="next">Next</string>
+    <string name="sixth_sc_sub_heading">Pray Watch synchronizes your settings and preferences across all devices in real-time. This is important for Google Watch use. Ensure you are logged into Google Drive and have it enabled.</string>
+    <string name="sixth_sc_bottom_text">Google Drive is enabled</string>
+    <string name="sub_heading">Successful indeed are the believers; Who are humble in their prayers.\n[Qur\'an, 23:1–2]</string>
+    <string name="let_s_go">Let\'s go!</string>
+    <string name="fifth_sc_sub_heading">Please select the calculation method that best matches your local authority or institution.</string>
+    <string name="confirm_calculation">Confirm Calculation</string>
+
+</resources>
