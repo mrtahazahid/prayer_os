@@ -12,11 +12,11 @@ import androidx.fragment.app.Fragment
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.databinding.ActivityMainBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
-import com.iw.android.prayerapp.fragments.MoreFragment
+import com.iw.android.prayerapp.fragments.moreFragment.MoreFragment
 import com.iw.android.prayerapp.fragments.PrayerFragment
 import com.iw.android.prayerapp.fragments.QiblaFragment
 import com.iw.android.prayerapp.fragments.SettingFragment
-import com.iw.android.prayerapp.fragments.TimeFragment
+import com.iw.android.prayerapp.fragments.timeFragment.TimeFragment
 import com.iw.android.prayerapp.services.gps.GpsStatusListener
 import com.iw.android.prayerapp.services.gps.LocationEvent
 import com.iw.android.prayerapp.services.gps.LocationService

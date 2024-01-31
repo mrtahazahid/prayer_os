@@ -3,10 +3,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="app_green">#4BB37E</color>
     <color name="app_grey">#A9A9A9</color>
+    <color name="view_separator">#333335</color>
     <color name="small_icon">#529378</color>
     <color name="small_icon2">#335145</color>
     <color name="small_icon3">#D87D61</color>
     <color name="yellow_text">#FF9E0D</color>
     <color name="bg_color">#1C1C1E</color>
     <color name="btn_color">#4BB37E</color>
+    <color name="black">#000000</color>
 </resources>

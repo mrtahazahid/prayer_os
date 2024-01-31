@@ -32,6 +32,7 @@ class PrayerFragment : Fragment() {
     private var namazNames =  arrayOf("Fajr", "Dhuhr", "Asr", "Maghrib", "Isha")
 
 
+    @OptIn(ExperimentalStdlibApi::class)
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
