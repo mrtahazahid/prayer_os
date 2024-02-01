@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="ifContentScrolls">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#1c1c1e">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/mainView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:fontFamily="@font/sf_bold"
+                    android:text="Fajr"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewDropDownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:src="@drawable/ic_forward"
+                    android:tint="@color/small_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detailViews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#2c2c2e"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mainView">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewNotificationSoundTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:drawableEnd="@drawable/ic_help"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/sf_regular"
+                    android:text="Notification Sound"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewNotificationSound"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:drawableEnd="@drawable/ic_forward"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/sf_regular"
+                    android:text="Tone"
+                    android:textColor="@color/app_grey"
+                    android:textSize="18sp"
+                    app:drawableTint="@color/app_grey"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/view_separator"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/textViewNotificationSoundTitle"
+                    app:layout_constraintTop_toBottomOf="@id/textViewNotificationSoundTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewReminderSoundTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:drawableEnd="@drawable/ic_help"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/sf_regular"
+                    android:text="Reminder Sound"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewReminderSound"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:drawableEnd="@drawable/ic_forward"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/sf_regular"
+                    android:text="Tone"
+                    android:textColor="@color/app_grey"
+                    android:textSize="18sp"
+                    app:drawableTint="@color/app_grey"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view" />
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/view_separator"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/textViewReminderSoundTitle"
+                    app:layout_constraintTop_toBottomOf="@id/textViewReminderSoundTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewReminderTimeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:drawableEnd="@drawable/ic_help"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/sf_regular"
+                    android:text="Reminder Time"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view1" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewSetTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/sf_regular"
+                    android:text="20 min"
+                    android:textColor="@color/app_grey"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewReminderTimeTitle" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="15dp"
+                    app:cardBackgroundColor="#3c3b40"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textViewReminderTimeTitle"
+                    app:strokeWidth="0dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageViewRemove"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_minus"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <View
+                            android:id="@+id/view3"
+                            android:layout_width="1dp"
+                            android:layout_height="0dp"
+                            android:layout_marginVertical="5dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/imageViewAdd"
+                            app:layout_constraintStart_toEndOf="@+id/imageViewRemove"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageViewAdd"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/plus"
+                            android:tint="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/view3"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/view_separator"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/textViewReminderTimeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/textViewSetTime" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewDuaReminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:drawableEnd="@drawable/ic_help"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/sf_regular"
+                    android:text="Dua Reminder"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="15dp"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewDuaReminderSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:drawableEnd="@drawable/ic_drop_down"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/sf_regular"
+                    android:text="Off"
+                    android:textColor="@color/app_green"
+                    android:textSize="14sp"
+                    app:drawableTint="@color/app_green"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/view_separator"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detailViews" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</layout>
