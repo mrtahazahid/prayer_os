@@ -1,6 +1,7 @@
-package com.iw.android.prayerapp.fragments
+package com.iw.android.prayerapp.fragments.settingFragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,22 +9,26 @@ import android.view.ViewGroup
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.databinding.FragmentSettingBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
+import com.iw.android.prayerapp.utils.AppConstant
+import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.TinyDB
 
-class SettingFragment : Fragment(),View.OnClickListener{
+class SettingFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var tinyDB: TinyDB
 
-    private  var isCalViewShow = false
-    private  var isLocViewShow = false
+    private var isCalViewShow = false
+    private var isLocViewShow = false
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
         setStatusBarWithBlackIcon(R.color.bg_color)
 
@@ -33,15 +38,17 @@ class SettingFragment : Fragment(),View.OnClickListener{
         return binding.root
     }
 
-    override fun onViewCreated(view: android.view.View, savedInstanceState: android.os.Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
         setOnClickListener()
     }
 
 
-    private fun  initialize(){}
-    private fun  setOnClickListener(){
+    private fun initialize() {
+
+    }
+    private fun setOnClickListener() {
         binding.imageViewCalculationArrow.setOnClickListener(this)
         binding.imageViewLocationArrowButton.setOnClickListener(this)
     }
@@ -49,12 +56,12 @@ class SettingFragment : Fragment(),View.OnClickListener{
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.imageViewCalculationArrow.id -> {
-                if(!isCalViewShow){
-                    binding.imageViewLocationArrowButton.setImageResource(R.drawable.ic_drop_down)
+                if (!isCalViewShow) {
+                    binding.imageViewCalculationArrow.setImageResource(R.drawable.ic_drop_down)
                     binding.calculationMainDetailViews.visibility = View.VISIBLE
                     isCalViewShow = true
-                }else{
-                    binding.imageViewLocationArrowButton.setImageResource(R.drawable.ic_forward)
+                } else {
+                    binding.imageViewCalculationArrow.setImageResource(R.drawable.ic_forward)
                     binding.calculationMainDetailViews.visibility = View.GONE
                     isCalViewShow = false
                 }
@@ -62,11 +69,11 @@ class SettingFragment : Fragment(),View.OnClickListener{
             }
 
             binding.imageViewLocationArrowButton.id -> {
-                if(!isLocViewShow){
+                if (!isLocViewShow) {
                     binding.imageViewLocationArrowButton.setImageResource(R.drawable.ic_drop_down)
                     binding.locationDetailViews.visibility = View.VISIBLE
                     isLocViewShow = true
-                }else{
+                } else {
                     binding.imageViewLocationArrowButton.setImageResource(R.drawable.ic_forward)
                     binding.locationDetailViews.visibility = View.GONE
                     isLocViewShow = false

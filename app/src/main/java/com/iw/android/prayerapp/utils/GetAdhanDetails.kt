@@ -15,7 +15,7 @@ import java.util.TimeZone
 object GetAdhanDetails : AppCompatActivity() {
 
     @SuppressLint("SimpleDateFormat")
-    fun getPrayTime(latitude: Double, longitude: Double): Array<String> {
+    fun getPrayTime(latitude: Double, longitude: Double): ArrayList<String> {
         val coordinates = Coordinates(latitude, longitude);
         val timeZoneID = TimeZone.getDefault().id
 
@@ -35,7 +35,7 @@ object GetAdhanDetails : AppCompatActivity() {
         val formatter = SimpleDateFormat("hh:mm a")
         formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
 
-        return arrayOf(
+        return arrayListOf(
             formatter.format(Date(prayerTimes.fajr.toEpochMilliseconds())),
             formatter.format(Date(prayerTimes.dhuhr.toEpochMilliseconds())),
             formatter.format(Date(prayerTimes.asr.toEpochMilliseconds())),

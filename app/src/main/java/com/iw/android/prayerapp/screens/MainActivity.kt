@@ -3,19 +3,19 @@ package com.iw.android.prayerapp.screens
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.databinding.ActivityMainBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
-import com.iw.android.prayerapp.fragments.moreFragment.MoreFragment
 import com.iw.android.prayerapp.fragments.PrayerFragment
 import com.iw.android.prayerapp.fragments.QiblaFragment
-import com.iw.android.prayerapp.fragments.SettingFragment
+import com.iw.android.prayerapp.fragments.moreFragment.MoreFragment
+import com.iw.android.prayerapp.fragments.settingFragment.SettingFragment
 import com.iw.android.prayerapp.fragments.timeFragment.TimeFragment
 import com.iw.android.prayerapp.services.gps.GpsStatusListener
 import com.iw.android.prayerapp.services.gps.LocationEvent
@@ -24,8 +24,12 @@ import com.iw.android.prayerapp.services.gps.TurnOnGps
 import com.iw.android.prayerapp.utils.AppConstant.Companion.CURRENT_LATITUDE
 import com.iw.android.prayerapp.utils.AppConstant.Companion.CURRENT_LONGITUDE
 import com.iw.android.prayerapp.utils.TinyDB
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -72,6 +76,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        AppCenter.start(
+            application, "2074bfef-592a-47e1-889a-361c09ff108",
+            Analytics::class.java, Crashes::class.java
+        )
         setStatusBarWithBlackIcon(R.color.bg_color)
 
 

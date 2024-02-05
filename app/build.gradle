@@ -100,6 +100,10 @@ dependencies {
 
     //Dagger Hilt
     implementation "com.google.dagger:hilt-android:2.46"
-    kapt "com.google.dagger:hilt-compiler:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.46"
+
+    def appCenterSdkVersion = '4.4.5'
+    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 
 }

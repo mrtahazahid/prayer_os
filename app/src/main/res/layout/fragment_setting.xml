@@ -11,12 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_color"
-        tools:context=".fragments.SettingFragment">
+        tools:context=".fragments.settingFragment.SettingFragment">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="ifContentScrolls">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,50 +95,58 @@
                             app:layout_constraintTop_toBottomOf="@id/txt_snooze_time" />
 
 
-                        <LinearLayout
+                        <com.google.android.material.card.MaterialCardView
                             android:id="@+id/snooze_time"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:background="@drawable/rounded_corners_2"
-                            android:gravity="end"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/_10sdp"
+                            android:layout_height="30dp"
+                            app:cardBackgroundColor="#3c3b40"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="4dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeWidth="0dp">
 
-                            <ImageView
-                                android:id="@+id/iv_add"
-                                android:layout_width="wrap_content"
-                                android:layout_height="@dimen/_15sdp"
-                                android:layout_gravity="center"
-                                android:background="@drawable/ic_add"
-                                android:contentDescription="TODO"
-                                android:gravity="center"
-                                android:padding="@dimen/_10sdp" />
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
 
-                            <View
-                                android:layout_width="2dp"
-                                android:layout_height="@dimen/_15sdp"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/_10sdp"
-                                android:layout_marginTop="@dimen/_2sdp"
-                                android:layout_marginEnd="@dimen/_10sdp"
-                                android:layout_marginBottom="@dimen/_2sdp"
-                                android:background="@color/app_grey" />
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:id="@+id/imageViewSnoozeMinus"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_margin="10dp"
+                                    android:src="@drawable/ic_minus"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
 
-                            <ImageView
-                                android:id="@+id/iv_minus"
-                                android:layout_width="wrap_content"
-                                android:layout_height="@dimen/_15sdp"
-                                android:layout_gravity="center"
-                                android:background="@drawable/ic_remove"
-                                android:contentDescription="TODO"
-                                android:gravity="center"
-                                android:padding="@dimen/_10sdp" />
+                                <View
+                                    android:id="@+id/viewSeparator"
+                                    android:layout_width="1dp"
+                                    android:layout_height="0dp"
+                                    android:layout_marginVertical="5dp"
+                                    android:layout_marginStart="10dp"
+                                    android:background="@color/white"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@+id/imageViewSnoozeAdd"
+                                    app:layout_constraintStart_toEndOf="@+id/imageViewSnoozeMinus"
+                                    app:layout_constraintTop_toTopOf="parent" />
 
-                        </LinearLayout>
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:id="@+id/imageViewSnoozeAdd"
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_margin="10dp"
+                                    android:src="@drawable/plus"
+                                    android:tint="@color/white"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/viewSeparator"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </com.google.android.material.card.MaterialCardView>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -146,7 +155,7 @@
                         android:layout_height="0.5dp"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_2sdp"
-                        android:background="@color/app_grey" />
+                        android:background="@color/view_separator" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_juris"
@@ -174,12 +183,12 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
 
-                        <com.google.android.material.switchmaterial.SwitchMaterial
+                        <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/switch_adhan_dua"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_marginStart="@dimen/_10sdp"
-                            android:backgroundTint="@color/app_green"
+                            android:checked="true"
                             android:forceHasOverlappingRendering="false"
                             android:gravity="center"
                             android:overlapAnchor="false"
@@ -187,7 +196,9 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/txt_adhan_dua"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:thumbTint="@color/white"
+                            app:trackTint="@drawable/track" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -196,7 +207,7 @@
                         android:layout_height="0.5dp"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_2sdp"
-                        android:background="@color/app_grey" />
+                        android:background="@color/view_separator" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_elevation"
@@ -224,20 +235,24 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
 
-                        <androidx.appcompat.widget.SwitchCompat
+                        <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/switch_play_on_tap"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_marginStart="@dimen/_10sdp"
                             android:backgroundTint="@color/app_green"
+                            android:checked="true"
                             android:forceHasOverlappingRendering="false"
                             android:gravity="center"
                             android:overlapAnchor="false"
+                            android:scaleY="1.0"
                             android:spinnerMode="dropdown"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/txt_play_on_tap"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:thumbTint="@color/white"
+                            app:trackTint="@drawable/track" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -246,7 +261,7 @@
                         android:layout_height="0.5dp"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_2sdp"
-                        android:background="@color/app_grey" />
+                        android:background="@color/view_separator" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_sch_reminder"
@@ -328,9 +343,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="#2b2b2c"
-                            app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent">
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewTitle"
@@ -377,12 +392,12 @@
                                 android:layout_marginTop="10dp"
                                 android:layout_marginEnd="8dp"
                                 android:drawableEnd="@drawable/ic_help"
-                                app:layout_constraintBottom_toTopOf="@+id/view"
                                 android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:text="Method"
                                 android:textColor="@color/white"
                                 android:textSize="18sp"
+                                app:layout_constraintBottom_toTopOf="@+id/view"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -391,16 +406,16 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:layout_marginEnd="8dp"
                                 android:layout_marginHorizontal="10dp"
+                                android:layout_marginEnd="8dp"
                                 android:drawablePadding="4dp"
-                                android:gravity="end"
                                 android:fontFamily="@font/sf_regular"
+                                android:gravity="end"
                                 android:text="Moonsighting Committee"
                                 android:textColor="#808084"
                                 android:textSize="15sp"
-                                app:layout_constraintBottom_toTopOf="@+id/view"
                                 app:drawableTint="@color/app_grey"
+                                app:layout_constraintBottom_toTopOf="@+id/view"
                                 app:layout_constraintEnd_toStartOf="@id/imageViewMethod"
                                 app:layout_constraintStart_toEndOf="@+id/textViewNotificationSoundTitle"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -447,9 +462,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="10dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginEnd="8dp"
                                 android:drawablePadding="4dp"
-                                android:layout_marginStart="10dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:gravity="end"
                                 android:text="Standard"
@@ -490,14 +505,14 @@
                                 android:layout_marginStart="28dp"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="15dp"
                                 android:drawableEnd="@drawable/ic_help"
                                 android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:text="Adjustments"
                                 android:textColor="@color/white"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:layout_marginBottom="15dp"
                                 android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/view1" />
 
@@ -506,9 +521,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="10dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginEnd="8dp"
                                 android:drawablePadding="4dp"
-                                android:layout_marginStart="10dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:gravity="end"
                                 android:text="Standard"
@@ -590,12 +605,12 @@
                                 android:layout_marginTop="10dp"
                                 android:layout_marginEnd="8dp"
                                 android:drawableEnd="@drawable/ic_help"
-                                app:layout_constraintBottom_toTopOf="@+id/viewSepAutomatic"
                                 android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:text="Automatic"
                                 android:textColor="@color/white"
                                 android:textSize="18sp"
+                                app:layout_constraintBottom_toTopOf="@+id/viewSepAutomatic"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -663,10 +678,10 @@
                                 android:id="@+id/textViewCity"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_marginTop="15dp"
                                 android:drawablePadding="@dimen/_3sdp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="City"
-                                android:layout_marginTop="15dp"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_13ssp"
                                 app:layout_constraintStart_toStartOf="@id/viewSepGeofence"
@@ -676,9 +691,9 @@
                                 android:id="@+id/textViewCityName"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_margin="15dp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Karachi"
-                                android:layout_margin="15dp"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_13ssp"
                                 app:layout_constraintEnd_toEndOf="@id/viewSepGeofence"
@@ -698,10 +713,10 @@
                                 android:id="@+id/textViewTimeZone"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_marginTop="15dp"
                                 android:drawablePadding="@dimen/_3sdp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="TimeZone"
-                                android:layout_marginTop="15dp"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_13ssp"
                                 app:layout_constraintStart_toStartOf="@id/viewSepCity"
@@ -711,9 +726,9 @@
                                 android:id="@+id/textViewCityTimeZoneName"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_margin="15dp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Asia/Karachi"
-                                android:layout_margin="15dp"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_13ssp"
                                 app:layout_constraintEnd_toEndOf="@id/viewSepCity"
@@ -733,10 +748,10 @@
                                 android:id="@+id/textViewCoordinate"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_marginTop="15dp"
                                 android:drawablePadding="@dimen/_3sdp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Coordinates"
-                                android:layout_marginTop="15dp"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_13ssp"
                                 app:layout_constraintStart_toStartOf="@id/viewSepTimeZone"
@@ -746,9 +761,9 @@
                                 android:id="@+id/textViewCoordinatesPoint"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_margin="15dp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="24/0,67.11"
-                                android:layout_margin="15dp"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_13ssp"
                                 app:layout_constraintEnd_toEndOf="@id/viewSepTimeZone"
@@ -867,9 +882,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/_10sdp"
+                                android:drawableEnd="@drawable/ic_help"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Iqama  "
-                                android:drawableEnd="@drawable/ic_help"
                                 android:textColor="@color/white"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -901,8 +916,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
-                    android:fontFamily="@font/sf_regular"
                     android:layout_marginTop="20dp"
+                    android:fontFamily="@font/sf_regular"
                     android:text="Device"
                     android:textColor="@color/white"
                     android:textSize="14sp"
@@ -913,11 +928,11 @@
                     android:id="@+id/carViewDevice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="30dp"
                     app:cardBackgroundColor="#2c2c2e"
                     app:cardElevation="10dp"
-                    android:layout_marginBottom="30dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -927,7 +942,6 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-
 
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -940,7 +954,7 @@
                             android:textColor="@color/white"
                             android:textSize="14sp"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"  />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageViewSystem"
@@ -973,8 +987,8 @@
                             android:text="Twitter"
                             android:textColor="@color/white"
                             android:textSize="14sp"
-                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/viewSystem" />
 
                         <androidx.appcompat.widget.AppCompatImageView
@@ -992,10 +1006,8 @@
                 </com.google.android.material.card.MaterialCardView>
 
 
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
