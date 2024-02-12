@@ -1,0 +1,122 @@
+package com.iw.android.prayerapp.base.prefrence
+
+import android.content.Context
+import androidx.datastore.core.DataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import com.google.gson.Gson
+import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.APPLICATION_ID
+import com.iw.android.prayerapp.base.response.LoginUserResponse
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = APPLICATION_ID)
+
+class DataPreference @Inject constructor(
+    @ApplicationContext context: Context
+) {
+
+    private val appContext = context.applicationContext
+
+    val accessToken: Flow<String>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[ACCESS_TOKEN] ?: ""
+        }
+
+    val refreshToken: Flow<String>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[REFRESH_TOKEN] ?: ""
+        }
+
+    val loginUserId: Flow<String>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[USER_ID] ?: ""
+        }
+
+    val isUserLogin: Flow<Boolean>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[IS_LOGIN] ?: false
+        }
+
+    suspend fun saveAccessTokens(accessToken: String) {
+        appContext.dataStore.edit { preferences ->
+            preferences[ACCESS_TOKEN] = "Bearer $accessToken"
+        }
+    }
+
+    suspend fun getBooleanData(key: Preferences.Key<Boolean>): Boolean =
+        appContext.dataStore.data.map { preferences ->
+            preferences[key] ?: false
+        }.first()
+
+    suspend fun setBooleanData(key: Preferences.Key<Boolean>, value: Boolean) {
+        appContext.dataStore.edit { preferences ->
+            preferences[key] = value
+        }
+    }
+
+    suspend fun getStringData(key: Preferences.Key<String>): String =
+        appContext.dataStore.data.map { preferences ->
+            preferences[key] ?: ""
+        }.first()
+
+    suspend fun setStringData(key: Preferences.Key<String>, value: String) {
+        appContext.dataStore.edit { preferences ->
+            preferences[key] = value
+        }
+    }
+
+    suspend fun getIntegerData(key: Preferences.Key<Int>): Int =
+        appContext.dataStore.data.map { preferences ->
+            preferences[key] ?: -1
+        }.first()
+
+    suspend fun setIntegerData(key: Preferences.Key<Int>, value: Int) {
+        appContext.dataStore.edit { preferences ->
+            preferences[key] = value
+        }
+    }
+
+    suspend fun clear() {
+        appContext.dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
+
+    suspend fun clearLoginDataForUpdate() {
+        setStringData(USER_INFO, "")
+    }
+
+    suspend fun performLogout() {
+        setBooleanData(IS_LOGIN, false)
+        setStringData(USER_ID, "")
+        setStringData(USER_INFO, "")
+        setStringData(ACCESS_TOKEN, "")
+        setStringData(REFRESH_TOKEN, "")
+    }
+
+    suspend fun setUpdateUserProfile(userInfo: LoginUserResponse) {
+        setStringData(USER_INFO, Gson().toJson(userInfo))
+
+    }
+
+    suspend fun getUpdatedUserProfile(): LoginUserResponse? {
+        return Gson().fromJson(
+            getStringData(USER_INFO),
+            LoginUserResponse::class.java
+        )
+    }
+
+    companion object {
+        private val ACCESS_TOKEN = stringPreferencesKey("key_access_token")
+        private val REFRESH_TOKEN = stringPreferencesKey("key_refresh_token")
+        val IS_LOGIN = booleanPreferencesKey("key_is_login")
+        val USER_ID = stringPreferencesKey("key_user_id")
+        val USER_INFO = stringPreferencesKey("key_user_info")
+        val APPLICATION_ID = "com.iw.android.prayerapp"
+    }
+}

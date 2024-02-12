@@ -6,61 +6,67 @@
 
     <fragment
         android:id="@+id/firstOnboarding"
-        android:name="com.iw.android.prayerapp.onboarding.FirstOnboarding"
+        android:name="com.iw.android.prayerapp.ui.onBoarding.FirstOnboarding"
         android:label="fragment_first_onboarding"
-        tools:layout="@layout/fragment_first_onboarding" >
+        tools:layout="@layout/fragment_first_onboarding">
         <action
             android:id="@+id/action_firstOnboarding_to_secondOnboarding"
             app:destination="@id/secondOnboarding" />
     </fragment>
     <fragment
         android:id="@+id/secondOnboarding"
-        android:name="com.iw.android.prayerapp.onboarding.SecondOnboarding"
+        android:name="com.iw.android.prayerapp.ui.onBoarding.SecondOnboarding"
         android:label="fragment_second_onboarding"
-        tools:layout="@layout/fragment_second_onboarding" >
+        tools:layout="@layout/fragment_second_onboarding">
         <action
             android:id="@+id/action_secondOnboarding_to_thirdOnboarding"
             app:destination="@id/thirdOnboarding" />
     </fragment>
     <fragment
         android:id="@+id/thirdOnboarding"
-        android:name="com.iw.android.prayerapp.onboarding.ThirdOnboarding"
+        android:name="com.iw.android.prayerapp.ui.onBoarding.ThirdOnboarding"
         android:label="fragment_third_onboarding"
-        tools:layout="@layout/fragment_third_onboarding" >
+        tools:layout="@layout/fragment_third_onboarding">
         <action
             android:id="@+id/action_thirdOnboarding_to_fourthOnboarding"
             app:destination="@id/fourthOnboarding" />
     </fragment>
     <fragment
         android:id="@+id/fourthOnboarding"
-        android:name="com.iw.android.prayerapp.onboarding.FourthOnboarding"
+        android:name="com.iw.android.prayerapp.ui.onBoarding.FourthOnboarding"
         android:label="fragment_fourth_onboarding"
-        tools:layout="@layout/fragment_fourth_onboarding" >
+        tools:layout="@layout/fragment_fourth_onboarding">
         <action
             android:id="@+id/action_fourthOnboarding_to_fifthOnboarding"
             app:destination="@id/fifthOnboarding" />
     </fragment>
     <fragment
         android:id="@+id/fifthOnboarding"
-        android:name="com.iw.android.prayerapp.onboarding.FifthOnboarding"
+        android:name="com.iw.android.prayerapp.ui.onBoarding.FifthOnboarding"
         android:label="fragment_fifth_onboarding"
-        tools:layout="@layout/fragment_fifth_onboarding" >
+        tools:layout="@layout/fragment_fifth_onboarding">
         <action
             android:id="@+id/action_fifthOnboarding_to_sixthOnboarding"
             app:destination="@id/sixthOnboarding" />
     </fragment>
     <fragment
         android:id="@+id/sixthOnboarding"
-        android:name="com.iw.android.prayerapp.onboarding.SixthOnboarding"
+        android:name="com.iw.android.prayerapp.ui.onBoarding.SixthOnboarding"
         android:label="fragment_sixth_onboarding"
-        tools:layout="@layout/fragment_sixth_onboarding" >
+        tools:layout="@layout/fragment_sixth_onboarding">
         <action
             android:id="@+id/action_sixthOnboarding_to_seventhOnboarding"
             app:destination="@id/seventhOnboarding" />
     </fragment>
     <fragment
         android:id="@+id/seventhOnboarding"
-        android:name="com.iw.android.prayerapp.onboarding.SeventhOnboarding"
+        android:name="com.iw.android.prayerapp.ui.onBoarding.SeventhOnboarding"
         android:label="fragment_seventh_onboarding"
         tools:layout="@layout/fragment_seventh_onboarding" />
+    <fragment
+        android:id="@+id/islamicHolidayFragment"
+        android:name="com.iw.android.prayerapp.ui.main.timeFragment.IslamicHolidayFragment"
+        android:label="IslamicHolidayFragment"
+        tools:layout="@layout/fragment_islamic_holiday"/>
+
 </navigation>

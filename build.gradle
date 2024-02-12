@@ -15,8 +15,11 @@ buildscript {
         // in the individual module build.gradle files
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.6.0"
         classpath "com.github.dcendents:android-maven-gradle-plugin:2.0"
+
         classpath "com.google.dagger:hilt-android-gradle-plugin:2.46"
     }
+
+
 }
 
 task clean(type: Delete) {

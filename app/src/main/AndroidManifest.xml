@@ -19,7 +19,7 @@
         android:theme="@style/Theme.PrayerApp"
         tools:targetApi="31">
         <activity
-            android:name=".screens.OnBoardingActivity"
+            android:name=".ui.activities.screens.OnBoardingActivity"
             android:exported="false" />
 
         <service
@@ -28,11 +28,11 @@
             android:exported="false" />
 
         <activity
-            android:name=".screens.MainActivity"
+            android:name=".ui.activities.screens.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".screens.SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

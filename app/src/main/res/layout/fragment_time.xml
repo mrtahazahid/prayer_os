@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"
-        tools:context=".fragments.timeFragment.TimeFragment">
+        tools:context=".ui.main.timeFragment.TimeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/actionBar"
@@ -62,8 +62,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:overScrollMode="ifContentScrolls"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/actionBar">
@@ -126,10 +126,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:layout_marginBottom="30dp"
                     app:cardBackgroundColor="#1c1c1e"
                     app:cardElevation="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="30dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cardViewMain"
@@ -178,9 +178,9 @@
                             android:layout_height="1dp"
                             android:layout_marginTop="10dp"
                             android:background="@color/view_separator"
-                            app:layout_constraintTop_toBottomOf="@id/imageViewCalenderArrow"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/imageViewCalenderArrow" />
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageViewHolidays"
@@ -188,9 +188,17 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:src="@drawable/ic_calender"
-
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/view5" />
+
+                        <View
+                            android:id="@+id/islamicHolidayClickView"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            app:layout_constraintBottom_toBottomOf="@id/imageViewHolidays"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/imageViewHolidays" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/textViewIslamicHolidays"
@@ -221,9 +229,9 @@
                             android:layout_height="1dp"
                             android:layout_marginTop="6dp"
                             android:background="@color/view_separator"
-                            app:layout_constraintTop_toBottomOf="@id/imageViewHolidayArrow"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/imageViewHolidayArrow" />
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageViewMasjidLocation"
@@ -234,6 +242,15 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/view6" />
+
+                        <View
+                            android:id="@+id/masjidClickView"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            app:layout_constraintBottom_toBottomOf="@id/imageViewMasjidLocation"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/imageViewMasjidLocation" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/textViewMasjidLocation"
