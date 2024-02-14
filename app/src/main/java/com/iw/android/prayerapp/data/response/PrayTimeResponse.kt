@@ -12,6 +12,15 @@ data class IslamicHolidayResponse(
     val dayTitle: String
 )
 
+data class PrayerSoundData(
+    val title: String,
+    val icon: Int,
+    val type: String,
+    val isImageForwardShow: Boolean,
+    var isItemSelected: Boolean,
+    val selectedItemTitle: String = ""
+)
+
 
 data class MoreData(
     val image: Int,

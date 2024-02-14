@@ -10,6 +10,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph
+import androidx.navigation.fragment.NavHostFragment
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.activity.BaseActivity
 import com.iw.android.prayerapp.databinding.ActivityMainBinding
@@ -39,6 +42,10 @@ class MainActivity : BaseActivity() {
     private val binding get() = _binding!!
 
     private lateinit var tinyDB: TinyDB
+
+    private lateinit var navController: NavController
+    private lateinit var navGraph: NavGraph
+
 
     private var gpsStatusListener: GpsStatusListener? = null
 
@@ -95,6 +102,15 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initialize() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+
+        val inflater = navHostFragment.navController.navInflater
+        navGraph = inflater.inflate(R.navigation.nav_graph_dashboard)
+        navHostFragment.navController.graph = navGraph
+        navController = navHostFragment.navController
+
+
         tinyDB = TinyDB(this)
 
         service = Intent(this, LocationService::class.java)
@@ -102,21 +118,21 @@ class MainActivity : BaseActivity() {
         gpsStatusListener = GpsStatusListener(this)
         turnOnGps = TurnOnGps(this)
 
-        replaceFragment(PrayerFragment())
 
+    }
+
+    override fun setOnClickListener() {
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.prayer_screen -> replaceFragment(PrayerFragment())
-                R.id.time_screen -> replaceFragment(TimeFragment())
-                R.id.qibla_screen -> replaceFragment(QiblaFragment())
-                R.id.setting_screen -> replaceFragment(SettingFragment())
-                R.id.more_screen -> replaceFragment(MoreFragment())
+                R.id.prayer_screen -> navController.navigate(R.id.prayerFragment)
+                R.id.time_screen -> navController.navigate(R.id.timeFragment)
+                R.id.qibla_screen -> navController.navigate(R.id.qiblaFragment)
+                R.id.setting_screen -> navController.navigate(R.id.settingFragment)
+                R.id.more_screen -> navController.navigate(R.id.moreFragment)
             }
             true
         }
     }
-
-    override fun setOnClickListener() {}
 
 
     override fun onResume() {
@@ -196,12 +212,6 @@ class MainActivity : BaseActivity() {
         binding.bottomNavigationView.visibility = View.VISIBLE
     }
 
-    fun replaceFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frame_layout, fragment)
-        fragmentTransaction.commit()
-    }
 
     override fun onDestroy() {
         super.onDestroy()

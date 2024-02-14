@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_dashboard"
+    app:startDestination="@id/prayerFragment">
+
+    <fragment
+        android:id="@+id/prayerFragment"
+        android:name="com.iw.android.prayerapp.ui.main.PrayerFragment"
+        android:label="fragment_prayer"
+        tools:layout="@layout/fragment_prayer" >
+        <action
+            android:id="@+id/action_prayerFragment_to_prayerSoundFragment"
+            app:destination="@id/prayerSoundFragment" >
+            <argument
+                android:name="type"
+                app:argType="string" />
+
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/timeFragment"
+        android:name="com.iw.android.prayerapp.ui.main.timeFragment.TimeFragment"
+        android:label="TimeFragment"
+        tools:layout="@layout/fragment_time">
+        <action
+            android:id="@+id/action_timeFragment_to_islamicHolidayFragment2"
+            app:destination="@id/islamicHolidayFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/qiblaFragment"
+        android:name="com.iw.android.prayerapp.ui.main.QiblaFragment"
+        android:label="fragment_qibla"
+        tools:layout="@layout/fragment_qibla" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.iw.android.prayerapp.ui.main.settingFragment.SettingFragment"
+        android:label="SettingFragment" />
+    <fragment
+        android:id="@+id/moreFragment"
+        android:name="com.iw.android.prayerapp.ui.main.moreFragment.MoreFragment"
+        android:label="MoreFragment" />
+    <fragment
+        android:id="@+id/prayerSoundFragment"
+        android:name="com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerSoundFragment"
+        android:label="PrayerSoundFragment" >
+        <argument
+            android:name="type"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/islamicHolidayFragment2"
+        android:name="com.iw.android.prayerapp.ui.main.timeFragment.IslamicHolidayFragment"
+        android:label="IslamicHolidayFragment" />
+</navigation>

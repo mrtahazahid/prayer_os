@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
@@ -19,6 +20,10 @@ import com.iw.android.prayerapp.ui.activities.screens.MainActivity
 import com.iw.android.prayerapp.utils.AppConstant
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.TinyDB
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener {
 
@@ -28,6 +33,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
 
     //    private val viewModel: TimeViewModel by viewModels()
     private var viewTypeArray = ArrayList<ViewType<*>>()
+    private var dateOffset = 0
 
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
@@ -66,6 +72,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     }
 
     override fun initialize() {
+        binding.textViewDateTitle.text = getFormattedDate(dateOffset)
         tinyDB = TinyDB(requireContext())
         getPrayList()
         setRecyclerView()
@@ -169,6 +176,8 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     override fun setOnClickListener() {
         binding.islamicHolidayClickView.setOnClickListener(this)
         binding.masjidClickView.setOnClickListener(this)
+        binding.imageViewBack.setOnClickListener(this)
+        binding.imageViewForward.setOnClickListener(this)
 
     }
 
@@ -178,8 +187,19 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            binding.imageViewForward.id -> {
+                dateOffset++
+                binding.textViewDateTitle.text = getFormattedDate(dateOffset)
+            }
+
+            binding.imageViewBack.id -> {
+                dateOffset--
+                binding.textViewDateTitle.text = getFormattedDate(dateOffset)
+            }
+
             binding.islamicHolidayClickView.id -> {
-                (requireActivity() as MainActivity).replaceFragment(IslamicHolidayFragment())
+                prayTimeArray.clear()
+                findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToIslamicHolidayFragment2())
             }
 
             binding.masjidClickView.id -> {
@@ -201,5 +221,16 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
             startActivity(mapIntent)
         }
     }
+
+
+    fun getFormattedDate(offset: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, offset)
+        val targetDate: Date = calendar.time
+
+        val dateFormat = SimpleDateFormat("EEEE dd MMMM yyyy", Locale.getDefault())
+        return dateFormat.format(targetDate)
+    }
+
 
 }

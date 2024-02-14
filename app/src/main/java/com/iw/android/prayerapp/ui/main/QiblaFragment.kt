@@ -50,6 +50,20 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
         _binding = FragmentQiblaBinding.inflate(inflater, container, false)
         setStatusBarWithBlackIcon(R.color.bg_color)
         (requireActivity() as MainActivity).showBottomSheet()
+
+
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initialize()
+        setObserver()
+        setOnClickListener()
+    }
+
+    override fun initialize() {
         tinyDB = TinyDB(context)
 
         sensorManager = (requireActivity().getSystemService(SENSOR_SERVICE) as SensorManager)
@@ -76,13 +90,6 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
         val getQibla = GetAdhanDetails.getQiblaDirection(currentLatitude, currentLongitude)
 
         binding.txtQiblaHeading.text = "Qibla direction is ${"%.2f".format(getQibla.direction)}\u00B0 from North"
-
-
-        return binding.root
-    }
-
-    override fun initialize() {
-
     }
 
     override fun setObserver() {
@@ -118,8 +125,10 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
 
         rotateAnimation.duration = 210
         rotateAnimation.fillAfter = true
-        binding.ivQiblaDirection.startAnimation(rotateAnimation)
-        currentDegree = (-degree).toFloat() /*-267.69f*/
+        binding.imageViewQiblaDirection.startAnimation(rotateAnimation)
+        currentDegree = (degree).toFloat() /*-267.69f*/
+
+
 
     }
 

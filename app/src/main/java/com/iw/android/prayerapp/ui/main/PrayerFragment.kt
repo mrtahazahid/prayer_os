@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentPrayerBinding
@@ -20,7 +21,7 @@ import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
 import com.iw.android.prayerapp.utils.TinyDB
 
-class PrayerFragment : BaseFragment(R.layout.fragment_prayer) {
+class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListener {
 
     private var _binding: FragmentPrayerBinding? = null
     private val binding get() = _binding!!
@@ -104,7 +105,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer) {
     }
 
     override fun setOnClickListener() {
-
+binding.upComingPrayerTimeView.setOnClickListener(this)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -121,5 +122,13 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+            binding.upComingPrayerTimeView.id->{
+                 findNavController().navigate(PrayerFragmentDirections.actionPrayerFragmentToPrayerSoundFragment("prayer"))
+            }
+        }
     }
 }

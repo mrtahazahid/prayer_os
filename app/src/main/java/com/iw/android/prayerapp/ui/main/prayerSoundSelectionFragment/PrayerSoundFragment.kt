@@ -1,4 +1,4 @@
-package com.iw.android.prayerapp.ui.main.timeFragment
+package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +12,14 @@ import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.data.response.IslamicHolidayResponse
+import com.iw.android.prayerapp.data.response.PrayerSoundData
 import com.iw.android.prayerapp.databinding.FragmentIslamicHolidayBinding
+import com.iw.android.prayerapp.databinding.FragmentPrayerSoundBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.main.timeFragment.itemView.RowItemIslamicHolidays
 import com.iw.android.prayerapp.ui.activities.screens.MainActivity
+import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.PrayerEnumType
+import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.RowItemPrayerSound
 import com.iw.android.prayerapp.utils.TinyDB
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -26,15 +30,15 @@ import java.util.Locale
 import java.util.TimeZone
 
 
-class IslamicHolidayFragment : BaseFragment(R.layout.fragment_islamic_holiday), View.OnClickListener {
+class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.OnClickListener {
 
-    private var _binding: FragmentIslamicHolidayBinding? = null
+    private var _binding: FragmentPrayerSoundBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var tinyDB: TinyDB
 
     private var isItemClick = true
-    private var islamicHolidayArray = arrayListOf<IslamicHolidayResponse>()
+    private var prayerSoundList = arrayListOf<PrayerSoundData>()
 
     //private val viewModel: TimeViewModel by viewModels()
     private var viewTypeArray = ArrayList<ViewType<*>>()
@@ -61,7 +65,7 @@ class IslamicHolidayFragment : BaseFragment(R.layout.fragment_islamic_holiday), 
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentIslamicHolidayBinding.inflate(inflater, container, false)
+        _binding = FragmentPrayerSoundBinding.inflate(inflater, container, false)
         setStatusBarWithBlackIcon(R.color.bg_color)
 
         tinyDB = TinyDB(context)
@@ -84,12 +88,11 @@ class IslamicHolidayFragment : BaseFragment(R.layout.fragment_islamic_holiday), 
     }
 
     override fun setObserver() {
-        binding.textViewDate.text = getCurrentDateFormatted()
-        binding.textViewIslamicDate.text = getCurrentIslamicDate()
+
         viewTypeArray.clear()
-        for (data in islamicHolidayArray) {
+        for (data in prayerSoundList) {
             viewTypeArray.add(
-                RowItemIslamicHolidays(data)
+                RowItemPrayerSound(data)
             )
         }
         adapter.items = viewTypeArray
@@ -146,61 +149,26 @@ class IslamicHolidayFragment : BaseFragment(R.layout.fragment_islamic_holiday), 
     }
 
     private fun addHolidayList() {
-        islamicHolidayArray.add(
-            IslamicHolidayResponse(
-                "Isra' & Mi'raj",
-                "27 Rajab 1445",
-                "8 February 2024"
-            )
-        )
-        islamicHolidayArray.add(
-            IslamicHolidayResponse(
-                "Ramadan",
-                "1 Ramadan 1445",
-                "11 March 2024"
-            )
-        )
-        islamicHolidayArray.add(
-            IslamicHolidayResponse(
-                "Eid al-Fitr",
-                "2 Shawwal 1445",
-                "10 April 2024"
-            )
-        )
-        islamicHolidayArray.add(
-            IslamicHolidayResponse(
-                "Hajj",
-                "8 Dhu'l-Hijjah 1445",
-                "14 June 2024"
-            )
-        )
-        islamicHolidayArray.add(
-            IslamicHolidayResponse(
-                "Day of Arafah",
-                "9 Dhu'l-Hijjah 1445",
-                "15 June 2024"
-            )
-        )
-        islamicHolidayArray.add(
-            IslamicHolidayResponse(
-                "Eid al-Adha",
-                "10 Dhu'l-Hijjah 1445",
-                "16 June 2024"
-            )
-        )
-        islamicHolidayArray.add(
-            IslamicHolidayResponse(
-                "New Year",
-                "1 Muharram 1446",
-                "7 July 2024"
-            )
-        )
-        islamicHolidayArray.add(
-            IslamicHolidayResponse(
-                "Ashura",
-                "10 Muharram 1446",
-                "16 July 2024"
-            )
-        )
+        prayerSoundList.add(PrayerSoundData("Adhan",R.drawable.ic_mike,PrayerEnumType.ADHAN.getValue(),
+            isImageForwardShow = true,
+            isItemSelected = true,
+            selectedItemTitle = "adhan"
+        ))
+        prayerSoundList.add(PrayerSoundData("Tones",R.drawable.ic_mike,PrayerEnumType.TONES.getValue(),
+            isImageForwardShow = true,
+            isItemSelected = false
+        ))
+        prayerSoundList.add(PrayerSoundData("Vibrate",R.drawable.ic_mike,PrayerEnumType.VIBRATE.getValue(),
+            isImageForwardShow = false,
+            isItemSelected = false
+        ))
+        prayerSoundList.add(PrayerSoundData("Silent",R.drawable.ic_mike,PrayerEnumType.SILENT.getValue(),
+            isImageForwardShow = false,
+            isItemSelected = false
+        ))
+        prayerSoundList.add(PrayerSoundData("Off",R.drawable.ic_mike,PrayerEnumType.OFF.getValue(),
+            isImageForwardShow = false,
+            isItemSelected = false
+        ))
     }
 }
