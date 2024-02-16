@@ -16,7 +16,7 @@ import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.data.response.PrayTime
 import com.iw.android.prayerapp.databinding.FragmentTimeBinding
 import com.iw.android.prayerapp.ui.main.timeFragment.itemView.RowItemTime
-import com.iw.android.prayerapp.ui.activities.screens.MainActivity
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.utils.AppConstant
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.TinyDB
@@ -123,35 +123,35 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
             PrayTime(
                 R.drawable.ic_mike,
                 "Sunrise",
-                "6:58AM",
-            )
-        )
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Dhuhr",
                 getPrayerTime[1],
             )
         )
         prayTimeArray.add(
             PrayTime(
                 R.drawable.ic_mike,
-                "Asr",
+                "Dhuhr",
                 getPrayerTime[2],
             )
         )
         prayTimeArray.add(
             PrayTime(
                 R.drawable.ic_mike,
-                "Maghrib",
+                "Asr",
                 getPrayerTime[3],
             )
         )
         prayTimeArray.add(
             PrayTime(
                 R.drawable.ic_mike,
-                "Isha",
+                "Maghrib",
                 getPrayerTime[4],
+            )
+        )
+        prayTimeArray.add(
+            PrayTime(
+                R.drawable.ic_mike,
+                "Isha",
+                getPrayerTime[5],
             )
         )
 

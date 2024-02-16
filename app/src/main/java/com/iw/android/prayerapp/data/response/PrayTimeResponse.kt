@@ -6,11 +6,19 @@ data class PrayTime(
     val time: String
 )
 
+data class SoundData(
+    val title: String,
+    val soundFile: Int,
+    var isSoundSelected: Boolean
+)
+
 data class IslamicHolidayResponse(
     val title: String,
     val islamicDayTitle: String,
     val dayTitle: String
 )
+
+data class UserLatLong(val latitude: Double, val longitude: Double)
 
 data class PrayerSoundData(
     val title: String,

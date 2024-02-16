@@ -5,11 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentThirdOnboardingBinding
-import com.iw.android.prayerapp.ui.activities.screens.MainActivity
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
 
 class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
 
@@ -22,8 +23,6 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentThirdOnboardingBinding.inflate(inflater, container, false)
-
-
         return binding.root
     }
 
@@ -35,6 +34,7 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
     }
 
     override fun initialize() {
+        setOnBackPressedListener()
     }
 
     override fun setObserver() {
@@ -50,8 +50,13 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
         }
 
         binding.skip.setOnClickListener {
-            startActivity(Intent(activity, MainActivity::class.java))
-            activity?.finish()
+            requireActivity().startActivity(
+                Intent(
+                    requireContext(),
+                    MainActivity::class.java
+                ).putExtra("skip", "userSkipped")
+            )
+            requireActivity().finish()
         }
 
     }
@@ -59,5 +64,14 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+
+                }
+            })
     }
 }

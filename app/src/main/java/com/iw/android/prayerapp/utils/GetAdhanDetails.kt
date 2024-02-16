@@ -37,6 +37,7 @@ object GetAdhanDetails : AppCompatActivity() {
 
         return arrayListOf(
             formatter.format(Date(prayerTimes.fajr.toEpochMilliseconds())),
+            formatter.format(Date(prayerTimes.sunrise.toEpochMilliseconds())),
             formatter.format(Date(prayerTimes.dhuhr.toEpochMilliseconds())),
             formatter.format(Date(prayerTimes.asr.toEpochMilliseconds())),
             formatter.format(Date(prayerTimes.maghrib.toEpochMilliseconds())),

@@ -25,4 +25,32 @@
     <string name="fifth_sc_sub_heading">Please select the calculation method that best matches your local authority or institution.</string>
     <string name="confirm_calculation">Confirm Calculation</string>
 
+    <string-array name="elevation">
+        <item>Automatic</item>
+        <item>Night Middle</item>
+        <item>One/Seventh</item>
+        <item>Angle-based</item>
+
+    </string-array>
+
+    <string-array name="jurisprudence">
+        <item>Standard</item>
+        <item>Hanafi</item>
+    </string-array>
+
+    <string-array name="methods">
+        <item>Muslim World League</item>
+        <item>Islamic Society of N.America (ISNA)</item>
+        <item>Moonsighting Committee</item>
+        <item>Egyptian General Authority of Survey</item>
+        <item>Algerian Ministry of Awqaf and Religious Affairs</item>
+        <item>Tunisian Ministry of Religious Affairs</item>
+        <item>London Unified Prayer Timetable</item>
+        <item>Umm Al-Quran University</item>
+        <item>Umm Al-Qura University, Makkah</item>
+        <item>Authority of Dubai - UAE</item>
+        <item>Authority of Kuwait</item>
+        <item>Authority of Qatar</item>
+    </string-array>
+
 </resources>

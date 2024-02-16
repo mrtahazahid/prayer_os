@@ -8,7 +8,7 @@ import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentSettingBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
-import com.iw.android.prayerapp.ui.activities.screens.MainActivity
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.utils.TinyDB
 
 class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickListener {

@@ -5,19 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFirstOnboardingBinding
-import com.iw.android.prayerapp.ui.activities.screens.MainActivity
-import com.iw.android.prayerapp.utils.TinyDB
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
 
 class FirstOnboarding : BaseFragment(R.layout.fragment_first_onboarding) {
 
     private var _binding: FragmentFirstOnboardingBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var tinyDB: TinyDB
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +35,8 @@ class FirstOnboarding : BaseFragment(R.layout.fragment_first_onboarding) {
     }
 
     override fun initialize() {
-        tinyDB = TinyDB(context)
+        setOnBackPressedListener()
+
     }
 
     override fun setObserver() {}
@@ -48,8 +49,14 @@ class FirstOnboarding : BaseFragment(R.layout.fragment_first_onboarding) {
         }
 
         binding.skip.setOnClickListener {
-            startActivity(Intent(activity, MainActivity::class.java))
-            activity?.finish()
+            requireActivity().startActivity(
+                Intent(
+                    requireContext(),
+                    MainActivity::class.java
+                ).putExtra("skip", "userSkipped")
+            )
+            requireActivity().finish()
+
         }
     }
 
@@ -70,5 +77,14 @@ class FirstOnboarding : BaseFragment(R.layout.fragment_first_onboarding) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+
+                }
+            })
     }
 }

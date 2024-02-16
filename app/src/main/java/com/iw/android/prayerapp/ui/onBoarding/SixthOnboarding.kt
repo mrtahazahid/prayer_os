@@ -5,11 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentSixthOnboardingBinding
-import com.iw.android.prayerapp.ui.activities.screens.MainActivity
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
 
 class SixthOnboarding : BaseFragment(R.layout.fragment_sixth_onboarding) {
 
@@ -35,7 +36,7 @@ class SixthOnboarding : BaseFragment(R.layout.fragment_sixth_onboarding) {
 
 
     override fun initialize() {
-
+        setOnBackPressedListener()
     }
 
     override fun setObserver() {
@@ -52,8 +53,13 @@ class SixthOnboarding : BaseFragment(R.layout.fragment_sixth_onboarding) {
         }
 
         binding.skip.setOnClickListener {
-            startActivity(Intent(activity, MainActivity::class.java))
-            activity?.finish()
+            requireActivity().startActivity(
+                Intent(
+                    requireContext(),
+                    MainActivity::class.java
+                ).putExtra("skip", "userSkipped")
+            )
+            requireActivity().finish()
         }
 
     }
@@ -61,5 +67,14 @@ class SixthOnboarding : BaseFragment(R.layout.fragment_sixth_onboarding) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+
+                }
+            })
     }
 }

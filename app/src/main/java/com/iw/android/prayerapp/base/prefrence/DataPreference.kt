@@ -10,6 +10,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.APPLICATION_ID
 import com.iw.android.prayerapp.base.response.LoginUserResponse
+import com.iw.android.prayerapp.data.response.UserLatLong
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -37,9 +38,31 @@ class DataPreference @Inject constructor(
             preferences[USER_ID] ?: ""
         }
 
+    val prayerMethod: Flow<String>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[PRAYER_METHOD] ?: ""
+        }
+
+
+    val prayerJurisprudence: Flow<String>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[PRAYER_JURISPRUDENCE] ?: ""
+        }
+
+
+    val prayerElevation: Flow<String>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[PRAYER_ELEVATION_RULE] ?: ""
+        }
+
     val isUserLogin: Flow<Boolean>
         get() = appContext.dataStore.data.map { preferences ->
             preferences[IS_LOGIN] ?: false
+        }
+
+    val isOnBoarding: Flow<Boolean>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[IS_ONBOARDING] ?: false
         }
 
     suspend fun saveAccessTokens(accessToken: String) {
@@ -104,6 +127,11 @@ class DataPreference @Inject constructor(
 
     }
 
+    suspend fun setUserLatLong(userLatLong: UserLatLong) {
+        setStringData(USER_LAT_LONG, Gson().toJson(userLatLong))
+
+    }
+
     suspend fun getUpdatedUserProfile(): LoginUserResponse? {
         return Gson().fromJson(
             getStringData(USER_INFO),
@@ -115,7 +143,12 @@ class DataPreference @Inject constructor(
         private val ACCESS_TOKEN = stringPreferencesKey("key_access_token")
         private val REFRESH_TOKEN = stringPreferencesKey("key_refresh_token")
         val IS_LOGIN = booleanPreferencesKey("key_is_login")
+        val IS_ONBOARDING = booleanPreferencesKey("key_is_onboarding")
         val USER_ID = stringPreferencesKey("key_user_id")
+        val PRAYER_METHOD = stringPreferencesKey("key_method")
+        val USER_LAT_LONG = stringPreferencesKey("key_method")
+        val PRAYER_JURISPRUDENCE = stringPreferencesKey("key_jurisprudence")
+        val PRAYER_ELEVATION_RULE = stringPreferencesKey("key_user_elevation")
         val USER_INFO = stringPreferencesKey("key_user_info")
         val APPLICATION_ID = "com.iw.android.prayerapp"
     }

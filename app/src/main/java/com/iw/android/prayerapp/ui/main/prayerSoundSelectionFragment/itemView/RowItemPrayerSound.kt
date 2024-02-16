@@ -1,18 +1,20 @@
 package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView
 
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
-import com.iw.android.prayerapp.data.response.PrayTime
 import com.iw.android.prayerapp.data.response.PrayerSoundData
 import com.iw.android.prayerapp.databinding.RowItemPraySoundBinding
-import com.iw.android.prayerapp.databinding.RowItemPrayTimeBinding
+import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerSoundFragment
+import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerSoundFragmentDirections
 
-class RowItemPrayerSound(private val data: PrayerSoundData) : ViewType<PrayerSoundData> {
+class RowItemPrayerSound(
+    private val data: PrayerSoundData,
+    private val fragment: PrayerSoundFragment
+) : ViewType<PrayerSoundData> {
     private var isViewShow = false
     private var currentMinute = 20
 
@@ -26,10 +28,11 @@ class RowItemPrayerSound(private val data: PrayerSoundData) : ViewType<PrayerSou
 
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemPraySoundBinding).also { binding ->
-            binding.imageViewCheck.visibility =    if(data.isItemSelected) View.VISIBLE else View.GONE
+            binding.imageViewCheck.visibility = if (data.isItemSelected) View.VISIBLE else View.GONE
 
             //binding.view4.visibility = if (data.title == "Last Third") View.GONE else View.VISIBLE
-            binding.imageViewDropDownMenu.visibility = if(data.isImageForwardShow) View.VISIBLE else View.GONE
+            binding.imageViewDropDownMenu.visibility =
+                if (data.isImageForwardShow) View.VISIBLE else View.GONE
             binding.imageView.setImageResource(data.icon)
             binding.textViewTitle.text = data.title
             binding.textViewSelectSoundTitle.text = data.selectedItemTitle
@@ -38,8 +41,16 @@ class RowItemPrayerSound(private val data: PrayerSoundData) : ViewType<PrayerSou
 
             }
             binding.mainView.setOnClickListener {
-               data.isItemSelected = true
-                binding.imageViewCheck.visibility = View.VISIBLE
+                data.isItemSelected = true
+                if (data.title == "Adhan" || data.title == "Tones") {
+                    fragment.prayerSoundList.clear()
+                    fragment.findNavController()
+                        .navigate(PrayerSoundFragmentDirections.actionPrayerSoundFragmentToSoundFragment())
+                } else {
+                    binding.imageViewCheck.visibility = View.VISIBLE
+                }
+
+
             }
 
         }

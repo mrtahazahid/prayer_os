@@ -11,13 +11,10 @@ import com.iw.android.prayerapp.base.adapter.GenericListAdapter
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.fragment.BaseFragment
-import com.iw.android.prayerapp.data.response.IslamicHolidayResponse
 import com.iw.android.prayerapp.data.response.PrayerSoundData
-import com.iw.android.prayerapp.databinding.FragmentIslamicHolidayBinding
 import com.iw.android.prayerapp.databinding.FragmentPrayerSoundBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
-import com.iw.android.prayerapp.ui.main.timeFragment.itemView.RowItemIslamicHolidays
-import com.iw.android.prayerapp.ui.activities.screens.MainActivity
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.PrayerEnumType
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.RowItemPrayerSound
 import com.iw.android.prayerapp.utils.TinyDB
@@ -38,7 +35,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     private lateinit var tinyDB: TinyDB
 
     private var isItemClick = true
-    private var prayerSoundList = arrayListOf<PrayerSoundData>()
+    var prayerSoundList = arrayListOf<PrayerSoundData>()
 
     //private val viewModel: TimeViewModel by viewModels()
     private var viewTypeArray = ArrayList<ViewType<*>>()
@@ -92,7 +89,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
         viewTypeArray.clear()
         for (data in prayerSoundList) {
             viewTypeArray.add(
-                RowItemPrayerSound(data)
+                RowItemPrayerSound(data,this)
             )
         }
         adapter.items = viewTypeArray

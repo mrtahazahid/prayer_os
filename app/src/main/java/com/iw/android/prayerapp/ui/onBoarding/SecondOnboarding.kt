@@ -5,11 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentSecondOnboardingBinding
-import com.iw.android.prayerapp.ui.activities.screens.MainActivity
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
 
 class SecondOnboarding : BaseFragment(R.layout.fragment_second_onboarding) {
 
@@ -34,7 +35,7 @@ class SecondOnboarding : BaseFragment(R.layout.fragment_second_onboarding) {
 
 
     override fun initialize() {
-
+        setOnBackPressedListener()
     }
 
     override fun setObserver() {
@@ -60,5 +61,14 @@ class SecondOnboarding : BaseFragment(R.layout.fragment_second_onboarding) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+
+                }
+            })
     }
 }

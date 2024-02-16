@@ -7,11 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFourthOnboardingBinding
-import com.iw.android.prayerapp.ui.activities.screens.MainActivity
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
+import com.iw.android.prayerapp.utils.GetAdhanDetails
+import kotlinx.coroutines.launch
 
 class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
 
@@ -35,10 +40,16 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     }
 
     override fun initialize() {
+
+        setPrayerTime()
+
+        setOnBackPressedListener()
         spinnerMethod()
         spinnerJurisprudence()
         spinnerElevation()
+
     }
+
 
     override fun setObserver() {}
 
@@ -53,25 +64,28 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
         }
 
         binding.skip.setOnClickListener {
-            startActivity(Intent(activity, MainActivity::class.java))
-            activity?.finish()
+            requireActivity().startActivity(
+                Intent(
+                    requireContext(),
+                    MainActivity::class.java
+                ).putExtra("skip", "userSkipped")
+            )
+            requireActivity().finish()
         }
 
     }
 
     private fun spinnerElevation() {
-        val lst = arrayListOf(
-            "Automatic",
-            "Night Middle",
-            "One/Seventh",
-            "Angle-based"
+        val adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.elevation,
+            android.R.layout.simple_spinner_dropdown_item
         )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerElevation.adapter = adapter
 
-        val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner, lst)
 
-        binding.spElevationRule.adapter = adapter
-
-        binding.spElevationRule.onItemSelectedListener = object :
+        binding.spinnerElevation.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -79,6 +93,12 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
                 position: Int,
                 id: Long
             ) {
+                val selectedItem = parent?.getItemAtPosition(position).toString()
+                lifecycleScope.launch {
+                    (requireActivity() as OnBoardingActivity).viewModel.savePrayerElevation(
+                        selectedItem
+                    )
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -88,16 +108,16 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     }
 
     private fun spinnerJurisprudence() {
-        val lst = arrayListOf(
-            "Standard",
-            "Hanafi"
+        val adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.jurisprudence,
+            android.R.layout.simple_spinner_dropdown_item
         )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerJurisprudence.adapter = adapter
 
-        val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner, lst)
 
-        binding.spJurisprudence.adapter = adapter
-
-        binding.spJurisprudence.onItemSelectedListener = object :
+        binding.spinnerJurisprudence.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -105,6 +125,13 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
                 position: Int,
                 id: Long
             ) {
+                val selectedItem = parent?.getItemAtPosition(position).toString()
+                lifecycleScope.launch {
+                    (requireActivity() as OnBoardingActivity).viewModel.savePrayerJurisprudence(
+                        selectedItem
+                    )
+                }
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -114,26 +141,17 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     }
 
     private fun spinnerMethod() {
-        val lst = arrayListOf(
-            "Muslim World League",
-            "Islamic Society of N.America (ISNA",
-            "Moonsighting Committee",
-            "Egyptian General Authority of Survey",
-            "Algerian Ministry of Awqaf and Religious Affairs",
-            "Tunisian Ministry of Religious Affairs",
-            "London Unified Prayer Timetable",
-            "Umm Al-Quran University",
-            "Umm Al-Qura University, Makkah",
-            "Authority of Dubai - UAE",
-            "Authority of Kuwait",
-            "Authority of Qatar"
+
+        val adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.methods,
+            android.R.layout.simple_spinner_dropdown_item
         )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerMethod.adapter = adapter
 
-        val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner, lst)
 
-        binding.spMethod.adapter = adapter
-
-        binding.spMethod.onItemSelectedListener = object :
+        binding.spinnerMethod.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -141,10 +159,18 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
                 position: Int,
                 id: Long
             ) {
+                val selectedItem = parent?.getItemAtPosition(position).toString()
+                lifecycleScope.launch {
+                    (requireActivity() as OnBoardingActivity).viewModel.savePrayerMethod(
+                        selectedItem
+                    )
+                }
+
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // write code to perform some action
+                // write code to perform some action\
             }
         }
     }
@@ -152,5 +178,29 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setPrayerTime() {
+        val currentLatitude =
+            (requireActivity() as OnBoardingActivity).viewModel.userLatLong?.latitude ?: 0.0
+        val currentLongitude =
+            (requireActivity() as OnBoardingActivity).viewModel.userLatLong?.longitude ?: 0.0
+        val getPrayerTime = GetAdhanDetails.getPrayTime(currentLatitude, currentLongitude)
+        binding.textViewFajrTime.text = getPrayerTime[0]
+        binding.textViewSunriseTime.text = getPrayerTime[1]
+        binding.textViewDuhrTime.text = getPrayerTime[2]
+        binding.textViewAsrTime.text = getPrayerTime[3]
+        binding.textViewMagribTime.text = getPrayerTime[4]
+        binding.textViewIshaTime.text = getPrayerTime[5]
+    }
+
+
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+
+                }
+            })
     }
 }

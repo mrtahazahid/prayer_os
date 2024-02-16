@@ -5,19 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.lifecycleScope
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentSeventhOnboardingBinding
-import com.iw.android.prayerapp.ui.activities.screens.MainActivity
-import com.iw.android.prayerapp.utils.AppConstant.Companion.IS_ONBOARDING
-import com.iw.android.prayerapp.utils.TinyDB
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
+import kotlinx.coroutines.launch
 
 class SeventhOnboarding : BaseFragment(R.layout.fragment_seventh_onboarding) {
 
     private var _binding: FragmentSeventhOnboardingBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var tinyDB: TinyDB
+
 
 
     override fun onCreateView(
@@ -37,7 +39,8 @@ class SeventhOnboarding : BaseFragment(R.layout.fragment_seventh_onboarding) {
 
 
     override fun initialize() {
-        tinyDB = TinyDB(context)
+        setOnBackPressedListener()
+
     }
 
     override fun setObserver() {
@@ -46,24 +49,33 @@ class SeventhOnboarding : BaseFragment(R.layout.fragment_seventh_onboarding) {
 
     override fun setOnClickListener() {
         binding.btnEnableNotification.setOnClickListener {
-            tinyDB.putBoolean(IS_ONBOARDING, true)
-            startActivity(Intent(activity, MainActivity::class.java))
-            activity?.finish()
+          lifecycleScope.launch {   (requireActivity() as OnBoardingActivity).viewModel.saveIsOnBoarding()}
+            startActivity(Intent(requireActivity(), MainActivity::class.java))
+            requireActivity().finish()
         }
 
         binding.notNow.setOnClickListener {
-            startActivity(Intent(activity, MainActivity::class.java))
-            activity?.finish()
+            startActivity(Intent(requireActivity() , MainActivity::class.java))
+            requireActivity().finish()
         }
 
         binding.skip.setOnClickListener {
-            startActivity(Intent(activity, MainActivity::class.java))
-            activity?.finish()
+            startActivity(Intent(requireActivity(), MainActivity::class.java))
+            requireActivity().finish()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+
+                }
+            })
     }
 }

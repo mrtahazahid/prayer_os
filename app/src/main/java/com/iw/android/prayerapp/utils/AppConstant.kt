@@ -10,7 +10,6 @@ import java.util.Date
 class AppConstant {
     companion object {
         @JvmStatic
-        val IS_ONBOARDING = "isOnBoarding"
         val CURRENT_LATITUDE = "lat"
         val CURRENT_LONGITUDE = "lon"
 

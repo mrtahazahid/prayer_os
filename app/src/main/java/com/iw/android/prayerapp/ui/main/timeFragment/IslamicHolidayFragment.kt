@@ -15,7 +15,7 @@ import com.iw.android.prayerapp.data.response.IslamicHolidayResponse
 import com.iw.android.prayerapp.databinding.FragmentIslamicHolidayBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.main.timeFragment.itemView.RowItemIslamicHolidays
-import com.iw.android.prayerapp.ui.activities.screens.MainActivity
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.utils.TinyDB
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

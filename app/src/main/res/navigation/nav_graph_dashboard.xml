@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/prayerFragment"
-        android:name="com.iw.android.prayerapp.ui.main.PrayerFragment"
+        android:name="com.iw.android.prayerapp.ui.main.prayerFragment.PrayerFragment"
         android:label="fragment_prayer"
         tools:layout="@layout/fragment_prayer" >
         <action
@@ -48,9 +48,17 @@
         <argument
             android:name="type"
             app:argType="string" />
+        <action
+            android:id="@+id/action_prayerSoundFragment_to_soundFragment"
+            app:destination="@id/soundFragment" />
     </fragment>
     <fragment
         android:id="@+id/islamicHolidayFragment2"
         android:name="com.iw.android.prayerapp.ui.main.timeFragment.IslamicHolidayFragment"
         android:label="IslamicHolidayFragment" />
+    <fragment
+        android:id="@+id/soundFragment"
+        android:name="com.iw.android.prayerapp.ui.main.soundFragment.SoundFragment"
+        android:label="SoundFragment"
+        tools:layout="@layout/fragment_sound"/>
 </navigation>
