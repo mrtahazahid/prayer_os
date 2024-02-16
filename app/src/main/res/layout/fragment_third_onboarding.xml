@@ -91,6 +91,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+
         <View
             android:layout_width="@dimen/_7sdp"
             android:layout_height="@dimen/_7sdp"
@@ -121,18 +122,6 @@
             android:layout_margin="@dimen/_3sdp"
             android:background="@drawable/dotted_empty" />
 
-        <View
-            android:layout_width="@dimen/_7sdp"
-            android:layout_height="@dimen/_7sdp"
-            android:layout_margin="@dimen/_3sdp"
-            android:background="@drawable/dotted_empty" />
-
-        <View
-            android:layout_width="@dimen/_7sdp"
-            android:layout_height="@dimen/_7sdp"
-            android:layout_margin="@dimen/_3sdp"
-            android:background="@drawable/dotted_empty" />
-
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -144,7 +133,7 @@
         android:layout_marginBottom="@dimen/_5sdp"
         android:background="@drawable/button_rounded_corners"
         android:gravity="center"
-        android:text="@string/enable_notifications"
+        android:text="@string/enable_location"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@id/not_now"

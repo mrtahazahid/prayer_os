@@ -24,6 +24,7 @@
     <string name="let_s_go">Let\'s go!</string>
     <string name="fifth_sc_sub_heading">Please select the calculation method that best matches your local authority or institution.</string>
     <string name="confirm_calculation">Confirm Calculation</string>
+    <string name="enable_location">Enable Location</string>
 
     <string-array name="elevation">
         <item>Automatic</item>

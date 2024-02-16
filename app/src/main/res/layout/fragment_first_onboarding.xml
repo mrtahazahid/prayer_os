@@ -132,18 +132,6 @@
             android:layout_margin="@dimen/_3sdp"
             android:background="@drawable/dotted_empty" />
 
-        <View
-            android:layout_width="@dimen/_7sdp"
-            android:layout_height="@dimen/_7sdp"
-            android:layout_margin="@dimen/_3sdp"
-            android:background="@drawable/dotted_empty" />
-
-        <View
-            android:layout_width="@dimen/_7sdp"
-            android:layout_height="@dimen/_7sdp"
-            android:layout_margin="@dimen/_3sdp"
-            android:background="@drawable/dotted_empty" />
-
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton

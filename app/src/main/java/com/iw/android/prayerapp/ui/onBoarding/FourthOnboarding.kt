@@ -56,11 +56,17 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     override fun setOnClickListener() {
 
         binding.btnEnableNotification.setOnClickListener {
-            findNavController().navigate(R.id.action_fourthOnboarding_to_fifthOnboarding)
+            findNavController().navigate(R.id.action_fourthOnboarding_to_seventhOnboarding)
         }
 
         binding.notNow.setOnClickListener {
-            findNavController().navigate(R.id.action_fourthOnboarding_to_fifthOnboarding)
+            requireActivity().startActivity(
+                Intent(
+                    requireContext(),
+                    MainActivity::class.java
+                ).putExtra("skip", "userSkipped")
+            )
+            requireActivity().finish()
         }
 
         binding.skip.setOnClickListener {

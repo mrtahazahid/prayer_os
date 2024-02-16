@@ -31,7 +31,9 @@ class SoundFragment : BaseFragment(R.layout.fragment_sound), View.OnClickListene
 
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
-    val soundList = GetAdhanSound.adhansound
+    val soundList = GetAdhanSound.adhanSound
+    val notificationList = GetAdhanSound.notificationSound
+    val duaList = GetAdhanSound.duaSound
 
     private val adapter by lazy {
         GenericListAdapter(object : OnItemClickListener<ViewType<*>> {

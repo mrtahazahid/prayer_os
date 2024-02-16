@@ -36,28 +36,12 @@
         android:name="com.iw.android.prayerapp.ui.onBoarding.FourthOnboarding"
         android:label="fragment_fourth_onboarding"
         tools:layout="@layout/fragment_fourth_onboarding">
+
         <action
-            android:id="@+id/action_fourthOnboarding_to_fifthOnboarding"
-            app:destination="@id/fifthOnboarding" />
-    </fragment>
-    <fragment
-        android:id="@+id/fifthOnboarding"
-        android:name="com.iw.android.prayerapp.ui.onBoarding.FifthOnboarding"
-        android:label="fragment_fifth_onboarding"
-        tools:layout="@layout/fragment_fifth_onboarding">
-        <action
-            android:id="@+id/action_fifthOnboarding_to_sixthOnboarding"
-            app:destination="@id/sixthOnboarding" />
-    </fragment>
-    <fragment
-        android:id="@+id/sixthOnboarding"
-        android:name="com.iw.android.prayerapp.ui.onBoarding.SixthOnboarding"
-        android:label="fragment_sixth_onboarding"
-        tools:layout="@layout/fragment_sixth_onboarding">
-        <action
-            android:id="@+id/action_sixthOnboarding_to_seventhOnboarding"
+            android:id="@+id/action_fourthOnboarding_to_seventhOnboarding"
             app:destination="@id/seventhOnboarding" />
     </fragment>
+
     <fragment
         android:id="@+id/seventhOnboarding"
         android:name="com.iw.android.prayerapp.ui.onBoarding.SeventhOnboarding"

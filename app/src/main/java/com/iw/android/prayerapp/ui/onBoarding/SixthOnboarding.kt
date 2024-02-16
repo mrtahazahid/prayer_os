@@ -45,11 +45,11 @@ class SixthOnboarding : BaseFragment(R.layout.fragment_sixth_onboarding) {
 
     override fun setOnClickListener() {
         binding.btnEnableNotification.setOnClickListener {
-            findNavController().navigate(R.id.action_sixthOnboarding_to_seventhOnboarding)
+//            findNavController().navigate(R.id.action_sixthOnboarding_to_seventhOnboarding)
         }
 
         binding.notNow.setOnClickListener {
-            findNavController().navigate(R.id.action_sixthOnboarding_to_seventhOnboarding)
+//            findNavController().navigate(R.id.action_sixthOnboarding_to_seventhOnboarding)
         }
 
         binding.skip.setOnClickListener {
