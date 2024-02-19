@@ -48,7 +48,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
 
     lateinit var getQibla : Qibla
 
-    private val ALPHA = 0.2f
+    private val ALPHA = 0.08f
 
 
     @SuppressLint("SetTextI18n")
