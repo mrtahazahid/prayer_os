@@ -40,7 +40,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
     private lateinit var tinyDB: TinyDB
-    private var prayTimeArray = arrayListOf<PrayTime>()
+
 
     private val adapter by lazy {
         GenericListAdapter(object : OnItemClickListener<ViewType<*>> {
@@ -76,94 +76,21 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     override fun initialize() {
         binding.textViewDateTitle.text = getFormattedDate(dateOffset)
         tinyDB = TinyDB(requireContext())
-        getPrayList()
         setRecyclerView()
 
     }
 
     override fun setObserver() {
         viewTypeArray.clear()
-        for (data in prayTimeArray) {
+        for (data in viewModel.prayTimeArray) {
             viewTypeArray.add(
-                RowItemTime(data, binding.recyclerView)
+                RowItemTime(data, binding.recyclerView,this,viewModel)
             )
         }
         adapter.items = viewTypeArray
     }
 
-    private fun getPrayList() {
 
-        val madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 0) {
-            Madhab.SHAFI
-        } else {
-            Madhab.HANAFI
-        }
-        currentLatitude= viewModel.userLatLong?.latitude ?:0.0
-        currentLongitude=viewModel.userLatLong?.longitude ?:0.0
-        val getPrayerTime = GetAdhanDetails.getPrayTime(currentLatitude, currentLongitude, madhab)
-
-
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Fajr",
-                getPrayerTime[0],
-            )
-        )
-
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Sunrise",
-                getPrayerTime[1],
-            )
-        )
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Dhuhr",
-                getPrayerTime[2],
-            )
-        )
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Asr",
-                getPrayerTime[3],
-            )
-        )
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Maghrib",
-                getPrayerTime[4],
-            )
-        )
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Isha",
-                getPrayerTime[5],
-            )
-        )
-
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Midnight",
-                "11:42PM",
-            )
-        )
-
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Last Third",
-                "1:40AM",
-            )
-        )
-
-    }
 
     override fun setOnClickListener() {
         binding.islamicHolidayClickView.setOnClickListener(this)
@@ -190,7 +117,6 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
             }
 
             binding.islamicHolidayClickView.id -> {
-                prayTimeArray.clear()
                 findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToIslamicHolidayFragment2())
             }
 

@@ -61,6 +61,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="ContentDescription" />
 
+    <TextView
+        android:id="@+id/textViewCurrentDirection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/sf_regular"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_28ssp"
+        tools:text="256.72"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewQiblaDirection"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewQiblaDirection"
+        app:layout_constraintStart_toStartOf="@+id/imageViewQiblaDirection"
+        app:layout_constraintTop_toTopOf="@+id/imageViewQiblaDirection" />
+
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewMakkah"

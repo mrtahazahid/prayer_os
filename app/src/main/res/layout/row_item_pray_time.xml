@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -80,8 +81,10 @@
                 android:background="#2c2c2e"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/mainView">
+                app:layout_constraintTop_toBottomOf="@id/mainView"
+                tools:visibility="visible">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewNotificationSoundTitle"
@@ -109,12 +112,12 @@
                     android:drawableEnd="@drawable/ic_forward"
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/sf_regular"
-                    android:text="Tone"
                     android:textColor="@color/app_grey"
                     android:textSize="18sp"
                     app:drawableTint="@color/app_grey"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Tone" />
 
                 <View
                     android:id="@+id/view"
@@ -152,12 +155,12 @@
                     android:drawableEnd="@drawable/ic_forward"
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/sf_regular"
-                    android:text="Tone"
                     android:textColor="@color/app_grey"
                     android:textSize="18sp"
                     app:drawableTint="@color/app_grey"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view" />
+                    app:layout_constraintTop_toBottomOf="@id/view"
+                    tools:text="Tone" />
 
                 <View
                     android:id="@+id/view1"
@@ -194,11 +197,11 @@
                     android:layout_marginEnd="8dp"
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/sf_regular"
-                    android:text="20 min"
                     android:textColor="@color/app_grey"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewReminderTimeTitle" />
+                    app:layout_constraintTop_toBottomOf="@+id/textViewReminderTimeTitle"
+                    tools:text="off" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
@@ -271,33 +274,135 @@
                     android:layout_marginStart="28dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="25dp"
                     android:drawableEnd="@drawable/ic_help"
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/sf_regular"
-                    android:text="Dua Reminder"
+                    android:text="Duha"
                     android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="15dp"
                     android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view2" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/textViewDuaReminderSwitch"
+                    android:id="@+id/textViewDuaSetTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="28dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="4dp"
+                    android:visibility="gone"
                     android:layout_marginEnd="8dp"
-                    android:drawableEnd="@drawable/ic_drop_down"
+                    android:layout_marginBottom="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/sf_regular"
-                    android:text="Off"
-                    android:textColor="@color/app_green"
-                    android:textSize="14sp"
-                    app:drawableTint="@color/app_green"
+                    android:textColor="@color/app_grey"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewDuaReminder"
+                    tools:text="off" />
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewDuaAdjustmentTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="4dp"
+                    app:cardBackgroundColor="#3c3b40"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/spinnerDuaReminderSwitch"
+                    app:layout_constraintTop_toBottomOf="@+id/view2"
+                    app:strokeWidth="0dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageViewDuaMinus"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_minus"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <View
+                            android:id="@+id/view6"
+                            android:layout_width="1dp"
+                            android:layout_height="0dp"
+                            android:layout_marginVertical="5dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/imageViewDuaAdd"
+                            app:layout_constraintStart_toEndOf="@+id/imageViewDuaMinus"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageViewDuaAdd"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/plus"
+                            android:tint="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/view6"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewDuaTime"
+                    android:layout_width="90dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="4dp"
+                    app:cardBackgroundColor="#3c3b40"
+                    app:cardCornerRadius="8dp"
+                    android:visibility="gone"
+                    app:cardElevation="40dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/spinnerDuaReminderSwitch"
+                    app:layout_constraintTop_toBottomOf="@+id/view2"
+                    app:strokeWidth="0dp">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textViewDuaTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/sf_regular"
+                        android:text="12:00 AM"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+               />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinnerDuaReminderSwitch"
+                    android:layout_width="100dp"
+                    android:layout_height="0dp"
+                    android:backgroundTint="@color/app_green"
+                    android:forceHasOverlappingRendering="false"
+                    android:gravity="center"
+                    android:overlapAnchor="false"
+                    android:spinnerMode="dropdown"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view2" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -13,6 +13,7 @@ import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.IS_ONBOA
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_ELEVATION_RULE
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_JURISPRUDENCE
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_METHOD
+import com.iw.android.prayerapp.data.response.PrayerDetailData
 import com.iw.android.prayerapp.data.response.UserLatLong
 import kotlinx.coroutines.flow.first
 import javax.inject.Singleton
@@ -54,8 +55,98 @@ abstract class BaseRepository(
         )
     }
 
-    suspend fun saveUserLatLong(userLatLong: UserLatLong) {
-        preferences.setStringData(DataPreference.USER_LAT_LONG, Gson().toJson(userLatLong))
+    suspend fun saveUserLatLong(namazDetail: UserLatLong) {
+        preferences.setStringData(DataPreference.USER_LAT_LONG, Gson().toJson(namazDetail))
+    }
+
+    suspend fun saveFajrDetail(namazDetail: PrayerDetailData) {
+        preferences.setStringData(DataPreference.FAJR_INFO, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getFajrDetail(): PrayerDetailData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.FAJR_INFO),
+            PrayerDetailData::class.java
+        )
+    }
+
+    suspend fun saveSunriseDetail(namazDetail: PrayerDetailData) {
+        preferences.setStringData(DataPreference.SUNRISE_INFO, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getSunriseDetail(): PrayerDetailData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.SUNRISE_INFO),
+            PrayerDetailData::class.java
+        )
+    }
+
+    suspend fun saveDuhrDetail(namazDetail: PrayerDetailData) {
+        preferences.setStringData(DataPreference.DHUHR_INFO, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getDuhrDetail(): PrayerDetailData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.DHUHR_INFO),
+            PrayerDetailData::class.java
+        )
+    }
+
+
+    suspend fun saveAsrDetail(namazDetail: PrayerDetailData) {
+        preferences.setStringData(DataPreference.ASR_INFO, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getAsrDetail(): PrayerDetailData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.ASR_INFO),
+            PrayerDetailData::class.java
+        )
+    }
+
+    suspend fun saveMagribDetail(namazDetail: PrayerDetailData) {
+        preferences.setStringData(DataPreference.MAGRIB_INFO, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getMagribDetail(): PrayerDetailData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.MAGRIB_INFO),
+            PrayerDetailData::class.java
+        )
+    }
+
+    suspend fun saveIshaDetail(namazDetail: PrayerDetailData) {
+        preferences.setStringData(DataPreference.ISHA_INFO, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getIshaDetail(): PrayerDetailData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.ISHA_INFO),
+            PrayerDetailData::class.java
+        )
+    }
+
+    suspend fun saveMidnightDetail(namazDetail: PrayerDetailData) {
+        preferences.setStringData(DataPreference.MIDNIGHT_INFO, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getMidnightDetail(): PrayerDetailData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.MIDNIGHT_INFO),
+            PrayerDetailData::class.java
+        )
+    }
+
+
+    suspend fun saveLastThirdDetail(namazDetail: PrayerDetailData) {
+        preferences.setStringData(DataPreference.LASTTHIRD_INFO, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getLastThirdDetail(): PrayerDetailData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.LASTTHIRD_INFO),
+            PrayerDetailData::class.java
+        )
     }
 
 

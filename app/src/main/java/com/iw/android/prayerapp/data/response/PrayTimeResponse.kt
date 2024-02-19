@@ -3,7 +3,8 @@ package com.iw.android.prayerapp.data.response
 data class PrayTime(
     val image: Int,
     val title: String,
-    val time: String
+    val time: String,
+    val namazDetail: PrayerDetailData
 )
 
 data class SoundData(
@@ -16,9 +17,20 @@ data class LocationData(
     val timeZone: String,
     val city: String
 )
+
 data class SaveLocationData(
-    val isAutomatic:Boolean,
-    val geofence:String
+    val isAutomatic: Boolean,
+    val geofence: String
+)
+
+data class PrayerDetailData(
+    val notificationSoundPosition: Int = 0,
+    val notificationSound: String = "Tones",
+    val reminderNotificationSoundPosition: Int = 0,
+    val reminderNotificationSound: String = "Tones",
+    val reminderTime: String = "off",
+    val duaReminder: String = "off",
+    val duaTime: String = "12:00 AM"
 )
 
 data class IslamicHolidayResponse(

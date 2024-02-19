@@ -7,25 +7,30 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.activity.BaseActivity
+import com.iw.android.prayerapp.data.response.UserLatLong
 import com.iw.android.prayerapp.databinding.ActivityMainBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.services.gps.GpsStatusListener
 import com.iw.android.prayerapp.services.gps.LocationEvent
 import com.iw.android.prayerapp.services.gps.LocationService
 import com.iw.android.prayerapp.services.gps.TurnOnGps
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
 import com.iw.android.prayerapp.utils.AppConstant.Companion.CURRENT_LATITUDE
 import com.iw.android.prayerapp.utils.AppConstant.Companion.CURRENT_LONGITUDE
 import com.iw.android.prayerapp.utils.TinyDB
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -35,7 +40,7 @@ class MainActivity : BaseActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var tinyDB: TinyDB
+
 
     private lateinit var navController: NavController
     private lateinit var navGraph: NavGraph
@@ -43,6 +48,7 @@ class MainActivity : BaseActivity() {
 
     private var gpsStatusListener: GpsStatusListener? = null
 
+    val viewModel: OnBoardingViewModel by viewModels()
     private var turnOnGps: TurnOnGps? = null
 
     private var service: Intent? = null
@@ -103,10 +109,7 @@ class MainActivity : BaseActivity() {
         navGraph = inflater.inflate(R.navigation.nav_graph_dashboard)
         navHostFragment.navController.graph = navGraph
         navController = navHostFragment.navController
-
-
-        tinyDB = TinyDB(this)
-
+        navController.addOnDestinationChangedListener(destinationChangedListener)
         service = Intent(this, LocationService::class.java)
 
         gpsStatusListener = GpsStatusListener(this)
@@ -190,9 +193,13 @@ class MainActivity : BaseActivity() {
         }
 
     @Subscribe
-    fun receiveLocationEvent(locationEvent: LocationEvent) {
-        locationEvent.latitude?.let { tinyDB.putDouble(CURRENT_LATITUDE, it) }
-        locationEvent.longitude?.let { tinyDB.putDouble(CURRENT_LONGITUDE, it) }
+    fun receiveLocationEvent(locationEvent: LocationEvent) = lifecycleScope.launch {
+        viewModel.saveUserLatLong(
+            UserLatLong(
+                locationEvent.latitude ?: 0.0,
+                locationEvent.longitude ?: 0.0
+            )
+        )
 
         Log.d("CheckViewModel", "receiveLocationEvent: lat => ${locationEvent.latitude}")
         Log.d("CheckViewModel", "receiveLocationEvent: lon => ${locationEvent.longitude}")
@@ -214,5 +221,21 @@ class MainActivity : BaseActivity() {
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this)
         }
+        navController.removeOnDestinationChangedListener(destinationChangedListener)
     }
+
+    private val destinationChangedListener =
+        NavController.OnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.prayerFragment, R.id.qiblaFragment ,R.id.timeFragment,R.id.moreFragment,R.id.settingFragment-> {
+                    binding.bottomNavigationView.show()
+                }
+
+                else -> {
+                    binding.bottomNavigationView.gone()
+                }
+
+            }
+        }
+
 }

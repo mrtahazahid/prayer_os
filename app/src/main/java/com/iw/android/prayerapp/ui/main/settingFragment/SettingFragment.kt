@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentSettingBinding
@@ -32,6 +33,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     private var isCalViewShow = false
     private var isLocViewShow = false
     private var geofence = 75
+    private var snoozeTime = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,6 +77,9 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewLocationArrowButton.setOnClickListener(this)
         binding.imageViewAddGeofence.setOnClickListener(this)
         binding.imageViewMinusGeofence.setOnClickListener(this)
+        binding.imageViewSnoozeMinus.setOnClickListener(this)
+        binding.imageViewSnoozeAdd.setOnClickListener(this)
+        binding.clSchReminder.setOnClickListener(this)
         binding.switchAutomatic.setOnCheckedChangeListener { buttonView, isChecked ->
             viewModel.setLocationAutomaticValue(isChecked)
         }
@@ -82,6 +87,15 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            binding.clSchReminder.id->{
+                findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToSoundFragment("Settings","Notification","false",""))
+            }
+            binding.imageViewSnoozeMinus.id->{
+                binding.subTxtSnoozeTime.text = decrementSnoozeMinute()
+            }
+            binding.imageViewSnoozeAdd.id->{
+                binding.subTxtSnoozeTime.text = incrementSnoozeMinute()
+            }
             binding.imageViewAddGeofence.id -> {
                 binding.textViewGeofenceRadius.text = incrementGeofence(5)
                 viewModel.setGeofenceRadius(geofence)
@@ -166,7 +180,8 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 id: Long
             ) {
                 lifecycleScope.launch { viewModel.savePrayerJurisprudence(position.toString()) }
-                binding.textViewJurisprudenceDes.visibility = if(position== 0) View.GONE else View.VISIBLE
+                binding.textViewJurisprudenceDes.visibility =
+                    if (position == 0) View.GONE else View.VISIBLE
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -226,5 +241,15 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             105
         ) // Ensure the value is within the specified range
         return "$geofence Kilometers"
+    }
+
+    private fun incrementSnoozeMinute(): String {
+        snoozeTime++
+        return "$snoozeTime min"
+    }
+
+    private fun decrementSnoozeMinute(): String {
+        snoozeTime--
+        return if (snoozeTime > 0) "$snoozeTime min" else "off"
     }
 }

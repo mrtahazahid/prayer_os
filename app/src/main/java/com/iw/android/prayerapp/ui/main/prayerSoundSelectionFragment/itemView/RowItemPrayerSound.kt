@@ -13,7 +13,8 @@ import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerSound
 
 class RowItemPrayerSound(
     private val data: PrayerSoundData,
-    private val fragment: PrayerSoundFragment
+    private val fragment: PrayerSoundFragment,
+    val listener: OnClick
 ) : ViewType<PrayerSoundData> {
     private var isViewShow = false
     private var currentMinute = 20
@@ -41,16 +42,30 @@ class RowItemPrayerSound(
 
             }
             binding.mainView.setOnClickListener {
-                data.isItemSelected = true
-                if (data.title == "Adhan" || data.title == "Tones") {
-                    fragment.prayerSoundList.clear()
-                    fragment.findNavController()
-                        .navigate(PrayerSoundFragmentDirections.actionPrayerSoundFragmentToSoundFragment("",""))
-                } else {
-                    binding.imageViewCheck.visibility = View.VISIBLE
+                listener.onItemClick(position)
+                when (data.type) {
+                    PrayerEnumType.ADHAN.getValue() -> {
+                        fragment.findNavController()
+                            .navigate(
+                                PrayerSoundFragmentDirections.actionPrayerSoundFragmentToSoundFragment(
+                                    "Magrib Sound",
+                                    "Adhan",
+                                    "true"
+                                ,"")
+                            )
+                    }
+
+                    PrayerEnumType.TONES.getValue() -> {
+                        fragment.findNavController()
+                            .navigate(
+                                PrayerSoundFragmentDirections.actionPrayerSoundFragmentToSoundFragment(
+                                    "Back",
+                                    "Magrib Tones",
+                                    "false",""
+                                )
+                            )
+                    }
                 }
-
-
             }
 
         }
@@ -65,4 +80,10 @@ class RowItemPrayerSound(
         currentMinute--
         return "$currentMinute min"
     }
+
+
+}
+
+fun interface OnClick {
+    fun onItemClick(position: Int)
 }

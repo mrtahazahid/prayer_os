@@ -3,6 +3,7 @@ package com.iw.android.prayerapp.base.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iw.android.prayerapp.base.repo.BaseRepository
+import com.iw.android.prayerapp.data.response.PrayerDetailData
 import com.iw.android.prayerapp.data.response.UserLatLong
 import kotlinx.coroutines.launch
 
@@ -27,8 +28,54 @@ abstract class BaseViewModel(private val repository: BaseRepository) : ViewModel
     suspend fun getUserInfoData() = repository.getLoginUserData()
 
     suspend fun saveUserLatLong(userLatLong: UserLatLong) {
-        return repository.saveUserLatLong(userLatLong)
+        repository.saveUserLatLong(userLatLong)
     }
+
+    fun saveFajrDetail(prayerDetail: PrayerDetailData) = viewModelScope.launch {
+        repository.saveFajrDetail(prayerDetail)
+    }
+
+    suspend fun getFajrDetail() = repository.getFajrDetail()
+    fun saveSunriseDetail(prayerDetail: PrayerDetailData) = viewModelScope.launch {
+        repository.saveSunriseDetail(prayerDetail)
+    }
+
+    suspend fun getSunriseDetail() = repository.getSunriseDetail()
+    fun saveDuhrDetail(prayerDetail: PrayerDetailData) = viewModelScope.launch {
+        repository.saveDuhrDetail(prayerDetail)
+    }
+
+    suspend fun getDuhrDetail() = repository.getDuhrDetail()
+    fun saveAsrDetail(prayerDetail: PrayerDetailData) = viewModelScope.launch {
+        repository.saveAsrDetail(prayerDetail)
+    }
+
+    suspend fun getAsrDetail() = repository.getAsrDetail()
+
+    fun saveMagribDetail(prayerDetail: PrayerDetailData) = viewModelScope.launch {
+        repository.saveMagribDetail(prayerDetail)
+    }
+
+    suspend fun getMagribDetail() = repository.getMagribDetail()
+    fun saveIshaDetail(prayerDetail: PrayerDetailData) = viewModelScope.launch {
+        repository.saveIshaDetail(prayerDetail)
+    }
+
+    suspend fun getIshaDetail() = repository.getIshaDetail()
+
+    fun saveMidNightDetail(prayerDetail: PrayerDetailData) = viewModelScope.launch {
+        repository.saveMidnightDetail(prayerDetail)
+    }
+
+    suspend fun getMidNightDetail() = repository.getMidnightDetail()
+
+    fun saveLastNightDetail(prayerDetail: PrayerDetailData) = viewModelScope.launch {
+        repository.saveLastThirdDetail(prayerDetail)
+    }
+
+
+    suspend fun getLastNightDetail() = repository.getLastThirdDetail()
+
 
     suspend fun saveIsOnBoarding() {
         repository.setIsOnboarding()

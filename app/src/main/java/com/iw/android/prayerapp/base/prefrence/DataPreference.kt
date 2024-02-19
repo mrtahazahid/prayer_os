@@ -157,6 +157,14 @@ class DataPreference @Inject constructor(
         val PRAYER_JURISPRUDENCE = stringPreferencesKey("key_jurisprudence")
         val PRAYER_ELEVATION_RULE = stringPreferencesKey("key_user_elevation")
         val USER_INFO = stringPreferencesKey("key_user_info")
+        val FAJR_INFO = stringPreferencesKey("key_fajr_info")
+        val SUNRISE_INFO = stringPreferencesKey("key_sunrise_info")
+        val DHUHR_INFO = stringPreferencesKey("key_dhuhr_info")
+        val ASR_INFO = stringPreferencesKey("key_asr_info")
+        val MAGRIB_INFO = stringPreferencesKey("key_magrib_info")
+        val ISHA_INFO = stringPreferencesKey("key_isha_info")
+        val MIDNIGHT_INFO = stringPreferencesKey("key_midnight_info")
+        val LASTTHIRD_INFO = stringPreferencesKey("key_lastnight_info")
         val APPLICATION_ID = "com.iw.android.prayerapp"
     }
 }

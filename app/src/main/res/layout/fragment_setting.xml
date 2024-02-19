@@ -87,7 +87,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:fontFamily="@font/sf_medium"
-                            android:text="30 min"
+                            android:text="off"
                             android:textColor="@color/app_grey"
                             android:textSize="@dimen/_10ssp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -135,8 +135,8 @@
 
                                 <androidx.appcompat.widget.AppCompatImageView
                                     android:id="@+id/imageViewSnoozeAdd"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp"
                                     android:layout_margin="10dp"
                                     android:src="@drawable/plus"
                                     android:tint="@color/white"

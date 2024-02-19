@@ -16,8 +16,10 @@ import com.iw.android.prayerapp.data.response.PrayerSoundData
 import com.iw.android.prayerapp.databinding.FragmentPrayerSoundBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.OnClick
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.PrayerEnumType
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.RowItemPrayerSound
+import com.iw.android.prayerapp.utils.GetAdhanSound.prayerSoundList
 import com.iw.android.prayerapp.utils.TinyDB
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -28,16 +30,17 @@ import java.util.Locale
 import java.util.TimeZone
 
 
-class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.OnClickListener {
+class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.OnClickListener,
+    OnClick {
 
     private var _binding: FragmentPrayerSoundBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var tinyDB: TinyDB
-     private val args by navArgs<PrayerSoundFragmentArgs>()
+
+    private val args by navArgs<PrayerSoundFragmentArgs>()
 
     private var isItemClick = true
-    var prayerSoundList = arrayListOf<PrayerSoundData>()
+
 
     //private val viewModel: TimeViewModel by viewModels()
     private var viewTypeArray = ArrayList<ViewType<*>>()
@@ -67,9 +70,6 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
         _binding = FragmentPrayerSoundBinding.inflate(inflater, container, false)
         setStatusBarWithBlackIcon(R.color.bg_color)
 
-        tinyDB = TinyDB(context)
-        (requireActivity() as MainActivity).hideBottomSheet()
-
         return binding.root
     }
 
@@ -92,7 +92,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
         viewTypeArray.clear()
         for (data in prayerSoundList) {
             viewTypeArray.add(
-                RowItemPrayerSound(data,this)
+                RowItemPrayerSound(data, this, this)
             )
         }
         adapter.items = viewTypeArray
@@ -120,37 +120,18 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
 
     }
 
-    private fun getIslamicMonthName(month: Int): String {
-        val islamicMonths = listOf(
-            "Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani",
-            "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban",
-            "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah"
-        )
+    private fun addHolidayList() {
 
-        return islamicMonths[month - 1]
     }
 
-    private fun addHolidayList() {
-        prayerSoundList.add(PrayerSoundData("Adhan",R.drawable.ic_mike,PrayerEnumType.ADHAN.getValue(),
-            isImageForwardShow = true,
-            isItemSelected = true,
-            selectedItemTitle = "adhan"
-        ))
-        prayerSoundList.add(PrayerSoundData("Tones",R.drawable.ic_mike,PrayerEnumType.TONES.getValue(),
-            isImageForwardShow = true,
-            isItemSelected = false
-        ))
-        prayerSoundList.add(PrayerSoundData("Vibrate",R.drawable.ic_mike,PrayerEnumType.VIBRATE.getValue(),
-            isImageForwardShow = false,
-            isItemSelected = false
-        ))
-        prayerSoundList.add(PrayerSoundData("Silent",R.drawable.ic_mike,PrayerEnumType.SILENT.getValue(),
-            isImageForwardShow = false,
-            isItemSelected = false
-        ))
-        prayerSoundList.add(PrayerSoundData("Off",R.drawable.ic_mike,PrayerEnumType.OFF.getValue(),
-            isImageForwardShow = false,
-            isItemSelected = false
-        ))
+    override fun onItemClick(position: Int) {
+        for (checked in prayerSoundList) {
+            checked.isItemSelected = false
+        }
+
+        // Select the clicked item
+        prayerSoundList[position].isItemSelected = true
+        // Notify the adapter about the change in the entire dataset
+        binding.recyclerView.adapter?.notifyDataSetChanged()
     }
 }

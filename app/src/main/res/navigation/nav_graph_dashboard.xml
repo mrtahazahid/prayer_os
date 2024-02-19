@@ -9,10 +9,10 @@
         android:id="@+id/prayerFragment"
         android:name="com.iw.android.prayerapp.ui.main.prayerFragment.PrayerFragment"
         android:label="fragment_prayer"
-        tools:layout="@layout/fragment_prayer" >
+        tools:layout="@layout/fragment_prayer">
         <action
             android:id="@+id/action_prayerFragment_to_prayerSoundFragment"
-            app:destination="@id/prayerSoundFragment" >
+            app:destination="@id/prayerSoundFragment">
             <argument
                 android:name="title"
                 app:argType="string" />
@@ -29,7 +29,13 @@
             app:destination="@id/islamicHolidayFragment2" />
         <action
             android:id="@+id/action_timeFragment_to_soundFragment"
-            app:destination="@id/soundFragment" >
+            app:destination="@id/soundFragment">
+
+
+            <argument
+                android:name="subTitle"
+                app:argType="string" />
+
 
             <argument
                 android:name="title"
@@ -49,7 +55,23 @@
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.iw.android.prayerapp.ui.main.settingFragment.SettingFragment"
-        android:label="SettingFragment" />
+        android:label="SettingFragment">
+        <action
+            android:id="@+id/action_settingFragment_to_soundFragment"
+            app:destination="@id/soundFragment">
+            <argument
+                android:name="subTitle"
+                app:argType="string" />
+
+            <argument
+                android:name="title"
+                app:argType="string" />
+
+            <argument
+                android:name="type"
+                app:argType="string" />
+        </action>
+    </fragment>
     <fragment
         android:id="@+id/moreFragment"
         android:name="com.iw.android.prayerapp.ui.main.moreFragment.MoreFragment"
@@ -57,13 +79,19 @@
     <fragment
         android:id="@+id/prayerSoundFragment"
         android:name="com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerSoundFragment"
-        android:label="PrayerSoundFragment" >
+        android:label="PrayerSoundFragment">
         <argument
             android:name="title"
             app:argType="string" />
         <action
             android:id="@+id/action_prayerSoundFragment_to_soundFragment"
-            app:destination="@id/soundFragment" >
+            app:destination="@id/soundFragment">
+
+
+            <argument
+                android:name="subTitle"
+                app:argType="string" />
+
 
             <argument
                 android:name="title"
@@ -86,11 +114,19 @@
         tools:layout="@layout/fragment_sound">
 
         <argument
+            android:name="subTitle"
+            app:argType="string" />
+
+        <argument
             android:name="title"
             app:argType="string" />
 
         <argument
             android:name="type"
+            app:argType="string" />
+
+        <argument
+            android:name="dataFromTimeFragment"
             app:argType="string" />
     </fragment>
 </navigation>

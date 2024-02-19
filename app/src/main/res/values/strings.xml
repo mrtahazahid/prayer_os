@@ -39,6 +39,13 @@
         <item>Hanafi</item>
     </string-array>
 
+    <string-array name="dua">
+        <item>Off</item>
+        <item>Time</item>
+        <item>Minutes</item>
+    </string-array>
+
+
     <string-array name="methods">
         <item>Muslim World League</item>
         <item>Islamic Society of N.America (ISNA)</item>

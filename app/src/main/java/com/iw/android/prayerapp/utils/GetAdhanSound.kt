@@ -1,13 +1,17 @@
 package com.iw.android.prayerapp.utils
 
 import com.iw.android.prayerapp.R
+import com.iw.android.prayerapp.data.response.PrayerSoundData
 import com.iw.android.prayerapp.data.response.SoundData
+import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.PrayerEnumType
 
 object GetAdhanSound {
 
     val adhanSound = arrayListOf<SoundData>()
     val notificationSound = arrayListOf<SoundData>()
     val duaSound = arrayListOf<SoundData>()
+    var prayerSoundList = arrayListOf<PrayerSoundData>()
+
 
     init {
         adhanSound.add(SoundData("Abdul Basit", R.raw.adhan_abdul_basit,false))
@@ -189,5 +193,42 @@ object GetAdhanSound {
         notificationSound.add(SoundData("Wake Up Long",R.raw.noti_wake_up_long,false))
         notificationSound.add(SoundData("Winds",R.raw.noti_winds,false))
         notificationSound.add(SoundData("Xylophone",R.raw.noti_xylophone,false))
+
+        prayerSoundList.add(
+            PrayerSoundData(
+                "Adhan", R.drawable.ic_mike, PrayerEnumType.ADHAN.getValue(),
+                isImageForwardShow = true,
+                isItemSelected = true,
+                selectedItemTitle = "adhan"
+            )
+        )
+        prayerSoundList.add(
+            PrayerSoundData(
+                "Tones", R.drawable.ic_mike, PrayerEnumType.TONES.getValue(),
+                isImageForwardShow = true,
+                isItemSelected = false
+            )
+        )
+        prayerSoundList.add(
+            PrayerSoundData(
+                "Vibrate", R.drawable.ic_mike, PrayerEnumType.VIBRATE.getValue(),
+                isImageForwardShow = false,
+                isItemSelected = false
+            )
+        )
+        prayerSoundList.add(
+            PrayerSoundData(
+                "Silent", R.drawable.ic_mike, PrayerEnumType.SILENT.getValue(),
+                isImageForwardShow = false,
+                isItemSelected = false
+            )
+        )
+        prayerSoundList.add(
+            PrayerSoundData(
+                "Off", R.drawable.ic_mike, PrayerEnumType.OFF.getValue(),
+                isImageForwardShow = false,
+                isItemSelected = false
+            )
+        )
     }
 }
