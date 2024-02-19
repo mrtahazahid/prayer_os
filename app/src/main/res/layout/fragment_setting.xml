@@ -67,7 +67,7 @@
                         android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_10sdp">
+                        android:layout_marginBottom="@dimen/_6sdp">
 
                         <TextView
                             android:id="@+id/txt_snooze_time"
@@ -162,9 +162,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_10sdp">
+                        android:layout_marginTop="@dimen/_6sdp"
+
+                        android:layout_marginBottom="@dimen/_6sdp">
 
                         <TextView
                             android:id="@+id/txt_adhan_dua"
@@ -186,13 +186,12 @@
                         <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/switch_adhan_dua"
                             android:layout_width="0dp"
-                            android:layout_height="0dp"
+                            android:layout_height="10dp"
                             android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginEnd="-10dp"
                             android:checked="true"
-                            android:forceHasOverlappingRendering="false"
-                            android:gravity="center"
-                            android:overlapAnchor="false"
-                            android:spinnerMode="dropdown"
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/txt_adhan_dua"
@@ -214,9 +213,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_10sdp">
+                        android:layout_marginTop="@dimen/_6sdp"
+
+                        android:layout_marginBottom="@dimen/_6sdp">
 
                         <TextView
                             android:id="@+id/txt_play_on_tap"
@@ -238,15 +237,12 @@
                         <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/switch_play_on_tap"
                             android:layout_width="0dp"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_10sdp"
-                            android:backgroundTint="@color/app_green"
+                            android:layout_marginEnd="-10dp"
                             android:checked="true"
-                            android:forceHasOverlappingRendering="false"
-                            android:gravity="center"
-                            android:overlapAnchor="false"
-                            android:scaleY="1.0"
-                            android:spinnerMode="dropdown"
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/txt_play_on_tap"
@@ -268,9 +264,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_10sdp">
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:layout_marginBottom="@dimen/_6sdp">
 
                         <TextView
                             android:id="@+id/txt_sch_reminder"
@@ -336,6 +332,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="#2b2b2c"
                         android:orientation="vertical">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -382,10 +379,11 @@
                             android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/mainView">
+                            app:layout_constraintTop_toBottomOf="@id/mainView"
+                            tools:visibility="visible">
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/textViewNotificationSoundTitle"
+                                android:id="@+id/textViewMethodTitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="28dp"
@@ -401,33 +399,20 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/textViewNotificationSound"
+                            <androidx.appcompat.widget.AppCompatSpinner
+                                android:id="@+id/spinnerMethod"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-
-                                android:layout_marginHorizontal="10dp"
-                                android:layout_marginEnd="8dp"
-                                android:drawablePadding="4dp"
-                                android:fontFamily="@font/sf_regular"
-                                android:gravity="end"
-                                android:text="Moonsighting Committee"
-                                android:textColor="#808084"
-                                android:textSize="15sp"
-                                app:drawableTint="@color/app_grey"
-                                app:layout_constraintBottom_toTopOf="@+id/view"
-                                app:layout_constraintEnd_toStartOf="@id/imageViewMethod"
-                                app:layout_constraintStart_toEndOf="@+id/textViewNotificationSoundTitle"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/imageViewMethod"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="15dp"
-                                android:src="@drawable/ic_forward"
-                                android:tint="@color/small_icon"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:backgroundTint="@color/app_green"
+                                android:forceHasOverlappingRendering="false"
+                                android:gravity="center"
+                                android:overlapAnchor="false"
+                                android:spinnerMode="dropdown"
+                                android:textSize="12sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/view"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/textViewMethodTitle"
                                 app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -438,8 +423,8 @@
                                 android:layout_marginTop="10dp"
                                 android:background="@color/view_separator"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="@id/textViewNotificationSoundTitle"
-                                app:layout_constraintTop_toBottomOf="@id/textViewNotificationSoundTitle" />
+                                app:layout_constraintStart_toStartOf="@id/textViewMethodTitle"
+                                app:layout_constraintTop_toBottomOf="@id/textViewMethodTitle" />
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewJurisprudenceTitle"
@@ -458,32 +443,32 @@
                                 app:layout_constraintTop_toBottomOf="@+id/view" />
 
                             <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/textViewJurisprudenceType"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="10dp"
-                                android:layout_marginStart="10dp"
-                                android:layout_marginEnd="8dp"
-                                android:drawablePadding="4dp"
-                                android:fontFamily="@font/sf_regular"
-                                android:gravity="end"
-                                android:text="Standard"
-                                android:textColor="@color/app_grey"
-                                android:textSize="15sp"
-                                app:drawableTint="@color/app_grey"
-                                app:layout_constraintBottom_toTopOf="@+id/view1"
-                                app:layout_constraintEnd_toStartOf="@id/imageViewMethod"
-                                app:layout_constraintStart_toEndOf="@+id/textViewJurisprudenceTitle"
-                                app:layout_constraintTop_toBottomOf="@id/view" />
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/imageViewJurisprudence"
+                                android:id="@+id/textViewJurisprudenceDes"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="15dp"
-                                android:src="@drawable/ic_forward"
-                                android:tint="@color/small_icon"
+                                android:layout_marginTop="10dp"
+                                android:visibility="gone"
+                                android:layout_marginStart="40dp"
+                                android:fontFamily="@font/sf_regular"
+                                android:text="Note: Asr time is later in Hanafi method "
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                app:layout_constraintStart_toStartOf="@+id/textViewJurisprudenceTitle"
+                                app:layout_constraintTop_toBottomOf="@+id/textViewJurisprudenceTitle" />
+
+                            <Spinner
+                                android:id="@+id/spinnerJurisprudence"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:backgroundTint="@color/app_green"
+                                android:forceHasOverlappingRendering="false"
+                                android:gravity="center"
+                                android:overlapAnchor="false"
+                                android:spinnerMode="dropdown"
+                                app:layout_constraintBottom_toBottomOf="@+id/textViewJurisprudenceTitle"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/textViewJurisprudenceTitle"
                                 app:layout_constraintTop_toBottomOf="@id/view" />
 
 
@@ -495,7 +480,7 @@
                                 android:background="@color/view_separator"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="@id/textViewJurisprudenceTitle"
-                                app:layout_constraintTop_toBottomOf="@id/textViewJurisprudenceTitle" />
+                                app:layout_constraintTop_toBottomOf="@id/textViewJurisprudenceDes" />
 
 
                             <androidx.appcompat.widget.AppCompatTextView
@@ -516,40 +501,26 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/view1" />
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/textViewAdjustmentType"
+                            <Spinner
+                                android:id="@+id/spinnerElevation"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="10dp"
-                                android:layout_marginStart="10dp"
-                                android:layout_marginEnd="8dp"
-                                android:drawablePadding="4dp"
-                                android:fontFamily="@font/sf_regular"
-                                android:gravity="end"
-                                android:text="Standard"
-                                android:textColor="@color/app_grey"
-                                android:textSize="15sp"
-                                app:drawableTint="@color/app_grey"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:backgroundTint="@color/app_green"
+                                android:forceHasOverlappingRendering="false"
+                                android:gravity="center"
+                                android:overlapAnchor="false"
+                                android:spinnerMode="dropdown"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toStartOf="@id/imageViewAdjustment"
-                                app:layout_constraintStart_toEndOf="@+id/textViewAdjustments"
-                                app:layout_constraintTop_toBottomOf="@id/view1" />
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/imageViewAdjustment"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="15dp"
-                                android:src="@drawable/ic_forward"
-                                android:tint="@color/small_icon"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/textViewJurisprudenceTitle"
                                 app:layout_constraintTop_toBottomOf="@id/view1" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <View
                             android:id="@+id/viewCalSep"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@color/view_separator" />
 
@@ -593,16 +564,18 @@
                             android:layout_height="wrap_content"
                             android:background="#2c2c2e"
                             android:visibility="gone"
+                            android:layout_marginBottom="8dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/mainView">
+                            app:layout_constraintTop_toBottomOf="@id/mainView"
+                            app:layout_constraintBottom_toTopOf="@id/viewLocSep"
+                            tools:visibility="visible">
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewAutomatic"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="28dp"
-                                android:layout_marginTop="10dp"
                                 android:layout_marginEnd="8dp"
                                 android:drawableEnd="@drawable/ic_help"
                                 android:drawablePadding="4dp"
@@ -614,20 +587,22 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <com.google.android.material.switchmaterial.SwitchMaterial
+
+                            <com.google.android.material.materialswitch.MaterialSwitch
                                 android:id="@+id/switchAutomatic"
                                 android:layout_width="0dp"
-                                android:layout_height="0dp"
+                                android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_10sdp"
-                                android:backgroundTint="@color/app_green"
-                                android:forceHasOverlappingRendering="false"
-                                android:gravity="center"
-                                android:overlapAnchor="false"
-                                android:spinnerMode="dropdown"
+                                android:layout_marginEnd="-10dp"
+                                android:checked="true"
+                                android:scaleX="0.8"
+                                android:scaleY="0.8"
                                 app:layout_constraintBottom_toTopOf="@+id/viewSepAutomatic"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/textViewAutomatic"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:thumbTint="@color/white"
+                                app:trackTint="@drawable/track" />
 
                             <View
                                 android:id="@+id/viewSepAutomatic"
@@ -644,6 +619,7 @@
                                 android:id="@+id/textViewGeofence"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_marginTop="6dp"
                                 android:drawablePadding="@dimen/_3sdp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Geofence"
@@ -658,7 +634,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:fontFamily="@font/sf_medium"
-                                android:text="75 Kilometers"
+                                tools:text="75 Kilometers"
                                 android:textColor="@color/app_grey"
                                 android:textSize="@dimen/_10ssp"
                                 app:layout_constraintStart_toStartOf="@id/viewSepAutomatic"
@@ -693,9 +669,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="15dp"
                                 android:fontFamily="@font/sf_medium"
-                                android:text="Karachi"
+                                tools:text="Karachi"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="16sp"
                                 app:layout_constraintEnd_toEndOf="@id/viewSepGeofence"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepGeofence" />
 
@@ -728,9 +704,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="15dp"
                                 android:fontFamily="@font/sf_medium"
-                                android:text="Asia/Karachi"
+                                tools:text="Asia/Karachi"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="16sp"
                                 app:layout_constraintEnd_toEndOf="@id/viewSepCity"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepCity" />
 
@@ -765,7 +741,7 @@
                                 android:fontFamily="@font/sf_medium"
                                 android:text="24/0,67.11"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="16sp"
                                 app:layout_constraintEnd_toEndOf="@id/viewSepTimeZone"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepTimeZone" />
 
@@ -787,7 +763,7 @@
                                     android:layout_height="match_parent">
 
                                     <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/imageViewRemove"
+                                        android:id="@+id/imageViewMinusGeofence"
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
                                         android:layout_margin="10dp"
@@ -804,12 +780,12 @@
                                         android:layout_marginStart="10dp"
                                         android:background="@color/white"
                                         app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintEnd_toStartOf="@+id/imageViewAdd"
-                                        app:layout_constraintStart_toEndOf="@+id/imageViewRemove"
+                                        app:layout_constraintEnd_toStartOf="@+id/imageViewAddGeofence"
+                                        app:layout_constraintStart_toEndOf="@+id/imageViewMinusGeofence"
                                         app:layout_constraintTop_toTopOf="parent" />
 
                                     <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/imageViewAdd"
+                                        android:id="@+id/imageViewAddGeofence"
                                         android:layout_width="15dp"
                                         android:layout_height="15dp"
                                         android:layout_margin="10dp"

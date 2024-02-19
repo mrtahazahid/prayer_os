@@ -12,12 +12,14 @@ import javax.inject.Inject
 class PrayerViewModel @Inject constructor(private val repository: MainRepository) :
     BaseViewModel(repository) {
 
-         var userLatLong:UserLatLong?=null
+    var userLatLong: UserLatLong? = null
+    var getSavedPrayerJurisprudence = ""
 
-        init {
-            viewModelScope.launch {
-                userLatLong = getUserLatLong()
-            }
+    init {
+        viewModelScope.launch {
+            userLatLong = getUserLatLong()
+            getSavedPrayerJurisprudence = getPrayerJurisprudence()
         }
+    }
 
 }

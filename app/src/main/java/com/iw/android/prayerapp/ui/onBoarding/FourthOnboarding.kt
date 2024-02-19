@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFourthOnboardingBinding
@@ -85,7 +86,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.elevation,
-            android.R.layout.simple_spinner_dropdown_item
+            R.layout.custom_spinner
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerElevation.adapter = adapter
@@ -102,7 +103,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
                 val selectedItem = parent?.getItemAtPosition(position).toString()
                 lifecycleScope.launch {
                     (requireActivity() as OnBoardingActivity).viewModel.savePrayerElevation(
-                        selectedItem
+                        position.toString()
                     )
                 }
             }
@@ -117,7 +118,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.jurisprudence,
-            android.R.layout.simple_spinner_dropdown_item
+            R.layout.custom_spinner
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerJurisprudence.adapter = adapter
@@ -134,7 +135,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
                 val selectedItem = parent?.getItemAtPosition(position).toString()
                 lifecycleScope.launch {
                     (requireActivity() as OnBoardingActivity).viewModel.savePrayerJurisprudence(
-                        selectedItem
+                        position.toString()
                     )
                 }
 
@@ -151,7 +152,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.methods,
-            android.R.layout.simple_spinner_dropdown_item
+            R.layout.custom_spinner
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerMethod.adapter = adapter
@@ -168,7 +169,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
                 val selectedItem = parent?.getItemAtPosition(position).toString()
                 lifecycleScope.launch {
                     (requireActivity() as OnBoardingActivity).viewModel.savePrayerMethod(
-                        selectedItem
+                        position.toString()
                     )
                 }
 
@@ -191,7 +192,9 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
             (requireActivity() as OnBoardingActivity).viewModel.userLatLong?.latitude ?: 0.0
         val currentLongitude =
             (requireActivity() as OnBoardingActivity).viewModel.userLatLong?.longitude ?: 0.0
-        val getPrayerTime = GetAdhanDetails.getPrayTime(currentLatitude, currentLongitude)
+
+        val getPrayerTime = GetAdhanDetails.getPrayTime(currentLatitude, currentLongitude,   Madhab.HANAFI)
+
         binding.textViewFajrTime.text = getPrayerTime[0]
         binding.textViewSunriseTime.text = getPrayerTime[1]
         binding.textViewDuhrTime.text = getPrayerTime[2]

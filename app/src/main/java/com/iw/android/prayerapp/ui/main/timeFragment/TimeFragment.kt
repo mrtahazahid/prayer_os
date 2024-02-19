@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
@@ -31,7 +33,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     val binding
         get() = _binding!!
 
-    //    private val viewModel: TimeViewModel by viewModels()
+      private val viewModel: TimeViewModel by viewModels()
     private var viewTypeArray = ArrayList<ViewType<*>>()
     private var dateOffset = 0
 
@@ -90,26 +92,16 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     }
 
     private fun getPrayList() {
-        currentLatitude =
-            if (tinyDB.getDouble(AppConstant.CURRENT_LATITUDE).isNaN() || tinyDB.getDouble(
-                    AppConstant.CURRENT_LATITUDE
-                ).toString().isEmpty()
-            ) {
-                0.0
-            } else {
-                tinyDB.getDouble(AppConstant.CURRENT_LATITUDE)
-            }
 
-        currentLongitude =
-            if (tinyDB.getDouble(AppConstant.CURRENT_LONGITUDE).isNaN() || tinyDB.getDouble(
-                    AppConstant.CURRENT_LONGITUDE
-                ).toString().isEmpty()
-            ) {
-                0.0
-            } else {
-                tinyDB.getDouble(AppConstant.CURRENT_LONGITUDE)
-            }
-        val getPrayerTime = GetAdhanDetails.getPrayTime(currentLatitude, currentLongitude)
+        val madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 0) {
+            Madhab.SHAFI
+        } else {
+            Madhab.HANAFI
+        }
+        currentLatitude= viewModel.userLatLong?.latitude ?:0.0
+        currentLongitude=viewModel.userLatLong?.longitude ?:0.0
+        val getPrayerTime = GetAdhanDetails.getPrayTime(currentLatitude, currentLongitude, madhab)
+
 
         prayTimeArray.add(
             PrayTime(

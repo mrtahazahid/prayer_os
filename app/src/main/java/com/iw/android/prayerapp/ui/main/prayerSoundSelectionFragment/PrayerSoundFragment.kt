@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
@@ -33,6 +34,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     private val binding get() = _binding!!
 
     private lateinit var tinyDB: TinyDB
+     private val args by navArgs<PrayerSoundFragmentArgs>()
 
     private var isItemClick = true
     var prayerSoundList = arrayListOf<PrayerSoundData>()
@@ -80,6 +82,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
 
 
     override fun initialize() {
+        binding.textViewTitle.text = args.title
         setRecyclerView()
         addHolidayList()
     }
@@ -115,24 +118,6 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     private fun setRecyclerView() {
         binding.recyclerView.adapter = adapter
 
-    }
-
-    private fun getCurrentDateFormatted(): String {
-        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-        val calendar = Calendar.getInstance()
-        return dateFormat.format(calendar.time)
-    }
-
-    private fun getCurrentIslamicDate(): String {
-        val currentDate = Date()
-        val islamicCalendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"))
-        islamicCalendar.time = currentDate
-
-        val day = islamicCalendar.get(Calendar.DAY_OF_MONTH)
-        val month = islamicCalendar.get(Calendar.MONTH) + 1 // Months are 0-indexed in Calendar
-        val year = islamicCalendar.get(Calendar.YEAR)
-
-        return "$day ${getIslamicMonthName(month)} $year"
     }
 
     private fun getIslamicMonthName(month: Int): String {

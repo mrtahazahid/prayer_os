@@ -12,6 +12,15 @@ data class SoundData(
     var isSoundSelected: Boolean
 )
 
+data class LocationData(
+    val timeZone: String,
+    val city: String
+)
+data class SaveLocationData(
+    val isAutomatic:Boolean,
+    val geofence:String
+)
+
 data class IslamicHolidayResponse(
     val title: String,
     val islamicDayTitle: String,

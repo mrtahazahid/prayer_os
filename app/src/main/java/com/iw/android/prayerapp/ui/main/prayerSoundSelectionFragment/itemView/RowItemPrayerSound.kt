@@ -45,7 +45,7 @@ class RowItemPrayerSound(
                 if (data.title == "Adhan" || data.title == "Tones") {
                     fragment.prayerSoundList.clear()
                     fragment.findNavController()
-                        .navigate(PrayerSoundFragmentDirections.actionPrayerSoundFragmentToSoundFragment())
+                        .navigate(PrayerSoundFragmentDirections.actionPrayerSoundFragmentToSoundFragment("",""))
                 } else {
                     binding.imageViewCheck.visibility = View.VISIBLE
                 }

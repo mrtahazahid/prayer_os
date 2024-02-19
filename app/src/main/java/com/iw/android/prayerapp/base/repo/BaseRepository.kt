@@ -7,6 +7,8 @@ import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.USER_ID
 import com.iw.android.prayerapp.base.response.LoginUserResponse
 import com.iw.android.prayerapp.base.network.BaseApi
 import com.iw.android.prayerapp.base.network.SafeApiCall
+import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.AUTOMATIC_LOCATION
+import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.GEOFENCE_RADIUS
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.IS_ONBOARDING
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_ELEVATION_RULE
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_JURISPRUDENCE
@@ -84,9 +86,24 @@ abstract class BaseRepository(
 
     suspend fun setUserLoggedIn() {
         preferences.setBooleanData(IS_LOGIN, true)
-    }  suspend fun setIsOnboarding() {
+    }
+
+    suspend fun setIsOnboarding() {
         preferences.setBooleanData(IS_ONBOARDING, true)
     }
+
+    suspend fun setLocationAutomatic(value: Boolean) {
+        preferences.setBooleanData(AUTOMATIC_LOCATION, value)
+    }
+
+    suspend fun getLocationAutomatic(): Boolean = preferences.automaticLocation.first()
+
+    suspend fun setGeofenceRadius(value: Int) {
+        preferences.setIntegerData(GEOFENCE_RADIUS, value)
+    }
+
+    suspend fun getGeofenceRadius() = preferences.getIntegerData(GEOFENCE_RADIUS)
+
 
     suspend fun clearUserPreferenceData() {
         preferences.performLogout()

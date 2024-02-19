@@ -60,6 +60,11 @@ class DataPreference @Inject constructor(
             preferences[IS_LOGIN] ?: false
         }
 
+    val automaticLocation: Flow<Boolean>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[AUTOMATIC_LOCATION] ?: false
+        }
+
     val isOnBoarding: Flow<Boolean>
         get() = appContext.dataStore.data.map { preferences ->
             preferences[IS_ONBOARDING] ?: false
@@ -95,7 +100,7 @@ class DataPreference @Inject constructor(
 
     suspend fun getIntegerData(key: Preferences.Key<Int>): Int =
         appContext.dataStore.data.map { preferences ->
-            preferences[key] ?: -1
+            preferences[key] ?: 75
         }.first()
 
     suspend fun setIntegerData(key: Preferences.Key<Int>, value: Int) {
@@ -145,8 +150,10 @@ class DataPreference @Inject constructor(
         val IS_LOGIN = booleanPreferencesKey("key_is_login")
         val IS_ONBOARDING = booleanPreferencesKey("key_is_onboarding")
         val USER_ID = stringPreferencesKey("key_user_id")
+        val GEOFENCE_RADIUS = intPreferencesKey("key_geofence_radius")
+        val AUTOMATIC_LOCATION = booleanPreferencesKey("key_automatic_location")
         val PRAYER_METHOD = stringPreferencesKey("key_method")
-        val USER_LAT_LONG = stringPreferencesKey("key_method")
+        val USER_LAT_LONG = stringPreferencesKey("key_user_lat_long")
         val PRAYER_JURISPRUDENCE = stringPreferencesKey("key_jurisprudence")
         val PRAYER_ELEVATION_RULE = stringPreferencesKey("key_user_elevation")
         val USER_INFO = stringPreferencesKey("key_user_info")

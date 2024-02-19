@@ -14,7 +14,7 @@
             android:id="@+id/action_prayerFragment_to_prayerSoundFragment"
             app:destination="@id/prayerSoundFragment" >
             <argument
-                android:name="type"
+                android:name="title"
                 app:argType="string" />
 
         </action>
@@ -27,6 +27,19 @@
         <action
             android:id="@+id/action_timeFragment_to_islamicHolidayFragment2"
             app:destination="@id/islamicHolidayFragment2" />
+        <action
+            android:id="@+id/action_timeFragment_to_soundFragment"
+            app:destination="@id/soundFragment" >
+
+            <argument
+                android:name="title"
+                app:argType="string" />
+
+            <argument
+                android:name="type"
+                app:argType="string" />
+
+        </action>
     </fragment>
     <fragment
         android:id="@+id/qiblaFragment"
@@ -46,11 +59,21 @@
         android:name="com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerSoundFragment"
         android:label="PrayerSoundFragment" >
         <argument
-            android:name="type"
+            android:name="title"
             app:argType="string" />
         <action
             android:id="@+id/action_prayerSoundFragment_to_soundFragment"
-            app:destination="@id/soundFragment" />
+            app:destination="@id/soundFragment" >
+
+            <argument
+                android:name="title"
+                app:argType="string" />
+
+
+            <argument
+                android:name="type"
+                app:argType="string" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/islamicHolidayFragment2"
@@ -60,5 +83,14 @@
         android:id="@+id/soundFragment"
         android:name="com.iw.android.prayerapp.ui.main.soundFragment.SoundFragment"
         android:label="SoundFragment"
-        tools:layout="@layout/fragment_sound"/>
+        tools:layout="@layout/fragment_sound">
+
+        <argument
+            android:name="title"
+            app:argType="string" />
+
+        <argument
+            android:name="type"
+            app:argType="string" />
+    </fragment>
 </navigation>

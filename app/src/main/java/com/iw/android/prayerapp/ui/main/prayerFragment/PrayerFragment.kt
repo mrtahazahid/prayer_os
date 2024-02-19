@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.batoulapps.adhan2.CalculationMethod
 import com.batoulapps.adhan2.Coordinates
@@ -66,10 +67,15 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     @RequiresApi(Build.VERSION_CODES.O)
     @OptIn(ExperimentalStdlibApi::class)
     override fun initialize() {
-  currentLatitude=viewModel.userLatLong?.latitude ?:0.0
-  currentLongitude= viewModel.userLatLong?.longitude ?:0.0
+        currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
+        currentLongitude = viewModel.userLatLong?.longitude ?: 0.0
 
-        val getPrayerTime = getPrayTime(currentLatitude, currentLongitude)
+        val madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 0) {
+            Madhab.SHAFI
+        } else {
+            Madhab.HANAFI
+        }
+        val getPrayerTime = getPrayTime(currentLatitude, currentLongitude, madhab)
 
         val coordinates = Coordinates(currentLatitude, currentLongitude)
         val timeZoneID = TimeZone.getDefault().id
@@ -105,8 +111,8 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                     adhanName.text = namazNames[i]
                 } else {
                     fajarTime.text = namazTimesList[0]
-                    dhuhrTime.text = namazTimesList[1]
-                    asrTime.text = namazTimesList[2]
+                    dhuhrTime.text = namazTimesList[2]
+                    asrTime.text = namazTimesList[3]
                     ishaTime.text = namazTimesList[4]
                 }
             }
@@ -119,7 +125,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     }
 
     override fun setOnClickListener() {
-binding.upComingPrayerTimeView.setOnClickListener(this)
+        binding.upComingPrayerTimeView.setOnClickListener(this)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -139,13 +145,13 @@ binding.upComingPrayerTimeView.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
-        when(v?.id){
-            binding.upComingPrayerTimeView.id->{
-                 findNavController().navigate(
-                     PrayerFragmentDirections.actionPrayerFragmentToPrayerSoundFragment(
-                         "prayer"
-                     )
-                 )
+        when (v?.id) {
+            binding.upComingPrayerTimeView.id -> {
+                findNavController().navigate(
+                    PrayerFragmentDirections.actionPrayerFragmentToPrayerSoundFragment(
+                        "prayer"
+                    )
+                )
             }
         }
     }
