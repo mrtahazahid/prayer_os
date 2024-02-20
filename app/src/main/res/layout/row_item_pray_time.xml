@@ -104,18 +104,19 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewNotificationSound"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="28dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="8dp"
+                    android:gravity="end"
                     android:drawableEnd="@drawable/ic_forward"
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/sf_regular"
                     android:textColor="@color/app_grey"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     app:drawableTint="@color/app_grey"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textViewNotificationSoundTitle"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Tone" />
 
@@ -127,7 +128,7 @@
                     android:background="@color/view_separator"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/textViewNotificationSoundTitle"
-                    app:layout_constraintTop_toBottomOf="@id/textViewNotificationSoundTitle" />
+                    app:layout_constraintTop_toBottomOf="@+id/textViewNotificationSoundTitle" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewReminderSoundTitle"
@@ -147,18 +148,19 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewReminderSound"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="28dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:gravity="end"
                     android:drawableEnd="@drawable/ic_forward"
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/sf_regular"
                     android:textColor="@color/app_grey"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     app:drawableTint="@color/app_grey"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textViewReminderSoundTitle"
                     app:layout_constraintTop_toBottomOf="@id/view"
                     tools:text="Tone" />
 
@@ -292,6 +294,7 @@
                     android:layout_marginStart="28dp"
                     android:layout_marginTop="4dp"
                     android:visibility="gone"
+                    tools:visibility="visible"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -301,7 +304,7 @@
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewDuaReminder"
-                    tools:text="off" />
+                    android:text="off" />
 
 
                 <com.google.android.material.card.MaterialCardView
@@ -369,6 +372,7 @@
                     app:cardBackgroundColor="#3c3b40"
                     app:cardCornerRadius="8dp"
                     android:visibility="gone"
+                    tools:visibility="visible"
                     app:cardElevation="40dp"
                     android:layout_marginEnd="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"

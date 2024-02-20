@@ -2,6 +2,7 @@ package com.iw.android.prayerapp.ui.main.prayerFragment
 
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +37,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
 
+    private var countDownTimer: CountDownTimer? = null
     val viewModel: PrayerViewModel by viewModels()
 
 
@@ -75,7 +77,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         } else {
             Madhab.HANAFI
         }
-        val getPrayerTime = getPrayTime(currentLatitude, currentLongitude, madhab)
+        val getPrayerTime = getPrayTime(currentLatitude, currentLongitude, madhab,Date())
 
         val coordinates = Coordinates(currentLatitude, currentLongitude)
         val timeZoneID = TimeZone.getDefault().id
@@ -133,15 +135,23 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude)
         val getCurrentTime = getUserCurrentTimeLong()
 
-        Log.d(
-            "checkLatLon",
-            "upComingNamazTime: ${getPrayerTime.fajr.toEpochMilliseconds()} , $getCurrentTime"
-        )
+        // Start countdown for the next prayer
+        if (getUserCurrentTime() != null) {
+            val prayerTimeMillis = namazTimesList[0] // Adjust index accordingly
+            startCountdown(getPrayerTime.fajr.toEpochMilliseconds(),getCurrentTime)
+        }
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        countDownTimer?.cancel()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        countDownTimer?.cancel()
     }
 
     override fun onClick(v: View?) {
@@ -155,4 +165,37 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             }
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun startCountdown(prayerTimeMillis: Long,currentTime:Long) {
+        val timeDifferenceMillis = prayerTimeMillis - currentTime
+
+        countDownTimer = object : CountDownTimer(timeDifferenceMillis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val secondsRemaining = (millisUntilFinished / 1000).toInt()
+
+                // Update progress bar and display remaining time
+                binding.progressbar.max = timeDifferenceMillis.toInt()
+                binding.progressbar.progress = millisUntilFinished.toInt()
+
+                val remainingTime = formatRemainingTime(secondsRemaining)
+                binding.textViewRemainingTime.text = remainingTime
+            }
+
+            override fun onFinish() {
+                // Prayer time has arrived, handle accordingly
+                binding.textViewRemainingTime.text = "Prayer time!"
+                // You can perform any additional actions when the prayer time arrives
+            }
+        }
+
+        countDownTimer?.start()
+    }
+
+    private fun formatRemainingTime(secondsRemaining: Int): String {
+        val minutes = secondsRemaining / 60
+        val seconds = secondsRemaining % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
+
 }

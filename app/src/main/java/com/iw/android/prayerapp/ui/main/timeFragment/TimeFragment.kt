@@ -33,7 +33,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     val binding
         get() = _binding!!
 
-      private val viewModel: TimeViewModel by viewModels()
+    private val viewModel: TimeViewModel by viewModels()
     private var viewTypeArray = ArrayList<ViewType<*>>()
     private var dateOffset = 0
 
@@ -42,7 +42,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     private lateinit var tinyDB: TinyDB
 
 
-    private val adapter by lazy {
+    val adapter by lazy {
         GenericListAdapter(object : OnItemClickListener<ViewType<*>> {
             override fun onItemClicked(view: View, item: ViewType<*>, position: Int) {
             }
@@ -81,15 +81,15 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     }
 
     override fun setObserver() {
+        viewModel.getPrayList()
         viewTypeArray.clear()
         for (data in viewModel.prayTimeArray) {
             viewTypeArray.add(
-                RowItemTime(data, binding.recyclerView,this,viewModel)
+                RowItemTime(data, binding.recyclerView, this, viewModel)
             )
         }
         adapter.items = viewTypeArray
     }
-
 
 
     override fun setOnClickListener() {
@@ -145,6 +145,8 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, offset)
         val targetDate: Date = calendar.time
+        viewModel.selectedPrayerDate = targetDate
+        setObserver()
 
         val dateFormat = SimpleDateFormat("EEEE dd MMMM yyyy", Locale.getDefault())
         return dateFormat.format(targetDate)

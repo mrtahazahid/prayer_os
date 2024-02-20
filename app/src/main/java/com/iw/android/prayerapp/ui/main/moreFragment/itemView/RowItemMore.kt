@@ -1,6 +1,9 @@
 package com.iw.android.prayerapp.ui.main.moreFragment.itemView
 
+import android.content.Context
+import android.net.Uri
 import android.view.View
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.ViewDataBinding
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
@@ -23,26 +26,23 @@ class RowItemMore(private val data: MoreData) : ViewType<MoreData> {
         (bi as RowItemMoreBinding).also { binding ->
             binding.imageView.setImageResource(data.image)
             binding.textViewTitle.text = data.title
+            binding.mainView.setOnClickListener {
+               openCustomTab(binding.imageView.context,"https://www.instagram.com/praywatchapp/?hl=en")
 
-            if(data.title == "Read tutorial"){
+            }
+            if (data.title == "Read tutorial") {
                 binding.imageViewDropDownMenu.visibility = View.VISIBLE
-                binding.imageViewDropDownMenu.setOnClickListener {
-                    if (!isViewShow) {
-                        binding.imageViewDropDownMenu.setImageResource(R.drawable.ic_drop_down)
-                        isViewShow = true
-                    } else {
-                        //  binding.detailViews.visibility = View.GONE
-                        binding.imageViewDropDownMenu.setImageResource(R.drawable.ic_forward)
-                        isViewShow = false
-                    }
-                }
-            }else{
+            } else {
                 binding.imageViewDropDownMenu.visibility = View.GONE
             }
 
 
-
-
         }
+    }
+
+    fun openCustomTab(context: Context, url: String?) {
+        val builder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
+        val customTabsIntent: CustomTabsIntent = builder.build()
+        customTabsIntent.launchUrl(context, Uri.parse(url))
     }
 }

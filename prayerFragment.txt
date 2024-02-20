@@ -1,0 +1,182 @@
+package com.iw.android.prayerapp.ui.main.prayerFragment
+
+import android.os.Build
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.batoulapps.adhan2.CalculationMethod
+import com.batoulapps.adhan2.Coordinates
+import com.batoulapps.adhan2.Madhab
+import com.batoulapps.adhan2.PrayerTimes
+import com.batoulapps.adhan2.data.DateComponents
+import com.iw.android.prayerapp.R
+import com.iw.android.prayerapp.base.fragment.BaseFragment
+import com.iw.android.prayerapp.databinding.FragmentPrayerBinding
+import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.utils.AppConstant.Companion.getUserCurrentTime
+import com.iw.android.prayerapp.utils.AppConstant.Companion.getUserCurrentTimeLong
+import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTime
+import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+
+class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListener {
+
+    private var _binding: FragmentPrayerBinding? = null
+    private val binding get() = _binding!!
+
+    private var currentLatitude = 0.0
+    private var currentLongitude = 0.0
+
+    val viewModel: PrayerViewModel by viewModels()
+
+
+    private lateinit var namazTimesList: ArrayList<String>
+    private var namazNames = arrayOf("Fajr", "Dhuhr", "Asr", "Maghrib", "Isha")
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentPrayerBinding.inflate(inflater, container, false)
+        setStatusBarWithBlackIcon(R.color.bg_color)
+        (requireActivity() as MainActivity).showBottomSheet()
+        binding.progressbar.visibility = View.VISIBLE
+        namazTimesList = ArrayList()
+        return binding.root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initialize()
+        setObserver()
+        setOnClickListener()
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @OptIn(ExperimentalStdlibApi::class)
+    override fun initialize() {
+        setPrayerTimes(binding.fajar,binding.dhuhr,binding.adhanName,binding.asr,binding.isha)
+    }
+
+    override fun setObserver() {
+
+    }
+
+    override fun setOnClickListener() {
+        binding.upComingPrayerTimeView.setOnClickListener(this)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun upComingNamazTime() {
+        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude)
+        val getCurrentTime = getUserCurrentTimeLong()
+
+        Log.d(
+            "checkLatLon",
+            "upComingNamazTime: ${getPrayerTime.fajr.toEpochMilliseconds()} , $getCurrentTime"
+        )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            binding.upComingPrayerTimeView.id -> {
+                findNavController().navigate(
+                    PrayerFragmentDirections.actionPrayerFragmentToPrayerSoundFragment(
+                        "prayer"
+                    )
+                )
+            }
+        }
+    }
+
+    fun setPrayerTimes(textView1: TextView, textView2: TextView, textView3: TextView, textView4: TextView, textView5: TextView) {
+        val currentTime = Calendar.getInstance().time
+        val formatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
+        currentLongitude = viewModel.userLatLong?.longitude ?: 0.0
+
+        val madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 0) {
+            Madhab.SHAFI
+        } else {
+            Madhab.HANAFI
+        }
+        val getPrayerTime = getPrayTime(currentLatitude, currentLongitude, madhab,Date())
+
+
+        for (i in getPrayerTime) {
+            namazTimesList.add(i)
+        }
+
+        val fajrTime = formatter.parse(namazTimesList[0]) // Replace with your Fajr time
+        val duhrTime = formatter.parse(namazTimesList[2]) // Replace with your Duhr time
+        val asrTime = formatter.parse(namazTimesList[3]) // Replace with your Asr time
+        val maghribTime = formatter.parse(namazTimesList[4]) // Replace with your Maghrib time
+        val ishaTime = formatter.parse(namazTimesList[5]) // Replace with your Isha time
+
+        when {
+            currentTime.before(fajrTime) -> {
+                // Before Fajr, set Isha in the center
+                setTextViews(textView1, textView2, textView3, textView4, textView5, "Isha", "Fajr", "Duhr", "Asr", "Maghrib")
+            }
+            currentTime.before(duhrTime) -> {
+                // Between Fajr and Duhr, set Fajr in the center
+                setTextViews(textView1, textView2, textView3, textView4, textView5, "Fajr", "Duhr", "Asr", "Maghrib", "Isha")
+            }
+            currentTime.before(asrTime) -> {
+                // Between Duhr and Asr, set Duhr in the center
+                setTextViews(textView1, textView2, textView3, textView4, textView5, "Duhr", "Asr", "Maghrib", "Isha", "Fajr")
+            }
+            currentTime.before(maghribTime) -> {
+                // Between Asr and Maghrib, set Asr in the center
+                setTextViews(textView1, textView2, textView3, textView4, textView5, "Asr", "Maghrib", "Isha", "Fajr", "Duhr")
+            }
+            currentTime.before(ishaTime) -> {
+                // Between Maghrib and Isha, set Maghrib in the center
+                setTextViews(textView1, textView2, textView3, textView4, textView5, "Maghrib", "Isha", "Fajr", "Duhr", "Asr")
+            }
+            else -> {
+                // After Isha, set Fajr in the center (for the next day)
+                setTextViews(textView1, textView2, textView3, textView4, textView5, "Fajr", "Duhr", "Asr", "Maghrib", "Isha")
+            }
+        }
+    }
+
+    fun setTextViews(
+        centerTextView: TextView,
+        firstTextView: TextView,
+        secondTextView: TextView,
+        fourthTextView: TextView,
+        fifthTextView: TextView,
+        centerText: String,
+        firstText: String,
+        secondText: String,
+        fourthText: String,
+        fifthText: String
+    ) {
+        centerTextView.text = centerText
+        firstTextView.text = firstText
+        secondTextView.text = secondText
+        fourthTextView.text = fourthText
+        fifthTextView.text = fifthText
+    }
+}

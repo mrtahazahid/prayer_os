@@ -3,6 +3,8 @@ package com.iw.android.prayerapp.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Geocoder
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.batoulapps.adhan2.CalculationMethod
 import com.batoulapps.adhan2.Coordinates
@@ -23,24 +25,22 @@ object GetAdhanDetails : AppCompatActivity() {
 
 
     @SuppressLint("SimpleDateFormat")
-     fun getPrayTime(latitude: Double, longitude: Double,madhab: Madhab): ArrayList<String> {
-        val coordinates = Coordinates(latitude, longitude);
+    fun getPrayTime(latitude: Double, longitude: Double, madhab: Madhab, date: Date): ArrayList<String> {
+        val coordinates = Coordinates(latitude, longitude)
         val timeZoneID = TimeZone.getDefault().id
 
         val sdf = SimpleDateFormat("yyyy/M/dd")
-        val currentDate = sdf.format(Date())
+        val currentDate = sdf.format(date)
 
         var splitDate = currentDate.split("/")
         var year = splitDate[0]
         var month = splitDate[1]
         var day = splitDate[2]
 
-        val date = DateComponents(year.toInt(), month.toInt(), day.toInt());
+        val dateComponents = DateComponents(year.toInt(), month.toInt(), day.toInt())
         val params = CalculationMethod.KARACHI.parameters.copy(madhab = madhab)
 
-
-
-        val prayerTimes = PrayerTimes(coordinates, date, params)
+        val prayerTimes = PrayerTimes(coordinates, dateComponents, params)
         val formatter = SimpleDateFormat("hh:mm a")
         formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
 
@@ -52,6 +52,69 @@ object GetAdhanDetails : AppCompatActivity() {
             formatter.format(Date(prayerTimes.maghrib.toEpochMilliseconds())),
             formatter.format(Date(prayerTimes.isha.toEpochMilliseconds()))
         )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentPrayerTime(prayerTimes: List<Long>, currentTime: Long): Pair<String, Long>? {
+        for (i in prayerTimes.indices) {
+            val currentPrayerTime = prayerTimes[i]
+            val nextPrayerTime = if (i < prayerTimes.size - 1) prayerTimes[i + 1] else prayerTimes[0]
+
+            if (currentTime < nextPrayerTime) {
+                val remainingTime = nextPrayerTime - currentTime
+                val formattedTime = formatRemainingTime(remainingTime)
+                return Pair(formattedTime, remainingTime)
+            }
+        }
+
+        return null
+    }
+
+    private fun formatRemainingTime(millisRemaining: Long): String {
+        val secondsRemaining = (millisRemaining / 1000).toInt()
+        val minutes = secondsRemaining / 60
+        val seconds = secondsRemaining % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getPrayTimeWithNames(latitude: Double, longitude: Double, madhab: Madhab, date: Date): List<Pair<String, String>> {
+        val coordinates = Coordinates(latitude, longitude)
+        val timeZoneID = TimeZone.getDefault().id
+
+        val sdf = SimpleDateFormat("yyyy/M/dd")
+        val currentDate = sdf.format(date)
+
+        var splitDate = currentDate.split("/")
+        var year = splitDate[0]
+        var month = splitDate[1]
+        var day = splitDate[2]
+
+        val dateComponents = DateComponents(year.toInt(), month.toInt(), day.toInt())
+        val params = CalculationMethod.KARACHI.parameters.copy(madhab = madhab)
+
+        val prayerTimes = PrayerTimes(coordinates, dateComponents, params)
+        val formatter = SimpleDateFormat("hh:mm a")
+        formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
+
+        val prayerNames = listOf("Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha")
+
+        val prayerTimesWithNames = prayerNames.map { prayerName ->
+            val prayerTimeInstant = when (prayerName) {
+                "Fajr" -> prayerTimes.fajr
+                "Sunrise" -> prayerTimes.sunrise
+                "Dhuhr" -> prayerTimes.dhuhr
+                "Asr" -> prayerTimes.asr
+                "Maghrib" -> prayerTimes.maghrib
+                "Isha" -> prayerTimes.isha
+                else -> throw IllegalArgumentException("Invalid prayer name: $prayerName")
+            }
+
+            val formattedTime = formatter.format(Date(prayerTimeInstant.toEpochMilliseconds()))
+            Pair(prayerName, formattedTime)
+        }
+
+        return prayerTimesWithNames
     }
 
     @SuppressLint("SimpleDateFormat")

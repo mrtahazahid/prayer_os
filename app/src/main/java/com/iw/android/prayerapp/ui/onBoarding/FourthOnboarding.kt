@@ -18,6 +18,7 @@ import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
 
@@ -193,7 +194,9 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
         val currentLongitude =
             (requireActivity() as OnBoardingActivity).viewModel.userLatLong?.longitude ?: 0.0
 
-        val getPrayerTime = GetAdhanDetails.getPrayTime(currentLatitude, currentLongitude,   Madhab.HANAFI)
+        val getPrayerTime = GetAdhanDetails.getPrayTime(currentLatitude, currentLongitude, Madhab.HANAFI,
+            Date()
+        )
 
         binding.textViewFajrTime.text = getPrayerTime[0]
         binding.textViewSunriseTime.text = getPrayerTime[1]

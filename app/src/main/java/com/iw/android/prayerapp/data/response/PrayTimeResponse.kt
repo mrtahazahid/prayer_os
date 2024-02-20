@@ -1,5 +1,7 @@
 package com.iw.android.prayerapp.data.response
 
+import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
+
 data class PrayTime(
     val image: Int,
     val title: String,
@@ -24,13 +26,14 @@ data class SaveLocationData(
 )
 
 data class PrayerDetailData(
-    val notificationSoundPosition: Int = 0,
-    val notificationSound: String = "Tones",
-    val reminderNotificationSoundPosition: Int = 0,
-    val reminderNotificationSound: String = "Tones",
-    val reminderTime: String = "off",
-    val duaReminder: String = "off",
-    val duaTime: String = "12:00 AM"
+    var notificationSoundPosition: Int = 0,
+    var notificationSound: String = "Tones",
+    var reminderNotificationSoundPosition: Int = 0,
+    var reminderNotificationSound: String = "Tones",
+    var reminderTime: String = "off",
+    var duaType: String = DuaTypeEnum.OFF.getValue(),
+    var duaReminder: String = "off",
+    var duaTime: String = "12:00 AM"
 )
 
 data class IslamicHolidayResponse(
