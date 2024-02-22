@@ -132,10 +132,10 @@ class MainActivity : BaseActivity() {
     }
 
 
-//    override fun onResume() {
-//        super.onResume()
-//        checkPermissions()
-//    }
+    override fun onResume() {
+        super.onResume()
+        checkPermissions()
+    }
 
     private fun checkPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
