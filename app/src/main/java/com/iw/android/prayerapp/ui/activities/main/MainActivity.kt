@@ -24,12 +24,6 @@ import com.iw.android.prayerapp.services.gps.LocationEvent
 import com.iw.android.prayerapp.services.gps.LocationService
 import com.iw.android.prayerapp.services.gps.TurnOnGps
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
-import com.iw.android.prayerapp.utils.AppConstant.Companion.CURRENT_LATITUDE
-import com.iw.android.prayerapp.utils.AppConstant.Companion.CURRENT_LONGITUDE
-import com.iw.android.prayerapp.utils.TinyDB
-import com.microsoft.appcenter.AppCenter
-import com.microsoft.appcenter.analytics.Analytics
-import com.microsoft.appcenter.crashes.Crashes
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -92,10 +86,6 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        AppCenter.start(
-            application, "2074bfef-592a-47e1-889a-361c09ff108",
-            Analytics::class.java, Crashes::class.java
-        )
         setStatusBarWithBlackIcon(R.color.bg_color)
         initialize()
         setOnClickListener()
