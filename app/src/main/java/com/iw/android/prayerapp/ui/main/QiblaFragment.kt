@@ -13,12 +13,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
+import androidx.fragment.app.viewModels
 import com.batoulapps.adhan2.Qibla
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentQiblaBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.ui.main.settingFragment.SettingViewModel
 import com.iw.android.prayerapp.utils.AppConstant
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.TinyDB
@@ -29,13 +31,14 @@ import kotlin.math.sin
 import kotlin.math.tan
 
 
-class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener{
+class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener {
 
-    private var _binding : FragmentQiblaBinding? = null
+    private var _binding: FragmentQiblaBinding? = null
     private val binding get() = _binding!!
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
-    private lateinit var tinyDB: TinyDB
+
+    private val viewModel: SettingViewModel by viewModels()
 
     private lateinit var sensorManager: SensorManager
     private lateinit var accelerometer: Sensor
@@ -46,7 +49,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
     private var accelerometerReading = FloatArray(3)
     private var magnetometerReading = FloatArray(3)
 
-    lateinit var getQibla : Qibla
+    lateinit var getQibla: Qibla
 
     private val ALPHA = 0.08f
 
@@ -73,30 +76,16 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
     }
 
     override fun initialize() {
-        tinyDB = TinyDB(context)
-
-        currentLatitude = if (tinyDB.getDouble(AppConstant.CURRENT_LATITUDE).isNaN() || tinyDB.getDouble(AppConstant.CURRENT_LATITUDE)
-                .toString().isEmpty()
-        ) {
-            0.0
-        } else {
-            tinyDB.getDouble(AppConstant.CURRENT_LATITUDE)
-        }
-
-        currentLongitude = if (tinyDB.getDouble(AppConstant.CURRENT_LONGITUDE).isNaN() || tinyDB.getDouble(AppConstant.CURRENT_LONGITUDE)
-                .toString().isEmpty()
-        ) {
-            0.0
-        } else {
-            tinyDB.getDouble(AppConstant.CURRENT_LONGITUDE)
-        }
+        currentLatitude = viewModel.getUserLatLong?.latitude ?: 0.0
+        currentLongitude = viewModel.getUserLatLong?.longitude ?: 0.0
 
         sensorManager = (requireActivity().getSystemService(SENSOR_SERVICE) as SensorManager)
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)!!
 
         getQibla = GetAdhanDetails.getQiblaDirection(currentLatitude, currentLongitude)
-        binding.txtQiblaHeading.text = "Qibla direction is ${"%.2f".format(getQibla.direction)}\u00B0 from North"
+        binding.txtQiblaHeading.text =
+            "Qibla direction is ${"%.2f".format(getQibla.direction)}\u00B0 from North"
     }
 
     override fun setObserver() {
@@ -131,6 +120,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
             Sensor.TYPE_ACCELEROMETER -> {
                 lowPassFilter(event.values, accelerometerReading)
             }
+
             Sensor.TYPE_MAGNETIC_FIELD -> {
                 lowPassFilter(event.values, magnetometerReading)
             }
@@ -187,7 +177,10 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
         val makkahLongitude = 39.8261 * Math.PI / 180.0
         val valueA = latitude
         val valueB = longitude
-        val result = atan2(sin(makkahLatitude - valueA),cos(valueA) * tan(makkahLatitude) - sin(valueA) * cos(makkahLongitude - valueB))
+        val result = atan2(
+            sin(makkahLatitude - valueA),
+            cos(valueA) * tan(makkahLatitude) - sin(valueA) * cos(makkahLongitude - valueB)
+        )
         return (result + Math.PI * 2) % (Math.PI * 2)
     }
 }

@@ -87,15 +87,25 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            binding.clSchReminder.id->{
-                findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToSoundFragment("Settings","Notification","false",""))
+            binding.clSchReminder.id -> {
+                findNavController().navigate(
+                    SettingFragmentDirections.actionSettingFragmentToSoundFragment(
+                        "Settings",
+                        "Notification",
+                        "false",
+                        ""
+                    )
+                )
             }
-            binding.imageViewSnoozeMinus.id->{
+
+            binding.imageViewSnoozeMinus.id -> {
                 binding.subTxtSnoozeTime.text = decrementSnoozeMinute()
             }
-            binding.imageViewSnoozeAdd.id->{
+
+            binding.imageViewSnoozeAdd.id -> {
                 binding.subTxtSnoozeTime.text = incrementSnoozeMinute()
             }
+
             binding.imageViewAddGeofence.id -> {
                 binding.textViewGeofenceRadius.text = incrementGeofence(5)
                 viewModel.setGeofenceRadius(geofence)

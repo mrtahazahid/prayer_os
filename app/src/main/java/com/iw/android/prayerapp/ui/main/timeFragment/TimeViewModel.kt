@@ -28,6 +28,7 @@ class TimeViewModel @Inject constructor(private val repository: MainRepository) 
         viewModelScope.launch {
             userLatLong = getUserLatLong()
             getSavedPrayerJurisprudence = getPrayerJurisprudence()
+            getPrayList()
         }
     }
       fun getPrayList() = viewModelScope.launch {

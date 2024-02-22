@@ -81,7 +81,6 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     }
 
     override fun setObserver() {
-        viewModel.getPrayList()
         viewTypeArray.clear()
         for (data in viewModel.prayTimeArray) {
             viewTypeArray.add(
@@ -146,6 +145,8 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
         calendar.add(Calendar.DAY_OF_YEAR, offset)
         val targetDate: Date = calendar.time
         viewModel.selectedPrayerDate = targetDate
+        viewModel.prayTimeArray.clear()
+        viewModel.getPrayList()
         setObserver()
 
         val dateFormat = SimpleDateFormat("EEEE dd MMMM yyyy", Locale.getDefault())
