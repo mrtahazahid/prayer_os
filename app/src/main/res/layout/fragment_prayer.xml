@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.308">
@@ -39,6 +39,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/textViewTodayIslamicDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -48,23 +49,6 @@
                         android:textColor="@color/yellow_text"
                         android:textSize="@dimen/_18ssp" />
 
-                    <View
-                        android:layout_width="@dimen/_1sdp"
-                        android:layout_height="@dimen/_15sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:background="@color/yellow_text" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/sf_regular"
-                        android:gravity="center"
-                        android:text="1445"
-                        android:textColor="@color/yellow_text"
-                        android:textSize="@dimen/_17ssp" />
 
                 </LinearLayout>
 
@@ -75,7 +59,7 @@
                     android:fontFamily="@font/sf_regular"
                     android:text="Karachi"
                     android:textColor="@color/yellow_text"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_14ssp" />
 
             </LinearLayout>
 
@@ -92,7 +76,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/fajar"
+                    android:id="@+id/textViewFifthNamaz"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_5sdp"
@@ -102,15 +86,7 @@
                     android:textColor="@color/app_grey"
                     android:textSize="@dimen/_15ssp" />
 
-                <TextView
-                    android:id="@+id/fajar_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sf_regular"
-                    android:gravity="center"
-                    android:text="5:37"
-                    android:textColor="@color/app_grey"
-                    android:textSize="@dimen/_15ssp" />
+
 
             </LinearLayout>
 
@@ -127,23 +103,13 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/dhuhr"
+                    android:id="@+id/textViewSecondNamaz"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:fontFamily="@font/sf_medium"
                     android:gravity="center"
                     android:text="Dhuhr"
-                    android:textColor="@color/app_grey"
-                    android:textSize="@dimen/_15ssp" />
-
-                <TextView
-                    android:id="@+id/dhuhr_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sf_regular"
-                    android:gravity="center"
-                    android:text="12:25"
                     android:textColor="@color/app_grey"
                     android:textSize="@dimen/_15ssp" />
 
@@ -202,7 +168,7 @@
                     android:textSize="@dimen/_15ssp" />
 
                 <TextView
-                    android:id="@+id/adhan_name"
+                    android:id="@+id/textViewCurrentNamazName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_10sdp"
@@ -213,7 +179,7 @@
                     android:textSize="@dimen/_30ssp" />
 
                 <TextView
-                    android:id="@+id/adhan_time"
+                    android:id="@+id/textViewCurrentNamazTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -235,23 +201,13 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <TextView
-                    android:id="@+id/asr"
+                    android:id="@+id/textViewThirdNamaz"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:fontFamily="@font/sf_medium"
                     android:gravity="center"
                     android:text="Asr"
-                    android:textColor="@color/app_grey"
-                    android:textSize="@dimen/_15ssp" />
-
-                <TextView
-                    android:id="@+id/asr_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sf_regular"
-                    android:gravity="center"
-                    android:text="3:21"
                     android:textColor="@color/app_grey"
                     android:textSize="@dimen/_15ssp" />
 
@@ -269,7 +225,7 @@
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
-                    android:id="@+id/isha"
+                    android:id="@+id/textViewFourthNamaz"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_5sdp"
@@ -279,15 +235,7 @@
                     android:textColor="@color/app_grey"
                     android:textSize="@dimen/_15ssp" />
 
-                <TextView
-                    android:id="@+id/isha_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sf_regular"
-                    android:gravity="center"
-                    android:text="7:02"
-                    android:textColor="@color/app_grey"
-                    android:textSize="@dimen/_15ssp" />
+
 
             </LinearLayout>
 

@@ -25,6 +25,8 @@ data class SaveLocationData(
     val geofence: String
 )
 
+data class PrayerTime(val namazName: String, val namazTime: Long, val timeDifference: Long = 0)
+
 data class PrayerDetailData(
     var notificationSoundPosition: Int = 0,
     var notificationSound: String = "Tones",

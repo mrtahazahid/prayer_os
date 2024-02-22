@@ -12,18 +12,16 @@ import com.batoulapps.adhan2.Madhab
 import com.batoulapps.adhan2.PrayerTimes
 import com.batoulapps.adhan2.Qibla
 import com.batoulapps.adhan2.data.DateComponents
-import com.iw.android.prayerapp.base.prefrence.DataPreference
 import com.iw.android.prayerapp.data.response.LocationData
-import kotlinx.coroutines.flow.first
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.chrono.HijrahDate
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
+
 object GetAdhanDetails : AppCompatActivity() {
-
-
-
     @SuppressLint("SimpleDateFormat")
     fun getPrayTime(latitude: Double, longitude: Double, madhab: Madhab, date: Date): ArrayList<String> {
         val coordinates = Coordinates(latitude, longitude)
@@ -74,6 +72,7 @@ object GetAdhanDetails : AppCompatActivity() {
         val secondsRemaining = (millisRemaining / 1000).toInt()
         val minutes = secondsRemaining / 60
         val seconds = secondsRemaining % 60
+
         return String.format("%02d:%02d", minutes, seconds)
     }
 
@@ -160,5 +159,4 @@ object GetAdhanDetails : AppCompatActivity() {
 
         return null
     }
-
 }

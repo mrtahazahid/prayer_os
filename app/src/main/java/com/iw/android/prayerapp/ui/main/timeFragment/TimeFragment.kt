@@ -101,6 +101,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
 
     private fun setRecyclerView() {
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.stopScroll()
     }
 
     override fun onClick(v: View?) {

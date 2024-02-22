@@ -51,7 +51,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
 
     lateinit var getQibla: Qibla
 
-    private val ALPHA = 0.08f
+    private val ALPHA = 0.05f
 
 
     @SuppressLint("SetTextI18n")
@@ -78,6 +78,9 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
     override fun initialize() {
         currentLatitude = viewModel.getUserLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.getUserLatLong?.longitude ?: 0.0
+
+        Log.d("currentLatitude",(viewModel.getUserLatLong?.latitude ?: 0.0).toString())
+        Log.d("currentLongitude",(viewModel.getUserLatLong?.longitude ?: 0.0).toString())
 
         sensorManager = (requireActivity().getSystemService(SENSOR_SERVICE) as SensorManager)
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!
