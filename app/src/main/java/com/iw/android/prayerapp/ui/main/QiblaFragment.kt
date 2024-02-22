@@ -21,14 +21,7 @@ import com.iw.android.prayerapp.databinding.FragmentQiblaBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.settingFragment.SettingViewModel
-import com.iw.android.prayerapp.utils.AppConstant
 import com.iw.android.prayerapp.utils.GetAdhanDetails
-import com.iw.android.prayerapp.utils.TinyDB
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.roundToLong
-import kotlin.math.sin
-import kotlin.math.tan
 
 
 class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener {
@@ -165,9 +158,6 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
         ) {
             SensorManager.getOrientation(rotationMatrix, currentOrientation)
             val radian = currentOrientation[0].toDouble()
-            val latitude = currentLatitude * Math.PI / 180
-            val longitude = currentLongitude * Math.PI / 180
-//            val qiblaRadians = calculateQiblaDirection(latitude, longitude)
             val qiblaRadians = getQibla.direction
             qiblaDegree = ((qiblaRadians - radian) * 180 / Math.PI).toFloat()
             if (qiblaDegree < 0) {
@@ -175,16 +165,4 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
             }
         }
     }
-
-//    private fun calculateQiblaDirection(latitude: Double, longitude: Double): Double {
-//        val makkahLatitude = 21.4225 * Math.PI / 180.0
-//        val makkahLongitude = 39.8261 * Math.PI / 180.0
-//        val valueA = latitude
-//        val valueB = longitude
-//        val result = atan2(
-//            sin(makkahLatitude - valueA),
-//            cos(valueA) * tan(makkahLatitude) - sin(valueA) * cos(makkahLongitude - valueB)
-//        )
-//        return (result + Math.PI * 2) % (Math.PI * 2)
-//    }
 }
