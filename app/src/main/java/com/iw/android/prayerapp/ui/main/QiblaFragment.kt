@@ -51,7 +51,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
 
     lateinit var getQibla: Qibla
 
-    private val ALPHA = 0.2f
+    private val ALPHA = 0.08f
 
 
     @SuppressLint("SetTextI18n")
@@ -168,13 +168,14 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
             val radian = currentOrientation[0].toDouble()
             val latitude = currentLatitude * Math.PI / 180
             val longitude = currentLongitude * Math.PI / 180
-//            val qiblaRadians = calculateQiblaDirection(latitude, longitude)
-            val qiblaRadians = getQibla.direction
+            val qiblaRadians = calculateQiblaDirection(latitude, longitude)
+//            val qiblaRadians = getQibla.direction
 
 
             qiblaDegree = ((qiblaRadians - radian) * 180 / Math.PI).toFloat()
 //            binding.textViewCurrentDirection.text = "%.2f".format(qiblaDegree)
-            binding.textViewCurrentDirection.text = "${"%.2f".format((qiblaRadians - radian) - 2.38)}°"
+            binding.textViewCurrentDirection.text = "${"%.2f".format((getQibla.direction - radian) - 1.90)}°"
+//            binding.textViewCurrentDirection.text = "${"%.2f".format((qiblaRadians - radian) - 2.38)}°"
             if (qiblaDegree < 0) {
                 qiblaDegree += 360f
             }
@@ -182,8 +183,8 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
     }
 
     private fun calculateQiblaDirection(latitude: Double, longitude: Double): Double {
-        val makkahLatitude = 21.4225 * Math.PI / 180.0
-        val makkahLongitude = 39.8261 * Math.PI / 180.0
+        val makkahLatitude = 21.422510 * Math.PI / 180.0
+        val makkahLongitude = 39.826168 * Math.PI / 180.0
         val valueA = latitude
         val valueB = longitude
         val result = atan2(
