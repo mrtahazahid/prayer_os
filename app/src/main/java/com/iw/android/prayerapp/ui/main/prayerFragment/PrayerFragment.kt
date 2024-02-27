@@ -1,8 +1,12 @@
 package com.iw.android.prayerapp.ui.main.prayerFragment
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +21,7 @@ import com.iw.android.prayerapp.extension.convertToFunTime
 import com.iw.android.prayerapp.extension.formatRemainingTime
 import com.iw.android.prayerapp.extension.getIslamicDate
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
+import com.iw.android.prayerapp.notificationService.Notification
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
@@ -38,6 +43,9 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     val viewModel: PrayerViewModel by viewModels()
 
     private lateinit var namazTimesList: ArrayList<String>
+
+
+    lateinit var notification: Notification
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +69,18 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     @SuppressLint("SimpleDateFormat")
     override fun initialize() {
+//        val hasWriteSettingsPermission = Settings.System.canWrite(context)
+//        if (!hasWriteSettingsPermission) {
+//            // You don't have permission, request it from the user
+//            val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+//            intent.data = Uri.parse("package:${requireContext().packageName}")
+//            requireContext().startActivity(intent)
+//        } else {
+//            notification = Notification(requireContext())
+//            notification.notify("user", "Title", "Message", "YourApp")
+//        }
+
+
         currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.userLatLong?.longitude ?: 0.0
         binding.textViewTodayIslamicDate.text = getIslamicDate()
@@ -115,14 +135,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     @SuppressLint("SetTextI18n")
     private fun upComingNamazTime() {
         val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude)
-        prayerTimeList.add(PrayerTime("Fajr", getPrayerTime.fajr.toEpochMilliseconds()))
-        prayerTimeList.add(PrayerTime("Dhuhr", getPrayerTime.dhuhr.toEpochMilliseconds()))
-        prayerTimeList.add(PrayerTime("Asr", getPrayerTime.asr.toEpochMilliseconds()))
-        prayerTimeList.add(PrayerTime("Maghrib", getPrayerTime.maghrib.toEpochMilliseconds()))
-        prayerTimeList.add(PrayerTime("Isha", getPrayerTime.isha.toEpochMilliseconds()))
-        prayerTimeList.asSequence()
-
-        val currentNamaz = getTimeDifferenceToNextPrayer(System.currentTimeMillis(), prayerTimeList)
+        val currentNamaz = getTimeDifferenceToNextPrayer()
 
         when (currentNamaz.namazName) {
             "Fajr" -> {
@@ -210,6 +223,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             override fun onFinish() {
                 // Prayer time has arrived, handle accordingly
                 binding.textViewRemainingTime.text = getString(R.string.prayer_time)
+                getTimeDifferenceToNextPrayer()
                 // You can perform any additional actions when the prayer time arrives
             }
         }
@@ -217,32 +231,65 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         countDownTimer?.start()
     }
 
-    private fun getTimeDifferenceToNextPrayer(
-        currentTimeMillis: Long,
-        prayerTimesMillis: ArrayList<PrayerTime>
-    ): PrayerTime {
-        var upperTimeIndex = prayerTimesMillis.size - 1
+    private fun getTimeDifferenceToNextPrayer(): PrayerTime {
 
-        // Check if current time is greater than the upper array time
-        if (currentTimeMillis > prayerTimesMillis[upperTimeIndex].namazTime) {
-            upperTimeIndex = prayerTimesMillis.size - 1
-        } else {
-            // Find the upper time in the array
-            for (i in 0 until prayerTimesMillis.size - 1) {
-                if (currentTimeMillis < prayerTimesMillis[i + 1].namazTime) {
-                    upperTimeIndex = i
-                    break
+        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude)
+        prayerTimeList.add(PrayerTime("Fajr", getPrayerTime.fajr.toEpochMilliseconds()))
+        prayerTimeList.add(PrayerTime("Dhuhr", getPrayerTime.dhuhr.toEpochMilliseconds()))
+        prayerTimeList.add(PrayerTime("Asr", getPrayerTime.asr.toEpochMilliseconds()))
+        prayerTimeList.add(PrayerTime("Maghrib", getPrayerTime.maghrib.toEpochMilliseconds()))
+        prayerTimeList.add(PrayerTime("Isha", getPrayerTime.isha.toEpochMilliseconds()))
+
+        val currentTimeMillis = System.currentTimeMillis()
+
+        // Find the next prayer time
+        var nextPrayerTimeIndex = 0
+        while (nextPrayerTimeIndex < prayerTimeList.size && prayerTimeList[nextPrayerTimeIndex + 1].namazTime < currentTimeMillis) {
+            nextPrayerTimeIndex += 2
+        }
+
+        // If all prayer times are before the current time, set the next prayer time to the last one
+        if (nextPrayerTimeIndex == prayerTimeList.size) {
+            nextPrayerTimeIndex -= 2
+        }
+
+        // Get the name and time of the next prayer
+        val nextPrayerName = prayerTimeList[nextPrayerTimeIndex].namazName
+        val nextPrayerTime = prayerTimeList[nextPrayerTimeIndex + 1].namazTime
+
+        // Iterate through the array, move prayer times less than currentTimeMillis to last index,
+        // and break the loop when a prayer time greater than currentTimeMillis is found
+        var upperTimeIndex = prayerTimeList.size - 1
+        for (i in 0 until prayerTimeList.size - 1) {
+            if (prayerTimeList[i + 1].namazTime < currentTimeMillis) {
+                // Move the prayer time less than currentTimeMillis to the last index
+                val tempName = prayerTimeList[i].namazName
+                val tempTime = prayerTimeList[i + 1].namazTime
+                for (j in i until prayerTimeList.size - 2) {
+                    prayerTimeList[j] = prayerTimeList[j + 2]
                 }
+                prayerTimeList[upperTimeIndex - 1] = PrayerTime(tempName, tempTime, 0)
+            } else {
+                // Break the loop when a prayer time greater than currentTimeMillis is found
+                upperTimeIndex = i
+                break
             }
         }
 
-        val timeDifference = prayerTimesMillis[upperTimeIndex].namazTime - currentTimeMillis
+        val timeDifference = prayerTimeList[upperTimeIndex].namazTime - currentTimeMillis
+
+        Log.d("nextPrayerName", nextPrayerName)
+        Log.d("nextPrayerTime", nextPrayerTime.toString())
+        Log.d("namazName", prayerTimeList[upperTimeIndex].namazName)
+        Log.d("namazTime", prayerTimeList[upperTimeIndex].namazTime.toString())
+        Log.d("prayerTimeList", prayerTimeList.toString())
+
+        // Return the PrayerTime object with time difference
         return PrayerTime(
-            prayerTimesMillis[upperTimeIndex].namazName,
-            prayerTimesMillis[upperTimeIndex].namazTime,
+            prayerTimeList[upperTimeIndex].namazName,
+            prayerTimeList[upperTimeIndex].namazTime,
             timeDifference
         )
     }
-
 
 }

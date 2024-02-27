@@ -295,7 +295,6 @@ class RowItemTime(
         } else {
             "off"
         }
-
     }
 
     private fun spinnerDua(binding: RowItemPrayTimeBinding) {
@@ -331,7 +330,6 @@ class RowItemTime(
                 binding.cardViewDuaTime.visibility = View.GONE
                 binding.textViewDuaSetTime.visibility = View.VISIBLE
                 binding.textViewDuaTime.text = prayerDetailData?.duaTime
-
                 binding.spinnerDuaReminderSwitch.setSelection(1)
 
             }

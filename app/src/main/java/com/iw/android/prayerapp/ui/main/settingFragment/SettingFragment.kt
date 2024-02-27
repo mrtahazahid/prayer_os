@@ -17,12 +17,15 @@ import com.iw.android.prayerapp.databinding.FragmentSettingBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
+import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
+import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getTimeZoneAndCity
 import com.iw.android.prayerapp.utils.TinyDB
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
-class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickListener {
+class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickListener,
+    OnDataSelected {
 
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!!
@@ -32,8 +35,11 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
     private var isCalViewShow = false
     private var isLocViewShow = false
+    private var isTimeViewShow = false
     private var geofence = 75
     private var snoozeTime = 0
+    private var adjustHijriDate = 0
+    private var countUpTime = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,6 +86,11 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewSnoozeMinus.setOnClickListener(this)
         binding.imageViewSnoozeAdd.setOnClickListener(this)
         binding.clSchReminder.setOnClickListener(this)
+        binding.timeView.setOnClickListener(this)
+        binding.imageViewAddHijri.setOnClickListener(this)
+        binding.imageViewMinusHijri.setOnClickListener(this)
+        binding.imageViewMinusCountUpTime.setOnClickListener(this)
+        binding.imageViewAddCountUpTime.setOnClickListener(this)
         binding.switchAutomatic.setOnCheckedChangeListener { buttonView, isChecked ->
             viewModel.setLocationAutomaticValue(isChecked)
         }
@@ -87,15 +98,34 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            binding.imageViewAddCountUpTime.id->{
+
+            }
+            binding.imageViewMinusCountUpTime.id->{
+
+            }
+            binding.imageViewAddHijri.id->{
+                incrementAdjustHijriDate()
+            }
+
+            binding.imageViewMinusHijri.id->{
+                decrementAdjustHijriDate()
+            }
+
             binding.clSchReminder.id -> {
-                findNavController().navigate(
-                    SettingFragmentDirections.actionSettingFragmentToSoundFragment(
-                        "Settings",
-                        "Notification",
-                        "false",
-                        ""
-                    )
-                )
+                openSoundDialogFragment("Notification", "Settings", true)
+            }
+
+            binding.timeView.id -> {
+                if (!isTimeViewShow) {
+                    binding.imageViewTimeArrowButton.setImageResource(R.drawable.ic_drop_down)
+                    binding.timeDetailViews.visibility = View.VISIBLE
+                    isTimeViewShow = true
+                } else {
+                    binding.imageViewTimeArrowButton.setImageResource(R.drawable.ic_forward)
+                    binding.timeDetailViews.visibility = View.GONE
+                    isTimeViewShow = false
+                }
             }
 
             binding.imageViewSnoozeMinus.id -> {
@@ -262,4 +292,55 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         snoozeTime--
         return if (snoozeTime > 0) "$snoozeTime min" else "off"
     }
+
+    private fun openSoundDialogFragment(
+        title: String,
+        subTitle: String,
+        isForNotification: Boolean
+    ) {
+        val soundDialog = SoundDialog()
+        soundDialog.listener = this
+        soundDialog.title = title
+        soundDialog.subTitle = subTitle
+        soundDialog.isForNotification = isForNotification
+        soundDialog.show(childFragmentManager, "SoundDialogFragment")
+    }
+
+    override fun onDataPassed(
+        soundName: String,
+        soundPosition: Int,
+        isSoundForNotification: Boolean
+    ) {
+        binding.textViewNotificationSound.text = soundName
+    }
+
+    private fun incrementAdjustHijriDate(): String {
+        adjustHijriDate++
+        return "$adjustHijriDate days"
+    }
+
+    private fun decrementAdjustHijriDate(): String {
+        return if (adjustHijriDate > 0) {
+            adjustHijriDate--
+            "$adjustHijriDate days"
+        } else {
+            "0 days"
+        }
+    }
+
+    private fun incrementCountUpTime(): String {
+        countUpTime++
+        return "$countUpTime mins"
+    }
+
+    private fun decrementCountUpTime(): String {
+        return if (countUpTime > 0) {
+            countUpTime--
+            "$countUpTime mins"
+        } else {
+            "off"
+        }
+    }
+
+
 }

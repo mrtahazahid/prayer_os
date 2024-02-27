@@ -6,16 +6,19 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.iw.android.prayerapp.App
 import com.iw.android.prayerapp.base.network.BaseApi
+import com.iw.android.prayerapp.notificationService.Notification
 import com.iw.android.prayerapp.utils.TinyDB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.DelicateCoroutinesApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 
 @Module
@@ -27,6 +30,12 @@ object AppModule {
         // Provide the application context
         // You can replace this with your actual way of obtaining the application context
         return App().applicationContext
+    }
+
+    @Singleton
+    @Provides
+    fun provideNotification(@ApplicationContext context: Context): Notification {
+        return Notification(context)
     }
 
     @DelicateCoroutinesApi
