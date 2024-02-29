@@ -13,7 +13,7 @@ import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.data.response.PrayTime
-import com.iw.android.prayerapp.data.response.PrayerDetailData
+import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.databinding.RowItemPrayTimeBinding
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
@@ -30,7 +30,7 @@ class RowItemTime(
     val viewModel: TimeViewModel
 ) : ViewType<PrayTime>, OnDataSelected {
     private var isViewShow = false
-    private var prayerDetailData: PrayerDetailData? = null
+    private var prayerDetailData: NotificationData? = null
     private var currentMinute = 0
     private var duaReminderTime = 0
     private lateinit var _binding: RowItemPrayTimeBinding
@@ -138,7 +138,7 @@ class RowItemTime(
         when (data.title) {
             "Fajr" -> {
                 viewModel.saveFajrDetail(
-                    PrayerDetailData(
+                    NotificationData(
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -154,7 +154,7 @@ class RowItemTime(
 
             "Sunrise" -> {
                 viewModel.saveSunriseDetail(
-                    PrayerDetailData(
+                    NotificationData(
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -170,7 +170,7 @@ class RowItemTime(
 
             "Dhuhr" -> {
                 viewModel.saveDuhrDetail(
-                    PrayerDetailData(
+                    NotificationData(
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -186,7 +186,7 @@ class RowItemTime(
 
             "Asr" -> {
                 viewModel.saveAsrDetail(
-                    PrayerDetailData(
+                    NotificationData(
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -202,7 +202,7 @@ class RowItemTime(
 
             "Maghrib" -> {
                 viewModel.saveMagribDetail(
-                    PrayerDetailData(
+                    NotificationData(
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -218,7 +218,7 @@ class RowItemTime(
 
             "Isha" -> {
                 viewModel.saveIshaDetail(
-                    PrayerDetailData(
+                    NotificationData(
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -234,7 +234,7 @@ class RowItemTime(
 
             "Midnight" -> {
                 viewModel.saveMidNightDetail(
-                    PrayerDetailData(
+                    NotificationData(
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -250,7 +250,7 @@ class RowItemTime(
 
             "Last Third" -> {
                 viewModel.saveLastNightDetail(
-                    PrayerDetailData(
+                    NotificationData(
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,

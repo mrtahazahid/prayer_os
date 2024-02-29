@@ -6,7 +6,8 @@ data class PrayTime(
     val image: Int,
     val title: String,
     val time: String,
-    val namazDetail: PrayerDetailData
+    var createdDate:String = "",
+    val namazDetail: NotificationData
 )
 
 data class SoundData(
@@ -20,14 +21,9 @@ data class LocationData(
     val city: String
 )
 
-data class SaveLocationData(
-    val isAutomatic: Boolean,
-    val geofence: String
-)
-
 data class PrayerTime(val namazName: String, val namazTime: Long, val timeDifference: Long = 0)
 
-data class PrayerDetailData(
+data class NotificationData(
     var notificationSoundPosition: Int = 0,
     var notificationSound: String = "Tones",
     var reminderNotificationSoundPosition: Int = 0,
@@ -35,7 +31,8 @@ data class PrayerDetailData(
     var reminderTime: String = "off",
     var duaType: String = DuaTypeEnum.OFF.getValue(),
     var duaReminder: String = "off",
-    var duaTime: String = "12:00 AM"
+    var duaTime: String = "12:00 AM",
+    var createdDate:String = ""
 )
 
 data class IslamicHolidayResponse(

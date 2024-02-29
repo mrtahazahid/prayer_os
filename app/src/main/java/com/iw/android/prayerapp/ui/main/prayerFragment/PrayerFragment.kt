@@ -146,7 +146,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 binding.textViewThirdNamaz.text =
                     "Asr: ${convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())}"
                 binding.textViewFourthNamaz.text =
-                    "Isha: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}"
+                    "Maghrib: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}"
                 binding.textViewCurrentNamazName.text = "Fajr"
                 binding.textViewCurrentNamazTime.text = convertToFunTime(currentNamaz.namazTime)
             }
@@ -204,6 +204,8 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             }
         }
 
+        Log.d("currentNamaz",currentNamaz.timeDifference.toString())
+
         startCountdown(currentNamaz.timeDifference)
     }
 
@@ -213,6 +215,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 val secondsRemaining = (millisUntilFinished / 1000).toInt()
 
                 // Update progress bar and display remaining time
+                Log.d("timeLeft",timeDifferenceMillis.toInt().toString())
                 binding.progressbar.max = timeDifferenceMillis.toInt()
                 binding.progressbar.progress = millisUntilFinished.toInt()
 
