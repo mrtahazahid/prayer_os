@@ -52,6 +52,8 @@ object GetAdhanDetails : AppCompatActivity() {
         )
     }
 
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentPrayerTime(prayerTimes: List<Long>, currentTime: Long): Pair<String, Long>? {
         for (i in prayerTimes.indices) {

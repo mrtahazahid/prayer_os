@@ -8,12 +8,18 @@ import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.APPLICATION_ID
 import com.iw.android.prayerapp.base.response.LoginUserResponse
+import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.UserLatLong
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = APPLICATION_ID)
 
@@ -132,6 +138,70 @@ class DataPreference @Inject constructor(
 
     }
 
+//    suspend fun saveNotificationData(data: NotificationData) {
+//        if(getNotificationData().isEmpty()){
+//            setStringData(NOTIFICATION_DATA, Gson().toJson(data))
+//        }else{
+//            val notification = getNotificationData().add(data)
+//            setStringData(NOTIFICATION_DATA, Gson().toJson(notification))
+//        }
+//
+//    }
+//
+//    suspend fun getNotificationData(): ArrayList<NotificationData?> {
+//        val json = Json { ignoreUnknownKeys = true }
+//        val preferences = appContext.dataStore.data.first()
+//        val jsonString = preferences[NOTIFICATION_DATA] ?: ""
+//        return Gson().fromJson(jsonString, object : TypeToken<ArrayList<NotificationData>>() {}.type)
+//    }
+
+    suspend fun saveNotificationData(newItem: NotificationData) {
+        val jsonString = appContext.dataStore.data
+            .first()[NOTIFICATION_DATA]
+            ?: "[]" // Default to an empty array if the key is not present
+
+        val list: MutableList<NotificationData> = Json.decodeFromString(jsonString)
+
+        // Check if NotificationData with the same createdDate already exists
+        val existingItem = list.find { it.createdDate == newItem.createdDate }
+
+        if (existingItem != null) {
+            // If the item already exists, update its values
+            existingItem.notificationSoundPosition = newItem.notificationSoundPosition
+            existingItem.notificationSound = newItem.notificationSound
+            existingItem.reminderNotificationSoundPosition = newItem.reminderNotificationSoundPosition
+            existingItem.reminderNotificationSound = newItem.reminderNotificationSound
+            existingItem.reminderTime = newItem.reminderTime
+            existingItem.duaType = newItem.duaType
+            existingItem.duaReminder = newItem.duaReminder
+            existingItem.duaTime = newItem.duaTime
+            // Update other fields as needed
+        } else {
+            // If the item doesn't exist, add it to the list
+            list.add(newItem)
+        }
+
+        val updatedJsonString = Json.encodeToString(list)
+
+        appContext.dataStore.edit { preferences ->
+            preferences[NOTIFICATION_DATA] = updatedJsonString
+        }
+    }
+
+    suspend fun getNotificationData(): List<NotificationData> {
+        val jsonString = appContext.dataStore.data.first()[NOTIFICATION_DATA] ?: return emptyList()
+        return mapJsonToList(jsonString)
+    }
+
+    private fun convertListToJsonString(list: NotificationData): String {
+         // adjust settings if needed
+        return Json.encodeToString(list)
+    }
+
+    private fun mapJsonToList(jsonString: String): List<NotificationData> {
+        val json = Json { ignoreUnknownKeys = true } // adjust settings if needed
+        return json.decodeFromString(jsonString)
+    }
     suspend fun setUserLatLong(userLatLong: UserLatLong) {
         setStringData(USER_LAT_LONG, Gson().toJson(userLatLong))
 
@@ -159,6 +229,8 @@ class DataPreference @Inject constructor(
         val USER_INFO = stringPreferencesKey("key_user_info")
         val FAJR_INFO = stringPreferencesKey("key_fajr_info")
         val SUNRISE_INFO = stringPreferencesKey("key_sunrise_info")
+        val NOTIFICATION_DATA = stringPreferencesKey("key_notification_data")
+        val SETTING_NOTIFICATION_DATA = stringPreferencesKey("key_setting_notification_data")
         val DHUHR_INFO = stringPreferencesKey("key_dhuhr_info")
         val ASR_INFO = stringPreferencesKey("key_asr_info")
         val MAGRIB_INFO = stringPreferencesKey("key_magrib_info")

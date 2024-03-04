@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
@@ -22,6 +24,7 @@ import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.utils.AppConstant
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.TinyDB
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -74,6 +77,8 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     }
 
     override fun initialize() {
+
+
         binding.textViewDateTitle.text = getFormattedDate(dateOffset)
         tinyDB = TinyDB(requireContext())
         setRecyclerView()
@@ -96,6 +101,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
         binding.masjidClickView.setOnClickListener(this)
         binding.imageViewBack.setOnClickListener(this)
         binding.imageViewForward.setOnClickListener(this)
+        binding.textViewTitle.setOnClickListener(this)
 
     }
 
@@ -106,6 +112,9 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            binding.textViewTitle.id-> lifecycleScope.launch{
+                Log.d("NamazDetailFajr",viewModel.getFajrDetail().toString())
+            }
             binding.imageViewForward.id -> {
                 dateOffset++
                 binding.textViewDateTitle.text = getFormattedDate(dateOffset)

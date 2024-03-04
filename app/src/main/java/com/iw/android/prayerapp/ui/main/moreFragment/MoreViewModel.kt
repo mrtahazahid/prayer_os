@@ -52,7 +52,7 @@ class MoreViewModel@Inject constructor()  : ViewModel() {
         moreList.add(
             MoreData(
                 R.drawable.ic_mike,
-                "plan azan",
+                "Plan adhan",
 
             )
         )

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color"
+    android:background="@color/black"
     tools:context=".ui.main.prayerFragment.PrayerFragment">
 
     <FrameLayout
@@ -124,7 +124,7 @@
                 android:background="@drawable/gray_progressbar_background"
                 android:indeterminate="false"
                 android:max="10"
-                android:progress="7"
+                android:progress="10"
                 android:progressDrawable="@drawable/blue_progressbar_background"
                 android:rotation="-90"
                 android:visibility="gone"

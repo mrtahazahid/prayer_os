@@ -21,6 +21,8 @@ import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
 import com.iw.android.prayerapp.ui.main.timeFragment.TimeFragment
 import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class RowItemTime(
@@ -139,6 +141,7 @@ class RowItemTime(
             "Fajr" -> {
                 viewModel.saveFajrDetail(
                     NotificationData(
+                        namazName =  data.title,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -146,7 +149,7 @@ class RowItemTime(
                         reminderTime = prayerDetailData?.reminderTime!!,
                         duaReminder = prayerDetailData?.duaReminder!!,
                         duaTime = prayerDetailData?.duaTime!!,
-                        duaType = prayerDetailData?.duaType!!
+                        duaType = prayerDetailData?.duaType!!, createdDate = getCurrentDate()
                     )
                 )
 
@@ -155,6 +158,7 @@ class RowItemTime(
             "Sunrise" -> {
                 viewModel.saveSunriseDetail(
                     NotificationData(
+                        namazName =  data.title,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -162,7 +166,7 @@ class RowItemTime(
                         reminderTime = prayerDetailData?.reminderTime!!,
                         duaReminder = prayerDetailData?.duaReminder!!,
                         duaTime = prayerDetailData?.duaTime!!,
-                        duaType = prayerDetailData?.duaType!!
+                        duaType = prayerDetailData?.duaType!!, createdDate = getCurrentDate()
                     )
                 )
 
@@ -171,6 +175,7 @@ class RowItemTime(
             "Dhuhr" -> {
                 viewModel.saveDuhrDetail(
                     NotificationData(
+                        namazName =  data.title,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -178,7 +183,7 @@ class RowItemTime(
                         reminderTime = prayerDetailData?.reminderTime!!,
                         duaReminder = prayerDetailData?.duaReminder!!,
                         duaTime = prayerDetailData?.duaTime!!,
-                        duaType = prayerDetailData?.duaType!!
+                        duaType = prayerDetailData?.duaType!!, createdDate = getCurrentDate()
                     )
                 )
 
@@ -187,6 +192,7 @@ class RowItemTime(
             "Asr" -> {
                 viewModel.saveAsrDetail(
                     NotificationData(
+                        namazName =  data.title,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -194,7 +200,7 @@ class RowItemTime(
                         reminderTime = prayerDetailData?.reminderTime!!,
                         duaReminder = prayerDetailData?.duaReminder!!,
                         duaTime = prayerDetailData?.duaTime!!,
-                        duaType = prayerDetailData?.duaType!!
+                        duaType = prayerDetailData?.duaType!!, createdDate = getCurrentDate()
                     )
                 )
 
@@ -203,6 +209,7 @@ class RowItemTime(
             "Maghrib" -> {
                 viewModel.saveMagribDetail(
                     NotificationData(
+                        namazName =  data.title,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -210,7 +217,7 @@ class RowItemTime(
                         reminderTime = prayerDetailData?.reminderTime!!,
                         duaReminder = prayerDetailData?.duaReminder!!,
                         duaTime = prayerDetailData?.duaTime!!,
-                        duaType = prayerDetailData?.duaType!!
+                        duaType = prayerDetailData?.duaType!!, createdDate = getCurrentDate()
                     )
                 )
 
@@ -219,6 +226,7 @@ class RowItemTime(
             "Isha" -> {
                 viewModel.saveIshaDetail(
                     NotificationData(
+                        namazName =  data.title,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -226,7 +234,7 @@ class RowItemTime(
                         reminderTime = prayerDetailData?.reminderTime!!,
                         duaReminder = prayerDetailData?.duaReminder!!,
                         duaTime = prayerDetailData?.duaTime!!,
-                        duaType = prayerDetailData?.duaType!!
+                        duaType = prayerDetailData?.duaType!!, createdDate = getCurrentDate()
                     )
                 )
 
@@ -235,6 +243,7 @@ class RowItemTime(
             "Midnight" -> {
                 viewModel.saveMidNightDetail(
                     NotificationData(
+                        namazName =  data.title,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -242,7 +251,7 @@ class RowItemTime(
                         reminderTime = prayerDetailData?.reminderTime!!,
                         duaReminder = prayerDetailData?.duaReminder!!,
                         duaTime = prayerDetailData?.duaTime!!,
-                        duaType = prayerDetailData?.duaType!!
+                        duaType = prayerDetailData?.duaType!!, createdDate = getCurrentDate()
                     )
                 )
 
@@ -251,6 +260,7 @@ class RowItemTime(
             "Last Third" -> {
                 viewModel.saveLastNightDetail(
                     NotificationData(
+                        namazName =  data.title,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -258,7 +268,7 @@ class RowItemTime(
                         reminderTime = prayerDetailData?.reminderTime!!,
                         duaReminder = prayerDetailData?.duaReminder!!,
                         duaTime = prayerDetailData?.duaTime!!,
-                        duaType = prayerDetailData?.duaType!!
+                        duaType = prayerDetailData?.duaType!!, createdDate = getCurrentDate()
                     )
                 )
 
@@ -519,4 +529,11 @@ class RowItemTime(
         }
         savePrayerDetailData()
     }
+
+    fun getCurrentDate(): String {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy") // Customize the format as needed
+        return currentDate.format(formatter)
+    }
+
 }

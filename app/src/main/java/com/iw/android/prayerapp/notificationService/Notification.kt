@@ -1,28 +1,34 @@
 package com.iw.android.prayerapp.notificationService
 
+
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.media.AudioManager
 import android.media.MediaPlayer
-import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.random.Random
 
+
+
+ var player: MediaPlayer? = null
 @Singleton
 class Notification @Inject constructor(@ApplicationContext private val context: Context) {
 
-
+    private val applicationScope = ProcessLifecycleOwner.get().lifecycleScope
     companion object {
         private const val channelId = "110"
         private const val NOTIFICATION_ID_MULTIPLIER = 1000
@@ -33,11 +39,8 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         private const val NOTIFICATION_IMPORTANCE = NotificationManager.IMPORTANCE_HIGH
     }
 
-    fun notify(user: String, title: String, message: String, app: String) {
+    fun notify(currentNamazTitle: String) {
         val intent = Intent(context, MainActivity::class.java).apply {
-            putExtra("user", user)
-            putExtra("app", app)
-            putExtra("notificationDeleted", true)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
             // Get the Uri of the sound from the raw resource folder
@@ -55,25 +58,34 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
 
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, pendingFlag)
 
-        val actionButton = NotificationCompat.Action.Builder(
-            R.mipmap.app_icon,
-            "Stop Reminder",
-            pendingIntent
-        ).build()
+
       //  val customSoundUri =Uri.parse("android.resource://${context.packageName}/${R.raw.adhan_abdul_basit}" )
       //  RingtoneManager.setActualDefaultRingtoneUri(context,RingtoneManager.TYPE_ALARM,customSoundUri)
 
         val notificationBuilder = NotificationCompat.Builder(context, channelId).apply {
             setSmallIcon(R.mipmap.app_icon)
-            setContentTitle(title)
-            setContentText(message)
+            setContentTitle(currentNamazTitle)
+            setContentText("Namaz Time")
             setAutoCancel(true)
-            addAction(actionButton)
             priority = NotificationCompat.PRIORITY_HIGH
-            setSound(Uri.parse("android.resource://${context.packageName}/${R.raw.adhan_abdul_basit}"))
+            setSilent(true)
             setContentIntent(pendingIntent)
         }
+        try {
+            applicationScope.launch {
+                val uri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.adhan_abdul_basit)
+                player = MediaPlayer.create(context, uri)
+                player?.isLooping = false // This will play sound in repeatable mode.
+                player?.start()
+                delay(20000)
+                player?.stop()
+            }
 
+
+//     mBuilder.setSound(uri);
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 //        val mMediaPlayer = MediaPlayer.create(context, R.raw.adhan_abdul_basit);
 //        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
 //        mMediaPlayer.setLooping(true);
@@ -97,3 +109,4 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         notificationManager.notify(notificationId, notificationBuilder.build())
     }
 }
+

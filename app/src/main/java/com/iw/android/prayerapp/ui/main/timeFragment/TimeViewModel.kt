@@ -13,6 +13,8 @@ import com.iw.android.prayerapp.utils.GetAdhanDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -142,4 +144,6 @@ class TimeViewModel @Inject constructor(private val repository: MainRepository) 
         val dateFormat = SimpleDateFormat("dd MMM yyyy hh:mm a", Locale.getDefault())
         return dateFormat.format(calendar.time)
     }
+
+
 }

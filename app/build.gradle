@@ -5,6 +5,8 @@ plugins {
     id 'kotlin-parcelize'
     id 'com.google.dagger.hilt.android'
     id 'androidx.navigation.safeargs'
+    id 'org.jetbrains.kotlin.plugin.serialization'
+
 }
 
 android {
@@ -50,6 +52,7 @@ dependencies {
     def retrofit_version = "2.9.0"
     def okhttp_version = "4.9.0"
     def okhttp3_integration_version = "4.11.0"
+    def work_version = "2.7.0"
 
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -136,5 +139,11 @@ dependencies {
     implementation 'io.github.stefanosiano.powerful_libraries:imageview_rs:1.0.25' //Use this if you need renderscript
     //Custom Tab
     implementation 'androidx.browser:browser:1.5.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0"
+
+
+
+    // WorkManager
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
 }

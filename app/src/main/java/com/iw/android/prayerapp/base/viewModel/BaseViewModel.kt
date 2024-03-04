@@ -1,9 +1,11 @@
 package com.iw.android.prayerapp.base.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iw.android.prayerapp.base.repo.BaseRepository
 import com.iw.android.prayerapp.data.response.NotificationData
+import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.data.response.UserLatLong
 import kotlinx.coroutines.launch
 
@@ -87,6 +89,7 @@ abstract class BaseViewModel(private val repository: BaseRepository) : ViewModel
     }
 
     suspend fun getUserLatLong(): UserLatLong? {
+        Log.d("getUserLatLong", repository.getUserLatLong().toString())
         return repository.getUserLatLong()
     }
 
@@ -96,5 +99,14 @@ abstract class BaseViewModel(private val repository: BaseRepository) : ViewModel
 
     suspend fun getGeofenceRadius(): Int = repository.getGeofenceRadius()
 
+    fun saveSettingNotificationData(data: NotificationSettingData) = viewModelScope.launch {
+        repository.saveSettingNotificationData(data)
+    }
+
+    suspend fun getSettingNotificationData(): NotificationSettingData =
+        repository.getSettingNotificationData()
+
+    suspend fun getAllNotificationData(): List<NotificationData?> =
+        repository.getAllNotificationData()
 
 }

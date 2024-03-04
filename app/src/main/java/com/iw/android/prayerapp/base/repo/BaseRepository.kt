@@ -1,19 +1,20 @@
 package com.iw.android.prayerapp.base.repo
 
+import android.util.Log
 import com.google.gson.Gson
-import com.iw.android.prayerapp.base.prefrence.DataPreference
-import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.IS_LOGIN
-import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.USER_ID
-import com.iw.android.prayerapp.base.response.LoginUserResponse
 import com.iw.android.prayerapp.base.network.BaseApi
 import com.iw.android.prayerapp.base.network.SafeApiCall
+import com.iw.android.prayerapp.base.prefrence.DataPreference
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.AUTOMATIC_LOCATION
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.GEOFENCE_RADIUS
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.IS_ONBOARDING
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_ELEVATION_RULE
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_JURISPRUDENCE
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_METHOD
+import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.USER_ID
+import com.iw.android.prayerapp.base.response.LoginUserResponse
 import com.iw.android.prayerapp.data.response.NotificationData
+import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.data.response.UserLatLong
 import kotlinx.coroutines.flow.first
 import javax.inject.Singleton
@@ -53,6 +54,7 @@ abstract class BaseRepository(
             preferences.getStringData(DataPreference.USER_LAT_LONG),
             UserLatLong::class.java
         )
+
     }
 
     suspend fun saveUserLatLong(namazDetail: UserLatLong) {
@@ -61,6 +63,7 @@ abstract class BaseRepository(
 
     suspend fun saveFajrDetail(namazDetail: NotificationData) {
         preferences.setStringData(DataPreference.FAJR_INFO, Gson().toJson(namazDetail))
+        saveNotificationData(namazDetail)
     }
 
     suspend fun getFajrDetail(): NotificationData? {
@@ -72,6 +75,7 @@ abstract class BaseRepository(
 
     suspend fun saveSunriseDetail(namazDetail: NotificationData) {
         preferences.setStringData(DataPreference.SUNRISE_INFO, Gson().toJson(namazDetail))
+        saveNotificationData(namazDetail)
     }
 
     suspend fun getSunriseDetail(): NotificationData? {
@@ -83,6 +87,7 @@ abstract class BaseRepository(
 
     suspend fun saveDuhrDetail(namazDetail: NotificationData) {
         preferences.setStringData(DataPreference.DHUHR_INFO, Gson().toJson(namazDetail))
+        saveNotificationData(namazDetail)
     }
 
     suspend fun getDuhrDetail(): NotificationData? {
@@ -95,6 +100,7 @@ abstract class BaseRepository(
 
     suspend fun saveAsrDetail(namazDetail: NotificationData) {
         preferences.setStringData(DataPreference.ASR_INFO, Gson().toJson(namazDetail))
+        saveNotificationData(namazDetail)
     }
 
     suspend fun getAsrDetail(): NotificationData? {
@@ -106,6 +112,7 @@ abstract class BaseRepository(
 
     suspend fun saveMagribDetail(namazDetail: NotificationData) {
         preferences.setStringData(DataPreference.MAGRIB_INFO, Gson().toJson(namazDetail))
+        saveNotificationData(namazDetail)
     }
 
     suspend fun getMagribDetail(): NotificationData? {
@@ -117,6 +124,7 @@ abstract class BaseRepository(
 
     suspend fun saveIshaDetail(namazDetail: NotificationData) {
         preferences.setStringData(DataPreference.ISHA_INFO, Gson().toJson(namazDetail))
+        saveNotificationData(namazDetail)
     }
 
     suspend fun getIshaDetail(): NotificationData? {
@@ -128,6 +136,7 @@ abstract class BaseRepository(
 
     suspend fun saveMidnightDetail(namazDetail: NotificationData) {
         preferences.setStringData(DataPreference.MIDNIGHT_INFO, Gson().toJson(namazDetail))
+        saveNotificationData(namazDetail)
     }
 
     suspend fun getMidnightDetail(): NotificationData? {
@@ -140,6 +149,7 @@ abstract class BaseRepository(
 
     suspend fun saveLastThirdDetail(namazDetail: NotificationData) {
         preferences.setStringData(DataPreference.LASTTHIRD_INFO, Gson().toJson(namazDetail))
+        saveNotificationData(namazDetail)
     }
 
     suspend fun getLastThirdDetail(): NotificationData? {
@@ -147,16 +157,6 @@ abstract class BaseRepository(
             preferences.getStringData(DataPreference.LASTTHIRD_INFO),
             NotificationData::class.java
         )
-    }
-
-
-    suspend fun saveUserProfileData(userInfo: LoginUserResponse) {
-        preferences.setStringData(DataPreference.USER_INFO, Gson().toJson(userInfo))
-    }
-
-
-    suspend fun logout() = safeApiCall {
-        api.logout()
     }
 
     suspend fun saveLoginUserId(userId: String) {
@@ -175,10 +175,6 @@ abstract class BaseRepository(
         preferences.setStringData(PRAYER_ELEVATION_RULE, prayerElevationRule)
     }
 
-    suspend fun setUserLoggedIn() {
-        preferences.setBooleanData(IS_LOGIN, true)
-    }
-
     suspend fun setIsOnboarding() {
         preferences.setBooleanData(IS_ONBOARDING, true)
     }
@@ -195,12 +191,19 @@ abstract class BaseRepository(
 
     suspend fun getGeofenceRadius() = preferences.getIntegerData(GEOFENCE_RADIUS)
 
-
-    suspend fun clearUserPreferenceData() {
-        preferences.performLogout()
+    suspend fun saveNotificationData(data: NotificationData) {
+        preferences.saveNotificationData(data)
     }
 
-    suspend fun clearUserLoginData() {
-        preferences.clearLoginDataForUpdate()
+    suspend fun getAllNotificationData(): List<NotificationData?> = preferences.getNotificationData()
+
+    suspend fun saveSettingNotificationData(data: NotificationSettingData) {
+        preferences.setStringData(DataPreference.SETTING_NOTIFICATION_DATA, Gson().toJson(data))
     }
+
+    suspend fun getSettingNotificationData(): NotificationSettingData = Gson().fromJson(
+        preferences.getStringData(DataPreference.SETTING_NOTIFICATION_DATA),
+        NotificationSettingData::class.java
+    )
+
 }
