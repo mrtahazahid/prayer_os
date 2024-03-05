@@ -22,6 +22,7 @@ import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.services.gps.GpsStatusListener
 import com.iw.android.prayerapp.services.gps.LocationEvent
 import com.iw.android.prayerapp.services.gps.LocationService
+import com.iw.android.prayerapp.services.gps.NotificationService
 import com.iw.android.prayerapp.services.gps.TurnOnGps
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
 import kotlinx.coroutines.launch
@@ -92,6 +93,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initialize() {
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
 
@@ -106,6 +108,11 @@ class MainActivity : BaseActivity() {
         turnOnGps = TurnOnGps(this)
 
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        startForegroundService()
     }
 
     override fun setOnClickListener() {
@@ -227,5 +234,11 @@ class MainActivity : BaseActivity() {
 
             }
         }
+
+    fun startForegroundService() {
+        val notificationIntent = Intent(this, NotificationService::class.java)
+        startForegroundService(notificationIntent)
+    }
+
 
 }

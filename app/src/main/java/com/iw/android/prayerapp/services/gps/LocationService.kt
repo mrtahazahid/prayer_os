@@ -55,7 +55,7 @@ class LocationService : Service() {
             }
         }
         prefrence = DataPreference(this)
-        startPeriodicTask()
+
 //        notificationManager = this.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            val notificationChannel = NotificationChannel(CHANNEL_ID, "locations", NotificationManager.IMPORTANCE_HIGH)
@@ -74,46 +74,7 @@ class LocationService : Service() {
         }
 
     }
-    fun startPeriodicTask() {
 
-        applicationScope.launch {
-            while (true) {
-                // Your periodic task logic here
-                checkAndTriggerNotification()
-
-                // Delay for 10 seconds
-                delay(10_000)
-            }
-        }
-    }
-
-
-    private fun checkAndTriggerNotification() {
-        // Add your logic here to check if it's time to show a notification
-
-        val specifiedTimes = listOf("05:35 AM", "12:44 PM", "05:32 PM", "06:30 PM", "07:12 PM")
-
-        for (specifiedTime in specifiedTimes) {
-            if (isTimeMatch(specifiedTime)) {
-           notifications.notify("Isha")
-                break
-            }
-        }
-    }
-
-    fun convertTimeToMillis(timeString: String): Long {
-        val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
-        val date = dateFormat.parse(timeString)
-        return date?.time ?: 0
-    }
-    fun getCurrentTimeFormatted(): String {
-        val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
-        val currentTime = Date()
-        return dateFormat.format(currentTime)
-    }
-    private fun isTimeMatch(specifiedTime: String): Boolean {
-        return convertTimeToMillis(getCurrentTimeIn12HourFormat()).compareTo(convertTimeToMillis(specifiedTime)) == 0
-    }
 
 
     private fun removeLocationUpdates(){
@@ -124,10 +85,7 @@ class LocationService : Service() {
         stopSelf()
     }
 
-    fun getCurrentTimeIn12HourFormat(): String {
-        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
-        return LocalTime.now().format(formatter)
-    }
+
     private fun onNewLocation(locationResult: LocationResult) {
         location = locationResult.lastLocation
         Log.d("CheckABC", "onNewLocation: ")

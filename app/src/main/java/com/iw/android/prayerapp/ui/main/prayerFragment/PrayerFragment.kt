@@ -106,7 +106,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             namazTimesList.add(i)
         }
         upComingNamazTime()
-        notifications.notify(currentNamazName)
+       // notifications.notify(currentNamazName)
     }
 
     override fun setObserver() {
@@ -236,10 +236,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
             override fun onFinish() {
                 notifications.notify(currentNamazName)
-                // Prayer time has arrived, handle accordingly
                 getTimeDifferenceToNextPrayer()
-
-                //
             }
         }
 
@@ -290,7 +287,11 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                     previousPrayerTimeIndex = prayerTimeList.size - 1
                     currentPrayerTimeIndex = i
                     nextPrayerTimeIndex = i + 1
-                } else {
+                } else if(prayerTimeList[i].currentNamazName =="Isha"){
+                    previousPrayerTimeIndex = i - 1
+                    currentPrayerTimeIndex = i
+                    nextPrayerTimeIndex = 0
+                }else{
                     previousPrayerTimeIndex = i - 1
                     currentPrayerTimeIndex = i
                     nextPrayerTimeIndex = i + 1

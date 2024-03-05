@@ -142,6 +142,7 @@ class RowItemTime(
                 viewModel.saveFajrDetail(
                     NotificationData(
                         namazName =  data.title,
+                        namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -159,6 +160,7 @@ class RowItemTime(
                 viewModel.saveSunriseDetail(
                     NotificationData(
                         namazName =  data.title,
+                        namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -176,6 +178,7 @@ class RowItemTime(
                 viewModel.saveDuhrDetail(
                     NotificationData(
                         namazName =  data.title,
+                        namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -193,6 +196,7 @@ class RowItemTime(
                 viewModel.saveAsrDetail(
                     NotificationData(
                         namazName =  data.title,
+                        namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -210,6 +214,7 @@ class RowItemTime(
                 viewModel.saveMagribDetail(
                     NotificationData(
                         namazName =  data.title,
+                        namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -227,6 +232,7 @@ class RowItemTime(
                 viewModel.saveIshaDetail(
                     NotificationData(
                         namazName =  data.title,
+                        namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -244,6 +250,7 @@ class RowItemTime(
                 viewModel.saveMidNightDetail(
                     NotificationData(
                         namazName =  data.title,
+                        namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,
@@ -261,6 +268,7 @@ class RowItemTime(
                 viewModel.saveLastNightDetail(
                     NotificationData(
                         namazName =  data.title,
+                        namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
                         reminderNotificationSound = prayerDetailData?.reminderNotificationSound!!,

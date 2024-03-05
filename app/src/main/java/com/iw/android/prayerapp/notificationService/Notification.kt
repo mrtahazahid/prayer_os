@@ -24,15 +24,17 @@ import kotlin.random.Random
 
 
 
- var player: MediaPlayer? = null
+
 @Singleton
 class Notification @Inject constructor(@ApplicationContext private val context: Context) {
+
+    var player: MediaPlayer? = null
 
     private val applicationScope = ProcessLifecycleOwner.get().lifecycleScope
     companion object {
         private const val channelId = "110"
         private const val NOTIFICATION_ID_MULTIPLIER = 1000
-        private const val NOTIFICATION_FLAGS = PendingIntent.FLAG_UPDATE_CURRENT
+        const val NOTIFICATION_FLAGS = PendingIntent.FLAG_UPDATE_CURRENT
         private const val NOTIFICATION_CHANNEL_NAME = "Channel Name"
 
         @RequiresApi(Build.VERSION_CODES.N)
@@ -42,10 +44,6 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
     fun notify(currentNamazTitle: String) {
         val intent = Intent(context, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
-            // Get the Uri of the sound from the raw resource folder
-
-
         }
 
         val pendingFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -53,8 +51,6 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         } else {
             NOTIFICATION_FLAGS
         }
-
-
 
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, pendingFlag)
 
@@ -77,20 +73,10 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                 player = MediaPlayer.create(context, uri)
                 player?.isLooping = false // This will play sound in repeatable mode.
                 player?.start()
-                delay(20000)
-                player?.stop()
             }
-
-
-//     mBuilder.setSound(uri);
         } catch (e: Exception) {
             e.printStackTrace()
         }
-//        val mMediaPlayer = MediaPlayer.create(context, R.raw.adhan_abdul_basit);
-//        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-//        mMediaPlayer.setLooping(true);
-//        mMediaPlayer.start();
-
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -107,6 +93,15 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
             NOTIFICATION_ID_MULTIPLIER
         )
         notificationManager.notify(notificationId, notificationBuilder.build())
+    }
+    private val notificationIntent = Intent(context, MainActivity::class.java)
+    fun startForegroundService() {
+        notificationIntent.putExtra("fromNotification", true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(notificationIntent)
+        } else {
+            context.startService(notificationIntent)
+        }
     }
 }
 

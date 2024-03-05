@@ -47,12 +47,22 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.iw.android.prayerapp.notificationService.NotificationDismissedReceiver"
-            android:exported="true">
+        <service
+            android:name="com.iw.android.prayerapp.services.gps.NotificationService"
+            android:exported="true"
+            android:label="service"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
-                <action android:name="notification_dismissed" />
+                <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
-        </receiver>
+
+            <meta-data
+                android:name="android.service.notification.default_filter_types"
+                android:value="conversations|alerting" />
+            <meta-data
+                android:name="android.service.notification.disabled_filter_types"
+                android:value="ongoing|silent" />
+        </service>
     </application>
 
 </manifest>

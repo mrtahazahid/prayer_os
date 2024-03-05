@@ -169,7 +169,8 @@ class DataPreference @Inject constructor(
             // If the item already exists, update its values
             existingItem.notificationSoundPosition = newItem.notificationSoundPosition
             existingItem.notificationSound = newItem.notificationSound
-            existingItem.reminderNotificationSoundPosition = newItem.reminderNotificationSoundPosition
+            existingItem.reminderNotificationSoundPosition =
+                newItem.reminderNotificationSoundPosition
             existingItem.reminderNotificationSound = newItem.reminderNotificationSound
             existingItem.reminderTime = newItem.reminderTime
             existingItem.duaType = newItem.duaType
@@ -193,8 +194,23 @@ class DataPreference @Inject constructor(
         return mapJsonToList(jsonString)
     }
 
+    suspend fun updateNotificationData(position: Int, data: NotificationData) {
+        val jsonString = appContext.dataStore.data
+            .first()[NOTIFICATION_DATA]
+            ?: "[]" // Default to an empty array if the key is not present
+
+        val list: MutableList<NotificationData> = Json.decodeFromString(jsonString)
+        list[position] = data
+
+        val updatedJsonString = Json.encodeToString(list)
+
+        appContext.dataStore.edit { preferences ->
+            preferences[NOTIFICATION_DATA] = updatedJsonString
+        }
+    }
+
     private fun convertListToJsonString(list: NotificationData): String {
-         // adjust settings if needed
+        // adjust settings if needed
         return Json.encodeToString(list)
     }
 
@@ -202,6 +218,7 @@ class DataPreference @Inject constructor(
         val json = Json { ignoreUnknownKeys = true } // adjust settings if needed
         return json.decodeFromString(jsonString)
     }
+
     suspend fun setUserLatLong(userLatLong: UserLatLong) {
         setStringData(USER_LAT_LONG, Gson().toJson(userLatLong))
 

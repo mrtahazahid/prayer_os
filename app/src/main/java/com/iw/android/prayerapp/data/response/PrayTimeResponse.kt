@@ -31,24 +31,30 @@ data class PrayerTime(
 
 @Serializable
 data class NotificationData(
-    var namazName:String = "",
+    var namazName: String = "",
+    var namazTime: String = "",
     var notificationSoundPosition: Int = 0,
     var notificationSound: String = "Tones",
+    var notificationSoundId: Int = 0,
     var reminderNotificationSoundPosition: Int = 0,
     var reminderNotificationSound: String = "Tones",
+    var reminderNotificationSoundId: Int = 0,
     var reminderTime: String = "off",
     var duaType: String = DuaTypeEnum.OFF.getValue(),
     var duaReminder: String = "off",
     var duaTime: String = "12:00 AM",
-    var isNotificationCall:Boolean = false,
+    var isNotificationCall: Boolean = false,
+    var isReminderNotificationCall: Boolean = false,
     var createdDate: String = ""
 )
-data class NotificationSettingData(
-    val snoozeTime:String,
-    val isAdhanDuaOn:Boolean,
-    val isPrayOnTap:Boolean,
 
-)
+data class NotificationSettingData(
+    val snoozeTime: String,
+    val isAdhanDuaOn: Boolean,
+    val isPrayOnTap: Boolean,
+
+    )
+
 data class IslamicHolidayResponse(
     val title: String,
     val islamicDayTitle: String,
