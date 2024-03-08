@@ -89,6 +89,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
         getQibla = GetAdhanDetails.getQiblaDirection(currentLatitude, currentLongitude)
         binding.txtQiblaHeading.text =
             "Qibla direction is ${"%.2f".format(getQibla.direction)}\u00B0 from North"
+
     }
 
     override fun setObserver() {
@@ -175,6 +176,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
             qiblaDegree = ((qiblaRadians - radian) * 180 / Math.PI).toFloat()
 //            binding.textViewCurrentDirection.text = "%.2f".format(qiblaDegree)
             binding.textViewCurrentDirection.text = "${"%.2f".format((getQibla.direction - radian) - 1.90)}°"
+
 //            binding.textViewCurrentDirection.text = "${"%.2f".format((qiblaRadians - radian) - 2.38)}°"
             if (qiblaDegree < 0) {
                 qiblaDegree += 360f

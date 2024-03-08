@@ -2,6 +2,7 @@ package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView
 
 import android.view.View
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
@@ -10,12 +11,15 @@ import com.iw.android.prayerapp.data.response.PrayerSoundData
 import com.iw.android.prayerapp.databinding.RowItemPraySoundBinding
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerSoundFragment
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerSoundFragmentDirections
+import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
+import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
 
 class RowItemPrayerSound(
     private val data: PrayerSoundData,
-    private val fragment: PrayerSoundFragment,
+    private val currentNamazName:String,
+    private val fragment: Fragment,
     val listener: OnClick
-) : ViewType<PrayerSoundData> {
+) : ViewType<PrayerSoundData>, OnDataSelected {
     private var isViewShow = false
     private var currentMinute = 20
 
@@ -45,25 +49,11 @@ class RowItemPrayerSound(
                 listener.onItemClick(position)
                 when (data.type) {
                     PrayerEnumType.ADHAN.getValue() -> {
-                        fragment.findNavController()
-                            .navigate(
-                                PrayerSoundFragmentDirections.actionPrayerSoundFragmentToSoundFragment(
-                                    "Magrib Sound",
-                                    "Adhan",
-                                    "true"
-                                ,"")
-                            )
+                        openSoundDialogFragment("Adhan Sound", currentNamazName, true)
                     }
 
                     PrayerEnumType.TONES.getValue() -> {
-                        fragment.findNavController()
-                            .navigate(
-                                PrayerSoundFragmentDirections.actionPrayerSoundFragmentToSoundFragment(
-                                    "Back",
-                                    "Magrib Tones",
-                                    "false",""
-                                )
-                            )
+                        openSoundDialogFragment("Tones Sound", currentNamazName, true)
                     }
                 }
             }
@@ -71,19 +61,31 @@ class RowItemPrayerSound(
         }
     }
 
-    private fun incrementMinute(): String {
-        currentMinute++
-        return "$currentMinute min"
+    override fun onDataPassed(
+        soundName: String,
+        soundPosition: Int,
+        sound:Int,
+
+        isSoundForNotification: Boolean
+    ) {
     }
 
-    private fun decrementMinute(): String {
-        currentMinute--
-        return "$currentMinute min"
+    private fun openSoundDialogFragment(
+        title: String,
+        subTitle: String,
+        isForNotification: Boolean
+    ) {
+        val soundDialog = SoundDialog()
+        soundDialog.listener = this
+        soundDialog.title = title
+        soundDialog.subTitle = subTitle
+        soundDialog.isForNotification = isForNotification
+        soundDialog.show(fragment.childFragmentManager, "SoundDialogFragment")
     }
-
 
 }
 
-fun interface OnClick {
+ interface OnClick {
     fun onItemClick(position: Int)
+    fun onSoundSelected(soundName:String,soundPosition: Int,sound:Int,position: Int)
 }

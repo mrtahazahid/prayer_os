@@ -9,6 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.chrono.HijrahDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -65,6 +67,28 @@ fun Fragment.setStatusBarWithBlackIcon(@ColorRes color: Int) {
 
     val gregorianDate: LocalDate = LocalDate.of(year, month, day)
     val hijrahDate = HijrahDate.from(gregorianDate)
+
+    val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.ENGLISH)
+    val formattedHijrahDate = hijrahDate.format(formatter)
+
+    return formattedHijrahDate.replace(" ", " ") // Customize space as needed
+}
+
+fun getIslamicDateByOffSet(offset: Int): String {
+    val sdf = SimpleDateFormat("yyyy/M/dd")
+    val currentDate = sdf.format(Date())
+
+    val splitDate = currentDate.split("/")
+    val year = splitDate[0].toInt()
+    val month = splitDate[1].toInt()
+    val day = splitDate[2].toInt()
+
+    val gregorianDate: LocalDate = LocalDate.of(year, month, day)
+
+    // Add offset days to the current date
+    val offsetGregorianDate = gregorianDate.plusDays(offset.toLong())
+
+    val hijrahDate = HijrahDate.from(offsetGregorianDate)
 
     val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.ENGLISH)
     val formattedHijrahDate = hijrahDate.format(formatter)

@@ -141,7 +141,7 @@ class RowItemTime(
             "Fajr" -> {
                 viewModel.saveFajrDetail(
                     NotificationData(
-                        namazName =  data.title,
+                        namazName = data.title,
                         namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
@@ -159,7 +159,7 @@ class RowItemTime(
             "Sunrise" -> {
                 viewModel.saveSunriseDetail(
                     NotificationData(
-                        namazName =  data.title,
+                        namazName = data.title,
                         namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
@@ -177,7 +177,7 @@ class RowItemTime(
             "Dhuhr" -> {
                 viewModel.saveDuhrDetail(
                     NotificationData(
-                        namazName =  data.title,
+                        namazName = data.title,
                         namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
@@ -195,7 +195,7 @@ class RowItemTime(
             "Asr" -> {
                 viewModel.saveAsrDetail(
                     NotificationData(
-                        namazName =  data.title,
+                        namazName = data.title,
                         namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
@@ -213,7 +213,7 @@ class RowItemTime(
             "Maghrib" -> {
                 viewModel.saveMagribDetail(
                     NotificationData(
-                        namazName =  data.title,
+                        namazName = data.title,
                         namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
@@ -231,7 +231,7 @@ class RowItemTime(
             "Isha" -> {
                 viewModel.saveIshaDetail(
                     NotificationData(
-                        namazName =  data.title,
+                        namazName = data.title,
                         namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
@@ -249,7 +249,7 @@ class RowItemTime(
             "Midnight" -> {
                 viewModel.saveMidNightDetail(
                     NotificationData(
-                        namazName =  data.title,
+                        namazName = data.title,
                         namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
@@ -267,7 +267,7 @@ class RowItemTime(
             "Last Third" -> {
                 viewModel.saveLastNightDetail(
                     NotificationData(
-                        namazName =  data.title,
+                        namazName = data.title,
                         namazTime = data.time,
                         notificationSound = prayerDetailData?.notificationSound!!,
                         notificationSoundPosition = prayerDetailData?.notificationSoundPosition!!,
@@ -431,110 +431,22 @@ class RowItemTime(
     override fun onDataPassed(
         soundName: String,
         soundPosition: Int,
+        sound: Int,
         isSoundForNotification: Boolean
     ) {
-        when (data.title) {
-            "Fajr" -> {
-                if (isSoundForNotification) {
-                    prayerDetailData?.notificationSound = soundName
-                    prayerDetailData?.notificationSoundPosition = soundPosition
-                    _binding.textViewNotificationSound.text = soundName
-                } else {
-                    _binding.textViewReminderSound.text = soundName
-                    prayerDetailData?.reminderNotificationSound = soundName
-                    prayerDetailData?.reminderNotificationSoundPosition = soundPosition
-                }
-            }
-
-            "Sunrise" -> {
-                if (isSoundForNotification) {
-                    _binding.textViewNotificationSound.text = soundName
-                    prayerDetailData?.notificationSound = soundName
-                    prayerDetailData?.notificationSoundPosition = soundPosition
-
-                } else {
-                    _binding.textViewReminderSound.text = soundName
-                    prayerDetailData?.reminderNotificationSound = soundName
-                    prayerDetailData?.reminderNotificationSoundPosition = soundPosition
-                }
-            }
-
-            "Dhuhr" -> {
-                if (isSoundForNotification) {
-                    _binding.textViewNotificationSound.text = soundName
-                    prayerDetailData?.notificationSound = soundName
-                    prayerDetailData?.notificationSoundPosition = soundPosition
-                } else {
-                    _binding.textViewReminderSound.text = soundName
-                    prayerDetailData?.reminderNotificationSound = soundName
-                    prayerDetailData?.reminderNotificationSoundPosition = soundPosition
-
-                }
-            }
-
-            "Asr" -> {
-                if (isSoundForNotification) {
-                    _binding.textViewNotificationSound.text = soundName
-                    prayerDetailData?.notificationSound = soundName
-                    prayerDetailData?.notificationSoundPosition = soundPosition
-                } else {
-                    _binding.textViewReminderSound.text = soundName
-                    prayerDetailData?.reminderNotificationSound = soundName
-                    prayerDetailData?.reminderNotificationSoundPosition = soundPosition
-
-                }
-            }
-
-            "Maghrib" -> {
-                if (isSoundForNotification) {
-                    _binding.textViewNotificationSound.text = soundName
-                    prayerDetailData?.notificationSound = soundName
-                    prayerDetailData?.notificationSoundPosition = soundPosition
-                } else {
-                    _binding.textViewReminderSound.text = soundName
-                    prayerDetailData?.reminderNotificationSound = soundName
-                    prayerDetailData?.reminderNotificationSoundPosition = soundPosition
-                }
-            }
-
-            "Isha" -> {
-                if (isSoundForNotification) {
-                    _binding.textViewNotificationSound.text = soundName
-                    prayerDetailData?.notificationSound = soundName
-                    prayerDetailData?.notificationSoundPosition = soundPosition
-
-                } else {
-                    _binding.textViewReminderSound.text = soundName
-                    prayerDetailData?.reminderNotificationSound = soundName
-                    prayerDetailData?.reminderNotificationSoundPosition = soundPosition
-                }
-            }
-
-            "Midnight" -> {
-                if (isSoundForNotification) {
-                    _binding.textViewNotificationSound.text = soundName
-                    prayerDetailData?.notificationSound = soundName
-                    prayerDetailData?.notificationSoundPosition = soundPosition
-                } else {
-                    _binding.textViewReminderSound.text = soundName
-                    prayerDetailData?.reminderNotificationSound = soundName
-                    prayerDetailData?.reminderNotificationSoundPosition = soundPosition
-                }
-            }
-
-            "Last Third" -> {
-                if (isSoundForNotification) {
-                    _binding.textViewNotificationSound.text = soundName
-                    prayerDetailData?.notificationSound = soundName
-                    prayerDetailData?.notificationSoundPosition = soundPosition
-                } else {
-                    _binding.textViewReminderSound.text = soundName
-                    prayerDetailData?.reminderNotificationSound = soundName
-                    prayerDetailData?.reminderNotificationSoundPosition = soundPosition
-                }
-            }
-
+        if (isSoundForNotification) {
+            prayerDetailData?.notificationSound = soundName
+            prayerDetailData?.sound = sound
+            prayerDetailData?.notificationSoundPosition = soundPosition
+            _binding.textViewNotificationSound.text = soundName
+        } else {
+            _binding.textViewReminderSound.text = soundName
+            prayerDetailData?.reminderNotificationSound = soundName
+            prayerDetailData?.reminderSound = sound
+            prayerDetailData?.reminderNotificationSoundPosition = soundPosition
         }
+
+
         savePrayerDetailData()
     }
 

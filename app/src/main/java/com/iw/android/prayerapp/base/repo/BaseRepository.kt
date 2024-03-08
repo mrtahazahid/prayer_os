@@ -13,6 +13,7 @@ import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_J
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_METHOD
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.USER_ID
 import com.iw.android.prayerapp.base.response.LoginUserResponse
+import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.data.response.UserLatLong
@@ -195,7 +196,8 @@ abstract class BaseRepository(
         preferences.saveNotificationData(data)
     }
 
-    suspend fun getAllNotificationData(): List<NotificationData?> = preferences.getNotificationData()
+    suspend fun getAllNotificationData(): List<NotificationData?> =
+        preferences.getNotificationData()
 
     suspend fun saveSettingNotificationData(data: NotificationSettingData) {
         preferences.setStringData(DataPreference.SETTING_NOTIFICATION_DATA, Gson().toJson(data))
@@ -205,5 +207,25 @@ abstract class BaseRepository(
         preferences.getStringData(DataPreference.SETTING_NOTIFICATION_DATA),
         NotificationSettingData::class.java
     )
+
+    suspend fun saveCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        preferences.setStringData(
+            DataPreference.CURRENT_NAMAZ_NOTIFICATION_DATA,
+            Gson().toJson(currentNamazNotificationData)
+        )
+
+    }
+
+    suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData = Gson().fromJson(
+        preferences.getStringData(DataPreference.CURRENT_NAMAZ_NOTIFICATION_DATA),
+        CurrentNamazNotificationData::class.java
+    )
+
+    suspend fun deleteCurrentNamazNotificationData() {
+        preferences.setStringData(
+            DataPreference.CURRENT_NAMAZ_NOTIFICATION_DATA,
+            Gson().toJson(null)
+        )
+    }
 
 }

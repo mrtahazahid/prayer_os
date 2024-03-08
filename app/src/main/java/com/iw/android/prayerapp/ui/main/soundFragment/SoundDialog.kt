@@ -25,6 +25,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
     private var selectedItem = ""
     private var selectedItemPosition = 0
     var listener: OnDataSelected? = null
+    var sound: Int? = null
      var isForNotification = false
 
     private val notificationList = GetAdhanSound.notificationSound
@@ -97,7 +98,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.imageViewBack.id -> {
-                listener?.onDataPassed(selectedItem, selectedItemPosition, isForNotification)
+                listener?.onDataPassed(selectedItem, selectedItemPosition,  sound!!,isForNotification)
                 dismiss()
             }
         }
@@ -125,6 +126,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
             checked.isSoundSelected = false
         }
 
+
         // Select the clicked item
         notificationList[position].isSoundSelected = true
         // Notify the adapter about the change in the entire dataset
@@ -134,7 +136,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
         // Create a new MediaPlayer instance
         selectedItem = data.title
         selectedItemPosition = position
-
+        sound = data.soundFile
         // Start playing the selected sound
         mediaPlayer?.start()
 
@@ -146,5 +148,5 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
 }
 
 fun interface OnDataSelected {
-    fun onDataPassed(soundName: String, soundPosition: Int, isSoundForNotification: Boolean)
+    fun onDataPassed(soundName: String, soundPosition: Int,sound:Int, isSoundForNotification: Boolean)
 }

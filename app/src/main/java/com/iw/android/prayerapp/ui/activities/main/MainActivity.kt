@@ -106,12 +106,6 @@ class MainActivity : BaseActivity() {
 
         gpsStatusListener = GpsStatusListener(this)
         turnOnGps = TurnOnGps(this)
-
-
-    }
-
-    override fun onPause() {
-        super.onPause()
         startForegroundService()
     }
 

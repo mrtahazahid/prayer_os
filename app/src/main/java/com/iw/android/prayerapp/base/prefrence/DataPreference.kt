@@ -248,6 +248,7 @@ class DataPreference @Inject constructor(
         val SUNRISE_INFO = stringPreferencesKey("key_sunrise_info")
         val NOTIFICATION_DATA = stringPreferencesKey("key_notification_data")
         val SETTING_NOTIFICATION_DATA = stringPreferencesKey("key_setting_notification_data")
+        val CURRENT_NAMAZ_NOTIFICATION_DATA = stringPreferencesKey("key_current_namaz_notification_data")
         val DHUHR_INFO = stringPreferencesKey("key_dhuhr_info")
         val ASR_INFO = stringPreferencesKey("key_asr_info")
         val MAGRIB_INFO = stringPreferencesKey("key_magrib_info")

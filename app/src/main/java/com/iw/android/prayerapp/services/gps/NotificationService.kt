@@ -63,7 +63,7 @@ class NotificationService : NotificationListenerService() {
         rankingMap: RankingMap?,
         reason: Int
     ) {
-        Log.d("notification Removed",sbn.toString())
+        Log.d("notification Removed", sbn.toString())
         if (sbn?.packageName == application.packageName) {
             if (reason == REASON_APP_CANCEL || reason == REASON_APP_CANCEL_ALL || reason == REASON_CLICK) {
                 notifications.player?.stop()
@@ -75,35 +75,47 @@ class NotificationService : NotificationListenerService() {
     private fun checkAndTriggerNotification() = applicationScope.launch {
         // Add your logic here to check if it's time to show a notification
         val specifiedTimes = prefrence.getNotificationData()
-        for ((index, specifiedTime) in specifiedTimes.withIndex()) {
-            if (!specifiedTime.isReminderNotificationCall) {
-                if (specifiedTime.duaTime != "off") {
-                    Log.d("namazTime",specifiedTime.namazTime)
-                    val reminderTime = convertTimeToMillis(specifiedTime.namazTime) - minutesToMillis(extractNumberFromString(specifiedTime.reminderTime))
-                    val formattedTime  = millisToTimeFormat(reminderTime)
-                    Log.d("formattedTime",formattedTime)
-                    if (isTimeMatch(formattedTime
-                        )
-                    ) {
-                        notifications.notify(specifiedTime.namazName)
-                        specifiedTime.isReminderNotificationCall = true
-                        prefrence.updateNotificationData(index, specifiedTime)
-                        delay(1500)
-                        break
-                    }
-                }else{
-                    if(!specifiedTime.isNotificationCall){
-                        if (isTimeMatch(specifiedTime.namazTime)) {
-                            notifications.notify(specifiedTime.namazName)
-                            specifiedTime.isNotificationCall = true
-                            prefrence.updateNotificationData(index, specifiedTime)
-                            delay(1500)
-                            break
+        if (specifiedTimes.isNotEmpty()) {
+            for ((index, specifiedTime) in specifiedTimes.withIndex()) {
+                if (specifiedTime.namazTime != "") {
+                    if (!specifiedTime.isReminderNotificationCall) {
+
+                        if (specifiedTime.duaTime != "off") {
+                            Log.d("namazTime", specifiedTime.namazTime)
+                            val reminderTime =
+                                convertTimeToMillis(specifiedTime.namazTime) - minutesToMillis(
+                                    extractNumberFromString(specifiedTime.reminderTime)
+                                )
+                            val formattedTime = millisToTimeFormat(reminderTime)
+                            Log.d("formattedTime", formattedTime)
+                            if (isTimeMatch(
+                                    formattedTime
+                                )
+                            ) {
+                                notifications.notify(specifiedTime.namazName)
+                                specifiedTime.isReminderNotificationCall = true
+                                prefrence.updateNotificationData(index, specifiedTime)
+                                delay(1500)
+                                break
+                            }
+                        } else {
+                            if (!specifiedTime.isNotificationCall) {
+                                if (isTimeMatch(specifiedTime.namazTime)) {
+                                    notifications.notify(specifiedTime.namazName)
+                                    specifiedTime.isNotificationCall = true
+                                    prefrence.updateNotificationData(index, specifiedTime)
+                                    delay(1500)
+                                    break
+                                }
+                            }
                         }
                     }
+                } else {
+                    continue
                 }
             }
         }
+
     }
 
 
@@ -141,14 +153,14 @@ class NotificationService : NotificationListenerService() {
     }
 
     private fun isTimeMatch(specifiedTime: String): Boolean {
-        if(specifiedTime == ""){
+        if (specifiedTime == "") {
             return false
         }
         return (convertTimeToMillis(getCurrentTimeIn12HourFormat()).compareTo(
-                convertTimeToMillis(
-                    specifiedTime
-                )
-            ) == 0)
+            convertTimeToMillis(
+                specifiedTime
+            )
+        ) == 0)
 
     }
 

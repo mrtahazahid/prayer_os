@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/mainView"
     android:background="@color/black"
     tools:context=".ui.main.prayerFragment.PrayerFragment">
 
@@ -21,7 +22,122 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewOffSet"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:elevation="50dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="#1e1e1e"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/topViewText"
+                app:layout_constraintStart_toStartOf="@+id/topViewText"
+                app:layout_constraintTop_toBottomOf="@+id/topViewText">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:cardBackgroundColor="#1e1e1e">
+
+                    <TextView
+                        android:id="@+id/textViewTodayAdjustHijro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:fontFamily="@font/sf_regular"
+                        android:gravity="center"
+                        android:text="Adjust hijri date offset"
+                        android:textColor="#7b7b80"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/view_separator" />
+
+                    <TextView
+                        android:id="@+id/incrementPlusTwoTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:fontFamily="@font/sf_regular"
+                        android:gravity="center"
+                        android:text="+2 days"
+                        android:textColor="#7b7b80"
+                        android:textSize="14sp" />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/view_separator" />
+
+                    <TextView
+                        android:id="@+id/incrementPlusOneTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:fontFamily="@font/sf_regular"
+                        android:gravity="center"
+                        android:text="+1 days"
+                        android:textColor="#7b7b80"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/view_separator" />
+
+                    <TextView
+                        android:id="@+id/incrementPlusZeroTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:fontFamily="@font/sf_regular"
+                        android:gravity="center"
+                        android:text="+0 days"
+                        android:textColor="#7b7b80"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/view_separator" />
+
+                    <TextView
+                        android:id="@+id/incrementMinusOneTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:fontFamily="@font/sf_regular"
+                        android:gravity="center"
+                        android:text="-1 days"
+                        android:textColor="#7b7b80"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/view_separator" />
+
+                    <TextView
+                        android:id="@+id/incrementMinusTwoTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:fontFamily="@font/sf_regular"
+                        android:gravity="center"
+                        android:text="-2 days"
+                        android:textColor="#7b7b80"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
             <LinearLayout
+                android:id="@+id/topViewText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_15sdp"
@@ -87,7 +203,6 @@
                     android:textSize="@dimen/_15ssp" />
 
 
-
             </LinearLayout>
 
             <LinearLayout
@@ -128,11 +243,11 @@
                 android:progressDrawable="@drawable/blue_progressbar_background"
                 android:rotation="-90"
                 android:visibility="gone"
-                tools:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/upComingPrayerTimeView"
@@ -234,7 +349,6 @@
                     android:text="Isha"
                     android:textColor="@color/app_grey"
                     android:textSize="@dimen/_15ssp" />
-
 
 
             </LinearLayout>

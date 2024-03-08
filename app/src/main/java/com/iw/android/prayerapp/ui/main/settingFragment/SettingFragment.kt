@@ -309,6 +309,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     override fun onDataPassed(
         soundName: String,
         soundPosition: Int,
+        sound: Int,
         isSoundForNotification: Boolean
     ) {
         binding.textViewNotificationSound.text = soundName
@@ -327,20 +328,4 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             "0 days"
         }
     }
-
-    private fun incrementCountUpTime(): String {
-        countUpTime++
-        return "$countUpTime mins"
-    }
-
-    private fun decrementCountUpTime(): String {
-        return if (countUpTime > 0) {
-            countUpTime--
-            "$countUpTime mins"
-        } else {
-            "off"
-        }
-    }
-
-
 }

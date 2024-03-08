@@ -35,6 +35,8 @@ data class NotificationData(
     var namazTime: String = "",
     var notificationSoundPosition: Int = 0,
     var notificationSound: String = "Tones",
+    var sound: Int? = null,
+    var reminderSound: Int? = null,
     var notificationSoundId: Int = 0,
     var reminderNotificationSoundPosition: Int = 0,
     var reminderNotificationSound: String = "Tones",
@@ -47,6 +49,22 @@ data class NotificationData(
     var isReminderNotificationCall: Boolean = false,
     var createdDate: String = ""
 )
+
+data class CurrentNamazNotificationData(
+    val currentNamazName: String,
+    val adhanSoundName: String,
+    val adhanSoundPosition: String,
+    val isSoundSelected: Boolean,
+    val adhanToneName: String,
+    val adhanTonePosition: String,
+    val isToneSelected: Boolean,
+    val isVibrate: Boolean,
+    val isSilent: Boolean,
+    val isOff: Boolean,
+    val sound: Int?=null,
+    val tone: Int?=null,
+
+    )
 
 data class NotificationSettingData(
     val snoozeTime: String,

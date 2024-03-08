@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iw.android.prayerapp.base.repo.BaseRepository
+import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.data.response.UserLatLong
@@ -108,5 +109,18 @@ abstract class BaseViewModel(private val repository: BaseRepository) : ViewModel
 
     suspend fun getAllNotificationData(): List<NotificationData?> =
         repository.getAllNotificationData()
+
+    fun saveCurrentNamazNotificationData(data: CurrentNamazNotificationData) =
+        viewModelScope.launch {
+            repository.saveCurrentNamazNotificationData(data)
+        }
+
+    fun deleteCurrentNamazNotificationData() = viewModelScope.launch {
+        repository.deleteCurrentNamazNotificationData()
+    }
+
+    suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData =
+        repository.getCurrentNamazNotificationData()
+
 
 }

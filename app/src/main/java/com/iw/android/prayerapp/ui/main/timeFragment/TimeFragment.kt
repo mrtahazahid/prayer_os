@@ -157,7 +157,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
         viewModel.selectedPrayerDate = targetDate
         viewModel.prayTimeArray.clear()
         viewModel.getPrayList()
-        showToast(viewModel.prayTimeArray[1].createdDate)
+
         setObserver()
 
         val dateFormat = SimpleDateFormat("EEEE dd MMMM yyyy", Locale.getDefault())

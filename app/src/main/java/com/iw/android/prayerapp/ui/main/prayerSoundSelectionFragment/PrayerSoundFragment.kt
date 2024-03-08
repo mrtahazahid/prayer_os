@@ -40,6 +40,17 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     private val args by navArgs<PrayerSoundFragmentArgs>()
 
     private var isItemClick = true
+    private var soundName = ""
+    private var soundPosition: Int? = null
+    private var sound: Int? = null
+    private var toneName = ""
+    private var tonePosition: Int? = null
+    private var tone: Int? = null
+    private var isVibrateSelected = false
+    private var isOffSelected = false
+    private var isSoundSelected = false
+    private var isToneSelected = false
+    private var isSilentSelected = false
 
 
     //private val viewModel: TimeViewModel by viewModels()
@@ -69,7 +80,6 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     ): View {
         _binding = FragmentPrayerSoundBinding.inflate(inflater, container, false)
         setStatusBarWithBlackIcon(R.color.bg_color)
-
         return binding.root
     }
 
@@ -82,7 +92,27 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
 
 
     override fun initialize() {
-        binding.textViewTitle.text = args.title
+        when (args.title) {
+            "Fajr" -> {
+                binding.textViewTitle.text = "${args.title} Sound"
+            }
+
+            "Dhuhr" -> {
+                binding.textViewTitle.text = "${args.title} Sound"
+            }
+
+            "Asr" -> {
+                binding.textViewTitle.text = "${args.title} Sound"
+            }
+
+            "Maghrib" -> {
+                binding.textViewTitle.text = "${args.title} Sound"
+            }
+
+            "Isha" -> {
+                binding.textViewTitle.text = "${args.title} Sound"
+            }
+        }
         setRecyclerView()
         addHolidayList()
     }
@@ -92,7 +122,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
         viewTypeArray.clear()
         for (data in prayerSoundList) {
             viewTypeArray.add(
-                RowItemPrayerSound(data, this, this)
+                RowItemPrayerSound(data, args.title, this,this)
             )
         }
         adapter.items = viewTypeArray
@@ -100,6 +130,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
 
     override fun setOnClickListener() {
         binding.imageViewBack.setOnClickListener(this)
+        binding.imageViewCopy.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -107,6 +138,11 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
             binding.imageViewBack.id -> {
                 findNavController().popBackStack()
             }
+
+            binding.imageViewCopy.id -> {
+                showToast("Copied")
+            }
+
         }
     }
 
@@ -133,5 +169,64 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
         prayerSoundList[position].isItemSelected = true
         // Notify the adapter about the change in the entire dataset
         binding.recyclerView.adapter?.notifyDataSetChanged()
+    }
+
+    override fun onSoundSelected(soundName: String, soundPosition: Int, sound: Int, position: Int) {
+        for (checked in prayerSoundList) {
+            checked.isItemSelected = false
+        }
+
+        // Select the clicked item
+        prayerSoundList[position].isItemSelected = true
+        // Notify the adapter about the change in the entire dataset
+        binding.recyclerView.adapter?.notifyDataSetChanged()
+
+        when (position) {
+            0 -> {
+                this.soundName = soundName
+this.soundPosition = soundPosition
+                this.sound = sound
+                isSoundSelected = true
+                isToneSelected = false
+                isVibrateSelected = false
+                isSilentSelected = false
+                isOffSelected = false
+            }
+
+            1 -> {
+                this.toneName = soundName
+                isToneSelected = true
+                isSoundSelected = true
+                isVibrateSelected = false
+                isSilentSelected = false
+                isOffSelected = false
+            }
+
+            2 -> {
+                isVibrateSelected = true
+                isSoundSelected = true
+                isToneSelected = false
+                isSilentSelected = false
+                isOffSelected = false
+            }
+
+            3 -> {
+                isSilentSelected = true
+                isSoundSelected = true
+                isToneSelected = false
+                isVibrateSelected = false
+                isOffSelected = false
+            }
+
+            4 -> {
+                isOffSelected = true
+                isSoundSelected = true
+                isToneSelected = false
+                isVibrateSelected = false
+                isSilentSelected = false
+            }
+
+        }
+
     }
 }
