@@ -98,7 +98,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.imageViewBack.id -> {
-                listener?.onDataPassed(selectedItem, selectedItemPosition,  sound!!,isForNotification)
+                listener?.onDataPassed(selectedItem, selectedItemPosition,  sound,isForNotification)
                 dismiss()
             }
         }
@@ -148,5 +148,5 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
 }
 
 fun interface OnDataSelected {
-    fun onDataPassed(soundName: String, soundPosition: Int,sound:Int, isSoundForNotification: Boolean)
+    fun onDataPassed(soundName: String, soundPosition: Int,sound:Int?, isSoundForNotification: Boolean)
 }

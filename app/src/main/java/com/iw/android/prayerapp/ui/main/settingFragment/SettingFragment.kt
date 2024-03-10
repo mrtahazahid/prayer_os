@@ -309,7 +309,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     override fun onDataPassed(
         soundName: String,
         soundPosition: Int,
-        sound: Int,
+        sound: Int?,
         isSoundForNotification: Boolean
     ) {
         binding.textViewNotificationSound.text = soundName

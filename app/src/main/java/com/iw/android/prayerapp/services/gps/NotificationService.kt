@@ -53,7 +53,7 @@ class NotificationService : NotificationListenerService() {
                 checkAndTriggerNotification()
 
                 // Delay for 10 seconds
-                delay(10000)
+                delay(30000)
             }
         }
     }
@@ -75,6 +75,7 @@ class NotificationService : NotificationListenerService() {
     private fun checkAndTriggerNotification() = applicationScope.launch {
         // Add your logic here to check if it's time to show a notification
         val specifiedTimes = prefrence.getNotificationData()
+        Log.d("specific",specifiedTimes.toString())
         if (specifiedTimes.isNotEmpty()) {
             for ((index, specifiedTime) in specifiedTimes.withIndex()) {
                 if (specifiedTime.namazTime != "") {

@@ -8,7 +8,9 @@
     <color name="small_icon2">#335145</color>
     <color name="small_icon3">#D87D61</color>
     <color name="yellow_text">#FF9E0D</color>
-    <color name="bg_color">#1C1C1E</color>
+    <color name="opaqueSeparator">#ACACAF</color>
+    <color name="bg_color">#1c1c1e</color>
     <color name="btn_color">#4BB37E</color>
+    <color name="text_color_gray">#929299</color>
     <color name="black">#000000</color>
 </resources>

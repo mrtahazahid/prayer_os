@@ -24,7 +24,8 @@ class RowItemMore(private val data: MoreData) : ViewType<MoreData> {
 
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemMoreBinding).also { binding ->
-            binding.imageView.setImageResource(data.image)
+            binding.view4.visibility = if(data.title == "Plan adhan") View.GONE else View.VISIBLE
+                binding.imageView.setImageResource(data.image)
             binding.textViewTitle.text = data.title
             binding.mainView.setOnClickListener {
                openCustomTab(binding.imageView.context,"https://www.instagram.com/praywatchapp/?hl=en")

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color"
+    android:background="@color/black"
     tools:context=".ui.main.QiblaFragment">
 
     <LinearLayout
@@ -54,6 +54,8 @@
         android:layout_height="360dp"
         android:src="@drawable/ic_qibla_direction"
         android:tint="@color/white"
+        android:rotation="-30"
+        android:backgroundTint="@color/app_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -37,7 +37,6 @@ class IslamicHolidayFragment : BaseFragment(R.layout.fragment_islamic_holiday), 
         })
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

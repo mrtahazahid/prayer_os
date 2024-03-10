@@ -33,6 +33,8 @@ class RowItemPrayerSound(
 
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemPraySoundBinding).also { binding ->
+            binding.view4.visibility = if( data.title == "Off") View.GONE else View.VISIBLE
+
             binding.imageViewCheck.visibility = if (data.isItemSelected) View.VISIBLE else View.GONE
 
             //binding.view4.visibility = if (data.title == "Last Third") View.GONE else View.VISIBLE
@@ -64,7 +66,7 @@ class RowItemPrayerSound(
     override fun onDataPassed(
         soundName: String,
         soundPosition: Int,
-        sound:Int,
+        sound:Int?,
 
         isSoundForNotification: Boolean
     ) {

@@ -1,18 +1,25 @@
 package com.iw.android.prayerapp.ui.main
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Context.SENSOR_SERVICE
+import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.batoulapps.adhan2.Qibla
 import com.iw.android.prayerapp.R
@@ -21,12 +28,10 @@ import com.iw.android.prayerapp.databinding.FragmentQiblaBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.settingFragment.SettingViewModel
-import com.iw.android.prayerapp.utils.AppConstant
 import com.iw.android.prayerapp.utils.GetAdhanDetails
-import com.iw.android.prayerapp.utils.TinyDB
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
-import kotlin.math.roundToLong
 import kotlin.math.sin
 import kotlin.math.tan
 
@@ -50,7 +55,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
     private var magnetometerReading = FloatArray(3)
 
     lateinit var getQibla: Qibla
-
+    val handler: Handler = Handler()
     private val ALPHA = 0.08f
 
 
@@ -175,7 +180,25 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
 
             qiblaDegree = ((qiblaRadians - radian) * 180 / Math.PI).toFloat()
 //            binding.textViewCurrentDirection.text = "%.2f".format(qiblaDegree)
-            binding.textViewCurrentDirection.text = "${"%.2f".format((getQibla.direction - radian) - 1.90)}°"
+            binding.textViewCurrentDirection.text = "${"%.2f".format((getQibla.direction - radian) - 1.35)}°"
+
+            Log.d("qiblaDegree","mainDegree -->>> ${getQibla.direction}")
+            Log.d("qiblaDegree","SecondDegree -->>> ${binding.textViewCurrentDirection.text}")
+
+
+            val tolerance = 0.01 // Set your tolerance level as needed
+
+
+            if (abs(getQibla.direction - ("${"%.2f".format((getQibla.direction - radian) - 1.35)}").toDouble()) < tolerance) {
+                binding.imageViewQiblaDirection.imageTintList =  ContextCompat.getColorStateList(requireContext(),R.color.app_green)
+            } else {
+                binding.imageViewQiblaDirection.imageTintList =   ContextCompat.getColorStateList(requireContext(),R.color.white)
+            }
+
+
+            if (binding.textViewCurrentDirection.text == "%.2f".format((getQibla.direction - radian) - 1.35)) {
+                Log.d("qiblaDegree","matched -->>> ")
+            }
 
 //            binding.textViewCurrentDirection.text = "${"%.2f".format((qiblaRadians - radian) - 2.38)}°"
             if (qiblaDegree < 0) {
@@ -194,5 +217,19 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
             cos(valueA) * tan(makkahLatitude) - sin(valueA) * cos(makkahLongitude - valueB)
         )
         return (result + Math.PI * 2) % (Math.PI * 2)
+    }
+    fun vibrateForOneSecond() {
+        val vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+
+        if (vibrator != null && vibrator.hasVibrator()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Vibrate for 1 second using VibrationEffect API
+                vibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE))
+            } else {
+                // Deprecated in API 26, but still used for older devices
+                @Suppress("DEPRECATION")
+                vibrator.vibrate(1000)
+            }
+        }
     }
 }

@@ -8,7 +8,8 @@ data class PrayTime(
     val title: String,
     val time: String,
     var createdDate: String = "",
-    val namazDetail: NotificationData
+    val namazDetail: NotificationData,
+    var isCurrentNamaz:Boolean=false,
 )
 
 data class SoundData(
@@ -52,17 +53,13 @@ data class NotificationData(
 
 data class CurrentNamazNotificationData(
     val currentNamazName: String,
-    val adhanSoundName: String,
-    val adhanSoundPosition: String,
+    val soundName: String,
     val isSoundSelected: Boolean,
-    val adhanToneName: String,
-    val adhanTonePosition: String,
     val isToneSelected: Boolean,
     val isVibrate: Boolean,
     val isSilent: Boolean,
     val isOff: Boolean,
     val sound: Int?=null,
-    val tone: Int?=null,
 
     )
 

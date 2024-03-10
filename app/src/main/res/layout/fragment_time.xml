@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:src="@drawable/ic_arrow_forward_ios"
+                android:src="@drawable/ic_forward"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -63,6 +63,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:scrollbars="none"
             android:overScrollMode="ifContentScrolls"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -144,9 +145,8 @@
                             android:id="@+id/imageView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
+                            android:layout_margin="15dp"
                             android:src="@drawable/ic_calender"
-
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -167,9 +167,8 @@
                             android:id="@+id/imageViewCalenderArrow"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            android:src="@drawable/ic_arrow_forward_ios"
-                            android:tint="@color/small_icon"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/ic_forward"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -177,18 +176,18 @@
                             android:id="@+id/view5"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="15dp"
                             android:background="@color/view_separator"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/imageViewCalenderArrow" />
+                            app:layout_constraintStart_toStartOf="@+id/textViewMonthCalender"
+                            app:layout_constraintTop_toBottomOf="@id/imageView" />
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageViewHolidays"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            android:src="@drawable/ic_calender"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/ic_gift"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/view5" />
 
@@ -218,9 +217,8 @@
                             android:id="@+id/imageViewHolidayArrow"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            android:src="@drawable/ic_arrow_forward_ios"
-                            android:tint="@color/small_icon"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/ic_forward"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/view5" />
 
@@ -228,18 +226,18 @@
                             android:id="@+id/view6"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="15dp"
                             android:background="@color/view_separator"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/imageViewHolidayArrow" />
+                            app:layout_constraintStart_toStartOf="@+id/textViewIslamicHolidays"
+                            app:layout_constraintTop_toBottomOf="@id/imageViewHolidays" />
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageViewMasjidLocation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            android:src="@drawable/ic_calender"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/ic_pin"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/view6" />
@@ -270,9 +268,8 @@
                             android:id="@+id/imageViewMasjidLocationArrow"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            android:src="@drawable/ic_arrow_forward_ios"
-                            android:tint="@color/small_icon"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/ic_forward"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/view6" />
 

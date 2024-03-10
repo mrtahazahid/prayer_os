@@ -10,12 +10,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_color"
+        android:background="@color/black"
         tools:context=".ui.main.settingFragment.SettingFragment">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars="none"
             android:overScrollMode="ifContentScrolls">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -99,7 +100,7 @@
                             android:id="@+id/snooze_time"
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
-                            app:cardBackgroundColor="#3c3b40"
+                            app:cardBackgroundColor="#2d2d34"
                             app:cardCornerRadius="8dp"
                             app:cardElevation="4dp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -113,9 +114,8 @@
 
                                 <androidx.appcompat.widget.AppCompatImageView
                                     android:id="@+id/imageViewSnoozeMinus"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:paddingVertical="8dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:layout_marginHorizontal="5dp"
                                     android:src="@drawable/ic_minus"
                                     app:layout_constraintBottom_toBottomOf="parent"
@@ -136,10 +136,9 @@
 
                                 <androidx.appcompat.widget.AppCompatImageView
                                     android:id="@+id/imageViewSnoozeAdd"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:layout_marginHorizontal="5dp"
-                                    android:paddingVertical="10dp"
                                     android:src="@drawable/plus"
                                     android:tint="@color/white"
                                     app:layout_constraintBottom_toBottomOf="parent"
@@ -156,6 +155,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_marginTop="@dimen/_2sdp"
+                        android:layout_marginStart="15dp"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:background="@color/view_separator" />
 
@@ -206,6 +206,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
+                        android:layout_marginStart="15dp"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:background="@color/view_separator" />
@@ -257,6 +258,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
+                        android:layout_marginStart="15dp"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:background="@color/view_separator" />
@@ -327,7 +329,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:background="#2c2c2e"
+                app:cardBackgroundColor="#1c1c1e"
                     app:cardElevation="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -337,14 +339,14 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#2b2b2c"
+                        android:background="#1c1c1e"
                         android:orientation="vertical">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/calculationView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="#2b2b2c"
+                            android:background="#1c1c1e"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
@@ -380,7 +382,7 @@
                             android:id="@+id/calculationMainDetailViews"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="#2c2c2e"
+                            android:background="#1c1c1e"
                             android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -527,13 +529,14 @@
                             android:id="@+id/viewCalSep"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
+                            android:layout_marginStart="15dp"
                             android:background="@color/view_separator" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/locationView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="#2b2b2c">
+                            android:background="#1c1c1e">
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewLocationTitle"
@@ -567,7 +570,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:background="#2c2c2e"
+                            android:background="#1c1c1e"
                             android:visibility="gone"
                             app:layout_constraintBottom_toTopOf="@id/viewLocSep"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -810,13 +813,14 @@
                             android:id="@+id/viewLocSep"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
+                            android:layout_marginStart="15dp"
                             android:background="@color/view_separator" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/timeView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="#2b2b2c">
+                            android:background="#1c1c1e">
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewTimeTitle"
@@ -850,7 +854,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:background="#2c2c2e"
+                            android:background="#1c1c1e"
                             android:visibility="gone"
                             app:layout_constraintBottom_toTopOf="@id/viewTimeSep"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -1154,13 +1158,14 @@
                             android:id="@+id/viewTimeSep"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
+                            android:layout_marginStart="15dp"
                             android:background="@color/view_separator" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/iqamaView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="#2b2b2c">
+                            android:background="#1c1c1e">
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewIqamaTitle"
@@ -1216,7 +1221,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="30dp"
-                    app:cardBackgroundColor="#2c2c2e"
+                    app:cardBackgroundColor="#1c1c1e"
                     app:cardElevation="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

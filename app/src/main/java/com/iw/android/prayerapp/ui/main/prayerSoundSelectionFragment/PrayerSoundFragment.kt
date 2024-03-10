@@ -1,9 +1,11 @@
 package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -12,6 +14,7 @@ import com.iw.android.prayerapp.base.adapter.GenericListAdapter
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.fragment.BaseFragment
+import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.PrayerSoundData
 import com.iw.android.prayerapp.databinding.FragmentPrayerSoundBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
@@ -19,10 +22,14 @@ import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.OnClick
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.PrayerEnumType
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.RowItemPrayerSound
+import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.SoundViewModel
+import com.iw.android.prayerapp.ui.main.settingFragment.SettingViewModel
+import com.iw.android.prayerapp.utils.CopyBottomSheet
 import com.iw.android.prayerapp.utils.GetAdhanSound.prayerSoundList
 import com.iw.android.prayerapp.utils.TinyDB
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -35,7 +42,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
 
     private var _binding: FragmentPrayerSoundBinding? = null
     private val binding get() = _binding!!
-
+    private val viewModel: SoundViewModel by viewModels()
 
     private val args by navArgs<PrayerSoundFragmentArgs>()
 
@@ -43,9 +50,6 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     private var soundName = ""
     private var soundPosition: Int? = null
     private var sound: Int? = null
-    private var toneName = ""
-    private var tonePosition: Int? = null
-    private var tone: Int? = null
     private var isVibrateSelected = false
     private var isOffSelected = false
     private var isSoundSelected = false
@@ -122,7 +126,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
         viewTypeArray.clear()
         for (data in prayerSoundList) {
             viewTypeArray.add(
-                RowItemPrayerSound(data, args.title, this,this)
+                RowItemPrayerSound(data, args.title, this, this)
             )
         }
         adapter.items = viewTypeArray
@@ -136,11 +140,13 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.imageViewBack.id -> {
+                viewModel.saveCurrentNamazNotificationData(CurrentNamazNotificationData(args.title,soundName,isSoundSelected,isToneSelected,isVibrateSelected,isSilentSelected,isOffSelected,sound))
                 findNavController().popBackStack()
             }
 
             binding.imageViewCopy.id -> {
-                showToast("Copied")
+               val bottomSheet = CopyBottomSheet()
+                bottomSheet.show(parentFragmentManager, bottomSheet.tag)
             }
 
         }
@@ -184,7 +190,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
         when (position) {
             0 -> {
                 this.soundName = soundName
-this.soundPosition = soundPosition
+                this.soundPosition = soundPosition
                 this.sound = sound
                 isSoundSelected = true
                 isToneSelected = false
@@ -194,9 +200,10 @@ this.soundPosition = soundPosition
             }
 
             1 -> {
-                this.toneName = soundName
+                this.soundName = soundName
                 isToneSelected = true
                 isSoundSelected = true
+                this.sound = sound
                 isVibrateSelected = false
                 isSilentSelected = false
                 isOffSelected = false

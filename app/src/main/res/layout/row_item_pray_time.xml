@@ -56,7 +56,7 @@
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/sf_regular"
                     android:text="5:37 AM"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color_gray"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toStartOf="@id/imageViewDropDownMenu"
                     app:layout_constraintTop_toTopOf="@id/imageView" />
@@ -67,7 +67,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:src="@drawable/ic_forward"
-                    android:tint="@color/small_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -84,7 +83,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mainView"
-                tools:visibility="visible">
+                >
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewNotificationSoundTitle"
@@ -224,8 +223,8 @@
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageViewRemove"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:src="@drawable/ic_minus"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -246,8 +245,8 @@
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageViewAdd"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:src="@drawable/plus"
                             android:tint="@color/white"
@@ -415,6 +414,7 @@
                 android:id="@+id/view4"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
+                android:layout_marginStart="50dp"
                 android:background="@color/view_separator"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

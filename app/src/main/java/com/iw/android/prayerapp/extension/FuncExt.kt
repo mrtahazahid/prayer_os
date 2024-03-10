@@ -7,6 +7,7 @@ import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.iw.android.prayerapp.R
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
@@ -31,7 +32,7 @@ fun Fragment.setStatusBarWithBlackIcon(@ColorRes color: Int) {
     requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
     requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-    requireActivity().window.statusBarColor = ContextCompat.getColor(requireActivity(), color)
+    requireActivity().window.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.black)
 }
 
  fun formatRemainingTime(secondsRemaining: Int): String {

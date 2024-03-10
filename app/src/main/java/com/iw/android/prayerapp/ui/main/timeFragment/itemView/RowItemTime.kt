@@ -53,6 +53,8 @@ class RowItemTime(
             binding.imageView.setImageResource(data.image)
             binding.textViewTitle.text = data.title
             binding.textViewTime.text = data.time
+            val color = if(data.isCurrentNamaz) ContextCompat.getColorStateList(binding.textViewTime.context,R.color.yellow_text) else ContextCompat.getColorStateList(binding.textViewTime.context,R.color.text_color_gray)
+            binding.textViewTime.setTextColor(color)
             binding.textViewSetTime.text = if (data.namazDetail.reminderTime != "off") {
                 "${data.namazDetail.reminderTime} mins"
             } else {
@@ -431,7 +433,7 @@ class RowItemTime(
     override fun onDataPassed(
         soundName: String,
         soundPosition: Int,
-        sound: Int,
+        sound: Int?,
         isSoundForNotification: Boolean
     ) {
         if (isSoundForNotification) {
