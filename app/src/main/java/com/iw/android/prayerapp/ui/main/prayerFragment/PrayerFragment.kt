@@ -49,6 +49,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
     private var countDownTimer: CountDownTimer? = null
+    private var isFunCalled = false
 
     val viewModel: PrayerViewModel by viewModels()
     private var currentNamazName = ""
@@ -100,12 +101,21 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         for (i in getPrayerTime) {
             namazTimesList.add(i)
         }
+        isFunCalled = true
         upComingNamazTime()
+
         // notifications.notify(currentNamazName)
     }
 
     override fun setObserver() {
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(isFunCalled){
+          //  upComingNamazTime()
+        }
     }
 
     override fun setOnClickListener() {
@@ -130,6 +140,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     override fun onPause() {
         super.onPause()
         countDownTimer?.cancel()
+        isFunCalled = false
     }
 
     override fun onClick(v: View?) {
@@ -320,7 +331,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                     null
                 }
             }
-            notifications.notify(currentNamazName, sound ?: 0,false,false)
+            notifications.notify(currentNamazName, sound ?: 0, false, false)
             getTimeDifferenceToNextPrayer()
         }
 
