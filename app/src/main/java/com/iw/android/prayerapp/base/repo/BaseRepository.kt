@@ -203,7 +203,7 @@ abstract class BaseRepository(
         preferences.setStringData(DataPreference.SETTING_NOTIFICATION_DATA, Gson().toJson(data))
     }
 
-    suspend fun getSettingNotificationData(): NotificationSettingData = Gson().fromJson(
+    suspend fun getSettingNotificationData(): NotificationSettingData? = Gson().fromJson(
         preferences.getStringData(DataPreference.SETTING_NOTIFICATION_DATA),
         NotificationSettingData::class.java
     )

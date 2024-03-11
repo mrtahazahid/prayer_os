@@ -2,6 +2,7 @@ package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,13 +49,12 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
 
     private var isItemClick = true
     private var soundName = ""
-    private var soundPosition: Int? = null
     private var sound: Int? = null
     private var isVibrateSelected = false
     private var isOffSelected = false
     private var isSoundSelected = false
-    private var isToneSelected = false
     private var isSilentSelected = false
+    private var isDataForSave = false
 
 
     //private val viewModel: TimeViewModel by viewModels()
@@ -140,8 +140,23 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.imageViewBack.id -> {
-                viewModel.saveCurrentNamazNotificationData(CurrentNamazNotificationData(args.title,soundName,isSoundSelected,isToneSelected,isVibrateSelected,isSilentSelected,isOffSelected,sound))
-                findNavController().popBackStack()
+                Log.d("soundName",soundName)
+                Log.d("isDataForSave",isDataForSave.toString())
+                if(isDataForSave){
+                    binding.progress.show()
+                    lifecycleScope.launch {
+                        viewModel.saveCurrentNamazNotificationData(CurrentNamazNotificationData(args.title,soundName,isSoundSelected,isVibrateSelected,isSilentSelected,isOffSelected,sound))
+                        delay(3000)
+                        Log.d("soundName",viewModel.getCurrentNamazNotificationData().toString())
+                        binding.progress.hide()
+                        findNavController().popBackStack()
+                    }
+
+                }else{
+                    findNavController().popBackStack()
+                }
+
+
             }
 
             binding.imageViewCopy.id -> {
@@ -170,57 +185,18 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
         for (checked in prayerSoundList) {
             checked.isItemSelected = false
         }
-
-        // Select the clicked item
-        prayerSoundList[position].isItemSelected = true
-        // Notify the adapter about the change in the entire dataset
-        binding.recyclerView.adapter?.notifyDataSetChanged()
-    }
-
-    override fun onSoundSelected(soundName: String, soundPosition: Int, sound: Int, position: Int) {
-        for (checked in prayerSoundList) {
-            checked.isItemSelected = false
-        }
-
-        // Select the clicked item
-        prayerSoundList[position].isItemSelected = true
-        // Notify the adapter about the change in the entire dataset
-        binding.recyclerView.adapter?.notifyDataSetChanged()
-
-        when (position) {
-            0 -> {
-                this.soundName = soundName
-                this.soundPosition = soundPosition
-                this.sound = sound
-                isSoundSelected = true
-                isToneSelected = false
-                isVibrateSelected = false
-                isSilentSelected = false
-                isOffSelected = false
-            }
-
-            1 -> {
-                this.soundName = soundName
-                isToneSelected = true
-                isSoundSelected = true
-                this.sound = sound
-                isVibrateSelected = false
-                isSilentSelected = false
-                isOffSelected = false
-            }
-
+        isDataForSave = true
+        when(position){
             2 -> {
                 isVibrateSelected = true
-                isSoundSelected = true
-                isToneSelected = false
+                isSoundSelected = false
                 isSilentSelected = false
                 isOffSelected = false
             }
 
             3 -> {
                 isSilentSelected = true
-                isSoundSelected = true
-                isToneSelected = false
+                isSoundSelected = false
                 isVibrateSelected = false
                 isOffSelected = false
             }
@@ -228,12 +204,38 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
             4 -> {
                 isOffSelected = true
                 isSoundSelected = true
-                isToneSelected = false
                 isVibrateSelected = false
                 isSilentSelected = false
             }
-
         }
+        // Select the clicked item
+        prayerSoundList[position].isItemSelected = true
+        // Notify the adapter about the change in the entire dataset
+        binding.recyclerView.adapter?.notifyDataSetChanged()
+    }
+
+    override fun onSoundSelected(soundName: String, soundPosition: Int, sound: Int?, position: Int) {
+        for (checked in prayerSoundList) {
+            checked.isItemSelected = false
+        }
+
+        // Select the clicked item
+        prayerSoundList[position].isItemSelected = true
+        // Notify the adapter about the change in the entire dataset
+
+        isDataForSave = true
+        when (position) {
+            0,1 -> {
+                this.soundName = soundName
+                this.sound = sound
+                isSoundSelected = true
+                isVibrateSelected = false
+                isSilentSelected = false
+                isOffSelected = false
+            }
+        }
+        binding.recyclerView.adapter?.notifyDataSetChanged()
+
 
     }
 }

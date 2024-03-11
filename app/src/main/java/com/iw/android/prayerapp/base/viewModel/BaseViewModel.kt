@@ -104,7 +104,7 @@ abstract class BaseViewModel(private val repository: BaseRepository) : ViewModel
         repository.saveSettingNotificationData(data)
     }
 
-    suspend fun getSettingNotificationData(): NotificationSettingData =
+    suspend fun getSettingNotificationData(): NotificationSettingData? =
         repository.getSettingNotificationData()
 
     suspend fun getAllNotificationData(): List<NotificationData?> =

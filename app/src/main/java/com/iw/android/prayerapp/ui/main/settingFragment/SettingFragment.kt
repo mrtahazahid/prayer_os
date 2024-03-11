@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
+import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.databinding.FragmentSettingBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
@@ -40,6 +41,9 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     private var snoozeTime = 0
     private var adjustHijriDate = 0
     private var countUpTime = 0
+    private var isAdhanTap = false
+    private var isPlayOnTap = false
+    private var snooze = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,7 +63,19 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     }
 
     override fun initialize() {
-        lifecycleScope.launch { geofence = viewModel.getGeofenceRadius() }
+
+        lifecycleScope.launch {
+            geofence = viewModel.getGeofenceRadius()
+            binding.switchAdhanDua.isChecked =
+                viewModel.getSettingNotificationData()?.isAdhanDuaOn ?: false
+            isAdhanTap = viewModel.getSettingNotificationData()?.isAdhanDuaOn ?: false
+            isPlayOnTap = viewModel.getSettingNotificationData()?.isPrayOnTap ?: false
+            binding.switchPlayOnTap.isChecked =
+                viewModel.getSettingNotificationData()?.isPrayOnTap ?: false
+            binding.subTxtSnoozeTime.text =
+                viewModel.getSettingNotificationData()?.snoozeTime ?: "off"
+            snooze = viewModel.getSettingNotificationData()?.snoozeTime ?: "off"
+        }
         binding.textViewGeofenceRadius.text = "$geofence Kilometers"
 
         binding.textViewCoordinatesPoint.text = getFormattedCoordinates(
@@ -94,22 +110,73 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.switchAutomatic.setOnCheckedChangeListener { buttonView, isChecked ->
             viewModel.setLocationAutomaticValue(isChecked)
         }
+        binding.switchAdhanDua.setOnCheckedChangeListener { _, isChecked ->
+            // Do something with the isChecked value
+            if (isChecked) {
+                viewModel.saveSettingNotificationData(
+                    NotificationSettingData(
+                        isAdhanDuaOn = true,
+                        snoozeTime = snooze,
+                        isPrayOnTap = isPlayOnTap
+                    )
+                )
+            } else {
+                viewModel.saveSettingNotificationData(
+                    NotificationSettingData(
+                        isAdhanDuaOn = false,
+                        snoozeTime = snooze,
+                        isPrayOnTap = isPlayOnTap
+                    )
+                )
+                // Code to execute when the switch is unchecked (OFF)
+                // For example, you can reverse the action or update the variable back
+            }
+        }
+
+        binding.switchPlayOnTap.setOnCheckedChangeListener { _, isChecked ->
+            // Do something with the isChecked value
+            if (isChecked) {
+                viewModel.saveSettingNotificationData(
+                    NotificationSettingData(
+                        isAdhanDuaOn = isAdhanTap,
+                        snoozeTime = snooze,
+                        isPrayOnTap = true
+                    )
+                )
+            } else {
+                viewModel.saveSettingNotificationData(
+                    NotificationSettingData(
+                        isAdhanDuaOn = isAdhanTap,
+                        snoozeTime = snooze,
+                        isPrayOnTap = false
+                    )
+                )
+                // Code to execute when the switch is unchecked (OFF)
+                // For example, you can reverse the action or update the variable back
+            }
+        }
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            binding.imageViewAddCountUpTime.id->{
+            binding.imageViewAddCountUpTime.id -> {
+                binding.textViewCountUpTimeSetter.text = incrementACountUpDate()
 
             }
-            binding.imageViewMinusCountUpTime.id->{
+
+            binding.imageViewMinusCountUpTime.id -> {
+                binding.textViewCountUpTimeSetter.text = decrementCountUpDate()
 
             }
-            binding.imageViewAddHijri.id->{
-                incrementAdjustHijriDate()
+
+            binding.imageViewAddHijri.id -> {
+                binding.textViewAdjustHijriDateSetter.text = incrementAdjustHijriDate()
+
             }
 
-            binding.imageViewMinusHijri.id->{
-                decrementAdjustHijriDate()
+            binding.imageViewMinusHijri.id -> {
+                binding.textViewAdjustHijriDateSetter.text = decrementAdjustHijriDate()
+
             }
 
             binding.clSchReminder.id -> {
@@ -130,10 +197,29 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
             binding.imageViewSnoozeMinus.id -> {
                 binding.subTxtSnoozeTime.text = decrementSnoozeMinute()
+                viewModel.saveSettingNotificationData(
+                    NotificationSettingData(
+                        isAdhanDuaOn = isAdhanTap,
+                        snoozeTime = decrementSnoozeMinute(),
+                        isPrayOnTap = isPlayOnTap
+                    )
+                )
             }
 
             binding.imageViewSnoozeAdd.id -> {
-                binding.subTxtSnoozeTime.text = incrementSnoozeMinute()
+                lifecycleScope.launch {
+                    binding.subTxtSnoozeTime.text = incrementSnoozeMinute()
+                    viewModel.saveSettingNotificationData(
+                        NotificationSettingData(
+                            isAdhanDuaOn = isAdhanTap,
+                            snoozeTime = incrementSnoozeMinute(),
+                            isPrayOnTap = isPlayOnTap
+                        )
+                    )
+                }
+
+
+
             }
 
             binding.imageViewAddGeofence.id -> {
@@ -290,7 +376,10 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
     private fun decrementSnoozeMinute(): String {
         snoozeTime--
-        return if (snoozeTime > 0) "$snoozeTime min" else "off"
+        return if (snoozeTime > 0) "$snoozeTime min" else {
+            snoozeTime = 0
+            "off"
+        }
     }
 
     private fun openSoundDialogFragment(
@@ -325,7 +414,23 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             adjustHijriDate--
             "$adjustHijriDate days"
         } else {
-            "0 days"
+            adjustHijriDate = 0
+            "off"
+        }
+    }
+
+    private fun incrementACountUpDate(): String {
+        countUpTime++
+        return "$countUpTime mins"
+    }
+
+    private fun decrementCountUpDate(): String {
+        return if (countUpTime > 0) {
+            countUpTime--
+            "$countUpTime mins"
+        } else {
+            countUpTime = 0
+            "off"
         }
     }
 }

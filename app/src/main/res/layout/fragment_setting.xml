@@ -590,7 +590,6 @@
                                 android:text="Automatic"
                                 android:textColor="@color/white"
                                 android:textSize="18sp"
-                                app:layout_constraintBottom_toTopOf="@+id/viewSepAutomatic"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -615,11 +614,11 @@
                                 android:id="@+id/viewSepAutomatic"
                                 android:layout_width="0dp"
                                 android:layout_height="1dp"
-                                android:layout_marginTop="10dp"
+                                android:layout_marginTop="5dp"
                                 android:background="@color/view_separator"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="@id/textViewAutomatic"
-                                app:layout_constraintTop_toBottomOf="@id/textViewAutomatic" />
+                                app:layout_constraintTop_toBottomOf="@id/switchAutomatic" />
 
 
                             <TextView

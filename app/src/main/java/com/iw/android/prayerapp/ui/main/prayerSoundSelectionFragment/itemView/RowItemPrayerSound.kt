@@ -1,5 +1,6 @@
 package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView
 
+import android.util.Log
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ class RowItemPrayerSound(
 ) : ViewType<PrayerSoundData>, OnDataSelected {
     private var isViewShow = false
     private var currentMinute = 20
+    private var position = 0
 
     override fun layoutId(): Int {
         return R.layout.row_item_pray_sound
@@ -33,6 +35,7 @@ class RowItemPrayerSound(
 
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemPraySoundBinding).also { binding ->
+            this.position = position
             binding.view4.visibility = if( data.title == "Off") View.GONE else View.VISIBLE
 
             binding.imageViewCheck.visibility = if (data.isItemSelected) View.VISIBLE else View.GONE
@@ -70,6 +73,7 @@ class RowItemPrayerSound(
 
         isSoundForNotification: Boolean
     ) {
+        listener.onSoundSelected(soundName,soundPosition,sound,position)
     }
 
     private fun openSoundDialogFragment(
@@ -89,5 +93,5 @@ class RowItemPrayerSound(
 
  interface OnClick {
     fun onItemClick(position: Int)
-    fun onSoundSelected(soundName:String,soundPosition: Int,sound:Int,position: Int)
+    fun onSoundSelected(soundName:String,soundPosition: Int,sound:Int?,position: Int)
 }

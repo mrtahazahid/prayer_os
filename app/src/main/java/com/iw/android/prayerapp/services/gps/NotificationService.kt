@@ -15,13 +15,20 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.prefrence.DataPreference
+import com.iw.android.prayerapp.data.response.NotificationPrayerTime
+import com.iw.android.prayerapp.data.response.PrayerTime
+import com.iw.android.prayerapp.extension.convertToFunTime
 import com.iw.android.prayerapp.notificationService.Notification
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.utils.GetAdhanDetails
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.internal.notify
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
@@ -33,6 +40,8 @@ class NotificationService : NotificationListenerService() {
     lateinit var notifications: Notification
     lateinit var prefrence: DataPreference
 
+    private var prayerList = arrayListOf<NotificationPrayerTime>()
+
     // ProcessLifecycleOwner provides lifecycle for the whole application process.
     private val applicationScope = ProcessLifecycleOwner.get().lifecycleScope
 
@@ -40,7 +49,46 @@ class NotificationService : NotificationListenerService() {
     override fun onCreate() {
         super.onCreate()
         prefrence = DataPreference(this)
+        applicationScope.launch {
+            val userLatLong = prefrence.getUserLatLong()
+            val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
+                userLatLong?.latitude ?: 0.0,
+                userLatLong?.longitude ?: 0.0
+            )
+
+
+            prayerList = arrayListOf(
+                NotificationPrayerTime(
+                    "Fajr",
+                    convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds())
+                ),
+                NotificationPrayerTime(
+                    "Sunrise",
+                    convertToFunTime(getPrayerTime.sunrise.toEpochMilliseconds())
+                ),
+                NotificationPrayerTime(
+                    "Dhuhr",
+                    convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds())
+                ),
+                NotificationPrayerTime(
+                    "Asr",
+                    convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())
+                ),
+                NotificationPrayerTime(
+                    "Maghrib",
+                    convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())
+                ),
+                NotificationPrayerTime(
+                    "Isha",
+                    convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())
+                ),
+                NotificationPrayerTime("Midnight", "11:42PM"),
+                NotificationPrayerTime("LastThird", "01:40AM")
+            )
+        }
+
         startPeriodicTask()
+
     }
 
     fun startPeriodicTask() {
@@ -51,7 +99,8 @@ class NotificationService : NotificationListenerService() {
             while (true) {
                 // Your periodic task logic here
                 checkAndTriggerNotification()
-
+                checkDailyNamazTime()
+                Log.d("snooze", prefrence.getSettingNotificationData().toString())
                 // Delay for 10 seconds
                 delay(30000)
             }
@@ -73,9 +122,9 @@ class NotificationService : NotificationListenerService() {
 
 
     private fun checkAndTriggerNotification() = applicationScope.launch {
+        Log.d("service", "Called")
         // Add your logic here to check if it's time to show a notification
         val specifiedTimes = prefrence.getNotificationData()
-        Log.d("specific",specifiedTimes.toString())
         if (specifiedTimes.isNotEmpty()) {
             for ((index, specifiedTime) in specifiedTimes.withIndex()) {
                 if (specifiedTime.namazTime != "") {
@@ -93,7 +142,7 @@ class NotificationService : NotificationListenerService() {
                                     formattedTime
                                 )
                             ) {
-                                notifications.notify(specifiedTime.namazName)
+                                notifications.notify(specifiedTime.namazName,specifiedTime.sound?:0,false,false)
                                 specifiedTime.isReminderNotificationCall = true
                                 prefrence.updateNotificationData(index, specifiedTime)
                                 delay(1500)
@@ -102,7 +151,7 @@ class NotificationService : NotificationListenerService() {
                         } else {
                             if (!specifiedTime.isNotificationCall) {
                                 if (isTimeMatch(specifiedTime.namazTime)) {
-                                    notifications.notify(specifiedTime.namazName)
+                                    notifications.notify(specifiedTime.namazName,specifiedTime.sound?:0,false,false)
                                     specifiedTime.isNotificationCall = true
                                     prefrence.updateNotificationData(index, specifiedTime)
                                     delay(1500)
@@ -225,4 +274,23 @@ class NotificationService : NotificationListenerService() {
             manager.createNotificationChannel(serviceChannel)
         }
     }
+
+    private suspend fun checkDailyNamazTime() {
+        val notificationDetail = prefrence.getCurrentNamazNotificationData()
+        Log.d("notificationDetail",notificationDetail.toString())
+        val currentTime = millisToTimeFormat(System.currentTimeMillis())
+        Log.d("currentTime",currentTime.toString())
+        for (time in prayerList) {
+            if (currentTime == time.currentNamazTime && !time.isCalled && notificationDetail != null) {
+                if(!notificationDetail.isOff){
+                    notifications.notify(time.currentNamazName, notificationDetail.sound ?: 0,notificationDetail.isVibrate,notificationDetail.isSilent)
+                    time.isCalled = true
+                    break
+                }
+            } else {
+                continue
+            }
+        }
+    }
+
 }

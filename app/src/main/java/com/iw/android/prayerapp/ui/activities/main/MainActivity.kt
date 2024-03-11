@@ -1,15 +1,23 @@
 package com.iw.android.prayerapp.ui.activities.main
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
@@ -53,6 +61,15 @@ class MainActivity : BaseActivity() {
 
         }
 
+    private val pushNotificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if(!granted){
+            showPermissionAlertDialog()
+        }else{
+            startForegroundService()
+        }
+    }
     private val locationPermissions =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
             when {
@@ -92,6 +109,8 @@ class MainActivity : BaseActivity() {
         setOnClickListener()
     }
 
+
+    @SuppressLint("InlinedApi")
     override fun initialize() {
 
         val navHostFragment =
@@ -102,11 +121,20 @@ class MainActivity : BaseActivity() {
         navHostFragment.navController.graph = navGraph
         navController = navHostFragment.navController
         navController.addOnDestinationChangedListener(destinationChangedListener)
+
         service = Intent(this, LocationService::class.java)
 
         gpsStatusListener = GpsStatusListener(this)
         turnOnGps = TurnOnGps(this)
         startForegroundService()
+        if(!checkPermission()){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+                showPermissionAlertDialog()
+            }else{
+                pushNotificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+
     }
 
     override fun setOnClickListener() {
@@ -150,6 +178,14 @@ class MainActivity : BaseActivity() {
                 enableGPSLocation()
             }
         }
+    }
+
+    private fun checkPermission(): Boolean {
+        val permission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.POST_NOTIFICATIONS
+        )
+        return permission == PackageManager.PERMISSION_GRANTED
     }
 
     private fun enableGPSLocation() {
@@ -229,9 +265,35 @@ class MainActivity : BaseActivity() {
             }
         }
 
+
+
+    // Request notification permission
+    fun requestNotificationPermission(context: Context) {
+        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+        context.startActivity(intent)
+    }
+
+
     fun startForegroundService() {
         val notificationIntent = Intent(this, NotificationService::class.java)
         startForegroundService(notificationIntent)
+    }
+
+    private fun showPermissionAlertDialog() {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setTitle("Permission Required")
+        alertDialogBuilder.setMessage("Notification permission is necessary to receive updates.")
+        alertDialogBuilder.setPositiveButton("Open Settings") { _, _ ->
+            requestNotificationPermission(this)
+        }
+        alertDialogBuilder.setNegativeButton("Cancel") { _, _ ->
+            // Handle cancellation, if needed
+        }
+        alertDialogBuilder.setCancelable(false)
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
     }
 
 

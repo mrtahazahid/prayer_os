@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.NotificationCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
@@ -28,6 +29,7 @@ import com.iw.android.prayerapp.notificationService.Notification
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -140,7 +142,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 )
             }
 
-            binding.topViewText.id-> {
+            binding.topViewText.id -> {
                 if (!isOffsetViewShow) {
                     isOffsetViewShow = true
                     binding.cardViewOffSet.show()
@@ -150,26 +152,30 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 }
             }
 
-            binding.mainView.id ->{
-                if(isOffsetViewShow){
+            binding.mainView.id -> {
+                if (isOffsetViewShow) {
                     isOffsetViewShow = false
                     binding.cardViewOffSet.gone()
                 }
             }
 
-            binding.incrementPlusTwoTextView.id->{
+            binding.incrementPlusTwoTextView.id -> {
                 binding.textViewTodayIslamicDate.text = getIslamicDateByOffSet(2)
             }
-            binding.incrementPlusOneTextView.id->{
+
+            binding.incrementPlusOneTextView.id -> {
                 binding.textViewTodayIslamicDate.text = getIslamicDateByOffSet(1)
             }
-            binding.incrementPlusZeroTextView.id->{
+
+            binding.incrementPlusZeroTextView.id -> {
                 binding.textViewTodayIslamicDate.text = getIslamicDateByOffSet(0)
             }
-            binding.incrementMinusOneTextView.id->{
+
+            binding.incrementMinusOneTextView.id -> {
                 binding.textViewTodayIslamicDate.text = getIslamicDateByOffSet(-1)
             }
-            binding.incrementMinusTwoTextView.id->{
+
+            binding.incrementMinusTwoTextView.id -> {
                 binding.textViewTodayIslamicDate.text = getIslamicDateByOffSet(-2)
             }
         }
@@ -268,14 +274,57 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             }
 
             override fun onFinish() {
-                notifications.notify(currentNamazName)
-                getTimeDifferenceToNextPrayer()
+                showNotification()
+
             }
         }
-
         countDownTimer?.start()
     }
 
+    private fun showNotification() {
+        lifecycleScope.launch {
+            val sound = when (currentNamazName) {
+                "Fajr" -> {
+                    viewModel.getFajrDetail()?.sound ?: 0
+                }
+
+                "Sunrise" -> {
+                    viewModel.getSunriseDetail()?.sound ?: 0
+                }
+
+                "Dhuhr" -> {
+                    viewModel.getDuhrDetail()?.sound ?: 0
+                }
+
+                "Asr" -> {
+                    viewModel.getAsrDetail()?.sound ?: 0
+                }
+
+                "Maghrib" -> {
+                    viewModel.getMagribDetail()?.sound ?: 0
+                }
+
+                "Isha" -> {
+                    viewModel.getIshaDetail()?.sound ?: 0
+                }
+
+                "Midnight" -> {
+                    viewModel.getMidNightDetail()?.sound ?: 0
+                }
+
+                "LastNight" -> {
+                    viewModel.getLastNightDetail()?.sound ?: 0
+                }
+
+                else -> {
+                    null
+                }
+            }
+            notifications.notify(currentNamazName, sound ?: 0,false,false)
+            getTimeDifferenceToNextPrayer()
+        }
+
+    }
 
     private fun getTimeDifferenceToNextPrayer(): PrayerTime {
         val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude)
@@ -307,6 +356,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
         Log.d("fajr", getPrayerTime.fajr.toEpochMilliseconds().toString())
         Log.d("currentTimeMillis", currentTimeMillis.toString())
+        Log.d("currentTime", millisToTimeFormat(System.currentTimeMillis()))
 
         // Iterate through the array to find the next prayer time
         var nextPrayerTimeIndex = 0
@@ -338,10 +388,18 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
         // Calculate the total time difference between the previous and up-coming prayer
         val totalDifferenceMillis =
-            if (prayerTimeList[currentPrayerTimeIndex].currentNamazName == "Fajr") {
-                prayerTimeList[previousPrayerTimeIndex].currentNamazTime - prayerTimeList[nextPrayerTimeIndex].currentNamazTime
-            } else {
-                prayerTimeList[nextPrayerTimeIndex].currentNamazTime - prayerTimeList[previousPrayerTimeIndex].currentNamazTime
+            when (prayerTimeList[currentPrayerTimeIndex].currentNamazName) {
+                "Fajr" -> {
+                    prayerTimeList[previousPrayerTimeIndex].currentNamazTime - prayerTimeList[nextPrayerTimeIndex].currentNamazTime
+                }
+
+                "Isha" -> {
+                    prayerTimeList[nextPrayerTimeIndex].currentNamazTime - prayerTimeList[currentPrayerTimeIndex].currentNamazTime
+                }
+
+                else -> {
+                    prayerTimeList[nextPrayerTimeIndex].currentNamazTime - prayerTimeList[previousPrayerTimeIndex].currentNamazTime
+                }
             }
         currentNamazName = prayerTimeList[currentPrayerTimeIndex].currentNamazName
         // Return the PrayerTime object with time differences
@@ -353,6 +411,11 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         )
     }
 
+    fun millisToTimeFormat(millis: Long): String {
+        val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        val date = Date(millis)
+        return dateFormat.format(date)
+    }
 
     fun convertAndGetCurrentTimeMillis(): Long {
         return LocalDateTime.now()

@@ -2,6 +2,7 @@ package com.iw.android.prayerapp.ui.main.soundFragment
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -126,7 +127,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
             checked.isSoundSelected = false
         }
 
-
+        Log.d("onClick", "onClick:${data.soundFile} ")
         // Select the clicked item
         notificationList[position].isSoundSelected = true
         // Notify the adapter about the change in the entire dataset

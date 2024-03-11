@@ -11,7 +11,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.APPLICATION_ID
 import com.iw.android.prayerapp.base.response.LoginUserResponse
+import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.NotificationData
+import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.data.response.UserLatLong
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -109,6 +111,15 @@ class DataPreference @Inject constructor(
             preferences[key] ?: 75
         }.first()
 
+    suspend fun saveSettingNotificationData(data: NotificationSettingData) {
+        setStringData(DataPreference.SETTING_NOTIFICATION_DATA, Gson().toJson(data))
+    }
+
+    suspend fun getSettingNotificationData(): NotificationSettingData? = Gson().fromJson(
+        getStringData(DataPreference.SETTING_NOTIFICATION_DATA),
+        NotificationSettingData::class.java
+    )
+
     suspend fun setIntegerData(key: Preferences.Key<Int>, value: Int) {
         appContext.dataStore.edit { preferences ->
             preferences[key] = value
@@ -119,6 +130,14 @@ class DataPreference @Inject constructor(
         appContext.dataStore.edit { preferences ->
             preferences.clear()
         }
+    }
+
+    suspend fun getUserLatLong(): UserLatLong? {
+        return Gson().fromJson(
+            getStringData(USER_LAT_LONG),
+            UserLatLong::class.java
+        )
+
     }
 
     suspend fun clearLoginDataForUpdate() {
@@ -132,6 +151,11 @@ class DataPreference @Inject constructor(
         setStringData(ACCESS_TOKEN, "")
         setStringData(REFRESH_TOKEN, "")
     }
+
+    suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData = Gson().fromJson(
+        getStringData(CURRENT_NAMAZ_NOTIFICATION_DATA),
+        CurrentNamazNotificationData::class.java
+    )
 
     suspend fun setUpdateUserProfile(userInfo: LoginUserResponse) {
         setStringData(USER_INFO, Gson().toJson(userInfo))
@@ -248,7 +272,8 @@ class DataPreference @Inject constructor(
         val SUNRISE_INFO = stringPreferencesKey("key_sunrise_info")
         val NOTIFICATION_DATA = stringPreferencesKey("key_notification_data")
         val SETTING_NOTIFICATION_DATA = stringPreferencesKey("key_setting_notification_data")
-        val CURRENT_NAMAZ_NOTIFICATION_DATA = stringPreferencesKey("key_current_namaz_notification_data")
+        val CURRENT_NAMAZ_NOTIFICATION_DATA =
+            stringPreferencesKey("key_current_namaz_notification_data")
         val DHUHR_INFO = stringPreferencesKey("key_dhuhr_info")
         val ASR_INFO = stringPreferencesKey("key_asr_info")
         val MAGRIB_INFO = stringPreferencesKey("key_magrib_info")

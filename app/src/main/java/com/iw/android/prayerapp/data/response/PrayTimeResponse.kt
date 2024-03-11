@@ -30,6 +30,13 @@ data class PrayerTime(
     val totalTime: Long = 0
 )
 
+data class NotificationPrayerTime(
+    val currentNamazName: String,
+    val currentNamazTime: String,
+    var isCalled: Boolean=false,
+)
+
+
 @Serializable
 data class NotificationData(
     var namazName: String = "",
@@ -55,7 +62,6 @@ data class CurrentNamazNotificationData(
     val currentNamazName: String,
     val soundName: String,
     val isSoundSelected: Boolean,
-    val isToneSelected: Boolean,
     val isVibrate: Boolean,
     val isSilent: Boolean,
     val isOff: Boolean,
@@ -64,9 +70,9 @@ data class CurrentNamazNotificationData(
     )
 
 data class NotificationSettingData(
-    val snoozeTime: String,
-    val isAdhanDuaOn: Boolean,
-    val isPrayOnTap: Boolean,
+    val snoozeTime: String?=null,
+    val isAdhanDuaOn: Boolean?=null,
+    val isPrayOnTap: Boolean?=null,
 
     )
 
