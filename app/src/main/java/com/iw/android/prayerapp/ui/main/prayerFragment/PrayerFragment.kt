@@ -31,6 +31,7 @@ import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
@@ -129,7 +130,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     override fun onPause() {
         super.onPause()
-        countDownTimer?.cancel()
     }
 
     override fun onClick(v: View?) {
@@ -200,6 +200,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 binding.textViewCurrentNamazName.text = "Fajr"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
+                startCountdown(currentNamaz.timeDifference, currentNamaz.totalTime)
             }
 
             "Dhuhr" -> {
@@ -214,6 +215,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 binding.textViewCurrentNamazName.text = "Dhuhr"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
+                startCountdown(currentNamaz.timeDifference, currentNamaz.totalTime)
             }
 
             "Asr" -> {
@@ -228,6 +230,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 binding.textViewCurrentNamazName.text = "Asr"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
+                startCountdown(currentNamaz.timeDifference, currentNamaz.totalTime)
             }
 
             "Maghrib" -> {
@@ -242,6 +245,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 binding.textViewCurrentNamazName.text = "Maghrib"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
+                startCountdown(currentNamaz.timeDifference, currentNamaz.totalTime)
             }
 
             "Isha" -> {
@@ -256,10 +260,24 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 binding.textViewCurrentNamazName.text = "Isha"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
+                startCountdown(currentNamaz.timeDifference, currentNamaz.totalTime)
+            }
+
+            else -> {
+                binding.textViewFifthNamaz.text =
+                    "Isha: ${convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())}"
+                binding.textViewSecondNamaz.text =
+                    "Dhuhr: ${convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds())}"
+                binding.textViewThirdNamaz.text =
+                    "Asr: ${convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())}"
+                binding.textViewFourthNamaz.text =
+                    "Maghrib: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}"
+                binding.textViewCurrentNamazName.text = "No Namaz Left"
+                binding.textViewCurrentNamazTime.text = "00:00"
             }
         }
 
-        startCountdown(currentNamaz.timeDifference, currentNamaz.totalTime)
+
     }
 
     private fun startCountdown(timeDifferenceMillis: Long, totalTime: Long) {
@@ -320,7 +338,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                     null
                 }
             }
-            notifications.notify(currentNamazName, sound ?: 0,false,false)
+            notifications.notify(currentNamazName, sound ?: 0, false, false)
             getTimeDifferenceToNextPrayer()
         }
 
@@ -328,7 +346,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     private fun getTimeDifferenceToNextPrayer(): PrayerTime {
         val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude)
-
         val prayerTimeList = listOf(
             PrayerTime(
                 "Fajr",
@@ -352,34 +369,37 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             )
         )
 
-        val currentTimeMillis = convertAndGetCurrentTimeMillis()
+        val currentTimeMillis = convertTimeToMillis(convertToFunTime(Instant.now().toEpochMilli()))
+        val currentTimeMillis1159 = 1710269940000
+        val currentTimeMillis12 = 1710183600000
 
-        Log.d("fajr", getPrayerTime.fajr.toEpochMilliseconds().toString())
-        Log.d("currentTimeMillis", currentTimeMillis.toString())
-        Log.d("currentTime", millisToTimeFormat(System.currentTimeMillis()))
-
-        // Iterate through the array to find the next prayer time
         var nextPrayerTimeIndex = 0
         var currentPrayerTimeIndex = 0
         var previousPrayerTimeIndex = 0
-        for (i in prayerTimeList.indices) {
-            if (prayerTimeList[i].currentNamazTime > currentTimeMillis) {
-                if (prayerTimeList[i].currentNamazName == "Fajr") {
-                    previousPrayerTimeIndex = prayerTimeList.size - 1
-                    currentPrayerTimeIndex = i
-                    nextPrayerTimeIndex = i + 1
-                } else if (prayerTimeList[i].currentNamazName == "Isha") {
-                    previousPrayerTimeIndex = i - 1
-                    currentPrayerTimeIndex = i
+        for ((index, _) in prayerTimeList.withIndex()) {
+            if (prayerTimeList[index].currentNamazTime > currentTimeMillis) {
+                if (prayerTimeList[index].currentNamazName == "Fajr") {
+                    previousPrayerTimeIndex = 4
+                    currentPrayerTimeIndex = index
+                    nextPrayerTimeIndex = index + 1
+                } else if (prayerTimeList[index].currentNamazName == "Isha") {
+                    previousPrayerTimeIndex = index - 1
+                    currentPrayerTimeIndex = index
                     nextPrayerTimeIndex = 0
                 } else {
-                    previousPrayerTimeIndex = i - 1
-                    currentPrayerTimeIndex = i
-                    nextPrayerTimeIndex = i + 1
+                    previousPrayerTimeIndex = index - 1
+                    currentPrayerTimeIndex = index
+                    nextPrayerTimeIndex = index + 1
                 }
                 break
+            } else {
+                //     showToast("lesss")
+                continue
             }
+
+
         }
+
 
         // Calculate the time difference between the current time and the next prayer time
         val timeDifferenceMillis =
@@ -390,7 +410,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         val totalDifferenceMillis =
             when (prayerTimeList[currentPrayerTimeIndex].currentNamazName) {
                 "Fajr" -> {
-                    prayerTimeList[previousPrayerTimeIndex].currentNamazTime - prayerTimeList[nextPrayerTimeIndex].currentNamazTime
+                    prayerTimeList[currentPrayerTimeIndex].currentNamazTime - prayerTimeList[previousPrayerTimeIndex].currentNamazTime
                 }
 
                 "Isha" -> {
@@ -402,13 +422,32 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 }
             }
         currentNamazName = prayerTimeList[currentPrayerTimeIndex].currentNamazName
-        // Return the PrayerTime object with time differences
-        return PrayerTime(
-            prayerTimeList[currentPrayerTimeIndex].currentNamazName,
-            prayerTimeList[currentPrayerTimeIndex].currentNamazTime,
-            timeDifferenceMillis,
-            totalDifferenceMillis
-        )
+
+        return if (currentTimeMillis >= prayerTimeList[4].currentNamazTime && currentTimeMillis <= currentTimeMillis1159) {
+            return PrayerTime(
+                "No Namaz Left",
+                0,
+                0,
+                0
+            )
+        } else if (currentTimeMillis >=currentTimeMillis12 && currentTimeMillis < prayerTimeList[0].currentNamazTime) {
+            val timeDifferenceMillis1 =
+                prayerTimeList[currentPrayerTimeIndex].currentNamazTime - currentTimeMillis
+            val totalDifferenceMillis1 = prayerTimeList[0].currentNamazTime - currentTimeMillis12
+            return PrayerTime(
+                "Fajr",
+                prayerTimeList[0].currentNamazTime,
+                timeDifferenceMillis1,
+                totalDifferenceMillis1
+            )
+        } else {
+            PrayerTime(
+                prayerTimeList[currentPrayerTimeIndex].currentNamazName,
+                prayerTimeList[currentPrayerTimeIndex].currentNamazTime,
+                timeDifferenceMillis,
+                totalDifferenceMillis
+            )
+        }
     }
 
     fun millisToTimeFormat(millis: Long): String {

@@ -186,10 +186,10 @@ class TimeViewModel @Inject constructor(private val repository: MainRepository) 
                 convertTimeToMillis(convertToFunTime(getPrayerTime.isha.toEpochMilliseconds()))
             ), PrayerTime(
                 "Midnight",
-                convertTimeToMillis(convertToFunTime(convertTimeToEpochMilliseconds("11:42PM")))
+                convertTimeToMillis(convertToFunTime(convertTimeToEpochMilliseconds("11:42 PM")))
             ), PrayerTime(
                 "LastThird",
-                convertTimeToMillis(convertToFunTime(convertTimeToEpochMilliseconds("10:40AM")))
+                convertTimeToMillis(convertToFunTime(convertTimeToEpochMilliseconds("10:40 AM")))
             )
         )
 
@@ -218,6 +218,8 @@ class TimeViewModel @Inject constructor(private val repository: MainRepository) 
                     nextPrayerTimeIndex = i + 1
                 }
                 break
+            }else{
+                continue
             }
         }
 

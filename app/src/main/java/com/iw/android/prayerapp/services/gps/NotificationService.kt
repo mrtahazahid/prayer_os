@@ -279,7 +279,7 @@ class NotificationService : NotificationListenerService() {
         val notificationDetail = prefrence.getCurrentNamazNotificationData()
         Log.d("notificationDetail",notificationDetail.toString())
         val currentTime = millisToTimeFormat(System.currentTimeMillis())
-        Log.d("currentTime",currentTime.toString())
+        Log.d("currentTime",currentTime)
         for (time in prayerList) {
             if (currentTime == time.currentNamazTime && !time.isCalled && notificationDetail != null) {
                 if(!notificationDetail.isOff){

@@ -152,7 +152,7 @@ class DataPreference @Inject constructor(
         setStringData(REFRESH_TOKEN, "")
     }
 
-    suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData = Gson().fromJson(
+    suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData? = Gson().fromJson(
         getStringData(CURRENT_NAMAZ_NOTIFICATION_DATA),
         CurrentNamazNotificationData::class.java
     )

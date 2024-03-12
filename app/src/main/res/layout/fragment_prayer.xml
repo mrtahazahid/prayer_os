@@ -268,7 +268,7 @@
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:fontFamily="@font/sf_bold"
                     android:gravity="center"
-                    android:text="30:15"
+                    android:text="00:00"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_23ssp" />
 

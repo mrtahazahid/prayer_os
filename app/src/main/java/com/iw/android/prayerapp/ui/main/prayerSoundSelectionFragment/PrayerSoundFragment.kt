@@ -203,7 +203,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
 
             4 -> {
                 isOffSelected = true
-                isSoundSelected = true
+                isSoundSelected = false
                 isVibrateSelected = false
                 isSilentSelected = false
             }
