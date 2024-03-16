@@ -104,6 +104,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.clSchReminder.setOnClickListener(this)
         binding.timeView.setOnClickListener(this)
         binding.imageViewAddHijri.setOnClickListener(this)
+        binding.iqamaView.setOnClickListener(this)
         binding.imageViewMinusHijri.setOnClickListener(this)
         binding.imageViewMinusCountUpTime.setOnClickListener(this)
         binding.imageViewAddCountUpTime.setOnClickListener(this)
@@ -159,6 +160,9 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            binding.iqamaView.id->{
+                findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToIqamaFragment())
+            }
             binding.imageViewAddCountUpTime.id -> {
                 binding.textViewCountUpTimeSetter.text = incrementACountUpDate()
 

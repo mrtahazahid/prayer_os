@@ -71,6 +71,9 @@
                 android:name="type"
                 app:argType="string" />
         </action>
+        <action
+            android:id="@+id/action_settingFragment_to_iqamaFragment"
+            app:destination="@id/iqamaFragment" />
     </fragment>
     <fragment
         android:id="@+id/moreFragment"
@@ -129,4 +132,8 @@
             android:name="dataFromTimeFragment"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/iqamaFragment"
+        android:name="com.iw.android.prayerapp.ui.main.iqamaFragment.IqamaFragment"
+        android:label="IqamaFragment" />
 </navigation>

@@ -26,6 +26,10 @@
         <item name="android:focusable">true</item>
     </style>
 
+    <style name="SpinnerTheme" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/bg_spinner</item>
+    </style>
+
     <style name="MyBottSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <!--<item name="android:windowCloseOnTouchOutside">false</item>-->
         <item name="android:windowIsTranslucent">true</item>

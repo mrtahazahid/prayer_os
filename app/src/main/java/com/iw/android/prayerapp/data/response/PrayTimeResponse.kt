@@ -12,6 +12,18 @@ data class PrayTime(
     var isCurrentNamaz:Boolean=false,
 )
 
+data class IqamaData(
+    val namazName: String,
+    var iqamaType: String= DuaTypeEnum.OFF.getValue(),
+    val iqamaTime:IqamaTime?=null
+)
+
+data class IqamaTime(
+    val iqamaTime: String= "12:00 AM",
+    val iqamaMinutes: String= ""
+)
+
+
 data class SoundData(
     val title: String,
     val soundFile: Int,

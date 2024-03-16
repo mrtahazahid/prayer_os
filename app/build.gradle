@@ -146,4 +146,6 @@ dependencies {
     // WorkManager
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
+    implementation 'com.akexorcist:round-corner-progress-bar:2.2.1'
+
 }

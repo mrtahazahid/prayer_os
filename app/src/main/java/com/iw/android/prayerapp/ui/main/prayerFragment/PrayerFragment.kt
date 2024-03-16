@@ -430,7 +430,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 0,
                 0
             )
-        } else if (currentTimeMillis >=currentTimeMillis12 && currentTimeMillis < prayerTimeList[0].currentNamazTime) {
+        } else if (currentTimeMillis >= currentTimeMillis12 && currentTimeMillis < prayerTimeList[0].currentNamazTime) {
             val timeDifferenceMillis1 =
                 prayerTimeList[currentPrayerTimeIndex].currentNamazTime - currentTimeMillis
             val totalDifferenceMillis1 = prayerTimeList[0].currentNamazTime - currentTimeMillis12

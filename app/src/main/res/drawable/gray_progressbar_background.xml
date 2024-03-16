@@ -8,6 +8,7 @@
             android:innerRadiusRatio="2.5"
             android:thicknessRatio="30.0"
             android:useLevel="false">
+            <corners android:radius="100dp"/>
             <solid
                 android:color="#121b15" />
         </shape>
