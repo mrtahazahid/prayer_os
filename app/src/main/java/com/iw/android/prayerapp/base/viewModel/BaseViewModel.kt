@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iw.android.prayerapp.base.repo.BaseRepository
 import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
+import com.iw.android.prayerapp.data.response.IqamaData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.data.response.UserLatLong
@@ -121,6 +122,37 @@ abstract class BaseViewModel(private val repository: BaseRepository) : ViewModel
 
     suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData =
         repository.getCurrentNamazNotificationData()
+
+    suspend fun saveIqamaFajrDetail(prayerDetail: IqamaData)  {
+        repository.saveIqamaFajrDetail(prayerDetail)
+    }
+
+    suspend fun getIqamaFajrDetail() = repository.getIqamaFajrDetail()
+
+    suspend fun saveIqamaDhuhrDetail(prayerDetail: IqamaData)  {
+        repository.saveIqamaDhuhrDetail(prayerDetail)
+    }
+
+    suspend fun getIqamaDhuhrDetail() = repository.getIqamaDhuhrDetail()
+
+    suspend fun saveIqamaAsrDetail(prayerDetail: IqamaData)  {
+        repository.saveIqamaAsrDetail(prayerDetail)
+    }
+
+    suspend fun getIqamaAsrDetail() = repository.getIqamaAsrDetail()
+
+    suspend fun saveIqamaMaghribDetail(prayerDetail: IqamaData)  {
+        repository.saveIqamaMaghribDetail(prayerDetail)
+    }
+
+    suspend fun getIqamaMaghribDetail() = repository.getIqamaMaghribDetail()
+
+    suspend fun saveIqamaIshaDetail(prayerDetail: IqamaData)  {
+        repository.saveIqamaIshaDetail(prayerDetail)
+    }
+
+    suspend fun getIqamaIshaDetail() = repository.getIqamaIshaDetail()
+
 
 
 }

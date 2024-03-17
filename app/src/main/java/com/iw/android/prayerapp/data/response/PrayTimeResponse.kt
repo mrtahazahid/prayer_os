@@ -15,12 +15,12 @@ data class PrayTime(
 data class IqamaData(
     val namazName: String,
     var iqamaType: String= DuaTypeEnum.OFF.getValue(),
-    val iqamaTime:IqamaTime?=null
+    var iqamaTime:IqamaTime?=null
 )
 
 data class IqamaTime(
-    val iqamaTime: String= "12:00 AM",
-    val iqamaMinutes: String= ""
+    var iqamaTime: String= "12:00 AM",
+    var iqamaMinutes: String= ""
 )
 
 
@@ -48,6 +48,11 @@ data class NotificationPrayerTime(
     var isCalled: Boolean=false,
 )
 
+data class IqamaJummahData(
+    var KhutbaTime:String = "12:00 AM",
+    var reminderTime:String = "Off",
+    var isEnabled:Boolean = false
+)
 
 @Serializable
 data class NotificationData(

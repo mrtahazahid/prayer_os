@@ -68,6 +68,18 @@ class DataPreference @Inject constructor(
             preferences[IS_LOGIN] ?: false
         }
 
+    val isIqamaDisplayTimeChecked: Flow<Boolean>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[IQAMA_DISPLAY_TIMER_COUNTDOWN] ?: false
+        }
+
+
+    val isIqamaDisplayShowInList: Flow<Boolean>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[IQAMA_SHOW_IN_LIST] ?: false
+        }
+
+
     val automaticLocation: Flow<Boolean>
         get() = appContext.dataStore.data.map { preferences ->
             preferences[AUTOMATIC_LOCATION] ?: false
@@ -271,6 +283,8 @@ class DataPreference @Inject constructor(
         val FAJR_INFO = stringPreferencesKey("key_fajr_info")
         val SUNRISE_INFO = stringPreferencesKey("key_sunrise_info")
         val NOTIFICATION_DATA = stringPreferencesKey("key_notification_data")
+        val IQAMA_DISPLAY_TIMER_COUNTDOWN = booleanPreferencesKey("key_iqama_dislplauy_countdown")
+        val IQAMA_SHOW_IN_LIST = booleanPreferencesKey("key_iqama_show_in_list")
         val SETTING_NOTIFICATION_DATA = stringPreferencesKey("key_setting_notification_data")
         val CURRENT_NAMAZ_NOTIFICATION_DATA =
             stringPreferencesKey("key_current_namaz_notification_data")
@@ -280,6 +294,11 @@ class DataPreference @Inject constructor(
         val ISHA_INFO = stringPreferencesKey("key_isha_info")
         val MIDNIGHT_INFO = stringPreferencesKey("key_midnight_info")
         val LASTTHIRD_INFO = stringPreferencesKey("key_lastnight_info")
+        val IQAMA_FAJR = stringPreferencesKey("key_iqama_fajr")
+        val IQAMA_DHUHR = stringPreferencesKey("key_iqama_dhuhr")
+        val IQAMA_ASR = stringPreferencesKey("key_iqama-asr")
+        val IQAMA_MAGHRIB = stringPreferencesKey("key_iqama_magrib")
+        val IQAMA_ISHA = stringPreferencesKey("key_iqama_isha")
         val APPLICATION_ID = "com.iw.android.prayerapp"
     }
 }

@@ -14,6 +14,7 @@ import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_M
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.USER_ID
 import com.iw.android.prayerapp.base.response.LoginUserResponse
 import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
+import com.iw.android.prayerapp.data.response.IqamaData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.data.response.UserLatLong
@@ -225,6 +226,62 @@ abstract class BaseRepository(
         preferences.setStringData(
             DataPreference.CURRENT_NAMAZ_NOTIFICATION_DATA,
             Gson().toJson(null)
+        )
+    }
+
+    suspend fun saveIqamaFajrDetail(namazDetail: IqamaData) {
+        preferences.setStringData(DataPreference.IQAMA_FAJR, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getIqamaFajrDetail(): IqamaData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.IQAMA_FAJR),
+            IqamaData::class.java
+        )
+    }
+
+
+    suspend fun saveIqamaDhuhrDetail(namazDetail: IqamaData) {
+        preferences.setStringData(DataPreference.IQAMA_DHUHR, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getIqamaDhuhrDetail(): IqamaData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.IQAMA_DHUHR),
+            IqamaData::class.java
+        )
+    }
+
+    suspend fun saveIqamaAsrDetail(namazDetail: IqamaData) {
+        preferences.setStringData(DataPreference.IQAMA_ASR, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getIqamaAsrDetail(): IqamaData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.IQAMA_ASR),
+            IqamaData::class.java
+        )
+    }
+
+    suspend fun saveIqamaMaghribDetail(namazDetail: IqamaData) {
+        preferences.setStringData(DataPreference.IQAMA_MAGHRIB, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getIqamaMaghribDetail(): IqamaData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.IQAMA_MAGHRIB),
+            IqamaData::class.java
+        )
+    }
+
+    suspend fun saveIqamaIshaDetail(namazDetail: IqamaData) {
+        preferences.setStringData(DataPreference.IQAMA_ISHA, Gson().toJson(namazDetail))
+    }
+
+    suspend fun getIqamaIshaDetail(): IqamaData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.IQAMA_ISHA),
+            IqamaData::class.java
         )
     }
 
