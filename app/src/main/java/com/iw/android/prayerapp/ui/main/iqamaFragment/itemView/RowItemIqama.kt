@@ -79,7 +79,8 @@ class RowItemIqama(
             }
             binding.imageViewIqamaMinus.setOnClickListener {
                 binding.textViewIqamaSetTime.text = decrementDuaMinute()
-                data.iqamaTime = IqamaTime("12:00 AM", binding.textViewIqamaSetTime.text.toString())
+                data.iqamaTime = IqamaTime("12:00 AM", binding.textViewIqamaSetTime.text.toString(),
+                    addMinutesToTime(data.namazTime, iqamaReminderTime))
                 savePrayerDetailData()
             }
 

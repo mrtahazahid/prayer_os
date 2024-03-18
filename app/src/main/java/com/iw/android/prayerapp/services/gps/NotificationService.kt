@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -97,9 +98,9 @@ class NotificationService : NotificationListenerService() {
                 checkAndTriggerNotification()
                 checkDailyNamazTime()
                 checkIqamaTime()
-                Log.d("snooze", prefrence.getSettingNotificationData().toString())
+                jummahTimeCheck()
                 // Delay for 10 seconds
-                delay(3000)
+                delay(60000)
             }
         }
     }
@@ -123,6 +124,7 @@ class NotificationService : NotificationListenerService() {
         // Add your logic here to check if it's time to show a notification
         val specifiedTimes = prefrence.getNotificationData()
         if (specifiedTimes.isNotEmpty()) {
+            Log.d("checkAndTriggerNotification", "checkAndTriggerNotification: ${specifiedTimes.toString()}")
             for ((index, specifiedTime) in specifiedTimes.withIndex()) {
                 if (specifiedTime.namazTime != "") {
                     if (!specifiedTime.isReminderNotificationCall) {
@@ -145,7 +147,6 @@ class NotificationService : NotificationListenerService() {
                                     false,
                                     false
                                 )
-                                specifiedTime.isReminderNotificationCall = true
                                 prefrence.updateNotificationData(index, specifiedTime)
                                 delay(1500)
                                 break
@@ -159,7 +160,6 @@ class NotificationService : NotificationListenerService() {
                                         false,
                                         false
                                     )
-                                    specifiedTime.isNotificationCall = true
                                     prefrence.updateNotificationData(index, specifiedTime)
                                     delay(1500)
                                     break
@@ -174,6 +174,7 @@ class NotificationService : NotificationListenerService() {
         }
 
     }
+
 
 
     fun convertTimeToMillis(timeString: String): Long {
@@ -283,13 +284,14 @@ class NotificationService : NotificationListenerService() {
     private fun checkIqamaTime() = applicationScope.launch {
 
 
-        Log.d("time","${prefrence.getIqamaFajrDetail()?.namazTime.toString()}")
-        Log.d("time","${prefrence.getIqamaFajrDetail()?.iqamaTime?.iqamaMinutesTime.toString()}  ")
+        Log.d("time", "${prefrence.getIqamaAsrDetail()?.namazTime.toString()}")
+        Log.d("time", "${prefrence.getIqamaAsrDetail()?.iqamaTime?.iqamaMinutesTime.toString()}  ")
         when (prefrence.getIqamaFajrDetail()?.iqamaType) {
             DuaTypeEnum.OFF.getValue() -> {}
             DuaTypeEnum.MINUTES.getValue() -> {
-                checkIqamaTimeByMinutes(
-                    prefrence.getIqamaFajrDetail()?.iqamaTime?.iqamaMinutes ?: "off"
+                checkIqamaTimeByTime(
+                    prefrence.getIqamaFajrDetail()?.iqamaTime?.iqamaMinutesTime ?: "",
+                    prefrence.getIqamaFajrDetail()?.namazName ?: ""
                 )
             }
 
@@ -304,8 +306,9 @@ class NotificationService : NotificationListenerService() {
         when (prefrence.getIqamaDhuhrDetail()?.iqamaType) {
             DuaTypeEnum.OFF.getValue() -> {}
             DuaTypeEnum.MINUTES.getValue() -> {
-                checkIqamaTimeByMinutes(
-                    prefrence.getIqamaDhuhrDetail()?.iqamaTime?.iqamaMinutes ?: "off"
+                checkIqamaTimeByTime(
+                    prefrence.getIqamaDhuhrDetail()?.iqamaTime?.iqamaMinutesTime ?: "",
+                    prefrence.getIqamaDhuhrDetail()?.namazName ?: ""
                 )
 
             }
@@ -321,8 +324,9 @@ class NotificationService : NotificationListenerService() {
         when (prefrence.getIqamaAsrDetail()?.iqamaType) {
             DuaTypeEnum.OFF.getValue() -> {}
             DuaTypeEnum.MINUTES.getValue() -> {
-                checkIqamaTimeByMinutes(
-                    prefrence.getIqamaAsrDetail()?.iqamaTime?.iqamaMinutes ?: "off"
+                checkIqamaTimeByTime(
+                    prefrence.getIqamaAsrDetail()?.iqamaTime?.iqamaMinutesTime ?: "",
+                    prefrence.getIqamaAsrDetail()?.namazName ?: ""
                 )
 
             }
@@ -338,8 +342,9 @@ class NotificationService : NotificationListenerService() {
         when (prefrence.getIqamaMaghribDetail()?.iqamaType) {
             DuaTypeEnum.OFF.getValue() -> {}
             DuaTypeEnum.MINUTES.getValue() -> {
-                checkIqamaTimeByMinutes(
-                    prefrence.getIqamaMaghribDetail()?.iqamaTime?.iqamaMinutes ?: "off"
+                checkIqamaTimeByTime(
+                    prefrence.getIqamaMaghribDetail()?.iqamaTime?.iqamaMinutesTime ?: "",
+                    prefrence.getIqamaMaghribDetail()?.namazName ?: ""
                 )
 
             }
@@ -355,8 +360,9 @@ class NotificationService : NotificationListenerService() {
         when (prefrence.getIqamaIshaDetail()?.iqamaType) {
             DuaTypeEnum.OFF.getValue() -> {}
             DuaTypeEnum.MINUTES.getValue() -> {
-                checkIqamaTimeByMinutes(
-                    prefrence.getIqamaIshaDetail()?.iqamaTime?.iqamaMinutes ?: "off"
+                checkIqamaTimeByTime(
+                    prefrence.getIqamaIshaDetail()?.iqamaTime?.iqamaMinutesTime ?: "",
+                    prefrence.getIqamaIshaDetail()?.namazName ?: ""
                 )
 
             }
@@ -445,6 +451,25 @@ class NotificationService : NotificationListenerService() {
                 )
             }
         }
+
+    private fun jummahTimeCheck() = applicationScope.launch {
+        val calendar = Calendar.getInstance()
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        if (dayOfWeek == Calendar.FRIDAY) {
+            if (!prefrence.getJummuahSetting()?.reminderTimeFormatted.isNullOrEmpty()) {
+                if (isTimeMatch(prefrence.getJummuahSetting()!!.reminderTimeFormatted)) {
+                    notifications.notify(
+                        "Khutba reminder",
+                        prefrence.getIqamaNotificationSetting()?.reminderSound ?: 0,
+                        false,
+                        false
+                    )
+                }
+
+            }
+
+        }
+    }
 
     fun addMinutesToTime(currentTime: String, minutesToAdd: Int): String {
         // Parse the current time string

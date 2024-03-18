@@ -22,7 +22,8 @@ data class IqamaData(
 data class JummuahData(
     var khutbaTime: String = "12:00 AM",
     var reminderTime: String = "off",
-    var isEnabled: Boolean = false
+    var isEnabled: Boolean = false,
+    var reminderTimeFormatted: String = ""
 )
 
 data class IqamaNotificationData(
@@ -93,7 +94,9 @@ data class NotificationData(
     var duaTime: String = "12:00 AM",
     var isNotificationCall: Boolean = false,
     var isReminderNotificationCall: Boolean = false,
-    var createdDate: String = ""
+    var createdDate: String = "",
+    var reminderTimeFormatted: String = "",
+    var reminderDuaTimeDoFormatted: String = "",
 )
 
 data class CurrentNamazNotificationData(

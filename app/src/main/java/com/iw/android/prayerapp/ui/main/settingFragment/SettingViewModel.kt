@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingViewModel @Inject constructor(private val repository: MainRepository) :
+class SettingViewModel @Inject constructor( repository: MainRepository) :
     BaseViewModel(repository) {
     var getSavedPrayerMethod = ""
     var getSavedPrayerJurisprudence = ""

@@ -105,9 +105,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         // notifications.notify(currentNamazName)
     }
 
-    override fun setObserver() {
-
-    }
+    override fun setObserver() {}
 
     override fun setOnClickListener() {
         binding.upComingPrayerTimeView.setOnClickListener(this)

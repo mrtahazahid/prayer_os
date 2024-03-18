@@ -29,6 +29,8 @@ import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
 import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListener, OnDataSelected {
@@ -48,6 +50,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
     private var khutbaReminderTime = 0
     private var reminderTimeCount = 0
     private var khutbaTime = "12:00 AM"
+    private var khutbaReminderTimeFormatted = ""
     private var reminderTime = "off"
     private var soundName = ""
     private var isEnabled = false
@@ -107,8 +110,6 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
                 reminderTime = it?.reminderTime ?: "off"
                 isEnabled = it?.isEnabled ?: false
 
-
-
                 if (it?.isEnabled == true) {
                     binding.jummahDetail.show()
                     binding.textViewNone.gone()
@@ -135,7 +136,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
                 notificationReminderTime = it?.reminderTime ?: "off"
                 notificationReminderSound = it?.reminderSound ?: 0
                 soundName = it?.soundName ?: "Tone"
-                binding.textViewNotificationSetTime.text = it?.reminderTime
+                binding.textViewNotificationSetTime.text = it?.reminderTime ?:"off"
                 if (reminderTime != "off" && !reminderTime.isNullOrBlank()) {
                     reminderTimeCount = extractMinutes(it!!.reminderTime)
                 }
@@ -243,8 +244,9 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
             }
 
             binding.textViewReset.id -> {
-                binding.progress.show()
+
                 lifecycleScope.launch {
+                    binding.progress.show()
                     viewModel.saveIqamaFajrDetail(
                         IqamaData(
                             "Fajr","",
@@ -275,11 +277,11 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
                         )
                     )
                 }
-                binding.progress.hide()
+
                 viewModel.iqamaList.clear()
                 viewModel.addList()
                 setObserver()
-
+                binding.progress.hide()
             }
 
             binding.imageViewJumuah.id -> {
@@ -333,12 +335,18 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
             binding.imageViewAdd.id -> {
                 binding.textViewSetTime.text = incrementDuaMinute()
                 reminderTime = binding.textViewSetTime.text.toString()
+                if(binding.textViewSetTime.text.toString() != "off"){
+                    khutbaReminderTimeFormatted = subtractMinutesFromTime(binding.textViewIqamaTime.text.toString(),khutbaReminderTime)
+                }
                 saveJummahData()
             }
 
             binding.imageViewRemove.id -> {
                 binding.textViewSetTime.text = decrementDuaMinute()
                 reminderTime = binding.textViewSetTime.text.toString()
+                if(binding.textViewSetTime.text.toString() != "off"){
+                    khutbaReminderTimeFormatted = subtractMinutesFromTime(binding.textViewIqamaTime.text.toString(),khutbaReminderTime)
+                }
                 saveJummahData()
             }
 
@@ -347,7 +355,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
     }
 
     private fun saveJummahData() = lifecycleScope.launch {
-        viewModel.saveJummuahSetting(JummuahData(khutbaTime, reminderTime, isEnabled))
+        viewModel.saveJummuahSetting(JummuahData(khutbaTime, reminderTime, isEnabled,khutbaReminderTimeFormatted))
     }
 
 
@@ -438,6 +446,9 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
         binding.spinnerIqamaReminderSwitch1.adapter = adapter
 
         lifecycleScope.launch {
+            if(viewModel.getIqamaNotificationSetting()?.updateInterval == null){
+                binding.spinnerIqamaReminderSwitch1.setSelection(0)
+            }
             when (viewModel.getIqamaNotificationSetting()?.updateInterval) {
                 IqamaTypeEnum.NONE.getValue() -> {
                     binding.spinnerIqamaReminderSwitch1.setSelection(0)
@@ -522,5 +533,17 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
         this.soundName = soundName
         notificationReminderSound = sound ?: 0
         saveNotificationSetting()
+    }
+
+    fun subtractMinutesFromTime(currentTime: String, minutesToSubtract: Int): String {
+        // Parse the current time string
+        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+        val parsedTime = LocalTime.parse(currentTime, formatter)
+
+        // Subtract minutes from the parsed time
+        val resultTime = parsedTime.minusMinutes(minutesToSubtract.toLong())
+
+        // Format the result time back to "hh:mm a" format
+        return resultTime.format(formatter)
     }
 }

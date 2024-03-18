@@ -93,7 +93,7 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
 
                 try {
                     applicationScope.launch {
-                        val uri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.adhan_abdul_basit)
+                        val uri = Uri.parse("android.resource://" + context.packageName + "/" + sound)
                         player = MediaPlayer.create(context, uri)
                         player?.isLooping = false // This will play sound in repeatable mode.
                         player?.start()

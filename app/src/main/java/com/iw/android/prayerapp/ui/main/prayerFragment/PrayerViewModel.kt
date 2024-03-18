@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PrayerViewModel @Inject constructor(private val repository: MainRepository) :
+class PrayerViewModel @Inject constructor(  repository: MainRepository) :
     BaseViewModel(repository) {
 
     var userLatLong: UserLatLong? = null

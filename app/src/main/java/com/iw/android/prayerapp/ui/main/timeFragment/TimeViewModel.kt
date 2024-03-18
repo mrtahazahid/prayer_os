@@ -27,7 +27,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class TimeViewModel @Inject constructor(private val repository: MainRepository) :
+class TimeViewModel @Inject constructor(repository: MainRepository) :
     BaseViewModel(repository) {
     var userLatLong: UserLatLong? = null
     var getSavedPrayerJurisprudence = ""
@@ -44,7 +44,7 @@ class TimeViewModel @Inject constructor(private val repository: MainRepository) 
 
     fun getPrayList() = viewModelScope.launch {
 
-        val madhab = if (getSavedPrayerJurisprudence.toInt() == 0) {
+        val madhab = if (getSavedPrayerJurisprudence.toInt() == 0 && getSavedPrayerJurisprudence!= null ) {
             Madhab.SHAFI
         } else {
             Madhab.HANAFI

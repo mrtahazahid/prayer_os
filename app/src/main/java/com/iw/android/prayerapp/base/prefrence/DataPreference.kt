@@ -128,14 +128,6 @@ class DataPreference @Inject constructor(
 
     }
 
-    suspend fun performLogout() {
-        setBooleanData(IS_LOGIN, false)
-        setStringData(USER_ID, "")
-        setStringData(USER_INFO, "")
-        setStringData(ACCESS_TOKEN, "")
-        setStringData(REFRESH_TOKEN, "")
-    }
-
     suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData? = Gson().fromJson(
         getStringData(CURRENT_NAMAZ_NOTIFICATION_DATA),
         CurrentNamazNotificationData::class.java

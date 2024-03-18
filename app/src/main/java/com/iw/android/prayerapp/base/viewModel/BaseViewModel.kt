@@ -15,7 +15,7 @@ import com.iw.android.prayerapp.data.response.UserLatLong
 import kotlinx.coroutines.launch
 
 
-abstract class BaseViewModel(private val repository: BaseRepository) : ViewModel() {
+abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
 
 
     suspend fun saveLoginUserId(userLoginId: String) = repository.saveLoginUserId(userLoginId)

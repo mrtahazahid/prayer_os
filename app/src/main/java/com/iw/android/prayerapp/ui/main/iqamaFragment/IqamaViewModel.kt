@@ -22,15 +22,13 @@ class IqamaViewModel @Inject constructor(repository: MainRepository) :
 
 
     init {
-        addList()
-        viewModelScope.launch {
-            lat = repository.getUserLatLong()?.latitude ?: 0.0
-            long = repository.getUserLatLong()?.longitude ?: 0.0
-        }
 
+        addList()
     }
 
     fun addList() = viewModelScope.launch {
+        lat = repository.getUserLatLong()?.latitude ?: 0.0
+        long = repository.getUserLatLong()?.longitude ?: 0.0
         val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(lat, long)
         iqamaList.add(
             IqamaData(
