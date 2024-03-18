@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.iw.android.prayerapp.base.repo.BaseRepository
 import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.IqamaData
+import com.iw.android.prayerapp.data.response.IqamaDisplaySetting
+import com.iw.android.prayerapp.data.response.IqamaNotificationData
+import com.iw.android.prayerapp.data.response.JummuahData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.data.response.UserLatLong
@@ -153,6 +156,24 @@ abstract class BaseViewModel(private val repository: BaseRepository) : ViewModel
 
     suspend fun getIqamaIshaDetail() = repository.getIqamaIshaDetail()
 
+    suspend fun saveJummuahSetting(data: JummuahData)  {
+        repository.saveJummuahSetting(data)
+    }
 
+    suspend fun getJummuahSetting() = repository.getJummuahSetting()
+
+
+    suspend fun saveIqamaNotificationSetting(data: IqamaNotificationData)  {
+        repository.saveIqamaNotificationSetting(data)
+    }
+
+    suspend fun getIqamaNotificationSetting() = repository.getIqamaNotificationSetting()
+
+
+    suspend fun saveIqamaDisplaySetting(data: IqamaDisplaySetting)  {
+        repository.saveIqamaDisplaySetting(data)
+    }
+
+    suspend fun getIqamaDisplaySetting() = repository.getIqamaDisplaySetting()
 
 }

@@ -9,18 +9,39 @@ data class PrayTime(
     val time: String,
     var createdDate: String = "",
     val namazDetail: NotificationData,
-    var isCurrentNamaz:Boolean=false,
+    var isCurrentNamaz: Boolean = false,
 )
 
 data class IqamaData(
     val namazName: String,
-    var iqamaType: String= DuaTypeEnum.OFF.getValue(),
-    var iqamaTime:IqamaTime?=null
+    var namazTime: String = "",
+    var iqamaType: String = DuaTypeEnum.OFF.getValue(),
+    var iqamaTime: IqamaTime? = null
+)
+
+data class JummuahData(
+    var khutbaTime: String = "12:00 AM",
+    var reminderTime: String = "off",
+    var isEnabled: Boolean = false
+)
+
+data class IqamaNotificationData(
+    var reminderTime: String = "off",
+    var reminderSound: Int = 0,
+    var soundName: String = "",
+    var updateInterval: String
+)
+
+data class IqamaDisplaySetting(
+    var isTimeCountDownTimer: Boolean = false,
+    var isShowInList: Boolean = false
 )
 
 data class IqamaTime(
-    var iqamaTime: String= "12:00 AM",
-    var iqamaMinutes: String= ""
+    var iqamaTime: String = "12:00 AM",
+    var iqamaMinutes: String = "",
+    var iqamaMinutesTime: String = "",
+
 )
 
 
@@ -42,16 +63,16 @@ data class PrayerTime(
     val totalTime: Long = 0
 )
 
+data class IqamaTimeList(
+    val namazName: String,
+    val nameTimeString: String,
+    val nameTimeLong: Long,
+)
+
 data class NotificationPrayerTime(
     val currentNamazName: String,
     val currentNamazTime: String,
-    var isCalled: Boolean=false,
-)
-
-data class IqamaJummahData(
-    var KhutbaTime:String = "12:00 AM",
-    var reminderTime:String = "Off",
-    var isEnabled:Boolean = false
+    var isCalled: Boolean = false,
 )
 
 @Serializable
@@ -82,14 +103,14 @@ data class CurrentNamazNotificationData(
     val isVibrate: Boolean,
     val isSilent: Boolean,
     val isOff: Boolean,
-    val sound: Int?=null,
+    val sound: Int? = null,
 
     )
 
 data class NotificationSettingData(
-    val snoozeTime: String?=null,
-    val isAdhanDuaOn: Boolean?=null,
-    val isPrayOnTap: Boolean?=null,
+    val snoozeTime: String? = null,
+    val isAdhanDuaOn: Boolean? = null,
+    val isPrayOnTap: Boolean? = null,
 
     )
 

@@ -1,6 +1,5 @@
 package com.iw.android.prayerapp.base.repo
 
-import android.util.Log
 import com.google.gson.Gson
 import com.iw.android.prayerapp.base.network.BaseApi
 import com.iw.android.prayerapp.base.network.SafeApiCall
@@ -15,6 +14,9 @@ import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.USER_ID
 import com.iw.android.prayerapp.base.response.LoginUserResponse
 import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.IqamaData
+import com.iw.android.prayerapp.data.response.IqamaDisplaySetting
+import com.iw.android.prayerapp.data.response.IqamaNotificationData
+import com.iw.android.prayerapp.data.response.JummuahData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.data.response.UserLatLong
@@ -284,5 +286,41 @@ abstract class BaseRepository(
             IqamaData::class.java
         )
     }
+
+    suspend fun saveIqamaDisplaySetting(data: IqamaDisplaySetting) {
+        preferences.setStringData(DataPreference.IQAMA_DISPLAY_SETTING, Gson().toJson(data))
+    }
+
+    suspend fun getIqamaDisplaySetting(): IqamaDisplaySetting? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.IQAMA_DISPLAY_SETTING),
+            IqamaDisplaySetting::class.java
+        )
+    }
+
+
+    suspend fun saveJummuahSetting(data: JummuahData) {
+        preferences.setStringData(DataPreference.JUMMUAH_SETTING, Gson().toJson(data))
+    }
+
+    suspend fun getJummuahSetting(): JummuahData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.JUMMUAH_SETTING),
+            JummuahData::class.java
+        )
+    }
+
+    suspend fun saveIqamaNotificationSetting(data: IqamaNotificationData) {
+        preferences.setStringData(DataPreference.IQAMA_NOTIFICATION_SETTING, Gson().toJson(data))
+    }
+
+    suspend fun getIqamaNotificationSetting(): IqamaNotificationData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.IQAMA_NOTIFICATION_SETTING),
+            IqamaNotificationData::class.java
+        )
+    }
+
+
 
 }

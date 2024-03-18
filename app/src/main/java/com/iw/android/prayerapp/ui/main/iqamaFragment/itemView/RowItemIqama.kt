@@ -15,12 +15,13 @@ import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.data.response.IqamaData
 import com.iw.android.prayerapp.data.response.IqamaTime
-import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.databinding.RowItemIqamaBinding
 import com.iw.android.prayerapp.ui.main.iqamaFragment.IqamaViewModel
 import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class RowItemIqama(
@@ -48,11 +49,13 @@ class RowItemIqama(
                     binding.cardViewIqamaTime.visibility = View.GONE
                     binding.textViewIqamaSetTime.visibility = View.GONE
                 }
+
                 DuaTypeEnum.TIME.getValue() -> {
                     binding.cardViewIqamaAdjustmentTime.visibility = View.GONE
                     binding.cardViewIqamaTime.visibility = View.VISIBLE
                     binding.textViewIqamaSetTime.visibility = View.GONE
                 }
+
                 DuaTypeEnum.MINUTES.getValue() -> {
                     binding.cardViewIqamaAdjustmentTime.visibility = View.VISIBLE
                     binding.cardViewIqamaTime.visibility = View.GONE
@@ -66,12 +69,17 @@ class RowItemIqama(
             binding.textViewIqamaSetTime.text = data.iqamaTime?.iqamaMinutes ?: "off"
             binding.imageViewIqamaAdd.setOnClickListener {
                 binding.textViewIqamaSetTime.text = incrementDuaMinute()
-                data.iqamaTime = IqamaTime("12:00 AM",binding.textViewIqamaSetTime.text.toString())
+                data.iqamaTime = IqamaTime(
+                    "12:00 AM",
+                    binding.textViewIqamaSetTime.text.toString(),
+                    addMinutesToTime(data.namazTime, iqamaReminderTime)
+                )
+
                 savePrayerDetailData()
             }
             binding.imageViewIqamaMinus.setOnClickListener {
                 binding.textViewIqamaSetTime.text = decrementDuaMinute()
-                data.iqamaTime = IqamaTime("12:00 AM",binding.textViewIqamaSetTime.text.toString())
+                data.iqamaTime = IqamaTime("12:00 AM", binding.textViewIqamaSetTime.text.toString())
                 savePrayerDetailData()
             }
 
@@ -85,12 +93,24 @@ class RowItemIqama(
                         }.time)
                     binding.textViewIqamaTime.text = formattedTime
                     data.iqamaTime?.iqamaTime = formattedTime
-                    data.iqamaTime = IqamaTime(formattedTime,"off")
+                    data.iqamaTime = IqamaTime(formattedTime, "off")
                     savePrayerDetailData()
                 }
             }
             spinnerDua(binding)
         }
+    }
+
+    fun addMinutesToTime(currentTime: String, minutesToAdd: Int): String {
+        // Parse the current time string
+        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+        val parsedTime = LocalTime.parse(currentTime, formatter)
+
+        // Add minutes to the parsed time
+        val resultTime = parsedTime.plusMinutes(minutesToAdd.toLong())
+
+        // Format the result time back to "hh:mm a" format
+        return resultTime.format(formatter)
     }
 
     private fun spinnerDua(binding: RowItemIqamaBinding) {
@@ -209,14 +229,15 @@ class RowItemIqama(
         timePickerDialog.show()
     }
 
-    private fun savePrayerDetailData()  =fragment.lifecycleScope.launch {
+    private fun savePrayerDetailData() = fragment.lifecycleScope.launch {
         when (data.namazName) {
             "Fajr" -> {
                 viewModel.saveIqamaFajrDetail(
                     IqamaData(
                         namazName = data.namazName,
                         iqamaType = data.iqamaType,
-                        iqamaTime = data.iqamaTime
+                        iqamaTime = data.iqamaTime,
+                        namazTime = data.namazTime
 
                     )
                 )
@@ -228,7 +249,8 @@ class RowItemIqama(
                     IqamaData(
                         namazName = data.namazName,
                         iqamaType = data.iqamaType,
-                        iqamaTime = data.iqamaTime
+                        iqamaTime = data.iqamaTime,
+                        namazTime = data.namazTime
 
                     )
                 )
@@ -240,7 +262,8 @@ class RowItemIqama(
                     IqamaData(
                         namazName = data.namazName,
                         iqamaType = data.iqamaType,
-                        iqamaTime = data.iqamaTime
+                        iqamaTime = data.iqamaTime,
+                        namazTime = data.namazTime
 
                     )
                 )
@@ -252,7 +275,8 @@ class RowItemIqama(
                     IqamaData(
                         namazName = data.namazName,
                         iqamaType = data.iqamaType,
-                        iqamaTime = data.iqamaTime
+                        iqamaTime = data.iqamaTime,
+                        namazTime = data.namazTime
 
                     )
                 )
@@ -264,7 +288,8 @@ class RowItemIqama(
                     IqamaData(
                         namazName = data.namazName,
                         iqamaType = data.iqamaType,
-                        iqamaTime = data.iqamaTime
+                        iqamaTime = data.iqamaTime,
+                        namazTime = data.namazTime
 
                     )
                 )

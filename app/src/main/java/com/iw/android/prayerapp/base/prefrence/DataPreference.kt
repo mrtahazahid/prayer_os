@@ -2,26 +2,29 @@ package com.iw.android.prayerapp.base.prefrence
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.APPLICATION_ID
 import com.iw.android.prayerapp.base.response.LoginUserResponse
 import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
+import com.iw.android.prayerapp.data.response.IqamaData
+import com.iw.android.prayerapp.data.response.IqamaNotificationData
+import com.iw.android.prayerapp.data.response.JummuahData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.data.response.UserLatLong
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = APPLICATION_ID)
 
@@ -63,38 +66,11 @@ class DataPreference @Inject constructor(
             preferences[PRAYER_ELEVATION_RULE] ?: ""
         }
 
-    val isUserLogin: Flow<Boolean>
-        get() = appContext.dataStore.data.map { preferences ->
-            preferences[IS_LOGIN] ?: false
-        }
-
-    val isIqamaDisplayTimeChecked: Flow<Boolean>
-        get() = appContext.dataStore.data.map { preferences ->
-            preferences[IQAMA_DISPLAY_TIMER_COUNTDOWN] ?: false
-        }
-
-
-    val isIqamaDisplayShowInList: Flow<Boolean>
-        get() = appContext.dataStore.data.map { preferences ->
-            preferences[IQAMA_SHOW_IN_LIST] ?: false
-        }
-
-
     val automaticLocation: Flow<Boolean>
         get() = appContext.dataStore.data.map { preferences ->
             preferences[AUTOMATIC_LOCATION] ?: false
         }
 
-    val isOnBoarding: Flow<Boolean>
-        get() = appContext.dataStore.data.map { preferences ->
-            preferences[IS_ONBOARDING] ?: false
-        }
-
-    suspend fun saveAccessTokens(accessToken: String) {
-        appContext.dataStore.edit { preferences ->
-            preferences[ACCESS_TOKEN] = "Bearer $accessToken"
-        }
-    }
 
     suspend fun getBooleanData(key: Preferences.Key<Boolean>): Boolean =
         appContext.dataStore.data.map { preferences ->
@@ -152,10 +128,6 @@ class DataPreference @Inject constructor(
 
     }
 
-    suspend fun clearLoginDataForUpdate() {
-        setStringData(USER_INFO, "")
-    }
-
     suspend fun performLogout() {
         setBooleanData(IS_LOGIN, false)
         setStringData(USER_ID, "")
@@ -173,6 +145,56 @@ class DataPreference @Inject constructor(
         setStringData(USER_INFO, Gson().toJson(userInfo))
 
     }
+
+    suspend fun getIqamaNotificationSetting(): IqamaNotificationData? {
+        return Gson().fromJson(
+            getStringData(IQAMA_NOTIFICATION_SETTING),
+            IqamaNotificationData::class.java
+        )
+    }
+
+    suspend fun getJummuahSetting(): JummuahData? {
+        return Gson().fromJson(
+            getStringData(JUMMUAH_SETTING),
+            JummuahData::class.java
+        )
+    }
+
+    suspend fun getIqamaIshaDetail(): IqamaData? {
+        return Gson().fromJson(
+            getStringData(IQAMA_ISHA),
+            IqamaData::class.java
+        )
+    }
+
+    suspend fun getIqamaMaghribDetail(): IqamaData? {
+        return Gson().fromJson(
+            getStringData(IQAMA_MAGHRIB),
+            IqamaData::class.java
+        )
+    }
+
+    suspend fun getIqamaAsrDetail(): IqamaData? {
+        return Gson().fromJson(
+            getStringData(IQAMA_ASR),
+            IqamaData::class.java
+        )
+    }
+
+    suspend fun getIqamaDhuhrDetail(): IqamaData? {
+        return Gson().fromJson(
+            getStringData(IQAMA_DHUHR),
+            IqamaData::class.java
+        )
+    }
+
+    suspend fun getIqamaFajrDetail(): IqamaData? {
+        return Gson().fromJson(
+            getStringData(IQAMA_FAJR),
+            IqamaData::class.java
+        )
+    }
+
 
 //    suspend fun saveNotificationData(data: NotificationData) {
 //        if(getNotificationData().isEmpty()){
@@ -283,8 +305,6 @@ class DataPreference @Inject constructor(
         val FAJR_INFO = stringPreferencesKey("key_fajr_info")
         val SUNRISE_INFO = stringPreferencesKey("key_sunrise_info")
         val NOTIFICATION_DATA = stringPreferencesKey("key_notification_data")
-        val IQAMA_DISPLAY_TIMER_COUNTDOWN = booleanPreferencesKey("key_iqama_dislplauy_countdown")
-        val IQAMA_SHOW_IN_LIST = booleanPreferencesKey("key_iqama_show_in_list")
         val SETTING_NOTIFICATION_DATA = stringPreferencesKey("key_setting_notification_data")
         val CURRENT_NAMAZ_NOTIFICATION_DATA =
             stringPreferencesKey("key_current_namaz_notification_data")
@@ -299,6 +319,9 @@ class DataPreference @Inject constructor(
         val IQAMA_ASR = stringPreferencesKey("key_iqama-asr")
         val IQAMA_MAGHRIB = stringPreferencesKey("key_iqama_magrib")
         val IQAMA_ISHA = stringPreferencesKey("key_iqama_isha")
+        val JUMMUAH_SETTING = stringPreferencesKey("key_jummuah_setting")
+        val IQAMA_NOTIFICATION_SETTING = stringPreferencesKey("key_iqama_notification_setting")
+        val IQAMA_DISPLAY_SETTING = stringPreferencesKey("key_iqama_display_setting")
         val APPLICATION_ID = "com.iw.android.prayerapp"
     }
 }

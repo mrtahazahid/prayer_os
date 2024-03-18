@@ -35,6 +35,14 @@
 
     </string-array>
 
+    <string-array name="iqama_update_interval">
+        <item>None</item>
+        <item>By weekly</item>
+        <item>By monthly</item>
+        <item>By yearly</item>
+
+    </string-array>
+
     <string-array name="jurisprudence">
         <item>Standard</item>
         <item>Hanafi</item>
