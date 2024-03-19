@@ -27,6 +27,7 @@ import com.iw.android.prayerapp.extension.getIslamicDateByOffSet
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.notificationService.Notification
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
 import kotlinx.coroutines.launch
@@ -83,6 +84,12 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     @SuppressLint("SimpleDateFormat")
     override fun initialize() {
         notifications = Notification(requireContext())
+
+        val location = GetAdhanDetails.getTimeZoneAndCity(
+            requireContext(), viewModel.userLatLong?.latitude ?: 0.0,
+            viewModel.userLatLong?.longitude ?: 0.0
+        )
+        binding.textViewCity.text = location?.city
 
         currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.userLatLong?.longitude ?: 0.0

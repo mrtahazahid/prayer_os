@@ -79,8 +79,8 @@ class NotificationService : NotificationListenerService() {
                     "Isha",
                     convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())
                 ),
-                NotificationPrayerTime("Midnight", "11:42PM"),
-                NotificationPrayerTime("LastThird", "01:40AM")
+                NotificationPrayerTime("Midnight", "11:42 PM"),
+                NotificationPrayerTime("LastThird", "01:40 AM")
             )
         }
 
