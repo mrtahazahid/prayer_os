@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.batoulapps.adhan2.Madhab
@@ -16,6 +17,7 @@ import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFourthOnboardingBinding
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -24,6 +26,11 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
 
     private var _binding: FragmentFourthOnboardingBinding? = null
     private val binding get() = _binding!!
+
+    val viewModel: OnBoardingViewModel by viewModels()
+
+    var lat = 0.0
+    var long = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +49,9 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     }
 
     override fun initialize() {
-
+val args = arguments
+         lat =args?.getString("lat")?.toDouble() ?:0.0
+         long =args?.getString("long")?.toDouble() ?:0.0
         setPrayerTime()
 
         setOnBackPressedListener()
@@ -103,7 +112,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
             ) {
                 val selectedItem = parent?.getItemAtPosition(position).toString()
                 lifecycleScope.launch {
-                    (requireActivity() as OnBoardingActivity).viewModel.savePrayerElevation(
+                    viewModel.savePrayerElevation(
                         position.toString()
                     )
                 }
@@ -135,7 +144,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
             ) {
                 val selectedItem = parent?.getItemAtPosition(position).toString()
                 lifecycleScope.launch {
-                    (requireActivity() as OnBoardingActivity).viewModel.savePrayerJurisprudence(
+                    viewModel.savePrayerJurisprudence(
                         position.toString()
                     )
                 }
@@ -169,7 +178,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
             ) {
                 val selectedItem = parent?.getItemAtPosition(position).toString()
                 lifecycleScope.launch {
-                    (requireActivity() as OnBoardingActivity).viewModel.savePrayerMethod(
+                    viewModel.savePrayerMethod(
                         position.toString()
                     )
                 }
@@ -189,12 +198,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     }
 
     private fun setPrayerTime() {
-        val currentLatitude =
-            (requireActivity() as OnBoardingActivity).viewModel.userLatLong?.latitude ?: 0.0
-        val currentLongitude =
-            (requireActivity() as OnBoardingActivity).viewModel.userLatLong?.longitude ?: 0.0
-
-        val getPrayerTime = GetAdhanDetails.getPrayTime(currentLatitude, currentLongitude, Madhab.HANAFI,
+        val getPrayerTime = GetAdhanDetails.getPrayTime(lat, long, Madhab.HANAFI,
             Date()
         )
 

@@ -74,13 +74,15 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     @SuppressLint("SimpleDateFormat")
     override fun initialize() {
+
+
         notifications = Notification(requireContext())
 
         val location = GetAdhanDetails.getTimeZoneAndCity(
             requireContext(), viewModel.userLatLong?.latitude ?: 0.0,
             viewModel.userLatLong?.longitude ?: 0.0
         )
-        binding.textViewCity.text = location?.city
+        binding.textViewCity.text = location?.city?:"City"
 
         currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.userLatLong?.longitude ?: 0.0
@@ -91,14 +93,19 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         } else {
             Madhab.HANAFI
         }
-        val getPrayerTime = getPrayTime(currentLatitude, currentLongitude, madhab, Date())
+      //  val getPrayerTime = getPrayTime(currentLatitude, currentLongitude, madhab, Date())
         val timeZoneID = TimeZone.getDefault().id
+        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude)
         val formatter = SimpleDateFormat("hh:mm a")
-        formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
+        formatter.setTimeZone(TimeZone.getTimeZone(timeZoneID))
 
-        for (i in getPrayerTime) {
-            namazTimesList.add(i)
-        }
+        Log.d("Formatted", "initialize: ${formatter.format(Date(getPrayerTime.fajr.toEpochMilliseconds()))}")
+//        val formatter = SimpleDateFormat("hh:mm a")
+//        formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
+
+//        for (i in getPrayerTime) {
+//            namazTimesList.add(i)
+//        }
         upComingNamazTime()
         // notifications.notify(currentNamazName)
     }

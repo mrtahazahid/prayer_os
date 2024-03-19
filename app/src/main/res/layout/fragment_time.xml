@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/sf_bold"
-                    android:text="Karachi"
+                    android:text="City"
                     android:textColor="@color/yellow_text"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -1,13 +1,18 @@
 package com.iw.android.prayerapp.extension
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.DialogInterface
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.annotation.ColorRes
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.iw.android.prayerapp.R
+import com.iw.android.prayerapp.utils.GetAdhanDetails
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
@@ -27,37 +32,81 @@ fun AppCompatActivity.setStatusBarWithBlackIcon(@ColorRes color: Int) {
     this.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     this.window.statusBarColor = ContextCompat.getColor(this, color)
 }
+
 fun Fragment.setStatusBarWithBlackIcon(@ColorRes color: Int) {
     requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
     requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-    requireActivity().window.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.black)
+    requireActivity().window.statusBarColor =
+        ContextCompat.getColor(requireActivity(), R.color.black)
 }
 
- fun formatRemainingTime(secondsRemaining: Int): String {
+fun formatRemainingTime(secondsRemaining: Int): String {
     val hours = TimeUnit.SECONDS.toHours(secondsRemaining.toLong())
     val minutes = TimeUnit.SECONDS.toMinutes(secondsRemaining.toLong()) % 60
     val seconds = secondsRemaining % 60
 
     return String.format("%02d:%02d:%02d", hours, minutes, seconds)
 }
+
 @SuppressLint("SimpleDateFormat")
- fun convertToFunTime(timestamp: Long): String {
-    val date = Date(timestamp)
-    val sdf = SimpleDateFormat("hh:mm a")
-    return sdf.format(date)
+fun convertToFunTime(timestamp: Long): String {
+    val timeZoneID = TimeZone.getDefault().id
+    val formatter = SimpleDateFormat("hh:mm a")
+    formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
+    return formatter.format(Date(timestamp))
 
 
 }
 
- fun getCurrentDateFormatted(): String {
+fun showPermissionDialog(
+    context: Context,
+    permissionTextProvider: PermissionTextProvider,
+    isPermanentlyDeclined: Boolean,
+    onDismiss: () -> Unit,
+    onOkClick: () -> Unit,
+    onGoToAppSettingsClick: () -> Unit
+) {
+    val dialogBuilder = AlertDialog.Builder(context)
+    dialogBuilder.apply {
+        setTitle("Permission required")
+        setCancelable(false)
+        setMessage(permissionTextProvider.getDescription(isPermanentlyDeclined))
+        setPositiveButton(if (isPermanentlyDeclined) "Grant permission" else "OK") { dialogInterface: DialogInterface, _: Int ->
+            if (isPermanentlyDeclined) {
+                onGoToAppSettingsClick()
+            } else {
+                onOkClick()
+            }
+        }
+    }
+    val dialog = dialogBuilder.create()
+    dialog.show()
+}
+
+interface PermissionTextProvider {
+    fun getDescription(isPermanentlyDeclined: Boolean): String
+}
+
+class NotificationPermissionTextProvider : PermissionTextProvider {
+    override fun getDescription(isPermanentlyDeclined: Boolean): String {
+        return if (isPermanentlyDeclined) {
+            "It seems you permanently declined notification permission. " +
+                    "You can go to the app settings to grant it."
+        } else {
+            "Please allow notification permission to get notifications of this app."
+        }
+    }
+}
+
+fun getCurrentDateFormatted(): String {
     val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
     val calendar = Calendar.getInstance()
     return dateFormat.format(calendar.time)
 }
 
- fun getIslamicDate(): String {
+fun getIslamicDate(): String {
     val sdf = SimpleDateFormat("yyyy/M/dd")
     val currentDate = sdf.format(Date())
 

@@ -94,7 +94,6 @@ abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
     }
 
     suspend fun getUserLatLong(): UserLatLong? {
-        Log.d("getUserLatLong", repository.getUserLatLong().toString())
         return repository.getUserLatLong()
     }
 

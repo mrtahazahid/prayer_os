@@ -42,7 +42,6 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
 
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
-    private lateinit var tinyDB: TinyDB
 
 
     val adapter by lazy {
@@ -77,10 +76,16 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     }
 
     override fun initialize() {
+        currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
+        currentLongitude = viewModel.userLatLong?.longitude ?: 0.0
 
+        val location = GetAdhanDetails.getTimeZoneAndCity(
+            requireContext(), currentLatitude,
+            currentLongitude
+        )
+        binding.textViewTitle.text = location?.city ?:"City"
 
         binding.textViewDateTitle.text = getFormattedDate(dateOffset)
-        tinyDB = TinyDB(requireContext())
         setRecyclerView()
 
     }
@@ -112,9 +117,10 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            binding.textViewTitle.id-> lifecycleScope.launch{
-                Log.d("NamazDetailFajr",viewModel.getFajrDetail().toString())
+            binding.textViewTitle.id -> lifecycleScope.launch {
+                Log.d("NamazDetailFajr", viewModel.getFajrDetail().toString())
             }
+
             binding.imageViewForward.id -> {
                 dateOffset++
                 binding.textViewDateTitle.text = getFormattedDate(dateOffset)
@@ -138,8 +144,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
 
     @SuppressLint("QueryPermissionsNeeded")
     private fun openGoogleMapsNearbyPlaces(latitude: Double, longitude: Double) {
-        val gmmIntentUri =
-            Uri.parse("geo:$latitude,$longitude?q=mosque")
+        val gmmIntentUri = Uri.parse("geo:$latitude,$longitude?q=mosque")
 
         val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
         mapIntent.setPackage("com.google.android.apps.maps")
