@@ -1,17 +1,12 @@
 package com.iw.android.prayerapp.ui.main.prayerFragment
 
 import android.annotation.SuppressLint
-import android.app.PendingIntent
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.NotificationCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -31,15 +26,11 @@ import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.Instant
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import javax.inject.Inject
 
 class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListener {
 
@@ -116,19 +107,13 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         binding.incrementMinusOneTextView.setOnClickListener(this)
         binding.incrementMinusTwoTextView.setOnClickListener(this)
         binding.mainView.setOnClickListener(this)
-
     }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         countDownTimer?.cancel()
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -184,6 +169,8 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     private fun upComingNamazTime() {
         val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude)
         val currentNamaz = getTimeDifferenceToNextPrayer()
+
+        Log.d("currentNamaz", "$currentNamaz ")
 
         when (currentNamaz.currentNamazName) {
             "Fajr" -> {
@@ -367,9 +354,9 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             )
         )
 
-        val currentTimeMillis = convertTimeToMillis(convertToFunTime(Instant.now().toEpochMilli()))
-        val currentTimeMillis1159 = 1710269940000
-        val currentTimeMillis12 = 1710183600000
+        val currentTimeMillis = convertTimeToMillis(convertToFunTime(System.currentTimeMillis()))
+        val currentTimeMillis1159 = convertTimeToMillis("11:59 PM")
+        val currentTimeMillis12 = convertTimeToMillis("12:00 AM")
 
         var nextPrayerTimeIndex = 0
         var currentPrayerTimeIndex = 0
@@ -429,9 +416,10 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 0
             )
         } else if (currentTimeMillis >= currentTimeMillis12 && currentTimeMillis < prayerTimeList[0].currentNamazTime) {
-            val timeDifferenceMillis1 =
-                prayerTimeList[currentPrayerTimeIndex].currentNamazTime - currentTimeMillis
+            val timeDifferenceMillis1 = prayerTimeList[0].currentNamazTime - currentTimeMillis
             val totalDifferenceMillis1 = prayerTimeList[0].currentNamazTime - currentTimeMillis12
+
+            Log.d("current", "$timeDifferenceMillis1   $totalDifferenceMillis1")
             return PrayerTime(
                 "Fajr",
                 prayerTimeList[0].currentNamazTime,
@@ -446,6 +434,12 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 totalDifferenceMillis
             )
         }
+    }
+
+    fun timeStringToMillis(timeString: String): Long {
+        val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        val date = dateFormat.parse(timeString)
+        return date?.time ?: 0
     }
 
     fun millisToTimeFormat(millis: Long): String {

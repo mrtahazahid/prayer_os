@@ -283,7 +283,6 @@ class NotificationService : NotificationListenerService() {
 
     private fun checkIqamaTime() = applicationScope.launch {
 
-
         Log.d("time", "${prefrence.getIqamaAsrDetail()?.namazTime.toString()}")
         Log.d("time", "${prefrence.getIqamaAsrDetail()?.iqamaTime?.iqamaMinutesTime.toString()}  ")
         when (prefrence.getIqamaFajrDetail()?.iqamaType) {
@@ -374,70 +373,6 @@ class NotificationService : NotificationListenerService() {
                 )
             }
         }
-    }
-
-
-    private fun checkIqamaTimeByMinutes(minutes: String) = applicationScope.launch {
-//        val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
-//            prefrence.getUserLatLong()?.latitude ?: 0.0,
-//            prefrence.getUserLatLong()?.longitude ?: 0.0
-//        )
-//        val prayerTimeList = listOf(
-//            IqamaTimeList(
-//                "Fajr",
-//                convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds()),
-//                convertTimeToMillis(convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds()))
-//            ),
-//            IqamaTimeList(
-//                "Dhuhr",
-//                convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds()),
-//                convertTimeToMillis(convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds()))
-//            ),
-//            IqamaTimeList(
-//                "Asr",
-//                convertToFunTime(getPrayerTime.asr.toEpochMilliseconds()),
-//                convertTimeToMillis(convertToFunTime(getPrayerTime.asr.toEpochMilliseconds()))
-//            ),
-//            IqamaTimeList(
-//                "Maghrib",
-//                convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds()),
-//                convertTimeToMillis(convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds()))
-//            ),
-//            IqamaTimeList(
-//                "Isha",
-//                convertToFunTime(getPrayerTime.isha.toEpochMilliseconds()),
-//                convertTimeToMillis(convertToFunTime(getPrayerTime.isha.toEpochMilliseconds()))
-//            )
-//        )
-//
-//        val currentTimeMillis = convertTimeToMillis(convertToFunTime(Instant.now().toEpochMilli()))
-//
-//        var currentPrayerTimeIndex = 0
-//        for ((index, _) in prayerTimeList.withIndex()) {
-//            if (prayerTimeList[index].nameTimeLong <= currentTimeMillis) {
-//                currentPrayerTimeIndex = index
-//                break
-//            } else {
-//                continue
-//            }
-//        }
-//
-//        val currentNamazName = prayerTimeList[currentPrayerTimeIndex].namazName
-//        val currentNamazTime = prayerTimeList[currentPrayerTimeIndex].nameTimeString
-//
-//        Log.d("iqama",currentNamazTime)
-//        Log.d("iqama",extractMinutes(minutes).toString())
-//        Log.d("iqama",addMinutesToTime(currentNamazTime, extractMinutes(minutes)))
-//        if (isTimeMatch(addMinutesToTime(currentNamazTime, extractMinutes(minutes)))) {
-//            notifications.notify(
-//                "$currentNamazName Iqama Time",
-//                prefrence.getIqamaNotificationSetting()?.reminderSound ?: 0,
-//                false,
-//                false
-//            )
-//        }
-
-
     }
 
     private fun checkIqamaTimeByTime(time: String, namazName: String) =
