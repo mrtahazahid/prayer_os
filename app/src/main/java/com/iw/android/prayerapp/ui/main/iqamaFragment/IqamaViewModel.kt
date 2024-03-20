@@ -2,6 +2,7 @@ package com.iw.android.prayerapp.ui.main.iqamaFragment
 
 
 import androidx.lifecycle.viewModelScope
+import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.base.viewModel.BaseViewModel
 import com.iw.android.prayerapp.data.repositories.MainRepository
 import com.iw.android.prayerapp.data.response.IqamaData
@@ -29,7 +30,12 @@ class IqamaViewModel @Inject constructor(repository: MainRepository) :
     fun addList() = viewModelScope.launch {
         lat = repository.getUserLatLong()?.latitude ?: 0.0
         long = repository.getUserLatLong()?.longitude ?: 0.0
-        val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(lat, long)
+       val madhab = if (getPrayerJurisprudence().toInt() == 1) {
+            Madhab.HANAFI
+        } else {
+            Madhab.SHAFI
+        }
+        val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(lat, long,madhab)
         iqamaList.add(
             IqamaData(
                 "Fajr", convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds()),

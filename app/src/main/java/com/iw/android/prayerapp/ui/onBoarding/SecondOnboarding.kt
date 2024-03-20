@@ -7,35 +7,21 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
-import com.iw.android.prayerapp.data.response.UserLatLong
 import com.iw.android.prayerapp.databinding.FragmentSecondOnboardingBinding
 import com.iw.android.prayerapp.extension.NotificationPermissionTextProvider
 import com.iw.android.prayerapp.extension.showPermissionDialog
-import com.iw.android.prayerapp.services.gps.GpsStatusListener
-import com.iw.android.prayerapp.services.gps.LocationEvent
-import com.iw.android.prayerapp.services.gps.LocationService
-import com.iw.android.prayerapp.services.gps.TurnOnGps
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
-import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
-import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
 
 class SecondOnboarding : BaseFragment(R.layout.fragment_second_onboarding) {
 
@@ -92,15 +78,13 @@ class SecondOnboarding : BaseFragment(R.layout.fragment_second_onboarding) {
     override fun setOnClickListener() {
         binding.btnEnableNotification.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                Log.d("checkNotificationPermission",checkNotificationPermission().toString())
                 if(!checkNotificationPermission()){
                     requestNotificationPermission()
                 }else{
                     findNavController().navigate(R.id.action_secondOnboarding_to_thirdOnboarding)
                 }
             } else {
-                    openNotificationSettings()
-
+                findNavController().navigate(R.id.action_secondOnboarding_to_thirdOnboarding)
             }
         }
 

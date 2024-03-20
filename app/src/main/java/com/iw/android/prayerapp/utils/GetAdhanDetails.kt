@@ -14,8 +14,6 @@ import com.batoulapps.adhan2.Qibla
 import com.batoulapps.adhan2.data.DateComponents
 import com.iw.android.prayerapp.data.response.LocationData
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.chrono.HijrahDate
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
@@ -36,7 +34,7 @@ object GetAdhanDetails : AppCompatActivity() {
         var day = splitDate[2]
 
         val dateComponents = DateComponents(year.toInt(), month.toInt(), day.toInt())
-        val params = CalculationMethod.KARACHI.parameters.copy(madhab = madhab)
+        val params = CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab)
 
         val prayerTimes = PrayerTimes(coordinates, dateComponents, params)
         val formatter = SimpleDateFormat("hh:mm a")
@@ -92,7 +90,7 @@ object GetAdhanDetails : AppCompatActivity() {
         var day = splitDate[2]
 
         val dateComponents = DateComponents(year.toInt(), month.toInt(), day.toInt())
-        val params = CalculationMethod.KARACHI.parameters.copy(madhab = madhab)
+        val params = CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab)
 
         val prayerTimes = PrayerTimes(coordinates, dateComponents, params)
         val formatter = SimpleDateFormat("hh:mm a")
@@ -119,7 +117,7 @@ object GetAdhanDetails : AppCompatActivity() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun getPrayTimeInLong(latitude: Double, longitude: Double): PrayerTimes {
+    fun getPrayTimeInLong(latitude: Double, longitude: Double, madhab: Madhab): PrayerTimes {
         val coordinates = Coordinates(latitude, longitude);
 
         val sdf = SimpleDateFormat("yyyy/M/dd")
@@ -132,7 +130,7 @@ object GetAdhanDetails : AppCompatActivity() {
 
         val date = DateComponents(year.toInt(), month.toInt(), day.toInt());
 
-        val params = CalculationMethod.KARACHI.parameters.copy(madhab = Madhab.HANAFI)
+        val params = CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab)
 
         return PrayerTimes(coordinates, date, params)
     }

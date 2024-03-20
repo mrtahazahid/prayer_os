@@ -23,7 +23,6 @@ import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.notificationService.Notification
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.utils.GetAdhanDetails
-import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -31,7 +30,6 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
-import java.util.TimeZone
 
 class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListener {
 
@@ -93,21 +91,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         } else {
             Madhab.HANAFI
         }
-      //  val getPrayerTime = getPrayTime(currentLatitude, currentLongitude, madhab, Date())
-        val timeZoneID = TimeZone.getDefault().id
-        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude)
-        val formatter = SimpleDateFormat("hh:mm a")
-        formatter.setTimeZone(TimeZone.getTimeZone(timeZoneID))
-
-        Log.d("Formatted", "initialize: ${formatter.format(Date(getPrayerTime.fajr.toEpochMilliseconds()))}")
-//        val formatter = SimpleDateFormat("hh:mm a")
-//        formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
-
-//        for (i in getPrayerTime) {
-//            namazTimesList.add(i)
-//        }
         upComingNamazTime()
-        // notifications.notify(currentNamazName)
     }
 
     override fun setObserver() {}
@@ -181,7 +165,12 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     @SuppressLint("SetTextI18n")
     private fun upComingNamazTime() {
-        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude)
+       val madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 1) {
+            Madhab.HANAFI
+        } else {
+            Madhab.SHAFI
+        }
+        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude,madhab)
         val currentNamaz = getTimeDifferenceToNextPrayer()
 
         Log.d("currentNamaz", "$currentNamaz ")
@@ -344,7 +333,12 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     }
 
     private fun getTimeDifferenceToNextPrayer(): PrayerTime {
-        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude)
+        val madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 1) {
+            Madhab.HANAFI
+        } else {
+            Madhab.SHAFI
+        }
+        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude,madhab)
         val prayerTimeList = listOf(
             PrayerTime(
                 "Fajr",

@@ -3,7 +3,6 @@ package com.iw.android.prayerapp.extension
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.annotation.ColorRes
@@ -12,11 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.iw.android.prayerapp.R
-import com.iw.android.prayerapp.utils.GetAdhanDetails
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZoneOffset
 import java.time.chrono.HijrahDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -96,6 +92,28 @@ class NotificationPermissionTextProvider : PermissionTextProvider {
                     "You can go to the app settings to grant it."
         } else {
             "Please allow notification permission to get notifications of this app."
+        }
+    }
+}
+
+class LocationFinePermissionTextProvider : PermissionTextProvider {
+    override fun getDescription(isPermanentlyDeclined: Boolean): String {
+        return if (isPermanentlyDeclined) {
+            "It seems you permanently declined location permission. " +
+                    "You can go to the app settings to grant it."
+        } else {
+            "Please allow location permission to get namaz time."
+        }
+    }
+}
+
+class LocationGPSPermissionTextProvider : PermissionTextProvider {
+    override fun getDescription(isPermanentlyDeclined: Boolean): String {
+        return if (isPermanentlyDeclined) {
+            "It seems you permanently declined GPS permission. " +
+                    "You can go to the app settings to grant it."
+        } else {
+            "Please allow GPS permission to get namaz time."
         }
     }
 }

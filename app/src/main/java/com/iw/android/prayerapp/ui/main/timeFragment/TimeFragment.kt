@@ -11,19 +11,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.fragment.BaseFragment
-import com.iw.android.prayerapp.data.response.PrayTime
 import com.iw.android.prayerapp.databinding.FragmentTimeBinding
-import com.iw.android.prayerapp.ui.main.timeFragment.itemView.RowItemTime
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
-import com.iw.android.prayerapp.utils.AppConstant
+import com.iw.android.prayerapp.ui.main.timeFragment.itemView.RowItemTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails
-import com.iw.android.prayerapp.utils.TinyDB
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -71,11 +67,12 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
-        setObserver()
         setOnClickListener()
+        setObserver()
     }
 
     override fun initialize() {
+        setRecyclerView()
         currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.userLatLong?.longitude ?: 0.0
 
@@ -83,21 +80,21 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
             requireContext(), currentLatitude,
             currentLongitude
         )
-        binding.textViewTitle.text = location?.city ?:"City"
+        binding.textViewTitle.text = location?.city ?: "City"
 
         binding.textViewDateTitle.text = getFormattedDate(dateOffset)
-        setRecyclerView()
+
 
     }
 
     override fun setObserver() {
-        viewTypeArray.clear()
-        for (data in viewModel.prayTimeArray) {
-            viewTypeArray.add(
-                RowItemTime(data, binding.recyclerView, this, viewModel)
-            )
-        }
-        adapter.items = viewTypeArray
+            viewTypeArray.clear()
+            for (data in viewModel.prayTimeArray) {
+                viewTypeArray.add(
+                    RowItemTime(data, binding.recyclerView, this@TimeFragment, viewModel)
+                )
+            }
+            adapter.items = viewTypeArray
     }
 
 

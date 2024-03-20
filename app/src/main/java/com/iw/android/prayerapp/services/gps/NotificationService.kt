@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.prefrence.DataPreference
 import com.iw.android.prayerapp.data.response.NotificationPrayerTime
@@ -22,6 +23,7 @@ import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalTime
@@ -36,6 +38,7 @@ class NotificationService : NotificationListenerService() {
     @Inject
     lateinit var notifications: Notification
     lateinit var prefrence: DataPreference
+    lateinit var madhab: Madhab
 
     private var prayerList = arrayListOf<NotificationPrayerTime>()
 
@@ -46,11 +49,19 @@ class NotificationService : NotificationListenerService() {
     override fun onCreate() {
         super.onCreate()
         prefrence = DataPreference(this)
+
+        applicationScope.launch {
+            madhab = if (prefrence.prayerJurisprudence.first().toInt() == 1) {
+                Madhab.HANAFI
+            } else {
+                Madhab.SHAFI
+            }
+        }
         applicationScope.launch {
             val userLatLong = prefrence.getUserLatLong()
             val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
                 userLatLong?.latitude ?: 0.0,
-                userLatLong?.longitude ?: 0.0
+                userLatLong?.longitude ?: 0.0, madhab
             )
 
 
@@ -124,7 +135,10 @@ class NotificationService : NotificationListenerService() {
         // Add your logic here to check if it's time to show a notification
         val specifiedTimes = prefrence.getNotificationData()
         if (specifiedTimes.isNotEmpty()) {
-            Log.d("checkAndTriggerNotification", "checkAndTriggerNotification: ${specifiedTimes.toString()}")
+            Log.d(
+                "checkAndTriggerNotification",
+                "checkAndTriggerNotification: ${specifiedTimes.toString()}"
+            )
             for ((index, specifiedTime) in specifiedTimes.withIndex()) {
                 if (specifiedTime.namazTime != "") {
                     if (!specifiedTime.isReminderNotificationCall) {
@@ -174,7 +188,6 @@ class NotificationService : NotificationListenerService() {
         }
 
     }
-
 
 
     fun convertTimeToMillis(timeString: String): Long {

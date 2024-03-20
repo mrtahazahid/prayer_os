@@ -7,8 +7,8 @@ import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.viewModel.BaseViewModel
 import com.iw.android.prayerapp.data.repositories.MainRepository
-import com.iw.android.prayerapp.data.response.PrayTime
 import com.iw.android.prayerapp.data.response.NotificationData
+import com.iw.android.prayerapp.data.response.PrayTime
 import com.iw.android.prayerapp.data.response.PrayerTime
 import com.iw.android.prayerapp.data.response.UserLatLong
 import com.iw.android.prayerapp.extension.convertToFunTime
@@ -30,6 +30,7 @@ import javax.inject.Inject
 class TimeViewModel @Inject constructor(repository: MainRepository) :
     BaseViewModel(repository) {
     var userLatLong: UserLatLong? = null
+    var madhab: Madhab = Madhab.SHAFI
     var getSavedPrayerJurisprudence = ""
     var selectedPrayerDate = Date()
     var prayTimeArray = arrayListOf<PrayTime>()
@@ -159,7 +160,15 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
     }
 
      private fun getTimeDifferenceToNextPrayer(): PrayerTime  {
-        val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(userLatLong?.latitude ?:0.0,userLatLong?.longitude ?:0.0)
+         viewModelScope.launch {
+             madhab = if (getSavedPrayerJurisprudence.toInt() == 1) {
+                 Madhab.HANAFI
+             } else {
+                 Madhab.SHAFI
+             }
+         }
+
+        val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(userLatLong?.latitude ?:0.0,userLatLong?.longitude ?:0.0, madhab = madhab!!)
 
         val prayerTimeList = listOf(
             PrayerTime(
