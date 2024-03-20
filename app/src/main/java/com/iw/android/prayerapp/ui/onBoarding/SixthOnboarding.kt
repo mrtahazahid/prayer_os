@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
@@ -50,16 +51,18 @@ class SixthOnboarding : BaseFragment(R.layout.fragment_sixth_onboarding) {
 
         binding.notNow.setOnClickListener {
 //            findNavController().navigate(R.id.action_sixthOnboarding_to_seventhOnboarding)
+            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
         }
 
         binding.skip.setOnClickListener {
-            requireActivity().startActivity(
-                Intent(
-                    requireContext(),
-                    MainActivity::class.java
-                ).putExtra("skip", "userSkipped")
-            )
-            requireActivity().finish()
+//            requireActivity().startActivity(
+//                Intent(
+//                    requireContext(),
+//                    MainActivity::class.java
+//                ).putExtra("skip", "userSkipped")
+//            )
+//            requireActivity().finish()
+            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
         }
 
     }

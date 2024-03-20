@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -66,23 +67,26 @@ val args = arguments
         }
 
         binding.notNow.setOnClickListener {
-            requireActivity().startActivity(
-                Intent(
-                    requireContext(),
-                    MainActivity::class.java
-                ).putExtra("skip", "userSkipped")
-            )
-            requireActivity().finish()
+//            requireActivity().startActivity(
+//                Intent(
+//                    requireContext(),
+//                    MainActivity::class.java
+//                ).putExtra("skip", "userSkipped")
+//            )
+//            requireActivity().finish()
+            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
+
         }
 
         binding.skip.setOnClickListener {
-            requireActivity().startActivity(
-                Intent(
-                    requireContext(),
-                    MainActivity::class.java
-                ).putExtra("skip", "userSkipped")
-            )
-            requireActivity().finish()
+//            requireActivity().startActivity(
+//                Intent(
+//                    requireContext(),
+//                    MainActivity::class.java
+//                ).putExtra("skip", "userSkipped")
+//            )
+//            requireActivity().finish()
+            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
         }
 
     }

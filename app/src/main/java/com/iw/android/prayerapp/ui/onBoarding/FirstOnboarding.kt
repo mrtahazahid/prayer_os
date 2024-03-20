@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
@@ -49,13 +50,14 @@ class FirstOnboarding : BaseFragment(R.layout.fragment_first_onboarding) {
         }
 
         binding.skip.setOnClickListener {
-            requireActivity().startActivity(
-                Intent(
-                    requireContext(),
-                    MainActivity::class.java
-                ).putExtra("skip", "userSkipped")
-            )
-            requireActivity().finish()
+            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
+//            requireActivity().startActivity(
+//                Intent(
+//                    requireContext(),
+//                    MainActivity::class.java
+//                ).putExtra("skip", "userSkipped")
+//            )
+//            requireActivity().finish()
 
         }
     }

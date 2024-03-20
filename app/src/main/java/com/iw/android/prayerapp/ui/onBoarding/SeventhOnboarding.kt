@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -57,13 +58,15 @@ class SeventhOnboarding : BaseFragment(R.layout.fragment_seventh_onboarding) {
         }
 
         binding.notNow.setOnClickListener {
-            startActivity(Intent(requireActivity() , MainActivity::class.java))
-            requireActivity().finish()
+//            startActivity(Intent(requireActivity() , MainActivity::class.java))
+//            requireActivity().finish()
+            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
         }
 
         binding.skip.setOnClickListener {
-            startActivity(Intent(requireActivity(), MainActivity::class.java))
-            requireActivity().finish()
+//            startActivity(Intent(requireActivity(), MainActivity::class.java))
+//            requireActivity().finish()
+            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
         }
     }
 

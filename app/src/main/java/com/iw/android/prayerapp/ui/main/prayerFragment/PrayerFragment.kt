@@ -86,11 +86,11 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         currentLongitude = viewModel.userLatLong?.longitude ?: 0.0
         binding.textViewTodayIslamicDate.text = getIslamicDate()
 
-        val madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 0) {
-            Madhab.SHAFI
-        } else {
-            Madhab.HANAFI
-        }
+//        val madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 0) {
+//            Madhab.SHAFI
+//        } else {
+//            Madhab.HANAFI
+//        }
         upComingNamazTime()
     }
 
