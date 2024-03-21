@@ -262,6 +262,8 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                     "Maghrib: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}"
                 binding.textViewCurrentNamazName.text = "No Namaz Left"
                 binding.textViewCurrentNamazTime.text = "00:00"
+                binding.progressbar.progress = 0
+                binding.progressbar.max = 100
             }
         }
 

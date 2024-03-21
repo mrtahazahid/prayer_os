@@ -16,7 +16,6 @@ import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFourthOnboardingBinding
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
-import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import kotlinx.coroutines.launch
@@ -50,22 +49,18 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
 
     override fun initialize() {
 val args = arguments
-         lat =args?.getString("lat")?.toDouble() ?:0.0
-         long =args?.getString("long")?.toDouble() ?:0.0
+         lat =args?.getDouble("lat") ?:0.0
+         long =args?.getDouble("long") ?:0.0
         setPrayerTime()
-
         setOnBackPressedListener()
         spinnerMethod()
         spinnerJurisprudence()
         spinnerElevation()
-
     }
-
 
     override fun setObserver() {}
 
     override fun setOnClickListener() {
-
         binding.btnEnableNotification.setOnClickListener {
             findNavController().navigate(R.id.action_fourthOnboarding_to_seventhOnboarding)
         }

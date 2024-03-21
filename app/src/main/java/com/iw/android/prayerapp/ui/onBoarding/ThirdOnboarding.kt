@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,7 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
     val viewModel: OnBoardingViewModel by viewModels()
 
     private var isButtonForNext = false
+    private var isLatLongFetched = false
     private var lat = 0.0
     private var long = 0.0
 
@@ -69,11 +71,14 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
                             backgroundLocation.launch(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION)
                         }
                     } else {
-                        showToast("granted")
+                        isButtonForNext = true
+                        binding.btnEnableNotification.text = "Next"
                     }
                 }
 
                 it.getOrDefault(android.Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                    isButtonForNext = true
+                    binding.btnEnableNotification.text = "Next"
                 }
             }
         }
@@ -117,13 +122,20 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
             if(isButtonForNext){
                     lifecycleScope.launch {
                         val args = Bundle()
-                        args.putString("lat", viewModel.getUserLatLong()?.latitude.toString())
-                        args.putString("long", viewModel.getUserLatLong()?.longitude.toString())
-                        requireActivity().runOnUiThread {
-                            findNavController().navigate(
-                                R.id.action_thirdOnboarding_to_fourthOnboarding,
-                                args
-                            )
+                        if(viewModel.getUserLatLong()?.latitude != null && viewModel.getUserLatLong()?.longitude != null){
+                            args.putDouble("lat", viewModel.getUserLatLong()?.latitude?:0.0)
+                            args.putDouble("long", viewModel.getUserLatLong()?.longitude?:0.0)
+                            requireActivity().runOnUiThread {
+                                findNavController().navigate(
+                                    R.id.action_thirdOnboarding_to_fourthOnboarding,
+                                    args
+                                )
+                            }
+                        }else{
+                            binding.btnEnableNotification.text = "Fetching Location"
+                            binding.progress.show()
+                            requireActivity().startService(service)
+                            enableGPSLocation()
                         }
                     }
             }else{
@@ -228,9 +240,10 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
         )
         isButtonForNext = true
         binding.btnEnableNotification.text = "Next"
+        binding.progress.hide()
         lat = locationEvent.latitude ?: 0.0
         long = locationEvent.longitude ?: 0.0
-
+        Log.d("latlong","${locationEvent.longitude ?: 0.0}  ${locationEvent.longitude ?: 0.0}")
     }
 
 
