@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -148,19 +147,17 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
         }
 
         binding.notNow.setOnClickListener {
-//            findNavController().navigate(R.id.action_thirdOnboarding_to_fourthOnboarding)
-            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_thirdOnboarding_to_fourthOnboarding)
         }
 
         binding.skip.setOnClickListener {
-//            requireActivity().startActivity(
-//                Intent(
-//                    requireContext(),
-//                    MainActivity::class.java
-//                ).putExtra("skip", "userSkipped")
-//            )
-//            requireActivity().finish()
-            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
+            requireActivity().startActivity(
+                Intent(
+                    requireContext(),
+                    MainActivity::class.java
+                )
+            )
+            requireActivity().finish()
         }
 
     }

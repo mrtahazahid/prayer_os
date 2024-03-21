@@ -66,8 +66,11 @@
         <item>Umm Al-Quran University</item>
         <item>Umm Al-Qura University, Makkah</item>
         <item>Authority of Dubai - UAE</item>
-        <item>Authority of Kuwait</item>
+        <item>Kuwait</item>
+        <item>Singapore</item>
+        <item>Other</item>
         <item>Authority of Qatar</item>
+        <item>Karachi</item>
     </string-array>
 
 </resources>

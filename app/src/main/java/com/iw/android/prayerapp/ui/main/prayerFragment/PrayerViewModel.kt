@@ -14,11 +14,13 @@ class PrayerViewModel @Inject constructor(  repository: MainRepository) :
 
     var userLatLong: UserLatLong? = null
     var getSavedPrayerJurisprudence = ""
+    var getMethods = ""
 
     init {
         viewModelScope.launch {
             userLatLong = getUserLatLong()
             getSavedPrayerJurisprudence = getPrayerJurisprudence()
+            getMethods = getPrayerMethod()
         }
     }
 

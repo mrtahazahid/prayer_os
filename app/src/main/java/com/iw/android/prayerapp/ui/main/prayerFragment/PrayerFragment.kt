@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.batoulapps.adhan2.CalculationMethod
+import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
@@ -47,7 +49,8 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     lateinit var notifications: Notification
 
     private lateinit var namazTimesList: ArrayList<String>
-
+    private var method: CalculationParameters? = null
+    private var madhab: Madhab? = null
     private var isOffsetViewShow = false
 
     override fun onCreateView(
@@ -80,7 +83,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             requireContext(), viewModel.userLatLong?.latitude ?: 0.0,
             viewModel.userLatLong?.longitude ?: 0.0
         )
-        binding.textViewCity.text = location?.city?:"City"
+        binding.textViewCity.text = location?.city ?: "City"
 
         currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.userLatLong?.longitude ?: 0.0
@@ -106,6 +109,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         binding.incrementMinusTwoTextView.setOnClickListener(this)
         binding.mainView.setOnClickListener(this)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -165,15 +169,11 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     @SuppressLint("SetTextI18n")
     private fun upComingNamazTime() {
-       val madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 1) {
-            Madhab.HANAFI
-        } else {
-            Madhab.SHAFI
-        }
-        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude,madhab)
-        val currentNamaz = getTimeDifferenceToNextPrayer()
+        getMethod()
 
-        Log.d("currentNamaz", "$currentNamaz ")
+        val getPrayerTime =
+            getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
+        val currentNamaz = getTimeDifferenceToNextPrayer()
 
         when (currentNamaz.currentNamazName) {
             "Fajr" -> {
@@ -335,12 +335,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     }
 
     private fun getTimeDifferenceToNextPrayer(): PrayerTime {
-        val madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 1) {
-            Madhab.HANAFI
-        } else {
-            Madhab.SHAFI
-        }
-        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude,madhab)
+        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
         val prayerTimeList = listOf(
             PrayerTime(
                 "Fajr",
@@ -491,5 +486,84 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         return 0
     }
 
+    private fun getMethod() {
+        if (!viewModel.getSavedPrayerJurisprudence.isNullOrEmpty()) {
+            madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 1) {
+                Madhab.HANAFI
+            } else {
+                Madhab.SHAFI
+            }
+        }
 
+        if (!viewModel.getMethods.isNullOrEmpty()) {
+            method = when (viewModel.getMethods.toInt()) {
+                0 -> {
+                    CalculationMethod.MUSLIM_WORLD_LEAGUE.parameters.copy(
+                        madhab = madhab ?: Madhab.SHAFI
+                    )
+                }
+
+                1 -> {
+                    CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                2 -> {
+                    CalculationMethod.MOON_SIGHTING_COMMITTEE.parameters.copy(
+                        madhab = madhab ?: Madhab.SHAFI
+                    )
+                }
+
+                3 -> {
+                    CalculationMethod.EGYPTIAN.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                4 -> {
+                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                5 -> {
+                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                6 -> {
+                    CalculationMethod.UMM_AL_QURA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                8 -> {
+                    CalculationMethod.UMM_AL_QURA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                9 -> {
+                    CalculationMethod.DUBAI.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                10 -> {
+                    CalculationMethod.KUWAIT.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                11 -> {
+                    CalculationMethod.SINGAPORE.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                12 -> {
+                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                13 -> {
+                    CalculationMethod.QATAR.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+
+                14 -> {
+                    CalculationMethod.KARACHI.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                else -> {
+                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+            }
+        }else{
+            CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+        }
+    }
 }

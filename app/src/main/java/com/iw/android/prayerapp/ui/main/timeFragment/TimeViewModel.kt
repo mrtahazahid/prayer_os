@@ -3,6 +3,8 @@ package com.iw.android.prayerapp.ui.main.timeFragment
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.batoulapps.adhan2.CalculationMethod
+import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.viewModel.BaseViewModel
@@ -30,31 +32,31 @@ import javax.inject.Inject
 class TimeViewModel @Inject constructor(repository: MainRepository) :
     BaseViewModel(repository) {
     var userLatLong: UserLatLong? = null
-    var madhab: Madhab = Madhab.SHAFI
     var getSavedPrayerJurisprudence = ""
+    var getMethod = ""
     var selectedPrayerDate = Date()
     var prayTimeArray = arrayListOf<PrayTime>()
+    private var method: CalculationParameters? = null
+    private var madhab: Madhab? = null
 
     init {
         viewModelScope.launch {
             userLatLong = getUserLatLong()
             getSavedPrayerJurisprudence = getPrayerJurisprudence()
+            getMethod = getPrayerMethod()
+            getMethod()
             getPrayList()
+
         }
     }
 
     fun getPrayList() = viewModelScope.launch {
 
-        val madhab = if (getSavedPrayerJurisprudence.toInt() == 0 && getSavedPrayerJurisprudence!= null ) {
-            Madhab.SHAFI
-        } else {
-            Madhab.HANAFI
-        }
 
         val getPrayerTime = GetAdhanDetails.getPrayTime(
             userLatLong?.latitude ?: 0.0,
             userLatLong?.longitude ?: 0.0,
-            madhab,
+            method!!,
             selectedPrayerDate
         )
 
@@ -159,16 +161,20 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         return dateFormat.format(calendar.time)
     }
 
-     private fun getTimeDifferenceToNextPrayer(): PrayerTime  {
-         viewModelScope.launch {
-             madhab = if (getSavedPrayerJurisprudence.toInt() == 1) {
-                 Madhab.HANAFI
-             } else {
-                 Madhab.SHAFI
-             }
-         }
+    private fun getTimeDifferenceToNextPrayer(): PrayerTime {
+        viewModelScope.launch {
+            madhab = if (getSavedPrayerJurisprudence.toInt() == 1) {
+                Madhab.HANAFI
+            } else {
+                Madhab.SHAFI
+            }
+        }
 
-        val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(userLatLong?.latitude ?:0.0,userLatLong?.longitude ?:0.0, madhab = madhab!!)
+        val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
+            userLatLong?.latitude ?: 0.0,
+            userLatLong?.longitude ?: 0.0,
+            method!!
+        )
 
         val prayerTimeList = listOf(
             PrayerTime(
@@ -227,7 +233,7 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
                     nextPrayerTimeIndex = i + 1
                 }
                 break
-            }else{
+            } else {
                 continue
             }
         }
@@ -253,12 +259,8 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         )
     }
 
-    private  fun convertTimeToMillis(timeString: String): Long {
-        val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
-
-        // Set the date to a fixed value (e.g., today's date) to avoid unexpected behavior
+    private fun convertTimeToMillis(timeString: String): Long {
         val currentDate = Date()
-
         try {
             // Parse the time string by combining it with the current date
             val combinedDateTime = SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.getDefault())
@@ -279,7 +281,7 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         return 0
     }
 
-    private  fun convertAndGetCurrentTimeMillis(): Long {
+    private fun convertAndGetCurrentTimeMillis(): Long {
         return LocalDateTime.now()
             .atZone(ZoneId.systemDefault())
             .toInstant()
@@ -304,6 +306,84 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         }
 
         return 0
+    }
+
+    private fun getMethod() = viewModelScope.launch {
+        if (!getSavedPrayerJurisprudence.isNullOrEmpty()) {
+            madhab = if (getSavedPrayerJurisprudence.toInt() == 1) {
+                Madhab.HANAFI
+            } else {
+                Madhab.SHAFI
+            }
+        }
+
+        if (!getMethod.isNullOrEmpty()) {
+            method = when (getMethod.toInt()) {
+                0 -> {
+                    CalculationMethod.MUSLIM_WORLD_LEAGUE.parameters.copy(
+                        madhab = madhab ?: Madhab.SHAFI
+                    )
+                }
+
+                1 -> {
+                    CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                2 -> {
+                    CalculationMethod.MOON_SIGHTING_COMMITTEE.parameters.copy(
+                        madhab = madhab ?: Madhab.SHAFI
+                    )
+                }
+
+                3 -> {
+                    CalculationMethod.EGYPTIAN.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                4 -> {
+                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                5 -> {
+                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                6 -> {
+                    CalculationMethod.UMM_AL_QURA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                8 -> {
+                    CalculationMethod.UMM_AL_QURA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                9 -> {
+                    CalculationMethod.DUBAI.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                10 -> {
+                    CalculationMethod.KUWAIT.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                11 -> {
+                    CalculationMethod.SINGAPORE.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                12 -> {
+                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                13 -> {
+                    CalculationMethod.QATAR.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                14 -> {
+                    CalculationMethod.KARACHI.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                else -> {
+                    CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+            }
+        }
     }
 
 }

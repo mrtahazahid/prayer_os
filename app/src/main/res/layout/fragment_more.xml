@@ -46,13 +46,13 @@
                     android:id="@+id/textViewPrayWatch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:fontFamily="@font/sf_regular"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/sf_regular"
                     android:text="PRAY WATCH"
+                    android:layout_marginStart="5dp"
                     android:textColor="@color/white"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/cardViewMain"
                     app:layout_constraintTop_toBottomOf="@+id/heading" />
 
                 <com.google.android.material.card.MaterialCardView
@@ -98,13 +98,13 @@
                     android:id="@+id/textViewTerms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:fontFamily="@font/sf_regular"
                     android:layout_marginTop="20dp"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/sf_regular"
                     android:text="TERMS"
                     android:textColor="@color/white"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/carViewTerms"
                     app:layout_constraintTop_toBottomOf="@id/cardViewMain" />
 
                 <com.google.android.material.card.MaterialCardView
@@ -208,13 +208,12 @@
                     android:id="@+id/textViewSocial"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:fontFamily="@font/sf_regular"
                     android:layout_marginTop="20dp"
+                    android:fontFamily="@font/sf_regular"
                     android:text="SOCIAL"
                     android:textColor="@color/white"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/carViewSocial"
                     app:layout_constraintTop_toBottomOf="@id/carViewTerms" />
 
                 <com.google.android.material.card.MaterialCardView
@@ -320,13 +319,13 @@
                     android:id="@+id/textViewProjects"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:fontFamily="@font/sf_regular"
                     android:layout_marginTop="20dp"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/sf_regular"
                     android:text="PROJECTS"
                     android:textColor="@color/white"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/carViewProject"
                     app:layout_constraintTop_toBottomOf="@id/carViewSocial" />
 
                 <com.google.android.material.card.MaterialCardView

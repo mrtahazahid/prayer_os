@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFourthOnboardingBinding
@@ -31,6 +29,10 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
 
     var lat = 0.0
     var long = 0.0
+    private var isMethodSelected = false
+    private var isJurisprudenceSelected = false
+    private var isElevationSelected = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,9 +51,9 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     }
 
     override fun initialize() {
-val args = arguments
-         lat =args?.getDouble("lat") ?:0.0
-         long =args?.getDouble("long") ?:0.0
+        val args = arguments
+        lat = args?.getDouble("lat") ?: 0.0
+        long = args?.getDouble("long") ?: 0.0
         setPrayerTime()
         setOnBackPressedListener()
         spinnerMethod()
@@ -63,30 +65,49 @@ val args = arguments
 
     override fun setOnClickListener() {
         binding.btnEnableNotification.setOnClickListener {
-            findNavController().navigate(R.id.action_fourthOnboarding_to_seventhOnboarding)
+            lifecycleScope.launch {
+                if (!isElevationSelected) {
+
+                    viewModel.savePrayerElevation(
+                        0.toString()
+                    )
+
+                }
+                if (!isJurisprudenceSelected) {
+                    isJurisprudenceSelected = true
+
+                    viewModel.savePrayerJurisprudence(
+                        0.toString()
+                    )
+
+                }
+                if (!isMethodSelected) {
+
+                    viewModel.savePrayerMethod(
+                        0.toString()
+                    )
+
+                }
+                requireActivity().runOnUiThread {
+                    findNavController().navigate(R.id.action_fourthOnboarding_to_seventhOnboarding)
+                }
+
+            }
         }
 
         binding.notNow.setOnClickListener {
-//            requireActivity().startActivity(
-//                Intent(
-//                    requireContext(),
-//                    MainActivity::class.java
-//                ).putExtra("skip", "userSkipped")
-//            )
-//            requireActivity().finish()
-            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
+            requireActivity().startActivity(
+                Intent(requireContext(), MainActivity::class.java)
+            )
+            requireActivity().finish()
 
         }
 
         binding.skip.setOnClickListener {
-//            requireActivity().startActivity(
-//                Intent(
-//                    requireContext(),
-//                    MainActivity::class.java
-//                ).putExtra("skip", "userSkipped")
-//            )
-//            requireActivity().finish()
-            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
+            requireActivity().startActivity(
+                Intent(requireContext(), MainActivity::class.java)
+            )
+            requireActivity().finish()
         }
 
     }
@@ -109,7 +130,7 @@ val args = arguments
                 position: Int,
                 id: Long
             ) {
-                val selectedItem = parent?.getItemAtPosition(position).toString()
+                isElevationSelected = true
                 lifecycleScope.launch {
                     viewModel.savePrayerElevation(
                         position.toString()
@@ -141,7 +162,7 @@ val args = arguments
                 position: Int,
                 id: Long
             ) {
-                val selectedItem = parent?.getItemAtPosition(position).toString()
+                isJurisprudenceSelected = true
                 lifecycleScope.launch {
                     viewModel.savePrayerJurisprudence(
                         position.toString()
@@ -175,7 +196,7 @@ val args = arguments
                 position: Int,
                 id: Long
             ) {
-                val selectedItem = parent?.getItemAtPosition(position).toString()
+                isMethodSelected = true
                 lifecycleScope.launch {
                     viewModel.savePrayerMethod(
                         position.toString()
@@ -197,7 +218,8 @@ val args = arguments
     }
 
     private fun setPrayerTime() {
-        val getPrayerTime = GetAdhanDetails.getPrayTime(lat, long, Madhab.HANAFI,
+        val getPrayerTime = GetAdhanDetails.getPrayTime(
+            lat, long, viewModel.method!!,
             Date()
         )
 
@@ -218,4 +240,6 @@ val args = arguments
                 }
             })
     }
+
+
 }

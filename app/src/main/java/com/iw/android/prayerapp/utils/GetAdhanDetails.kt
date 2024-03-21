@@ -6,9 +6,8 @@ import android.location.Geocoder
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.batoulapps.adhan2.CalculationMethod
+import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Coordinates
-import com.batoulapps.adhan2.Madhab
 import com.batoulapps.adhan2.PrayerTimes
 import com.batoulapps.adhan2.Qibla
 import com.batoulapps.adhan2.data.DateComponents
@@ -21,7 +20,7 @@ import java.util.TimeZone
 
 object GetAdhanDetails : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat")
-    fun getPrayTime(latitude: Double, longitude: Double, madhab: Madhab, date: Date): ArrayList<String> {
+    fun getPrayTime(latitude: Double, longitude: Double, param: CalculationParameters, date: Date): ArrayList<String> {
         val coordinates = Coordinates(latitude, longitude)
         val timeZoneID = TimeZone.getDefault().id
 
@@ -34,9 +33,8 @@ object GetAdhanDetails : AppCompatActivity() {
         var day = splitDate[2]
 
         val dateComponents = DateComponents(year.toInt(), month.toInt(), day.toInt())
-        val params = CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab)
 
-        val prayerTimes = PrayerTimes(coordinates, dateComponents, params)
+        val prayerTimes = PrayerTimes(coordinates, dateComponents, param)
         val formatter = SimpleDateFormat("hh:mm a")
         formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
 
@@ -77,7 +75,7 @@ object GetAdhanDetails : AppCompatActivity() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun getPrayTimeWithNames(latitude: Double, longitude: Double, madhab: Madhab, date: Date): List<Pair<String, String>> {
+    fun getPrayTimeWithNames(latitude: Double, longitude: Double, param: CalculationParameters, date: Date): List<Pair<String, String>> {
         val coordinates = Coordinates(latitude, longitude)
         val timeZoneID = TimeZone.getDefault().id
 
@@ -90,9 +88,8 @@ object GetAdhanDetails : AppCompatActivity() {
         var day = splitDate[2]
 
         val dateComponents = DateComponents(year.toInt(), month.toInt(), day.toInt())
-        val params = CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab)
 
-        val prayerTimes = PrayerTimes(coordinates, dateComponents, params)
+        val prayerTimes = PrayerTimes(coordinates, dateComponents, param)
         val formatter = SimpleDateFormat("hh:mm a")
         formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
 
@@ -117,7 +114,7 @@ object GetAdhanDetails : AppCompatActivity() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun getPrayTimeInLong(latitude: Double, longitude: Double, madhab: Madhab): PrayerTimes {
+    fun getPrayTimeInLong(latitude: Double, longitude: Double,params: CalculationParameters): PrayerTimes {
         val coordinates = Coordinates(latitude, longitude);
 
         val sdf = SimpleDateFormat("yyyy/M/dd")
@@ -130,7 +127,7 @@ object GetAdhanDetails : AppCompatActivity() {
 
         val date = DateComponents(year.toInt(), month.toInt(), day.toInt());
 
-        val params = CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab)
+
 
         return PrayerTimes(coordinates, date, params)
     }

@@ -10,7 +10,6 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -90,14 +89,14 @@ class SecondOnboarding : BaseFragment(R.layout.fragment_second_onboarding) {
         }
 
         binding.notNow.setOnClickListener {
-//            findNavController().navigate(R.id.action_secondOnboarding_to_thirdOnboarding)
-            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_secondOnboarding_to_thirdOnboarding)
+
         }
 
         binding.skip.setOnClickListener {
-//            startActivity(Intent(activity, MainActivity::class.java))
-//            activity?.finish()
-            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
+           requireActivity().startActivity(Intent(requireContext(), MainActivity::class.java))
+            requireActivity().finish()
+
         }
 
     }
