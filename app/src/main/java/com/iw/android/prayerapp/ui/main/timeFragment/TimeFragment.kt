@@ -104,6 +104,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
         binding.imageViewBack.setOnClickListener(this)
         binding.imageViewForward.setOnClickListener(this)
         binding.textViewTitle.setOnClickListener(this)
+        binding.monthlyClickView.setOnClickListener(this)
 
     }
 
@@ -135,6 +136,10 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
             binding.masjidClickView.id -> {
                 openGoogleMapsNearbyPlaces(currentLatitude, currentLongitude)
             }
+            binding.monthlyClickView.id->{
+                findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToFragmentMonthlyCalender())
+            }
+
         }
 
     }

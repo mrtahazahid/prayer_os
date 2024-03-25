@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
-import com.iw.android.prayerapp.data.response.PrayTime
 import com.iw.android.prayerapp.data.response.NotificationData
+import com.iw.android.prayerapp.data.response.PrayTime
 import com.iw.android.prayerapp.databinding.RowItemPrayTimeBinding
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
@@ -101,7 +101,7 @@ class RowItemTime(
                 prayerDetailData?.reminderTime = binding.textViewSetTime.text.toString()
                 if (binding.textViewSetTime.text.toString() != "off" && binding.textViewSetTime.text.toString() != "0 min") {
                     prayerDetailData?.reminderTimeFormatted =
-                        subtractMinutesFromTime(data.namazDetail.namazTime, currentMinute)
+                        addMinutesToTime(data.namazDetail.namazTime, currentMinute)
                 }
                 savePrayerDetailData()
             }

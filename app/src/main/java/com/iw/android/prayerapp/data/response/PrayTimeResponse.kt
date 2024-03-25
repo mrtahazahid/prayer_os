@@ -43,7 +43,7 @@ data class IqamaTime(
     var iqamaMinutes: String = "",
     var iqamaMinutesTime: String = "",
 
-)
+    )
 
 
 data class SoundData(
@@ -97,6 +97,18 @@ data class NotificationData(
     var createdDate: String = "",
     var reminderTimeFormatted: String = "",
     var reminderDuaTimeDoFormatted: String = "",
+)
+
+data class MonthlyCalenderData(
+    val date: String,
+    val day: String,
+    val fjr: String,
+    val shk: String,
+    val dhr: String,
+    val asr: String,
+    val mgb: String,
+    val ish: String,
+    val hijri: String,
 )
 
 data class CurrentNamazNotificationData(

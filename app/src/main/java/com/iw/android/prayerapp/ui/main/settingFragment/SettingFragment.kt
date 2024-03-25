@@ -1,13 +1,11 @@
 package com.iw.android.prayerapp.ui.main.settingFragment
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -17,11 +15,9 @@ import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.databinding.FragmentSettingBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
-import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getTimeZoneAndCity
-import com.iw.android.prayerapp.utils.TinyDB
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
@@ -184,7 +180,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             }
 
             binding.clSchReminder.id -> {
-                openSoundDialogFragment("Notification", "Settings", true)
+            findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToNotificationFragment())
             }
 
             binding.timeView.id -> {

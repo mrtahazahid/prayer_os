@@ -9,6 +9,7 @@ import com.iw.android.prayerapp.base.prefrence.DataPreference
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.IS_ONBOARDING
 import com.iw.android.prayerapp.databinding.ActivitySplashBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,7 +32,7 @@ class SplashActivity : BaseActivity() {
         lifecycleScope.launch {
             delay(2000)
             val activity = if (DataPreference(this@SplashActivity).getBooleanData(IS_ONBOARDING)) {
-                OnBoardingActivity::class.java
+                MainActivity::class.java
             } else {
                 OnBoardingActivity::class.java
             }

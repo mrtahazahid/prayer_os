@@ -46,6 +46,9 @@
                 app:argType="string" />
 
         </action>
+        <action
+            android:id="@+id/action_timeFragment_to_fragmentMonthlyCalender"
+            app:destination="@id/fragmentMonthlyCalender" />
     </fragment>
     <fragment
         android:id="@+id/qiblaFragment"
@@ -74,6 +77,9 @@
         <action
             android:id="@+id/action_settingFragment_to_iqamaFragment"
             app:destination="@id/iqamaFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
     </fragment>
     <fragment
         android:id="@+id/moreFragment"
@@ -136,4 +142,14 @@
         android:id="@+id/iqamaFragment"
         android:name="com.iw.android.prayerapp.ui.main.iqamaFragment.IqamaFragment"
         android:label="IqamaFragment" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.iw.android.prayerapp.ui.main.notificationList.NotificationFragment"
+        android:label="NotificationFragment"
+        tools:layout="@layout/fragment_notification_list"/>
+    <fragment
+        android:id="@+id/fragmentMonthlyCalender"
+        android:name="com.iw.android.prayerapp.ui.main.monthlyCalender.FragmentMonthlyCalender"
+        android:label="FragmentMonthlyCalender"
+        tools:layout="@layout/fragment_monthly_calendar"/>
 </navigation>
