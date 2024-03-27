@@ -3,11 +3,10 @@ package com.iw.android.prayerapp.services.gps
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.service.notification.NotificationListenerService
-import android.service.notification.StatusBarNotification
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -36,7 +35,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NotificationService : NotificationListenerService() {
+class NotificationService : Service() {
     @Inject
     lateinit var notifications: Notification
     lateinit var prefrence: DataPreference
@@ -118,19 +117,6 @@ class NotificationService : NotificationListenerService() {
             }
         }
     }
-
-    override fun onNotificationRemoved(
-        sbn: StatusBarNotification?,
-        rankingMap: RankingMap?,
-        reason: Int
-    ) {
-        if (sbn?.packageName == application.packageName) {
-            if (reason == REASON_APP_CANCEL || reason == REASON_APP_CANCEL_ALL || reason == REASON_CLICK) {
-                notifications.player?.stop()
-            }
-        }
-    }
-
 
     private fun checkAndTriggerNotification() = applicationScope.launch {
         Log.d("service", "Called")
@@ -251,7 +237,6 @@ class NotificationService : NotificationListenerService() {
         startForeground(1, notification)
         return START_STICKY
     }
-
 
     override fun onBind(intent: Intent): IBinder? = null
     private fun createNotificationChannel() {
@@ -404,36 +389,6 @@ class NotificationService : NotificationListenerService() {
             }
 
         }
-    }
-
-    fun addMinutesToTime(currentTime: String, minutesToAdd: Int): String {
-        // Parse the current time string
-        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
-        val parsedTime = LocalTime.parse(currentTime, formatter)
-
-        // Add minutes to the parsed time
-        val resultTime = parsedTime.plusMinutes(minutesToAdd.toLong())
-
-        // Format the result time back to "hh:mm a" format
-        return resultTime.format(formatter)
-    }
-
-    fun subtractMinutesFromTime(currentTime: String, minutesToSubtract: Int): String {
-        // Parse the current time string
-        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
-        val parsedTime = LocalTime.parse(currentTime, formatter)
-
-        // Subtract minutes from the parsed time
-        val resultTime = parsedTime.minusMinutes(minutesToSubtract.toLong())
-
-        // Format the result time back to "hh:mm a" format
-        return resultTime.format(formatter)
-    }
-
-    fun extractMinutes(input: String): Int {
-        val regex = """(\d+)\s+min""".toRegex()
-        val matchResult = regex.find(input)
-        return matchResult?.groupValues?.get(1)?.toInt() ?: 0
     }
 
     private fun getMethod() = applicationScope.launch {

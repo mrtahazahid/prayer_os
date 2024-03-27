@@ -11,14 +11,7 @@ import com.google.android.gms.location.*
 import com.iw.android.prayerapp.base.prefrence.DataPreference
 import com.iw.android.prayerapp.notificationService.Notification
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
-import java.text.SimpleDateFormat
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,7 +36,7 @@ class LocationService : Service() {
         super.onCreate()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000).setIntervalMillis(500).build()
+        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 60000).setIntervalMillis(60000).build()
         locationCallback = object : LocationCallback() {
             override fun onLocationAvailability(p0: LocationAvailability) {
                 super.onLocationAvailability(p0)
@@ -55,12 +48,6 @@ class LocationService : Service() {
             }
         }
         prefrence = DataPreference(this)
-
-//        notificationManager = this.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val notificationChannel = NotificationChannel(CHANNEL_ID, "locations", NotificationManager.IMPORTANCE_HIGH)
-//            notificationManager?.createNotificationChannel(notificationChannel)
-//        }
     }
 
     @Suppress("MissingPermission")
@@ -93,24 +80,7 @@ class LocationService : Service() {
             latitude = location?.latitude,
             longitude = location?.longitude
         ))
-
-//        startForeground(NOTIFICATION_ID,getNotification())
     }
-
-//    fun getNotification():Notification{
-//        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-//            .setContentTitle("Location Updates")
-//            .setContentText(
-//                "Latitude--> ${location?.latitude}\nLongitude --> ${location?.longitude}"
-//            )
-//            .setPriority(NotificationCompat.PRIORITY_HIGH)
-//            .setOngoing(true)
-//        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
-//            notification.setChannelId(CHANNEL_ID)
-//        }
-//        return notification.build()
-//    }
-
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)

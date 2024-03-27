@@ -30,7 +30,8 @@
         tools:targetApi="31">
         <activity
             android:name=".ui.activities.onBoarding.OnBoardingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".services.gps.LocationService"
@@ -54,21 +55,9 @@
 
         <service
             android:name="com.iw.android.prayerapp.services.gps.NotificationService"
-            android:exported="true"
+            android:exported="false"
             android:foregroundServiceType="specialUse"
-            android:label="service"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.service.notification.default_filter_types"
-                android:value="conversations|alerting" />
-            <meta-data
-                android:name="android.service.notification.disabled_filter_types"
-                android:value="ongoing|silent" />
-        </service>
+            android:label="service" />
     </application>
 
     <queries>
