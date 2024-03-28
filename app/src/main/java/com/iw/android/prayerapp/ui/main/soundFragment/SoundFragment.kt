@@ -17,7 +17,6 @@ import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.data.response.SoundData
 import com.iw.android.prayerapp.databinding.FragmentSoundBinding
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
-import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerSoundFragmentArgs
 import com.iw.android.prayerapp.ui.main.soundFragment.itemView.OnItemClick
 import com.iw.android.prayerapp.ui.main.soundFragment.itemView.RowItemSound
 import com.iw.android.prayerapp.utils.GetAdhanSound
@@ -94,7 +93,7 @@ class SoundFragment : BaseFragment(R.layout.fragment_sound), View.OnClickListene
 
         for (data in selectedList) {
             viewTypeArray.add(
-                RowItemSound(data, this)
+                RowItemSound(data, this,selectedItemPosition)
             )
         }
         adapter.items = viewTypeArray

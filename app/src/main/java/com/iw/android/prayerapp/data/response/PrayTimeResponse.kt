@@ -80,23 +80,18 @@ data class NotificationPrayerTime(
 data class NotificationData(
     var namazName: String = "",
     var namazTime: String = "",
-    var notificationSoundPosition: Int = 0,
     var notificationSound: String = "Tones",
     var sound: Int? = null,
     var reminderSound: Int? = null,
-    var notificationSoundId: Int = 0,
-    var reminderNotificationSoundPosition: Int = 0,
     var reminderNotificationSound: String = "Tones",
-    var reminderNotificationSoundId: Int = 0,
-    var reminderTime: String = "off",
     var duaType: String = DuaTypeEnum.OFF.getValue(),
-    var duaReminder: String = "off",
     var duaTime: String = "12:00 AM",
-    var isNotificationCall: Boolean = false,
-    var isReminderNotificationCall: Boolean = false,
+    var reminderTimeMinutes: String = "12:00 AM",
+    var reminderTime: String = "12:00 AM",
     var createdDate: String = "",
-    var reminderTimeFormatted: String = "",
-    var reminderDuaTimeDoFormatted: String = "",
+    var duaReminderMinutes: String = "off",
+    var isForNotification: Boolean = false,
+    var currentNotificationTypePosition: Int = 0
 )
 
 data class MonthlyCalenderData(
@@ -113,8 +108,11 @@ data class MonthlyCalenderData(
 
 data class CurrentNamazNotificationData(
     val currentNamazName: String,
-    val soundName: String,
+    val soundName: String = "Adhan",
+    val soundToneName: String= "Tones",
+    val position: Int,
     val isSoundSelected: Boolean,
+    val isForAdhan: Boolean,
     val isVibrate: Boolean,
     val isSilent: Boolean,
     val isOff: Boolean,
@@ -143,7 +141,9 @@ data class PrayerSoundData(
     val type: String,
     val isImageForwardShow: Boolean,
     var isItemSelected: Boolean,
-    val selectedItemTitle: String = ""
+    val selectedItemAdhanTitle: String = "",
+    val selectedItemTonesTitle: String = "",
+    val soundName: String = "Tones",
 )
 
 

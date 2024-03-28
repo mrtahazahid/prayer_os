@@ -1,6 +1,5 @@
 package com.iw.android.prayerapp.base.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iw.android.prayerapp.base.repo.BaseRepository
@@ -122,7 +121,7 @@ abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
         repository.deleteCurrentNamazNotificationData()
     }
 
-    suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData =
+    suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData? =
         repository.getCurrentNamazNotificationData()
 
     suspend fun saveIqamaFajrDetail(prayerDetail: IqamaData)  {

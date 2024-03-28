@@ -1,8 +1,6 @@
 package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment
 
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,26 +14,14 @@ import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
-import com.iw.android.prayerapp.data.response.PrayerSoundData
 import com.iw.android.prayerapp.databinding.FragmentPrayerSoundBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
-import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.OnClick
-import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.PrayerEnumType
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.RowItemPrayerSound
-import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.SoundViewModel
-import com.iw.android.prayerapp.ui.main.settingFragment.SettingViewModel
 import com.iw.android.prayerapp.utils.CopyBottomSheet
 import com.iw.android.prayerapp.utils.GetAdhanSound.prayerSoundList
-import com.iw.android.prayerapp.utils.TinyDB
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 
 
 class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.OnClickListener,
@@ -48,8 +34,13 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     private val args by navArgs<PrayerSoundFragmentArgs>()
 
     private var isItemClick = true
-    private var soundName = ""
     private var sound: Int? = null
+    private var notificationTypPosition: Int = 0
+    private var selectedSound: Int = 0
+    private var selectedSoundAdhanName: String = "Adhan"
+    private var selectedSoundToneName: String = "Tones"
+    private var selectedPosition: Int = 0
+    private var isForAdhan = false
     private var isVibrateSelected = false
     private var isOffSelected = false
     private var isSoundSelected = false
@@ -96,6 +87,15 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
 
 
     override fun initialize() {
+        lifecycleScope.launch {
+            selectedSound = viewModel.getCurrentNamazNotificationData()?.sound ?: 0
+            selectedPosition = viewModel.getCurrentNamazNotificationData()?.position ?: 0
+            isForAdhan = viewModel.getCurrentNamazNotificationData()?.isForAdhan ?: false
+            selectedSoundAdhanName =
+                viewModel.getCurrentNamazNotificationData()?.soundName ?: "Adhan"
+            selectedSoundToneName =
+                viewModel.getCurrentNamazNotificationData()?.soundToneName ?: "Tones"
+        }
         when (args.title) {
             "Fajr" -> {
                 binding.textViewTitle.text = "${args.title} Sound"
@@ -124,12 +124,33 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     override fun setObserver() {
 
         viewTypeArray.clear()
+        prayerSoundList[selectedPosition].isItemSelected = true
         for (data in prayerSoundList) {
-            viewTypeArray.add(
-                RowItemPrayerSound(data, args.title, this, this)
-            )
+            if(isForAdhan){
+                viewTypeArray.add(
+                    RowItemPrayerSound(
+                        data,
+                        args.title,
+                        this,
+                        selectedSound, selectedSoundAdhanName, this
+
+                    )
+                )
+            }else{
+                viewTypeArray.add(
+                    RowItemPrayerSound(
+                        data,
+                        args.title,
+                        this,
+                        selectedSound, selectedSoundToneName, this
+
+                    )
+                )
+            }
+
+
+            adapter.items = viewTypeArray
         }
-        adapter.items = viewTypeArray
     }
 
     override fun setOnClickListener() {
@@ -140,19 +161,28 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.imageViewBack.id -> {
-                Log.d("soundName",soundName)
-                Log.d("isDataForSave",isDataForSave.toString())
-                if(isDataForSave){
+                if (isDataForSave) {
                     binding.progress.show()
                     lifecycleScope.launch {
-                        viewModel.saveCurrentNamazNotificationData(CurrentNamazNotificationData(args.title,soundName,isSoundSelected,isVibrateSelected,isSilentSelected,isOffSelected,sound))
+                        viewModel.saveCurrentNamazNotificationData(
+                            CurrentNamazNotificationData(
+                                args.title,
+                                selectedSoundAdhanName, selectedSoundToneName,
+                                notificationTypPosition,
+                                isSoundSelected,
+                                isForAdhan,
+                                isVibrateSelected,
+                                isSilentSelected,
+                                isOffSelected,
+                                sound,
+                            )
+                        )
                         delay(3000)
-                        Log.d("soundName",viewModel.getCurrentNamazNotificationData().toString())
                         binding.progress.hide()
                         findNavController().popBackStack()
                     }
 
-                }else{
+                } else {
                     findNavController().popBackStack()
                 }
 
@@ -160,7 +190,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
             }
 
             binding.imageViewCopy.id -> {
-               val bottomSheet = CopyBottomSheet()
+                val bottomSheet = CopyBottomSheet()
                 bottomSheet.show(parentFragmentManager, bottomSheet.tag)
             }
 
@@ -186,7 +216,8 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
             checked.isItemSelected = false
         }
         isDataForSave = true
-        when(position){
+        notificationTypPosition = position
+        when (position) {
             2 -> {
                 isVibrateSelected = true
                 isSoundSelected = false
@@ -214,21 +245,37 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
         binding.recyclerView.adapter?.notifyDataSetChanged()
     }
 
-    override fun onSoundSelected(soundName: String, soundPosition: Int, sound: Int?, position: Int) {
+    override fun onSoundSelected(
+        soundName: String,
+        soundPosition: Int,
+        sound: Int?,
+        position: Int,
+        isForNotification: Boolean
+    ) {
         for (checked in prayerSoundList) {
             checked.isItemSelected = false
         }
-
         // Select the clicked item
         prayerSoundList[position].isItemSelected = true
         // Notify the adapter about the change in the entire dataset
 
         isDataForSave = true
         when (position) {
-            0,1 -> {
-                this.soundName = soundName
+            0 -> {
+                this.selectedSoundAdhanName = soundName
                 this.sound = sound
                 isSoundSelected = true
+                isForAdhan = true
+                isVibrateSelected = false
+                isSilentSelected = false
+                isOffSelected = false
+            }
+
+            1 -> {
+                this.selectedSoundToneName = soundName
+                this.sound = sound
+                isSoundSelected = true
+                isForAdhan = false
                 isVibrateSelected = false
                 isSilentSelected = false
                 isOffSelected = false

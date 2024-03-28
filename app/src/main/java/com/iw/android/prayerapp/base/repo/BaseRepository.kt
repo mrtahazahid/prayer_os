@@ -219,7 +219,7 @@ abstract class BaseRepository(
 
     }
 
-    suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData = Gson().fromJson(
+    suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData? = Gson().fromJson(
         preferences.getStringData(DataPreference.CURRENT_NAMAZ_NOTIFICATION_DATA),
         CurrentNamazNotificationData::class.java
     )

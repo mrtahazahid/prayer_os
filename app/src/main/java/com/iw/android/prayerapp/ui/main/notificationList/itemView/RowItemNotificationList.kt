@@ -18,7 +18,7 @@ class RowItemNotificationList(private val data: NotificationData) : ViewType<Not
 
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemNotificationListBinding).also { binding ->
-binding.textViewTime.text = data.namazTime
+            binding.textViewTime.text = data.namazTime
         }
     }
 }

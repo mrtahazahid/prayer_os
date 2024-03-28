@@ -3,7 +3,7 @@ package com.iw.android.prayerapp.utils
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.data.response.PrayerSoundData
 import com.iw.android.prayerapp.data.response.SoundData
-import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.PrayerEnumType
+import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerEnumType
 
 object GetAdhanSound {
 
@@ -199,7 +199,8 @@ object GetAdhanSound {
                 "Adhan", R.drawable.ic_mike, PrayerEnumType.ADHAN.getValue(),
                 isImageForwardShow = true,
                 isItemSelected = true,
-                selectedItemTitle = "adhan"
+                selectedItemAdhanTitle = "adhan",
+                selectedItemTonesTitle = "Tones",
             )
         )
         prayerSoundList.add(

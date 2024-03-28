@@ -1,4 +1,4 @@
-package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView
+package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment
 
 enum class PrayerEnumType(private val type: String) {
 

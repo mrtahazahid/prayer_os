@@ -1,4 +1,4 @@
-package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView
+package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment
 
 import com.iw.android.prayerapp.base.viewModel.BaseViewModel
 import com.iw.android.prayerapp.data.repositories.MainRepository

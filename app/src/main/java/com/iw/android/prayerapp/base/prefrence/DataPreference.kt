@@ -217,14 +217,10 @@ class DataPreference @Inject constructor(
 
         if (existingItem != null) {
             // If the item already exists, update its values
-            existingItem.notificationSoundPosition = newItem.notificationSoundPosition
             existingItem.notificationSound = newItem.notificationSound
-            existingItem.reminderNotificationSoundPosition =
-                newItem.reminderNotificationSoundPosition
             existingItem.reminderNotificationSound = newItem.reminderNotificationSound
             existingItem.reminderTime = newItem.reminderTime
             existingItem.duaType = newItem.duaType
-            existingItem.duaReminder = newItem.duaReminder
             existingItem.duaTime = newItem.duaTime
             // Update other fields as needed
         } else {

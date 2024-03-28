@@ -125,44 +125,44 @@ class NotificationService : Service() {
         if (specifiedTimes.isNotEmpty()) {
             for ((index, specifiedTime) in specifiedTimes.withIndex()) {
                 if (specifiedTime.namazTime != "") {
-                    if (!specifiedTime.isReminderNotificationCall) {
 
-                        if (specifiedTime.duaTime != "off") {
-                            val reminderTime =
-                                convertTimeToMillis(specifiedTime.namazTime) - minutesToMillis(
-                                    extractNumberFromString(specifiedTime.reminderTime)
-                                )
-                            val formattedTime = millisToTimeFormat(reminderTime)
-                            if (isTimeMatch(
-                                    formattedTime
-                                )
-                            ) {
-                                notifications.notify(
-                                    specifiedTime.namazName,
-                                    specifiedTime.sound ?: 0,
-                                    false,
-                                    false
-                                )
-                                prefrence.updateNotificationData(index, specifiedTime)
-                                delay(1500)
-                                break
-                            }
-                        } else {
-                            if (!specifiedTime.isNotificationCall) {
-                                if (isTimeMatch(specifiedTime.namazTime)) {
-                                    notifications.notify(
-                                        specifiedTime.namazName,
-                                        specifiedTime.sound ?: 0,
-                                        false,
-                                        false
-                                    )
-                                    prefrence.updateNotificationData(index, specifiedTime)
-                                    delay(1500)
-                                    break
-                                }
-                            }
+
+                    if (specifiedTime.duaTime != "off") {
+                        val reminderTime =
+                            convertTimeToMillis(specifiedTime.namazTime) - minutesToMillis(
+                                extractNumberFromString(specifiedTime.reminderTime)
+                            )
+                        val formattedTime = millisToTimeFormat(reminderTime)
+                        if (isTimeMatch(
+                                formattedTime
+                            )
+                        ) {
+                            notifications.notify(
+                                specifiedTime.namazName,
+                                specifiedTime.sound ?: 0,
+                                false,
+                                false
+                            )
+                            prefrence.updateNotificationData(index, specifiedTime)
+                            delay(1500)
+                            break
                         }
+
+
+                        if (isTimeMatch(specifiedTime.namazTime)) {
+                            notifications.notify(
+                                specifiedTime.namazName,
+                                specifiedTime.sound ?: 0,
+                                false,
+                                false
+                            )
+                            prefrence.updateNotificationData(index, specifiedTime)
+                            delay(1500)
+                            break
+                        }
+
                     }
+
                 } else {
                     continue
                 }
