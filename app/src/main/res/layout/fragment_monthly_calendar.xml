@@ -76,130 +76,105 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewDate"
-                    android:layout_width="match_parent"
+                    android:layout_width="8dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_regular"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:text="Date"
                     android:layout_weight="10"
                     android:textColor="@color/app_grey"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textSize="12sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewDay"
-                    android:layout_width="match_parent"
+                    android:layout_width="15dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_regular"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:text="Day"
                     android:layout_weight="10"
                     android:textColor="@color/app_grey"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textSize="12sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewFajr"
-                    android:layout_width="match_parent"
+                    android:layout_width="15dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_regular"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:text="FJR"
                     android:layout_weight="10"
                     android:textColor="@color/app_grey"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textSize="12sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewSHK"
-                    android:layout_width="match_parent"
+                    android:layout_width="15dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_regular"
                     android:gravity="start"
                     android:text="SHK"
                     android:textColor="@color/app_grey"
-                    android:textSize="14sp"
-                    android:layout_weight="10"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textSize="12sp"
+                    android:layout_weight="10" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewDHR"
-                    android:layout_width="match_parent"
+                    android:layout_width="15dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_regular"
                     android:gravity="start"
+                    android:paddingStart="6dp"
                     android:text="DHR"
                     android:textColor="@color/app_grey"
-                    android:textSize="14sp"
-                    android:layout_weight="10"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textSize="12sp"
+                    android:layout_weight="10" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewASR"
-                    android:layout_width="match_parent"
+                    android:layout_width="15dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_regular"
                     android:gravity="center"
                     android:text="ASR"
                     android:layout_weight="10"
                     android:textColor="@color/app_grey"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textSize="12sp" />
 
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewMGB"
-                    android:layout_width="match_parent"
+                    android:layout_width="15dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_regular"
                     android:gravity="center"
                     android:text="MGB"
                     android:layout_weight="10"
                     android:textColor="@color/app_grey"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textSize="12sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewISH"
-                    android:layout_width="match_parent"
+                    android:layout_width="15dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_regular"
                     android:gravity="center"
                     android:text="ISH"
                     android:layout_weight="10"
                     android:textColor="@color/app_grey"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textSize="12sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewHijri"
-                    android:layout_width="match_parent"
+                    android:layout_width="15dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_regular"
-                    android:gravity="center"
+                    android:gravity="end"
+                    android:paddingEnd="6dp"
                     android:text="Hijri"
                     android:layout_weight="10"
                     android:textColor="@color/app_grey"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -210,6 +185,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginHorizontal="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/actionBar">
 
@@ -218,7 +194,6 @@
                 android:id="@+id/frameLayoutRecyclerView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -50,7 +50,7 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         }
     }
 
-    fun getPrayList() = viewModelScope.launch {
+   suspend fun getPrayList()  {
 
 
         val getPrayerTime = GetAdhanDetails.getPrayTime(

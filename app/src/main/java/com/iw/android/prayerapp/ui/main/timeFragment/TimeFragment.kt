@@ -163,7 +163,10 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
         val targetDate: Date = calendar.time
         viewModel.selectedPrayerDate = targetDate
         viewModel.prayTimeArray.clear()
-        viewModel.getPrayList()
+        lifecycleScope.launch {
+            viewModel.getPrayList()
+        }
+
 
         setObserver()
 

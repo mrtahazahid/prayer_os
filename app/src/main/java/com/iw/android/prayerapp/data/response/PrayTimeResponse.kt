@@ -86,7 +86,7 @@ data class NotificationData(
     var reminderNotificationSound: String = "Tones",
     var duaType: String = DuaTypeEnum.OFF.getValue(),
     var duaTime: String = "12:00 AM",
-    var reminderTimeMinutes: String = "12:00 AM",
+    var reminderTimeMinutes: String = "off",
     var reminderTime: String = "12:00 AM",
     var createdDate: String = "",
     var duaReminderMinutes: String = "off",

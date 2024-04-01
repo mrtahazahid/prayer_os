@@ -11,6 +11,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.batoulapps.adhan2.CalculationMethod
+import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFourthOnboardingBinding
@@ -219,7 +221,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
 
     private fun setPrayerTime() {
         val getPrayerTime = GetAdhanDetails.getPrayTime(
-            lat, long, viewModel.method!!,
+            lat, long, viewModel.method?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = Madhab.SHAFI),
             Date()
         )
 

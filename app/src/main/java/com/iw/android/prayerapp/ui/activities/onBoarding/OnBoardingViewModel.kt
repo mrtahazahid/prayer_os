@@ -26,17 +26,20 @@ class OnBoardingViewModel @Inject constructor( repository: MainRepository) :
             userLatLong = getUserLatLong()
             getSavedPrayerJurisprudence = getPrayerJurisprudence()
             getMethod = getPrayerMethod()
+            getMethod()
         }
-        getMethod()
+
     }
 
-    private fun getMethod() = viewModelScope.launch {
+    private fun getMethod() {
         if (!getSavedPrayerJurisprudence.isNullOrEmpty()) {
             madhab = if (getSavedPrayerJurisprudence.toInt() == 1) {
                 Madhab.HANAFI
             } else {
                 Madhab.SHAFI
             }
+        }else{
+            Madhab.HANAFI
         }
 
         if (!getMethod.isNullOrEmpty()) {
