@@ -99,7 +99,7 @@ class RowItemTime(
                 binding.textViewSetTime.text = incrementReminderTimeMinutes()
                 prayerDetailData?.reminderTimeMinutes = binding.textViewSetTime.text.toString()
                 if (binding.textViewSetTime.text.toString() != "off" && binding.textViewSetTime.text.toString() != "0 min") {
-                    prayerDetailData?.reminderTime = addMinutesToTime(data.namazDetail.namazTime, reminderTimeMinutes)
+                    prayerDetailData?.reminderTime = subtractMinutesFromTime(data.time, reminderTimeMinutes)
                 }
                 savePrayerDetailData()
             }
@@ -109,7 +109,7 @@ class RowItemTime(
                 prayerDetailData?.reminderTimeMinutes = binding.textViewSetTime.text.toString()
                 if (binding.textViewSetTime.text.toString() != "off" && binding.textViewSetTime.text.toString() != "0 min") {
                     prayerDetailData?.reminderTime =
-                        subtractMinutesFromTime(data.namazDetail.namazTime, reminderTimeMinutes)
+                        subtractMinutesFromTime(data.time, reminderTimeMinutes)
                 }
                 savePrayerDetailData()
             }
@@ -119,7 +119,7 @@ class RowItemTime(
                 prayerDetailData?.duaReminderMinutes = binding.textViewDuaSetTime.text.toString()
                 if (binding.textViewSetTime.text.toString() != "off" && binding.textViewSetTime.text.toString() != "0 min") {
                     prayerDetailData?.duaTime =
-                        addMinutesToTime(data.namazDetail.namazTime, duaReminderTimeMinutes)
+                        addMinutesToTime(data.time, duaReminderTimeMinutes)
                 } else {
                     prayerDetailData?.duaType = DuaTypeEnum.OFF.getValue()
                 }
@@ -131,7 +131,7 @@ class RowItemTime(
                 prayerDetailData?.duaReminderMinutes = binding.textViewDuaSetTime.text.toString()
                 if (binding.textViewSetTime.text.toString() != "off" && binding.textViewSetTime.text.toString() != "0 min") {
                     prayerDetailData?.duaTime =
-                        addMinutesToTime(data.namazDetail.namazTime, duaReminderTimeMinutes)
+                        addMinutesToTime(data.time, duaReminderTimeMinutes)
                 } else {
                     prayerDetailData?.duaType = DuaTypeEnum.OFF.getValue()
                 }
@@ -179,7 +179,8 @@ class RowItemTime(
                         duaType = prayerDetailData?.duaType?:"off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off"
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                     )
                 )
 
@@ -198,7 +199,8 @@ class RowItemTime(
                         duaType = prayerDetailData?.duaType?:"off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off"
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                     )
                 )
 
@@ -217,7 +219,8 @@ class RowItemTime(
                         duaType = prayerDetailData?.duaType?:"off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off"
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
 
                         )
                 )
@@ -237,7 +240,8 @@ class RowItemTime(
                         duaType = prayerDetailData?.duaType?:"off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off"
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                         )
                 )
 
@@ -256,7 +260,8 @@ class RowItemTime(
                         duaType = prayerDetailData?.duaType?:"off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off"
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                     )
                 )
 
@@ -275,7 +280,8 @@ class RowItemTime(
                         duaType = prayerDetailData?.duaType?:"off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off"
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                     )
                 )
 
@@ -294,7 +300,8 @@ class RowItemTime(
                         duaType = prayerDetailData?.duaType?:"off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off"
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                     )
                 )
 
@@ -313,7 +320,8 @@ class RowItemTime(
                         duaType = prayerDetailData?.duaType?:"off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off"
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                     )
                 )
 

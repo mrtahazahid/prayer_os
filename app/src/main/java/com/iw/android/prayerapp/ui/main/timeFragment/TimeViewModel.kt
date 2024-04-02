@@ -120,7 +120,7 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
             PrayTime(
                 R.drawable.ic_notification_mute,
                 "Midnight",
-                "11:42PM",
+                convertToFunTime(1712083320000),
                 formatDateWithCurrentTime(selectedPrayerDate),
                 getMidNightDetail() ?: NotificationData()
             )
@@ -130,11 +130,14 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
             PrayTime(
                 R.drawable.ic_notification_mute,
                 "Last Third",
-                "1:40AM",
+                convertToFunTime(1712004000000),
                 formatDateWithCurrentTime(selectedPrayerDate),
                 getLastNightDetail() ?: NotificationData()
             )
         )
+
+
+
         // Get the upcoming namaz using getTimeDifferenceToNextPrayer function
         val upcomingNamaz = getTimeDifferenceToNextPrayer()
 
@@ -201,17 +204,15 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
                 convertTimeToMillis(convertToFunTime(getPrayerTime.isha.toEpochMilliseconds()))
             ), PrayerTime(
                 "Midnight",
-                convertTimeToMillis("11:42 PM")
+                1712083320000
             ), PrayerTime(
                 "LastThird",
-                convertTimeToMillis("10:40 AM")
+                1712004000000
             )
         )
 
         val currentTimeMillis = convertAndGetCurrentTimeMillis()
 
-        Log.d("fajr", getPrayerTime.fajr.toEpochMilliseconds().toString())
-        Log.d("currentTimeMillis", currentTimeMillis.toString())
 
         // Iterate through the array to find the next prayer time
         var nextPrayerTimeIndex = 0
