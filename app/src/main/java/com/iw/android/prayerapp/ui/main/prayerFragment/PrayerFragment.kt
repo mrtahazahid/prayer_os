@@ -75,7 +75,10 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     @SuppressLint("SimpleDateFormat")
     override fun initialize() {
-
+lifecycleScope.launch {
+    Log.d("noti",viewModel.getAllNotificationData().size.toString())
+    Log.d("noti",viewModel.getAllNotificationData().toString())
+}
 
         notifications = Notification(requireContext())
 
@@ -328,7 +331,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                     null
                 }
             }
-            notifications.notify(currentNamazName, sound ?: 0, false, false)
+            notifications.notify(currentNamazName, "Namaz Time",sound ?: 0, false, false)
             getTimeDifferenceToNextPrayer()
         }
 

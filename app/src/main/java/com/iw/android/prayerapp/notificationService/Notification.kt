@@ -23,14 +23,13 @@ import javax.inject.Singleton
 import kotlin.random.Random
 
 
-
-
 @Singleton
 class Notification @Inject constructor(@ApplicationContext private val context: Context) {
 
     var player: MediaPlayer? = null
 
     private val applicationScope = ProcessLifecycleOwner.get().lifecycleScope
+
     companion object {
         private const val channelId = "110"
         private const val NOTIFICATION_ID_MULTIPLIER = 1000
@@ -41,7 +40,13 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         private const val NOTIFICATION_IMPORTANCE = NotificationManager.IMPORTANCE_HIGH
     }
 
-    fun notify(currentNamazTitle: String,sound:Int,isForVibrate:Boolean,isForSilent:Boolean) {
+    fun notify(
+        currentNamazTitle: String,
+        description: String,
+        sound: Int,
+        isForVibrate: Boolean,
+        isForSilent: Boolean
+    ) {
         val intent = Intent(context, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
@@ -54,46 +59,40 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
 
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, pendingFlag)
 
-
-      //  val customSoundUri =Uri.parse("android.resource://${context.packageName}/${R.raw.adhan_abdul_basit}" )
-      //  RingtoneManager.setActualDefaultRingtoneUri(context,RingtoneManager.TYPE_ALARM,customSoundUri)
-
-        val notificationBuilder =  if(isForVibrate){
+        val notificationBuilder = if (isForVibrate) {
             NotificationCompat.Builder(context, channelId).apply {
                 setSmallIcon(R.mipmap.app_icon)
                 setContentTitle(currentNamazTitle)
-                setContentText("Namaz Time")
+                setContentText(description)
                 setAutoCancel(true)
-                setVibrate(longArrayOf(0, 100, 200, 300))
+                setVibrate(longArrayOf(0, 100, 200, 300,400,500))
                 priority = NotificationCompat.PRIORITY_HIGH
-                setSilent(true)
                 setContentIntent(pendingIntent)
             }
-        }else if(isForSilent){
+        } else if (isForSilent) {
             NotificationCompat.Builder(context, channelId).apply {
                 setSmallIcon(R.mipmap.app_icon)
                 setContentTitle(currentNamazTitle)
-                setContentText("Namaz Time")
+                setContentText(description)
                 setAutoCancel(true)
                 setSilent(true)
                 priority = NotificationCompat.PRIORITY_HIGH
-                setSilent(true)
+
                 setContentIntent(pendingIntent)
             }
-        }else{
+        } else {
             NotificationCompat.Builder(context, channelId).apply {
                 setSmallIcon(R.mipmap.app_icon)
                 setContentTitle(currentNamazTitle)
-                setContentText("Namaz Time")
+                setContentText(description)
                 setAutoCancel(true)
-                setVibrate(longArrayOf(0, 100, 200, 300))
                 priority = NotificationCompat.PRIORITY_HIGH
-                setSilent(true)
+                setSilent(false)
                 setContentIntent(pendingIntent)
 
                 try {
                     applicationScope.launch {
-                        val uri = Uri.parse("android.resource://" + context.packageName + "/" + sound)
+                        val uri =  Uri.parse("android.resource://" + context.packageName + "/" + sound)
                         player = MediaPlayer.create(context, uri)
                         player?.isLooping = false // This will play sound in repeatable mode.
                         player?.start()
@@ -105,7 +104,6 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                 }
             }
         }
-
 
 
         val notificationManager =
@@ -125,6 +123,7 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         )
         notificationManager.notify(notificationId, notificationBuilder.build())
     }
+
     private val notificationIntent = Intent(context, MainActivity::class.java)
     fun startForegroundService() {
         notificationIntent.putExtra("fromNotification", true)

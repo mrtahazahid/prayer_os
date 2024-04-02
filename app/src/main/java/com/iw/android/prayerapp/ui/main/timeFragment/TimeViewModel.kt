@@ -162,13 +162,13 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
     }
 
     private fun getTimeDifferenceToNextPrayer(): PrayerTime {
-        viewModelScope.launch {
+
             madhab = if (getSavedPrayerJurisprudence.toInt() == 1) {
                 Madhab.HANAFI
             } else {
                 Madhab.SHAFI
             }
-        }
+        
 
         val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
             userLatLong?.latitude ?: 0.0,
@@ -201,10 +201,10 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
                 convertTimeToMillis(convertToFunTime(getPrayerTime.isha.toEpochMilliseconds()))
             ), PrayerTime(
                 "Midnight",
-                convertTimeToMillis(convertToFunTime(convertTimeToEpochMilliseconds("11:42 PM")))
+                convertTimeToMillis("11:42 PM")
             ), PrayerTime(
                 "LastThird",
-                convertTimeToMillis(convertToFunTime(convertTimeToEpochMilliseconds("10:40 AM")))
+                convertTimeToMillis("10:40 AM")
             )
         )
 
@@ -308,7 +308,7 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         return 0
     }
 
-    private fun getMethod() = viewModelScope.launch {
+    private suspend fun getMethod()  {
         if (!getSavedPrayerJurisprudence.isNullOrEmpty()) {
             madhab = if (getSavedPrayerJurisprudence.toInt() == 1) {
                 Madhab.HANAFI

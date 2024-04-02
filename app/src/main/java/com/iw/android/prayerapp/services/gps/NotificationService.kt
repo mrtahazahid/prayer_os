@@ -51,8 +51,8 @@ class NotificationService : Service() {
     override fun onCreate() {
         super.onCreate()
         prefrence = DataPreference(this)
-        getMethod()
         applicationScope.launch {
+            getMethod()
             if (!prefrence.prayerJurisprudence.first().isNullOrEmpty()) {
                 madhab = if (prefrence.prayerJurisprudence.first().toInt() == 1) {
                     Madhab.HANAFI
@@ -60,7 +60,6 @@ class NotificationService : Service() {
                     Madhab.SHAFI
                 }
             }
-
 
             val userLatLong = prefrence.getUserLatLong()
             val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
@@ -118,27 +117,17 @@ class NotificationService : Service() {
         }
     }
 
-    private fun checkAndTriggerNotification() = applicationScope.launch {
+    private suspend fun checkAndTriggerNotification() {
         Log.d("service", "Called")
         // Add your logic here to check if it's time to show a notification
         val specifiedTimes = prefrence.getNotificationData()
         if (specifiedTimes.isNotEmpty()) {
             for ((index, specifiedTime) in specifiedTimes.withIndex()) {
                 if (specifiedTime.namazTime != "") {
-
-
                     if (specifiedTime.duaTime != "off") {
-                        val reminderTime =
-                            convertTimeToMillis(specifiedTime.namazTime) - minutesToMillis(
-                                extractNumberFromString(specifiedTime.reminderTime)
-                            )
-                        val formattedTime = millisToTimeFormat(reminderTime)
-                        if (isTimeMatch(
-                                formattedTime
-                            )
-                        ) {
+                        if (isTimeMatch(specifiedTime.duaTime)) {
                             notifications.notify(
-                                specifiedTime.namazName,
+                                specifiedTime.namazName, "${specifiedTime.namazName} Dhua Time",
                                 specifiedTime.sound ?: 0,
                                 false,
                                 false
@@ -151,7 +140,7 @@ class NotificationService : Service() {
 
                         if (isTimeMatch(specifiedTime.namazTime)) {
                             notifications.notify(
-                                specifiedTime.namazName,
+                                specifiedTime.namazName, "Namaz Time",
                                 specifiedTime.sound ?: 0,
                                 false,
                                 false
@@ -176,10 +165,6 @@ class NotificationService : Service() {
         val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
         val date = dateFormat.parse(timeString)
         return date?.time ?: 0
-    }
-
-    fun minutesToMillis(minutes: Int): Long {
-        return minutes.toLong() * 60 * 1000
     }
 
     fun millisToTimeFormat(millis: Long): String {
@@ -228,7 +213,7 @@ class NotificationService : Service() {
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, pendingFlag)
         val notification: android.app.Notification = NotificationCompat.Builder(this, "113")
-            .setContentTitle("Prayer App is Running")
+            .setContentTitle("Prayer App is Running in background")
             .setContentText("Click to open")
             .setSmallIcon(R.mipmap.app_icon)
             .setContentIntent(pendingIntent)
@@ -257,7 +242,7 @@ class NotificationService : Service() {
         for (time in prayerList) {
             if (currentTime == time.currentNamazTime && !time.isCalled && notificationDetail != null) {
                 notifications.notify(
-                    time.currentNamazName,
+                    time.currentNamazName, "Namaz Time",
                     notificationDetail.sound ?: 0,
                     notificationDetail.isVibrate,
                     notificationDetail.isSilent
@@ -269,7 +254,7 @@ class NotificationService : Service() {
         }
     }
 
-    private fun checkIqamaTime() = applicationScope.launch {
+    private suspend fun checkIqamaTime() {
         when (prefrence.getIqamaFajrDetail()?.iqamaType) {
             DuaTypeEnum.OFF.getValue() -> {}
             DuaTypeEnum.MINUTES.getValue() -> {
@@ -360,26 +345,28 @@ class NotificationService : Service() {
         }
     }
 
-    private fun checkIqamaTimeByTime(time: String, namazName: String) =
-        applicationScope.launch {
-            if (isTimeMatch(time)) {
-                notifications.notify(
-                    "$namazName Iqama Time",
-                    prefrence.getIqamaNotificationSetting()?.reminderSound ?: 0,
-                    false,
-                    false
-                )
-            }
+    private suspend fun checkIqamaTimeByTime(time: String, namazName: String) =
+
+        if (isTimeMatch(time)) {
+            notifications.notify(
+                "Jummah", "Iqama time",
+                prefrence.getIqamaNotificationSetting()?.reminderSound ?: 0,
+                false,
+                false
+            )
+        } else {
+            null
         }
 
-    private fun jummahTimeCheck() = applicationScope.launch {
+
+    private suspend fun jummahTimeCheck() {
         val calendar = Calendar.getInstance()
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         if (dayOfWeek == Calendar.FRIDAY) {
             if (!prefrence.getJummuahSetting()?.reminderTimeFormatted.isNullOrEmpty()) {
                 if (isTimeMatch(prefrence.getJummuahSetting()!!.reminderTimeFormatted)) {
                     notifications.notify(
-                        "Khutba reminder",
+                        "Jummah", "Khutba reminder",
                         prefrence.getIqamaNotificationSetting()?.reminderSound ?: 0,
                         false,
                         false
@@ -391,7 +378,7 @@ class NotificationService : Service() {
         }
     }
 
-    private fun getMethod() = applicationScope.launch {
+    private suspend fun getMethod() {
         if (prefrence.prayerJurisprudence.first().isNullOrEmpty()) {
             madhab = if (prefrence.prayerJurisprudence.first().toInt() == 1) {
                 Madhab.HANAFI

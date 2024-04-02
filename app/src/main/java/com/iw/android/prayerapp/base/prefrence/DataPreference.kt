@@ -213,15 +213,11 @@ class DataPreference @Inject constructor(
         val list: MutableList<NotificationData> = Json.decodeFromString(jsonString)
 
         // Check if NotificationData with the same createdDate already exists
-        val existingItem = list.find { it.createdDate == newItem.createdDate }
-
+        val existingItem = list.find { it.createdDate == newItem.createdDate && it.namazName == newItem.namazName }
         if (existingItem != null) {
-            // If the item already exists, update its values
-            existingItem.notificationSound = newItem.notificationSound
-            existingItem.reminderNotificationSound = newItem.reminderNotificationSound
-            existingItem.reminderTime = newItem.reminderTime
-            existingItem.duaType = newItem.duaType
-            existingItem.duaTime = newItem.duaTime
+
+list.remove(existingItem)
+list.add(newItem)
             // Update other fields as needed
         } else {
             // If the item doesn't exist, add it to the list
