@@ -276,7 +276,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                     "Asr: ${convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())}"
                 binding.textViewFourthNamaz.text =
                     "Maghrib: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}"
-                binding.textViewCurrentNamazName.text = "Fajar"
+                binding.textViewCurrentNamazName.text = "No Namaz Left"
                 binding.textViewCurrentNamazTime.text = "00:00"
                 binding.progressbar.progress = 0
                 binding.progressbar.max = 100
@@ -395,7 +395,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
         return if (currentTimeMillis >= prayerTimeList[4].currentNamazTime && currentTimeMillis <= currentTimeMillis1159) {
             return PrayerTime(
-                "Fajar",
+                "No Namaz Left",
                 0,
                 0,
                 0
