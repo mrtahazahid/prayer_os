@@ -78,7 +78,7 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         )
         prayTimeArray.add(
             PrayTime(
-                R.drawable.ic_gallery,
+                R.drawable.ic_mike,
                 "Dhuhr",
                 getPrayerTime[2],
                 formatDateWithCurrentTime(selectedPrayerDate),

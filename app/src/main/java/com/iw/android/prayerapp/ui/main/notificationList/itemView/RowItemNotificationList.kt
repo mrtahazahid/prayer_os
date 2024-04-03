@@ -1,5 +1,6 @@
 package com.iw.android.prayerapp.ui.main.notificationList.itemView
 
+import android.view.View
 import androidx.databinding.ViewDataBinding
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
@@ -18,8 +19,17 @@ class RowItemNotificationList(private val data: NotificationData) : ViewType<Not
 
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemNotificationListBinding).also { binding ->
-            binding.textViewTime.text = data.namazTime
-            binding.textViewTitle.text = data.namazName
+            if(data.reminderTime == ""){
+                binding.secondView.visibility = View.GONE
+            }else{
+                binding.secondView.visibility = View.VISIBLE
+                binding.textViewReminderTitle.text = "${data.namazName} in ${data.reminderTimeMinutes}"
+                binding.textViewReminderTime.text = "${data.createdDate} at ${data.reminderTime}"
+            }
+            binding.textViewTime.text = "${data.createdDate} at ${data.namazTime}"
+            binding.textViewTitle.text = "${data.namazName} at ${data.namazTime}"
+
+
         }
     }
 }

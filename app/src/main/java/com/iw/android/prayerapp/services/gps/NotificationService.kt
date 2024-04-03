@@ -118,8 +118,6 @@ class NotificationService : Service() {
     }
 
     private suspend fun checkAndTriggerNotification() {
-        Log.d("service", "Called")
-        // Add your logic here to check if it's time to show a notification
         val specifiedTimes = prefrence.getNotificationData()
         if (specifiedTimes.isNotEmpty()) {
             for ((index, specifiedTime) in specifiedTimes.withIndex()) {
@@ -132,7 +130,7 @@ class NotificationService : Service() {
                                 false,
                                 false
                             )
-                            prefrence.updateNotificationData(index, specifiedTime)
+                            prefrence.updateNotificationData(specifiedTime)
                             delay(1500)
                             break
                         }
@@ -145,7 +143,20 @@ class NotificationService : Service() {
                                 false,
                                 false
                             )
-                            prefrence.updateNotificationData(index, specifiedTime)
+                            prefrence.updateNotificationData(specifiedTime)
+                            delay(1500)
+                            break
+                        }
+
+                        if (isTimeMatch(specifiedTime.reminderTime)) {
+                            notifications.notify(
+                                specifiedTime.namazName, "Namaz reminder",
+                                specifiedTime.sound ?: 0,
+                                false,
+                                false
+                            )
+                            specifiedTime.reminderTime = ""
+                            prefrence.saveNotificationData(specifiedTime)
                             delay(1500)
                             break
                         }
