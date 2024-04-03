@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -103,6 +104,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.locationView.setOnClickListener(this)
         binding.imageViewAddHijri.setOnClickListener(this)
         binding.iqamaView.setOnClickListener(this)
+        binding.system.setOnClickListener(this)
         binding.imageViewMinusHijri.setOnClickListener(this)
         binding.imageViewMinusCountUpTime.setOnClickListener(this)
         binding.imageViewAddCountUpTime.setOnClickListener(this)
@@ -161,6 +163,12 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             binding.iqamaView.id->{
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToIqamaFragment())
             }
+
+            binding.system.id->{
+                Toast.makeText(binding.system.context, "Work in process", Toast.LENGTH_SHORT).show()
+            }
+
+
             binding.imageViewAddCountUpTime.id -> {
                 binding.textViewCountUpTimeSetter.text = incrementACountUpDate()
 
