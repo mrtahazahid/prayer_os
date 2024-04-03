@@ -73,6 +73,10 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
 
     override fun initialize() {
         setRecyclerView()
+        lifecycleScope.launch {
+            viewModel.getPrayList()
+        }
+
         currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.userLatLong?.longitude ?: 0.0
 

@@ -166,6 +166,10 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
 
     override fun setOnClickListener() {
         binding.imageViewBack.setOnClickListener(this)
+        binding.jummahView.setOnClickListener(this)
+        binding.backView.setOnClickListener(this)
+        binding.notificationView.setOnClickListener(this)
+        binding.displayView.setOnClickListener(this)
         binding.textViewTitle.setOnClickListener(this)
         binding.imageViewDisplay.setOnClickListener(this)
         binding.imageViewAdd.setOnClickListener(this)
@@ -284,7 +288,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
                 binding.progress.hide()
             }
 
-            binding.imageViewJumuah.id -> {
+            binding.jummahView.id, binding.imageViewJumuah.id -> {
                 if (!isJummuahDetailShow) {
                     binding.jummahDetail.show()
                     binding.textViewType.gone()
@@ -304,11 +308,11 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
             }
 
 
-            binding.imageViewBack.id -> {
+            binding.backView.id, binding.imageViewBack.id -> {
                 findNavController().popBackStack()
             }
 
-            binding.imageViewDisplay.id -> {
+            binding.displayView.id, binding.imageViewDisplay.id -> {
                 if (!isDisplayDetailShow) {
                     binding.displayDetailView.show()
                     isDisplayDetailShow = true
@@ -320,7 +324,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
                 }
             }
 
-            binding.imageViewNotification.id -> {
+            binding.notificationView.id,   binding.imageViewNotification.id -> {
                 if (!isNotificationDetailShow) {
                     binding.detailViews.show()
                     isNotificationDetailShow = true

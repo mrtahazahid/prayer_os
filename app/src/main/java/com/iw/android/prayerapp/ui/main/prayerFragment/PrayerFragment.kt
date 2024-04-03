@@ -28,8 +28,6 @@ import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 
@@ -149,22 +147,32 @@ lifecycleScope.launch {
 
             binding.incrementPlusTwoTextView.id -> {
                 binding.textViewTodayIslamicDate.text = getIslamicDateByOffSet(2)
+                isOffsetViewShow = false
+                binding.cardViewOffSet.gone()
             }
 
             binding.incrementPlusOneTextView.id -> {
                 binding.textViewTodayIslamicDate.text = getIslamicDateByOffSet(1)
+                isOffsetViewShow = false
+                binding.cardViewOffSet.gone()
             }
 
             binding.incrementPlusZeroTextView.id -> {
                 binding.textViewTodayIslamicDate.text = getIslamicDateByOffSet(0)
+                isOffsetViewShow = false
+                binding.cardViewOffSet.gone()
             }
 
             binding.incrementMinusOneTextView.id -> {
                 binding.textViewTodayIslamicDate.text = getIslamicDateByOffSet(-1)
+                isOffsetViewShow = false
+                binding.cardViewOffSet.gone()
             }
 
             binding.incrementMinusTwoTextView.id -> {
                 binding.textViewTodayIslamicDate.text = getIslamicDateByOffSet(-2)
+                isOffsetViewShow = false
+                binding.cardViewOffSet.gone()
             }
         }
     }
@@ -386,20 +394,15 @@ lifecycleScope.launch {
                 }
                 break
             } else {
-                //     showToast("lesss")
                 continue
             }
 
 
         }
 
-
-        // Calculate the time difference between the current time and the next prayer time
         val timeDifferenceMillis =
             prayerTimeList[currentPrayerTimeIndex].currentNamazTime - currentTimeMillis
 
-
-        // Calculate the total time difference between the previous and up-coming prayer
         val totalDifferenceMillis =
             when (prayerTimeList[currentPrayerTimeIndex].currentNamazName) {
                 "Fajr" -> {
@@ -427,7 +430,6 @@ lifecycleScope.launch {
             val timeDifferenceMillis1 = prayerTimeList[0].currentNamazTime - currentTimeMillis
             val totalDifferenceMillis1 = prayerTimeList[0].currentNamazTime - currentTimeMillis12
 
-            Log.d("current", "$timeDifferenceMillis1   $totalDifferenceMillis1")
             return PrayerTime(
                 "Fajr",
                 prayerTimeList[0].currentNamazTime,
@@ -444,27 +446,8 @@ lifecycleScope.launch {
         }
     }
 
-    fun timeStringToMillis(timeString: String): Long {
-        val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
-        val date = dateFormat.parse(timeString)
-        return date?.time ?: 0
-    }
-
-    fun millisToTimeFormat(millis: Long): String {
-        val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
-        val date = Date(millis)
-        return dateFormat.format(date)
-    }
-
-    fun convertAndGetCurrentTimeMillis(): Long {
-        return LocalDateTime.now()
-            .atZone(ZoneId.systemDefault())
-            .toInstant()
-            .toEpochMilli()
-    }
 
     fun convertTimeToMillis(timeString: String): Long {
-        val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
 
         // Set the date to a fixed value (e.g., today's date) to avoid unexpected behavior
         val currentDate = Date()
@@ -555,7 +538,6 @@ lifecycleScope.launch {
                 13 -> {
                     CalculationMethod.QATAR.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
                 }
-
 
                 14 -> {
                     CalculationMethod.KARACHI.parameters.copy(madhab = madhab ?: Madhab.SHAFI)

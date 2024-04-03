@@ -95,11 +95,12 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
 
     private fun setOnClickListener() {
         binding.imageViewBack.setOnClickListener(this)
+        binding.backView.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            binding.imageViewBack.id -> {
+            binding.backView.id , binding.imageViewBack.id -> {
                 listener?.onDataPassed(selectedItem, selectedItemPosition, sound, isForNotification)
                 dismiss()
             }

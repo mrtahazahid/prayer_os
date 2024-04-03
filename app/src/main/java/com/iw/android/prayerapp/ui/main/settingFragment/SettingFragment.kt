@@ -92,6 +92,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
     override fun setOnClickListener() {
         binding.imageViewCalculationArrow.setOnClickListener(this)
+        binding.calculationView.setOnClickListener(this)
         binding.imageViewLocationArrowButton.setOnClickListener(this)
         binding.imageViewAddGeofence.setOnClickListener(this)
         binding.imageViewMinusGeofence.setOnClickListener(this)
@@ -99,6 +100,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewSnoozeAdd.setOnClickListener(this)
         binding.clSchReminder.setOnClickListener(this)
         binding.timeView.setOnClickListener(this)
+        binding.locationView.setOnClickListener(this)
         binding.imageViewAddHijri.setOnClickListener(this)
         binding.iqamaView.setOnClickListener(this)
         binding.imageViewMinusHijri.setOnClickListener(this)
@@ -232,7 +234,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 viewModel.setGeofenceRadius(geofence)
             }
 
-            binding.imageViewCalculationArrow.id -> {
+            binding.calculationView.id,   binding.imageViewCalculationArrow.id -> {
                 if (!isCalViewShow) {
                     binding.imageViewCalculationArrow.setImageResource(R.drawable.ic_drop_down)
                     binding.calculationMainDetailViews.visibility = View.VISIBLE
@@ -247,7 +249,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 }
             }
 
-            binding.imageViewLocationArrowButton.id -> {
+          binding.locationView.id,  binding.imageViewLocationArrowButton.id -> {
                 if (!isLocViewShow) {
                     binding.imageViewLocationArrowButton.setImageResource(R.drawable.ic_drop_down)
                     binding.locationDetailViews.visibility = View.VISIBLE

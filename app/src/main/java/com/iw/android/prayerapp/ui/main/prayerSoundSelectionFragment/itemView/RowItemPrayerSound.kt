@@ -21,7 +21,7 @@ class RowItemPrayerSound(
     val listener: OnClick
 ) : ViewType<PrayerSoundData>, OnDataSelected {
     private var position = 0
-    private lateinit var _binding:RowItemPraySoundBinding
+    private lateinit var _binding: RowItemPraySoundBinding
 
     override fun layoutId(): Int {
         return R.layout.row_item_pray_sound
@@ -36,6 +36,15 @@ class RowItemPrayerSound(
             _binding = binding
             this.position = position
             binding.view4.visibility = if (data.title == "Off") View.GONE else View.VISIBLE
+            when (data.type) {
+                PrayerEnumType.ADHAN.getValue(), PrayerEnumType.TONES.getValue() -> {
+                    binding.textViewSelectSoundTitle.visibility = View.VISIBLE
+                }
+
+                else -> {
+                    binding.textViewSelectSoundTitle.visibility = View.GONE
+                }
+            }
 
             binding.imageViewCheck.visibility = if (data.isItemSelected) View.VISIBLE else View.GONE
             binding.imageViewDropDownMenu.visibility =
@@ -66,9 +75,8 @@ class RowItemPrayerSound(
         sound: Int?,
         isSoundForNotification: Boolean
     ) {
-
-        listener.onSoundSelected(soundName, soundPosition, sound, position,isSoundForNotification)
         _binding.textViewSelectSoundTitle.text = soundName
+        listener.onSoundSelected(soundName, soundPosition, sound, position, isSoundForNotification)
     }
 
     private fun openSoundDialogFragment(
@@ -90,5 +98,11 @@ class RowItemPrayerSound(
 
 interface OnClick {
     fun onItemClick(position: Int)
-    fun onSoundSelected(soundName: String, soundPosition: Int, sound: Int?, position: Int,isForNotification: Boolean)
+    fun onSoundSelected(
+        soundName: String,
+        soundPosition: Int,
+        sound: Int?,
+        position: Int,
+        isForNotification: Boolean
+    )
 }

@@ -29,12 +29,13 @@ class RowItemSound(private val data: SoundData, private val listener: OnItemClic
                 View.GONE
             }
 
-            binding.imageViewCheck.visibility = if(data.soundFile == selectedSound){
-                View.VISIBLE
-            }else{
-                View.GONE
-            }
+//            binding.imageViewCheck.visibility = if(data.soundFile == selectedSound){
+//                View.VISIBLE
+//            }else{
+//                View.GONE
+//            }
             binding.mainView.setOnClickListener {
+                data.isSoundSelected = true
                 binding.imageViewCheck.visibility =  View.VISIBLE
                 listener.onClick(position, data)
 

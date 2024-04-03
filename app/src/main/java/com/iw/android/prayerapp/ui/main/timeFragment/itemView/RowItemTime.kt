@@ -69,7 +69,30 @@ class RowItemTime(
             binding.textViewReminderSound.text = data.namazDetail.reminderNotificationSound
             binding.textViewSetTime.text = data.namazDetail.reminderTimeMinutes
             binding.textViewDuaSetTime.text = data.namazDetail.duaReminderMinutes
-
+            binding.mainView.setOnClickListener {
+                if (!isViewShow) {
+                    binding.imageViewDropDownMenu.setImageResource(R.drawable.ic_drop_down)
+                    binding.detailViews.visibility = View.VISIBLE
+                    recyclerView.smoothScrollToPosition(0)
+                    binding.textViewTime.setTextColor(
+                        ContextCompat.getColorStateList(
+                            binding.textViewTime.context,
+                            R.color.yellow_text
+                        )
+                    )
+                    isViewShow = true
+                } else {
+                    binding.detailViews.visibility = View.GONE
+                    binding.imageViewDropDownMenu.setImageResource(R.drawable.ic_forward)
+                    binding.textViewTime.setTextColor(
+                        ContextCompat.getColorStateList(
+                            binding.textViewTime.context,
+                            R.color.white
+                        )
+                    )
+                    isViewShow = false
+                }
+            }
             binding.imageViewDropDownMenu.setOnClickListener {
                 if (!isViewShow) {
                     binding.imageViewDropDownMenu.setImageResource(R.drawable.ic_drop_down)
@@ -99,7 +122,8 @@ class RowItemTime(
                 binding.textViewSetTime.text = incrementReminderTimeMinutes()
                 prayerDetailData?.reminderTimeMinutes = binding.textViewSetTime.text.toString()
                 if (binding.textViewSetTime.text.toString() != "off" && binding.textViewSetTime.text.toString() != "0 min") {
-                    prayerDetailData?.reminderTime = subtractMinutesFromTime(data.time, reminderTimeMinutes)
+                    prayerDetailData?.reminderTime =
+                        subtractMinutesFromTime(data.time, reminderTimeMinutes)
                 }
                 savePrayerDetailData()
             }
@@ -171,15 +195,16 @@ class RowItemTime(
                     NotificationData(
                         namazName = data.title,
                         namazTime = data.time,
-                        notificationSound = prayerDetailData?.notificationSound?:"Tones",
-                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes?:"off",
-                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound?:"Tones",
+                        notificationSound = prayerDetailData?.notificationSound ?: "Tones",
+                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
+                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound
+                            ?: "Tones",
                         duaTime = prayerDetailData?.duaTime ?: "12:00 AM",
-                        sound = prayerDetailData?.sound?:0,
-                        duaType = prayerDetailData?.duaType?:"off",
+                        sound = prayerDetailData?.sound ?: 0,
+                        duaType = prayerDetailData?.duaType ?: "off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
                         reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                     )
                 )
@@ -191,15 +216,16 @@ class RowItemTime(
                     NotificationData(
                         namazName = data.title,
                         namazTime = data.time,
-                        notificationSound = prayerDetailData?.notificationSound?:"Tones",
-                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes?:"off",
-                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound?:"Tones",
+                        notificationSound = prayerDetailData?.notificationSound ?: "Tones",
+                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
+                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound
+                            ?: "Tones",
                         duaTime = prayerDetailData?.duaTime ?: "12:00 AM",
-                        sound = prayerDetailData?.sound?:0,
-                        duaType = prayerDetailData?.duaType?:"off",
+                        sound = prayerDetailData?.sound ?: 0,
+                        duaType = prayerDetailData?.duaType ?: "off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
                         reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                     )
                 )
@@ -211,18 +237,19 @@ class RowItemTime(
                     NotificationData(
                         namazName = data.title,
                         namazTime = data.time,
-                        notificationSound = prayerDetailData?.notificationSound?:"Tones",
-                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes?:"off",
-                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound?:"Tones",
+                        notificationSound = prayerDetailData?.notificationSound ?: "Tones",
+                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
+                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound
+                            ?: "Tones",
                         duaTime = prayerDetailData?.duaTime ?: "12:00 AM",
-                        sound = prayerDetailData?.sound?:0,
-                        duaType = prayerDetailData?.duaType?:"off",
+                        sound = prayerDetailData?.sound ?: 0,
+                        duaType = prayerDetailData?.duaType ?: "off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
                         reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
 
-                        )
+                    )
                 )
 
             }
@@ -232,17 +259,18 @@ class RowItemTime(
                     NotificationData(
                         namazName = data.title,
                         namazTime = data.time,
-                        notificationSound = prayerDetailData?.notificationSound?:"Tones",
-                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes?:"off",
-                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound?:"Tones",
+                        notificationSound = prayerDetailData?.notificationSound ?: "Tones",
+                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
+                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound
+                            ?: "Tones",
                         duaTime = prayerDetailData?.duaTime ?: "12:00 AM",
-                        sound = prayerDetailData?.sound?:0,
-                        duaType = prayerDetailData?.duaType?:"off",
+                        sound = prayerDetailData?.sound ?: 0,
+                        duaType = prayerDetailData?.duaType ?: "off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
                         reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
-                        )
+                    )
                 )
 
             }
@@ -252,15 +280,16 @@ class RowItemTime(
                     NotificationData(
                         namazName = data.title,
                         namazTime = data.time,
-                        notificationSound = prayerDetailData?.notificationSound?:"Tones",
-                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes?:"off",
-                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound?:"Tones",
+                        notificationSound = prayerDetailData?.notificationSound ?: "Tones",
+                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
+                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound
+                            ?: "Tones",
                         duaTime = prayerDetailData?.duaTime ?: "12:00 AM",
-                        sound = prayerDetailData?.sound?:0,
-                        duaType = prayerDetailData?.duaType?:"off",
+                        sound = prayerDetailData?.sound ?: 0,
+                        duaType = prayerDetailData?.duaType ?: "off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
                         reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                     )
                 )
@@ -272,15 +301,16 @@ class RowItemTime(
                     NotificationData(
                         namazName = data.title,
                         namazTime = data.time,
-                        notificationSound = prayerDetailData?.notificationSound?:"Tones",
-                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes?:"off",
-                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound?:"Tones",
+                        notificationSound = prayerDetailData?.notificationSound ?: "Tones",
+                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
+                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound
+                            ?: "Tones",
                         duaTime = prayerDetailData?.duaTime ?: "12:00 AM",
-                        sound = prayerDetailData?.sound?:0,
-                        duaType = prayerDetailData?.duaType?:"off",
+                        sound = prayerDetailData?.sound ?: 0,
+                        duaType = prayerDetailData?.duaType ?: "off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
                         reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                     )
                 )
@@ -292,15 +322,16 @@ class RowItemTime(
                     NotificationData(
                         namazName = data.title,
                         namazTime = data.time,
-                        notificationSound = prayerDetailData?.notificationSound?:"Tones",
-                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes?:"off",
-                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound?:"Tones",
+                        notificationSound = prayerDetailData?.notificationSound ?: "Tones",
+                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
+                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound
+                            ?: "Tones",
                         duaTime = prayerDetailData?.duaTime ?: "12:00 AM",
-                        sound = prayerDetailData?.sound?:0,
-                        duaType = prayerDetailData?.duaType?:"off",
+                        sound = prayerDetailData?.sound ?: 0,
+                        duaType = prayerDetailData?.duaType ?: "off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
                         reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                     )
                 )
@@ -312,15 +343,16 @@ class RowItemTime(
                     NotificationData(
                         namazName = data.title,
                         namazTime = data.time,
-                        notificationSound = prayerDetailData?.notificationSound?:"Tones",
-                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes?:"off",
-                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound?:"Tones",
+                        notificationSound = prayerDetailData?.notificationSound ?: "Tones",
+                        duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
+                        reminderNotificationSound = prayerDetailData?.reminderNotificationSound
+                            ?: "Tones",
                         duaTime = prayerDetailData?.duaTime ?: "12:00 AM",
-                        sound = prayerDetailData?.sound?:0,
-                        duaType = prayerDetailData?.duaType?:"off",
+                        sound = prayerDetailData?.sound ?: 0,
+                        duaType = prayerDetailData?.duaType ?: "off",
                         isForNotification = prayerDetailData?.isForNotification ?: true,
                         createdDate = getCurrentDate(),
-                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes?: "off",
+                        reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
                         reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM"
                     )
                 )

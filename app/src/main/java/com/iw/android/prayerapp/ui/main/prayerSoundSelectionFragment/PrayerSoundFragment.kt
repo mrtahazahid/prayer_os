@@ -156,11 +156,12 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     override fun setOnClickListener() {
         binding.imageViewBack.setOnClickListener(this)
         binding.imageViewCopy.setOnClickListener(this)
+        binding.backView.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            binding.imageViewBack.id -> {
+            binding.backView.id,  binding.imageViewBack.id -> {
                 if (isDataForSave) {
                     binding.progress.show()
                     lifecycleScope.launch {
@@ -263,6 +264,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
         when (position) {
             0 -> {
                 this.selectedSoundAdhanName = soundName
+                this.selectedSoundToneName = "Tones"
                 this.sound = sound
                 isSoundSelected = true
                 isForAdhan = true
@@ -273,6 +275,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
 
             1 -> {
                 this.selectedSoundToneName = soundName
+                this.selectedSoundAdhanName = "Adhan"
                 this.sound = sound
                 isSoundSelected = true
                 isForAdhan = false

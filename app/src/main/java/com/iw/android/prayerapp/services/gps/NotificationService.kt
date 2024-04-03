@@ -112,7 +112,7 @@ class NotificationService : Service() {
                 checkDailyNamazTime()
                 checkIqamaTime()
                 jummahTimeCheck()
-                delay(2000)
+                delay(60000)
             }
         }
     }
