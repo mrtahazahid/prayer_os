@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -134,14 +135,16 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
             }
 
             binding.islamicHolidayClickView.id -> {
-                findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToIslamicHolidayFragment2())
+                Toast.makeText(binding.islamicHolidayClickView.context, "Work in process", Toast.LENGTH_SHORT).show()
+//                findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToIslamicHolidayFragment2())
             }
 
             binding.masjidClickView.id -> {
                 openGoogleMapsNearbyPlaces(currentLatitude, currentLongitude)
             }
             binding.monthlyClickView.id->{
-                findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToFragmentMonthlyCalender())
+                Toast.makeText(binding.monthlyClickView.context, "Work in process", Toast.LENGTH_SHORT).show()
+//                findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToFragmentMonthlyCalender())
             }
 
         }
