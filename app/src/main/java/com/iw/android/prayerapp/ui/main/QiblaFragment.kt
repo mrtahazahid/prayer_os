@@ -55,7 +55,6 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
     private var magnetometerReading = FloatArray(3)
 
     lateinit var getQibla: Qibla
-    val handler: Handler = Handler()
     private val ALPHA = 0.08f
 
 
@@ -200,7 +199,6 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
                 Log.d("qiblaDegree","matched -->>> ")
             }
 
-//            binding.textViewCurrentDirection.text = "${"%.2f".format((qiblaRadians - radian) - 2.38)}°"
             if (qiblaDegree < 0) {
                 qiblaDegree += 360f
             }
@@ -217,19 +215,5 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
             cos(valueA) * tan(makkahLatitude) - sin(valueA) * cos(makkahLongitude - valueB)
         )
         return (result + Math.PI * 2) % (Math.PI * 2)
-    }
-    fun vibrateForOneSecond() {
-        val vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-
-        if (vibrator != null && vibrator.hasVibrator()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                // Vibrate for 1 second using VibrationEffect API
-                vibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE))
-            } else {
-                // Deprecated in API 26, but still used for older devices
-                @Suppress("DEPRECATION")
-                vibrator.vibrate(1000)
-            }
-        }
     }
 }
