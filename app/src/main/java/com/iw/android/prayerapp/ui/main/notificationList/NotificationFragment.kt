@@ -12,10 +12,9 @@ import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentNotificationListBinding
-import com.iw.android.prayerapp.ui.main.notificationList.itemView.NotificationListViewModel
 import com.iw.android.prayerapp.ui.main.notificationList.itemView.RowItemNotificationList
 
-class NotificationFragment : BaseFragment(R.layout.fragment_notification_list),
+class   NotificationFragment : BaseFragment(R.layout.fragment_notification_list),
     View.OnClickListener {
 
 

@@ -118,7 +118,6 @@ class NotificationService : Service() {
     }
 
     private suspend fun checkAndTriggerNotification() {
-        Log.d("service", "Called")
         // Add your logic here to check if it's time to show a notification
         val specifiedTimes = prefrence.getNotificationData()
         if (specifiedTimes.isNotEmpty()) {
