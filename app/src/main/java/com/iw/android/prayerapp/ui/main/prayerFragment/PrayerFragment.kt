@@ -15,6 +15,7 @@ import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
+import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.PrayerTime
 import com.iw.android.prayerapp.databinding.FragmentPrayerBinding
 import com.iw.android.prayerapp.extension.convertToFunTime
@@ -28,6 +29,8 @@ import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
@@ -73,10 +76,10 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     @SuppressLint("SimpleDateFormat")
     override fun initialize() {
-lifecycleScope.launch {
-    Log.d("noti",viewModel.getAllNotificationData().size.toString())
-    Log.d("noti",viewModel.getAllNotificationData().toString())
-}
+        lifecycleScope.launch {
+            Log.d("noti", viewModel.getAllNotificationData().size.toString())
+            Log.d("noti", viewModel.getAllNotificationData().toString())
+        }
 
         notifications = Notification(requireContext())
 
@@ -199,7 +202,9 @@ lifecycleScope.launch {
                 binding.textViewCurrentNamazName.text = "Fajr"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
+                currentNamazName = "Fajr"
                 startCountdown(currentNamaz.timeDifference, currentNamaz.totalTime)
+
             }
 
             "Dhuhr" -> {
@@ -214,6 +219,7 @@ lifecycleScope.launch {
                 binding.textViewCurrentNamazName.text = "Dhuhr"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
+                currentNamazName = "Dhuhr"
                 startCountdown(currentNamaz.timeDifference, currentNamaz.totalTime)
             }
 
@@ -229,6 +235,7 @@ lifecycleScope.launch {
                 binding.textViewCurrentNamazName.text = "Asr"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
+                currentNamazName = "Asr"
                 startCountdown(currentNamaz.timeDifference, currentNamaz.totalTime)
             }
 
@@ -244,6 +251,7 @@ lifecycleScope.launch {
                 binding.textViewCurrentNamazName.text = "Maghrib"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
+                currentNamazName = "Maghrib"
                 startCountdown(currentNamaz.timeDifference, currentNamaz.totalTime)
             }
 
@@ -257,6 +265,7 @@ lifecycleScope.launch {
                 binding.textViewFourthNamaz.text =
                     "Asr: ${convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())}"
                 binding.textViewCurrentNamazName.text = "Isha"
+                currentNamazName = "Isha"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
                 startCountdown(currentNamaz.timeDifference, currentNamaz.totalTime)
@@ -276,14 +285,16 @@ lifecycleScope.launch {
                 binding.progressbar.progress = 0
                 binding.progressbar.max = 100
             }
-        }
 
+        }
+        viewModel.addCurrentNamazToList(NotificationData(namazName =  currentNamaz.currentNamazName, namazTime =   convertToFunTime(currentNamaz.currentNamazTime), createdDate = getCurrentDate()))
 
     }
 
     private fun startCountdown(timeDifferenceMillis: Long, totalTime: Long) {
         countDownTimer = object : CountDownTimer(timeDifferenceMillis, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
+            override fun onTick(millisUntilFinished: Long)
+            {
                 val secondsRemaining = (millisUntilFinished / 1000).toInt()
                 binding.progressbar.max = totalTime.toInt()
                 binding.progressbar.progress = millisUntilFinished.toInt()
@@ -300,46 +311,21 @@ lifecycleScope.launch {
         countDownTimer?.start()
     }
 
+    fun getCurrentDate(): String {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy") // Customize the format as needed
+        return currentDate.format(formatter)
+    }
+
     private fun showNotification() {
         lifecycleScope.launch {
-            val sound = when (currentNamazName) {
-                "Fajr" -> {
-                    viewModel.getFajrDetail()?.sound ?: 0
-                }
-
-                "Sunrise" -> {
-                    viewModel.getSunriseDetail()?.sound ?: 0
-                }
-
-                "Dhuhr" -> {
-                    viewModel.getDuhrDetail()?.sound ?: 0
-                }
-
-                "Asr" -> {
-                    viewModel.getAsrDetail()?.sound ?: 0
-                }
-
-                "Maghrib" -> {
-                    viewModel.getMagribDetail()?.sound ?: 0
-                }
-
-                "Isha" -> {
-                    viewModel.getIshaDetail()?.sound ?: 0
-                }
-
-                "Midnight" -> {
-                    viewModel.getMidNightDetail()?.sound ?: 0
-                }
-
-                "LastNight" -> {
-                    viewModel.getLastNightDetail()?.sound ?: 0
-                }
-
-                else -> {
-                    null
-                }
-            }
-            notifications.notify(currentNamazName, "Namaz Time",sound ?: 0, false, false)
+            notifications.notify(
+                viewModel.getCurrentNamazNotificationData()?.currentNamazName ?: "",
+                "Namaz Time",
+                viewModel.getCurrentNamazNotificationData()?.sound ?: R.raw.adhan_abdul_basit,
+                viewModel.getCurrentNamazNotificationData()?.isVibrate ?: false,
+                viewModel.getCurrentNamazNotificationData()?.isSilent ?: false
+            )
             getTimeDifferenceToNextPrayer()
         }
 
@@ -547,7 +533,7 @@ lifecycleScope.launch {
                     CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
                 }
             }
-        }else{
+        } else {
             CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
         }
     }

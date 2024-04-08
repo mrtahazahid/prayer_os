@@ -213,15 +213,37 @@ class DataPreference @Inject constructor(
         val list: MutableList<NotificationData> = Json.decodeFromString(jsonString)
 
         // Check if NotificationData with the same createdDate already exists
-        val existingItem = list.find { it.createdDate == newItem.createdDate && it.namazName == newItem.namazName }
+        val existingItem =
+            list.find { it.createdDate == newItem.createdDate && it.namazName == newItem.namazName }
         if (existingItem != null) {
 
-list.remove(existingItem)
-list.add(newItem)
+            list.remove(existingItem)
+            list.add(newItem)
             // Update other fields as needed
         } else {
             // If the item doesn't exist, add it to the list
             list.add(newItem)
+        }
+
+        val updatedJsonString = Json.encodeToString(list)
+
+        appContext.dataStore.edit { preferences ->
+            preferences[NOTIFICATION_DATA] = updatedJsonString
+        }
+    }
+
+    suspend fun updateNotificationData(newItem: NotificationData) {
+        val jsonString = appContext.dataStore.data
+            .first()[NOTIFICATION_DATA]
+            ?: "[]" // Default to an empty array if the key is not present
+
+        val list: MutableList<NotificationData> = Json.decodeFromString(jsonString)
+
+        // Check if NotificationData with the same createdDate already exists
+        val existingItem =
+            list.find { it.createdDate == newItem.createdDate && it.namazName == newItem.namazName }
+        if (existingItem != null) {
+            list.remove(existingItem)
         }
 
         val updatedJsonString = Json.encodeToString(list)
@@ -251,32 +273,16 @@ list.add(newItem)
         }
     }
 
-    private fun convertListToJsonString(list: NotificationData): String {
-        // adjust settings if needed
-        return Json.encodeToString(list)
-    }
 
     private fun mapJsonToList(jsonString: String): List<NotificationData> {
         val json = Json { ignoreUnknownKeys = true } // adjust settings if needed
         return json.decodeFromString(jsonString)
     }
 
-    suspend fun setUserLatLong(userLatLong: UserLatLong) {
-        setStringData(USER_LAT_LONG, Gson().toJson(userLatLong))
-
-    }
-
-    suspend fun getUpdatedUserProfile(): LoginUserResponse? {
-        return Gson().fromJson(
-            getStringData(USER_INFO),
-            LoginUserResponse::class.java
-        )
-    }
 
     companion object {
         private val ACCESS_TOKEN = stringPreferencesKey("key_access_token")
         private val REFRESH_TOKEN = stringPreferencesKey("key_refresh_token")
-        val IS_LOGIN = booleanPreferencesKey("key_is_login")
         val IS_ONBOARDING = booleanPreferencesKey("key_is_onboarding")
         val USER_ID = stringPreferencesKey("key_user_id")
         val GEOFENCE_RADIUS = intPreferencesKey("key_geofence_radius")

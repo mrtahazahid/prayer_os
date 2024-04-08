@@ -72,11 +72,16 @@ class   NotificationFragment : BaseFragment(R.layout.fragment_notification_list)
 
     override fun setOnClickListener() {
         binding.imageViewBack.setOnClickListener(this)
+        binding.textViewDateTitle.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.imageViewBack.id -> {
+                findNavController().popBackStack()
+            }
+
+            binding.textViewDateTitle.id -> {
                 findNavController().popBackStack()
             }
         }

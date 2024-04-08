@@ -90,21 +90,22 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener 
     override fun onClick(v: View?) {
         when(v?.id){
             binding.instagramViewClick.id->{
-                openCustomTab("https://www.instagram.com/praywatchapp/?hl=en")
+                openCustomTab("https://www.instagram.com/praywatchapp?igsh=MTBza2t0MHo2Yzdybw==")
             }
 
             binding.twitteriewClick.id->{
-                openCustomTab("https://www.instagram.com/praywatchapp/?hl=en")
+                openCustomTab("https://twitter.com/praywatchapp")
             }
 
             binding.carViewProject.id->{
-                openCustomTab("https://quranplus.app/")
+//                openCustomTab("https://quranplus.app/")
+                showToast("Work in progress")
             }
             binding.policyViewClick.id->{
-                openCustomTab("https://praywatch.app/")
+                openCustomTab("https://praywatch.app/privacy/")
             }
             binding.disclaimerClickView.id->{
-                openCustomTab("https://praywatch.app/")
+                openCustomTab("https://praywatch.app/disclaimer/")
             }
         }
     }

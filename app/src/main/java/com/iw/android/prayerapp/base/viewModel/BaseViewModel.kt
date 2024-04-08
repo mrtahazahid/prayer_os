@@ -46,6 +46,10 @@ abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
         repository.saveSunriseDetail(prayerDetail)
     }
 
+    fun addCurrentNamazToList(data: NotificationData) = viewModelScope.launch {
+        repository.saveNotificationData(data)
+    }
+
     suspend fun getSunriseDetail() = repository.getSunriseDetail()
     fun saveDuhrDetail(prayerDetail: NotificationData) = viewModelScope.launch {
         repository.saveDuhrDetail(prayerDetail)
@@ -124,51 +128,51 @@ abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
     suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData? =
         repository.getCurrentNamazNotificationData()
 
-    suspend fun saveIqamaFajrDetail(prayerDetail: IqamaData)  {
+    suspend fun saveIqamaFajrDetail(prayerDetail: IqamaData) {
         repository.saveIqamaFajrDetail(prayerDetail)
     }
 
     suspend fun getIqamaFajrDetail() = repository.getIqamaFajrDetail()
 
-    suspend fun saveIqamaDhuhrDetail(prayerDetail: IqamaData)  {
+    suspend fun saveIqamaDhuhrDetail(prayerDetail: IqamaData) {
         repository.saveIqamaDhuhrDetail(prayerDetail)
     }
 
     suspend fun getIqamaDhuhrDetail() = repository.getIqamaDhuhrDetail()
 
-    suspend fun saveIqamaAsrDetail(prayerDetail: IqamaData)  {
+    suspend fun saveIqamaAsrDetail(prayerDetail: IqamaData) {
         repository.saveIqamaAsrDetail(prayerDetail)
     }
 
     suspend fun getIqamaAsrDetail() = repository.getIqamaAsrDetail()
 
-    suspend fun saveIqamaMaghribDetail(prayerDetail: IqamaData)  {
+    suspend fun saveIqamaMaghribDetail(prayerDetail: IqamaData) {
         repository.saveIqamaMaghribDetail(prayerDetail)
     }
 
     suspend fun getIqamaMaghribDetail() = repository.getIqamaMaghribDetail()
 
-    suspend fun saveIqamaIshaDetail(prayerDetail: IqamaData)  {
+    suspend fun saveIqamaIshaDetail(prayerDetail: IqamaData) {
         repository.saveIqamaIshaDetail(prayerDetail)
     }
 
     suspend fun getIqamaIshaDetail() = repository.getIqamaIshaDetail()
 
-    suspend fun saveJummuahSetting(data: JummuahData)  {
+    suspend fun saveJummuahSetting(data: JummuahData) {
         repository.saveJummuahSetting(data)
     }
 
     suspend fun getJummuahSetting() = repository.getJummuahSetting()
 
 
-    suspend fun saveIqamaNotificationSetting(data: IqamaNotificationData)  {
+    suspend fun saveIqamaNotificationSetting(data: IqamaNotificationData) {
         repository.saveIqamaNotificationSetting(data)
     }
 
     suspend fun getIqamaNotificationSetting() = repository.getIqamaNotificationSetting()
 
 
-    suspend fun saveIqamaDisplaySetting(data: IqamaDisplaySetting)  {
+    suspend fun saveIqamaDisplaySetting(data: IqamaDisplaySetting) {
         repository.saveIqamaDisplaySetting(data)
     }
 
