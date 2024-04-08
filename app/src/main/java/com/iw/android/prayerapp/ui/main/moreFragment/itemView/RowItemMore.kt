@@ -14,8 +14,9 @@ import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.data.response.MoreData
 import com.iw.android.prayerapp.databinding.RowItemMoreBinding
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 
-class RowItemMore(private val data: MoreData,private val activity: Activity) : ViewType<MoreData> {
+class RowItemMore(private val data: MoreData, private val activity: Activity) : ViewType<MoreData> {
 
     override fun layoutId(): Int {
         return R.layout.row_item_more
@@ -38,14 +39,48 @@ class RowItemMore(private val data: MoreData,private val activity: Activity) : V
             }
 
             binding.mainView.setOnClickListener {
-                when(data.title){
-                    "About  this app" -> {openCustomTab(binding.imageView.context,"https://praywatch.app/")}
-                    "Read tutorial" -> {Toast.makeText(binding.imageView.context, "Work in process", Toast.LENGTH_SHORT).show()}
+                when (data.title) {
+                    "About  this app" -> {
+                        openCustomTab(binding.imageView.context, "https://praywatch.app/")
+                    }
+
+                    "Read tutorial" -> {
+                        activity.startActivity(
+                            Intent(
+                                binding.imageView.context,
+                                OnBoardingActivity::class.java
+                            )
+                        )
+                    }
+
                     "Request support" -> sendUserToGmail()
-                    "Subscribe for updates" -> {openCustomTab(binding.imageView.context,"https://praywatch.app/subscribe/")}
-                    "Rate this app" -> {Toast.makeText(binding.imageView.context, "Work in process", Toast.LENGTH_SHORT).show()}
-                    "Share this app" -> {Toast.makeText(binding.imageView.context, "Work in process", Toast.LENGTH_SHORT).show()}
-                    "Plan adhan" -> {Toast.makeText(binding.imageView.context, "Work in process", Toast.LENGTH_SHORT).show()}
+                    "Subscribe for updates" -> {
+                        openCustomTab(binding.imageView.context, "https://praywatch.app/subscribe/")
+                    }
+
+                    "Rate this app" -> {
+                        Toast.makeText(
+                            binding.imageView.context,
+                            "Work in process",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    "Share this app" -> {
+                        Toast.makeText(
+                            binding.imageView.context,
+                            "Work in process",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    "Plan adhan" -> {
+                        Toast.makeText(
+                            binding.imageView.context,
+                            "Work in process",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }

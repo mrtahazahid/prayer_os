@@ -104,49 +104,41 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        sensorManager.registerListener(
-            this,
-            accelerometer,
-            SensorManager.SENSOR_DELAY_UI
-        )
-        sensorManager.registerListener(
-            this,
-            magnetometer,
-            SensorManager.SENSOR_DELAY_UI
-        )
-    }
 
     override fun onPause() {
         super.onPause()
         sensorManager.unregisterListener(this)
     }
 
-    override fun onSensorChanged(event: SensorEvent) {
-        when (event.sensor.type) {
-            Sensor.TYPE_ACCELEROMETER -> {
-                lowPassFilter(event.values, accelerometerReading)
-            }
-
-            Sensor.TYPE_MAGNETIC_FIELD -> {
-                lowPassFilter(event.values, magnetometerReading)
-            }
+    override fun onResume() {
+        super.onResume()
+        if (sensorManager.getDefaultSensor(3) != null) {
+            sensorManager.registerListener(this, sensorManager.getDefaultSensor(3), 1)
+            return
         }
 
-        updateOrientationAngles()
-        val rotateAnimation = RotateAnimation(
-            currentDegree,
-            -qiblaDegree,
-            Animation.RELATIVE_TO_SELF, 0.5f,
-            Animation.RELATIVE_TO_SELF, 0.5f
-        )
-
+        showToast("Sorry the Qibla feature is not supported by your device")
+    }
+    override fun onSensorChanged(event: SensorEvent) {
+        val f = -Math.round(event.values.get(0)).toFloat()
+        val calculateQibla: Float = f + calculateQibla(currentLatitude, currentLongitude)
+//        textView.text = "Heading: $calculateQibla degrees"
+        val rotateAnimation = RotateAnimation(currentDegree, f, 1, 0.5f, 1, 0.5f)
         rotateAnimation.duration = 20000
         rotateAnimation.fillAfter = true
         binding.imageViewQiblaDirection.startAnimation(rotateAnimation)
-        currentDegree = -qiblaDegree
-
+        currentDegree = f
+        updateOrientationAngles()
+    }
+    fun calculateQibla(d: Double, d2: Double): Float {
+        val d3 = d * 3.141592653589793 / 180.0
+        val d4 = 0.6946410422937431 - d2 * 3.141592653589793 / 180.0
+        return Math.round(
+            Math.atan2(
+                Math.sin(d4),
+                Math.cos(d3) * Math.tan(0.3735004599267865) - Math.sin(d3) * Math.cos(d4)
+            ) * 57.29577951308232
+        ).toFloat()
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -162,13 +154,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
     @SuppressLint("SetTextI18n")
     private fun updateOrientationAngles() {
         val rotationMatrix = FloatArray(9)
-        if (SensorManager.getRotationMatrix(
-                rotationMatrix,
-                null,
-                accelerometerReading,
-                magnetometerReading
-            )
-        ) {
+
             SensorManager.getOrientation(rotationMatrix, currentOrientation)
             val radian = currentOrientation[0].toDouble()
             val latitude = currentLatitude * Math.PI / 180
@@ -202,7 +188,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
             if (qiblaDegree < 0) {
                 qiblaDegree += 360f
             }
-        }
+
     }
 
     private fun calculateQiblaDirection(latitude: Double, longitude: Double): Double {
