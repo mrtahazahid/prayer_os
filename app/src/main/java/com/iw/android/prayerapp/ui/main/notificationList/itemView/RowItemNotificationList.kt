@@ -19,15 +19,29 @@ class RowItemNotificationList(private val data: NotificationData) : ViewType<Not
 
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemNotificationListBinding).also { binding ->
-            if(data.reminderTime == ""){
+            if (data.isForNotificationList) {
+                binding.textViewTime.text = "${data.createdDate} at ${data.namazTime}"
+                binding.textViewTitle.text = data.namazName
                 binding.secondView.visibility = View.GONE
-            }else{
-                binding.secondView.visibility = View.VISIBLE
-                binding.textViewReminderTitle.text = "${data.namazName} in ${data.reminderTimeMinutes}"
-                binding.textViewReminderTime.text = "${data.createdDate} at ${data.reminderTime}"
+            } else {
+                if (data.reminderTime == "") {
+                    binding.secondView.visibility = View.GONE
+                    binding.textViewReminderTime.text = "${data.createdDate} at ${data.namazTime}"
+                } else {
+                    binding.secondView.visibility = View.VISIBLE
+                    binding.textViewReminderTitle.text = if (data.reminderTimeMinutes != "off") {
+                        "${data.namazName} in ${data.reminderTimeMinutes}"
+                    } else {
+                        data.namazName
+                    }
+
+                    binding.textViewReminderTime.text =
+                        "${data.createdDate} at ${data.reminderTime}"
+                }
+                binding.textViewTime.text = "${data.createdDate} at ${data.namazTime}"
+                binding.textViewTitle.text = "${data.namazName} at ${data.namazTime}"
+
             }
-            binding.textViewTime.text = "${data.createdDate} at ${data.namazTime}"
-            binding.textViewTitle.text = "${data.namazName} at ${data.namazTime}"
 
 
         }

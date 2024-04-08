@@ -91,7 +91,8 @@ data class NotificationData(
     var createdDate: String = "",
     var duaReminderMinutes: String = "off",
     var isForNotification: Boolean = false,
-    var currentNotificationTypePosition: Int = 0
+    var currentNotificationTypePosition: Int = 0,
+    var isForNotificationList: Boolean = false
 )
 
 data class MonthlyCalenderData(
@@ -109,7 +110,7 @@ data class MonthlyCalenderData(
 data class CurrentNamazNotificationData(
     val currentNamazName: String,
     val soundName: String = "Adhan",
-    val soundToneName: String= "Tones",
+    val soundToneName: String = "Tones",
     val position: Int,
     val isSoundSelected: Boolean,
     val isForAdhan: Boolean,

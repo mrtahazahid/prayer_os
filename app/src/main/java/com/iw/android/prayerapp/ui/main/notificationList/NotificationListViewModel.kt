@@ -11,8 +11,10 @@ import com.iw.android.prayerapp.data.response.UserLatLong
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,33 +37,177 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     Madhab.SHAFI
                 }
             }
-notificationList.add(NotificationData(namazName = "Fajr", namazTime = getFormattedDate(0)[0]))
-notificationList.add(NotificationData(namazName = "Sunrise", namazTime = getFormattedDate(0)[1]))
-notificationList.add(NotificationData(namazName = "Dhuhr", namazTime = getFormattedDate(0)[2]))
-notificationList.add(NotificationData(namazName = "Asr", namazTime = getFormattedDate(0)[3]))
-notificationList.add(NotificationData(namazName = "Maghrib", namazTime = getFormattedDate(0)[4]))
-notificationList.add(NotificationData(namazName = "Isha", namazTime = getFormattedDate(0)[5]))
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Fajr",
+                    namazTime = getFormattedDate(0)[0], createdDate = getFormattedCreatedDate(0)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Sunrise",
+                    namazTime = getFormattedDate(0)[1], createdDate = getFormattedCreatedDate(0)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Dhuhr",
+                    namazTime = getFormattedDate(0)[2], createdDate = getFormattedCreatedDate(0)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Asr",
+                    namazTime = getFormattedDate(0)[3], createdDate = getFormattedCreatedDate(0)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Maghrib",
+                    namazTime = getFormattedDate(0)[4], createdDate = getFormattedCreatedDate(0)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Isha",
+                    namazTime = getFormattedDate(0)[5], createdDate = getFormattedCreatedDate(0)
+                )
+            )
 
-            notificationList.add(NotificationData(namazName = "Fajr", namazTime = getFormattedDate(1)[0]))
-            notificationList.add(NotificationData(namazName = "Sunrise", namazTime = getFormattedDate(1)[1]))
-            notificationList.add(NotificationData(namazName = "Dhuhr", namazTime = getFormattedDate(1)[2]))
-            notificationList.add(NotificationData(namazName = "Asr", namazTime = getFormattedDate(1)[3]))
-            notificationList.add(NotificationData(namazName = "Maghrib", namazTime = getFormattedDate(1)[4]))
-            notificationList.add(NotificationData(namazName = "Isha", namazTime = getFormattedDate(1)[5]))
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Fajr",
+                    namazTime = getFormattedDate(1)[0], createdDate = getFormattedCreatedDate(1)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Sunrise",
+                    namazTime = getFormattedDate(1)[1], createdDate = getFormattedCreatedDate(1)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Dhuhr",
+                    namazTime = getFormattedDate(1)[2], createdDate = getFormattedCreatedDate(1)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Asr",
+                    namazTime = getFormattedDate(1)[3], createdDate = getFormattedCreatedDate(1)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Maghrib",
+                    namazTime = getFormattedDate(1)[4], createdDate = getFormattedCreatedDate(1)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Isha",
+                    namazTime = getFormattedDate(1)[5], createdDate = getFormattedCreatedDate(1)
+                )
+            )
 
-            notificationList.add(NotificationData(namazName = "Fajr", namazTime = getFormattedDate(2)[0]))
-            notificationList.add(NotificationData(namazName = "Sunrise", namazTime = getFormattedDate(2)[1]))
-            notificationList.add(NotificationData(namazName = "Dhuhr", namazTime = getFormattedDate(2)[2]))
-            notificationList.add(NotificationData(namazName = "Asr", namazTime = getFormattedDate(2)[3]))
-            notificationList.add(NotificationData(namazName = "Maghrib", namazTime = getFormattedDate(2)[4]))
-            notificationList.add(NotificationData(namazName = "Isha", namazTime = getFormattedDate(2)[5]))
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Fajr",
+                    namazTime = getFormattedDate(2)[0], createdDate = getFormattedCreatedDate(2)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Sunrise",
+                    namazTime = getFormattedDate(2)[1], createdDate = getFormattedCreatedDate(2)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Dhuhr",
+                    namazTime = getFormattedDate(2)[2], createdDate = getFormattedCreatedDate(2)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Asr",
+                    namazTime = getFormattedDate(2)[3], createdDate = getFormattedCreatedDate(2)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Maghrib",
+                    namazTime = getFormattedDate(2)[4], createdDate = getFormattedCreatedDate(2)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Isha",
+                    namazTime = getFormattedDate(2)[5], createdDate = getFormattedCreatedDate(2)
+                )
+            )
 
-            notificationList.add(NotificationData(namazName = "Fajr", namazTime = getFormattedDate(3)[0]))
-            notificationList.add(NotificationData(namazName = "Sunrise", namazTime = getFormattedDate(3)[1]))
-            notificationList.add(NotificationData(namazName = "Dhuhr", namazTime = getFormattedDate(3)[2]))
-            notificationList.add(NotificationData(namazName = "Asr", namazTime = getFormattedDate(3)[3]))
-            notificationList.add(NotificationData(namazName = "Maghrib", namazTime = getFormattedDate(3)[4]))
-            notificationList.add(NotificationData(namazName = "Isha", namazTime = getFormattedDate(3)[5]))
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Fajr",
+                    namazTime = getFormattedDate(3)[0], createdDate = getFormattedCreatedDate(3)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Sunrise",
+                    namazTime = getFormattedDate(3)[1], createdDate = getFormattedCreatedDate(3)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Dhuhr",
+                    namazTime = getFormattedDate(3)[2], createdDate = getFormattedCreatedDate(3)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Asr",
+                    namazTime = getFormattedDate(3)[3], createdDate = getFormattedCreatedDate(3)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Maghrib",
+                    namazTime = getFormattedDate(3)[4], createdDate = getFormattedCreatedDate(3)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Isha",
+                    namazTime = getFormattedDate(3)[5], createdDate = getFormattedCreatedDate(3)
+                )
+            )
             for (data in getAllNotificationData()) {
                 if (data != null) {
                     notificationList.add(data)
@@ -150,7 +296,7 @@ notificationList.add(NotificationData(namazName = "Isha", namazTime = getFormatt
         }
     }
 
-    fun getFormattedDate(offset: Int):ArrayList<String>{
+    fun getFormattedDate(offset: Int): ArrayList<String> {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, offset)
         val targetDate: Date = calendar.time
@@ -163,5 +309,14 @@ notificationList.add(NotificationData(namazName = "Isha", namazTime = getFormatt
             ),
             selectedPrayerDate
         )
+    }
+
+    fun getFormattedCreatedDate(offset: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, offset)
+        val targetDate: Date = calendar.time
+
+        val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        return dateFormat.format(targetDate)
     }
 }

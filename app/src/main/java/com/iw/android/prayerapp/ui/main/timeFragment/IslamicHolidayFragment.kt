@@ -15,8 +15,8 @@ import com.iw.android.prayerapp.databinding.FragmentIslamicHolidayBinding
 import com.iw.android.prayerapp.extension.getCurrentDateFormatted
 import com.iw.android.prayerapp.extension.getIslamicDate
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
-import com.iw.android.prayerapp.ui.main.timeFragment.itemView.RowItemIslamicHolidays
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.ui.main.timeFragment.itemView.RowItemIslamicHolidays
 
 
 class IslamicHolidayFragment : BaseFragment(R.layout.fragment_islamic_holiday), View.OnClickListener {
@@ -76,11 +76,12 @@ class IslamicHolidayFragment : BaseFragment(R.layout.fragment_islamic_holiday), 
 
     override fun setOnClickListener() {
         binding.imageViewBack.setOnClickListener(this)
+        binding.textViewDateTitle.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            binding.imageViewBack.id -> {
+            binding.textViewDateTitle.id,  binding.imageViewBack.id -> {
                 findNavController().popBackStack()
             }
         }
