@@ -13,4 +13,5 @@
     <color name="btn_color">#4BB37E</color>
     <color name="text_color_gray">#929299</color>
     <color name="black">#000000</color>
+    <color name="progress_bg">#121b15</color>
 </resources>

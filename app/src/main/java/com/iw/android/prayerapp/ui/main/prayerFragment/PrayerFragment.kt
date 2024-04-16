@@ -1,6 +1,7 @@
 package com.iw.android.prayerapp.ui.main.prayerFragment
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -27,6 +28,7 @@ import com.iw.android.prayerapp.notificationService.Notification
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
+import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -76,6 +78,29 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     @SuppressLint("SimpleDateFormat")
     override fun initialize() {
+
+        binding.progressbar.apply {
+
+            // or with gradient
+            progressBarColorStart = resources.getColor(R.color.app_green)
+            progressBarColorEnd = resources.getColor(R.color.small_icon3)
+            progressBarColorDirection = CircularProgressBar.GradientDirection.TOP_TO_BOTTOM
+
+            // Set background ProgressBar Color
+            backgroundProgressBarColor = resources.getColor(R.color.progress_bg)
+
+            // Set Width
+            progressBarWidth = 18f // in DP
+            backgroundProgressBarWidth = 18f // in DP
+
+            // Other
+            roundBorder = true
+            startAngle = 180f
+            progressDirection = CircularProgressBar.ProgressDirection.TO_RIGHT
+        }
+
+
+
         lifecycleScope.launch {
             Log.d("noti", viewModel.getAllNotificationData().size.toString())
             Log.d("noti", viewModel.getAllNotificationData().toString())
@@ -282,8 +307,8 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                     "Maghrib: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}"
                 binding.textViewCurrentNamazName.text = "No Namaz Left"
                 binding.textViewCurrentNamazTime.text = "00:00"
-                binding.progressbar.progress = 0
-                binding.progressbar.max = 100
+                binding.progressbar.progress = 0F
+                binding.progressbar.progressMax = 100F
             }
 
         }
@@ -296,8 +321,8 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             override fun onTick(millisUntilFinished: Long)
             {
                 val secondsRemaining = (millisUntilFinished / 1000).toInt()
-                binding.progressbar.max = totalTime.toInt()
-                binding.progressbar.progress = millisUntilFinished.toInt()
+                binding.progressbar. progressMax = totalTime.toFloat()
+                binding.progressbar.progress = millisUntilFinished.toFloat()
 
                 val remainingTime = formatRemainingTime(secondsRemaining)
                 binding.textViewRemainingTime.text = remainingTime

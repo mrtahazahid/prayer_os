@@ -231,20 +231,14 @@
 
             </LinearLayout>
 
-            <ProgressBar
+            <com.mikhaellopez.circularprogressbar.CircularProgressBar
                 android:id="@+id/progressbar"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:background="@drawable/gray_progressbar_background"
-                android:indeterminate="false"
-                android:progressDrawable="@drawable/blue_progressbar_background"
-                android:rotation="-90"
-                android:max="100"
-                android:progress="30"
+                android:layout_width="@dimen/_250sdp"
+                android:layout_height="@dimen/_250sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:cpb_progress_max="100"
+                android:rotation="-180"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
