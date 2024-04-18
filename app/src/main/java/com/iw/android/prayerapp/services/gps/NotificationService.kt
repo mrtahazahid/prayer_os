@@ -166,7 +166,7 @@ class NotificationService : Service() {
                         }
 
                     }
-
+                    prefrence.removeNotificationData(index)
                 } else {
                     continue
                 }

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.databinding.DialogToolsBinding
 

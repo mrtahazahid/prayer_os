@@ -17,6 +17,7 @@ import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.databinding.FragmentSettingBinding
 import com.iw.android.prayerapp.extension.CustomDialog
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
+import com.iw.android.prayerapp.extension.showToolDialog
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
@@ -114,6 +115,23 @@ binding.textViewLocal1.text = Locale.getDefault().toString()
         stopSound()
     }
 
+    private fun startSound() {
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.adhan_abdul_basit)
+        mediaPlayer?.isLooping = true
+        mediaPlayer?.start()
+    }
+
+    private fun stopSound() {
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Release MediaPlayer resources when activity stops
+        stopSound()
+    }
+
     override fun setOnClickListener() {
         binding.imageViewCalculationArrow.setOnClickListener(this)
         binding.calculationView.setOnClickListener(this)
@@ -150,11 +168,37 @@ binding.textViewLocal1.text = Locale.getDefault().toString()
         binding.imageViewAutoIncrementHelp.setOnClickListener(this)
 
 
+        binding.imageViewSnoozeHelp.setOnClickListener(this)
+        binding.imageVeiwAdhanHelp.setOnClickListener(this)
+        binding.imageViewPlayHelp.setOnClickListener(this)
+        binding.imageViewSchHelp.setOnClickListener(this)
+        binding.imageViewMethodHelp.setOnClickListener(this)
+        binding.imageViewJuriHelp.setOnClickListener(this)
+        binding.imageViewAdjHelp.setOnClickListener(this)
+        binding.imageView24HourHelp.setOnClickListener(this)
+        binding.imageViewAdjustHijriHelp.setOnClickListener(this)
+        binding.imageViewPrayerHelp.setOnClickListener(this)
+        binding.imageViewCountDownHelp.setOnClickListener(this)
+        binding.imageViewIqamaHelp.setOnClickListener(this)
+        binding.imageViewGeoHelp.setOnClickListener(this)
+        binding.imageViewAutoIncrementHelp.setOnClickListener(this)
+
+
         binding.switchAutomatic.setOnCheckedChangeListener { buttonView, isChecked ->
             viewModel.setLocationAutomaticValue(isChecked)
         }
 
 
+
+        binding.switchPlayOnTap.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // Play sound
+                startSound()
+            } else {
+                // Stop sound
+                stopSound()
+            }
+        }
         binding.switchAdhanDua.setOnCheckedChangeListener { _, isChecked ->
             // Do something with the isChecked value
             if (isChecked) {
@@ -250,6 +294,48 @@ binding.textViewLocal1.text = Locale.getDefault().toString()
                     }
                     binding.imageViewAutoIncrementHelp.id->{
                         CustomDialog(requireContext(),"Title","This is the description").show()
+                    }
+            binding.imageViewSnoozeHelp.id->{
+                CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+            }
+                    binding.imageVeiwAdhanHelp.id->{
+                        CustomDialog(requireContext(),"Adhan duaa","Duaa will play after the adhan when \ntapped from a notification.").show()
+                    }
+                    binding.imageViewPlayHelp.id->{
+                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                    }
+                    binding.imageViewSchHelp.id->{
+                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                    }
+                    binding.imageViewMethodHelp.id->{
+                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                    }
+                    binding.imageViewJuriHelp.id->{
+                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                    }
+                    binding.imageViewAdjHelp.id->{
+                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                    }
+                    binding.imageView24HourHelp.id->{
+                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                    }
+                    binding.imageViewAdjustHijriHelp.id->{
+                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                    }
+                    binding.imageViewPrayerHelp.id->{
+                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                    }
+                    binding.imageViewCountDownHelp.id->{
+                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                    }
+                    binding.imageViewIqamaHelp.id->{
+                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                    }
+                    binding.imageViewGeoHelp.id->{
+                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                    }
+                    binding.imageViewAutoIncrementHelp.id->{
+                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
                     }
             binding.iqamaView.id->{
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToIqamaFragment())
