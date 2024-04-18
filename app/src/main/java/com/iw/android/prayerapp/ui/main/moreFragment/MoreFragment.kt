@@ -70,7 +70,7 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener 
         viewTypeArray.clear()
         for (data in viewModel.moreList) {
             viewTypeArray.add(
-                RowItemMore(data,requireActivity())
+                RowItemMore(data,requireActivity(),viewModel.userLatLong?.latitude?:0.0,viewModel.userLatLong?.latitude?:0.0,viewModel.method!!,viewModel.methodInt!!,viewModel.madhabInt!!,requireContext())
             )
         }
         adapter.items = viewTypeArray

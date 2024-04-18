@@ -5,19 +5,38 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.view.View
 import android.widget.Toast
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.ViewDataBinding
+import com.batoulapps.adhan2.CalculationParameters
+import com.iw.android.prayerapp.BuildConfig
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.data.response.MoreData
 import com.iw.android.prayerapp.databinding.RowItemMoreBinding
+import com.iw.android.prayerapp.extension.convertToFunDateTime
+import com.iw.android.prayerapp.extension.convertToFunTime
+import com.iw.android.prayerapp.extension.getAndroidVersion
+import com.iw.android.prayerapp.extension.getDeviceName
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
+import com.iw.android.prayerapp.utils.GetAdhanDetails
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class RowItemMore(private val data: MoreData, private val activity: Activity) : ViewType<MoreData> {
-
+class RowItemMore(
+    private val data: MoreData,
+    private val activity: Activity,
+    private val lat: Double,
+    private val long: Double,
+    private val method: CalculationParameters,
+    private val methodInt: Int,
+    private val madhab: Int,
+    private val context: Context
+) : ViewType<MoreData> {
     override fun layoutId(): Int {
         return R.layout.row_item_more
     }
@@ -93,6 +112,33 @@ class RowItemMore(private val data: MoreData, private val activity: Activity) : 
     }
 
     fun sendUserToGmail() {
+        val location = GetAdhanDetails.getTimeZoneAndCity(
+            context, lat,
+            long
+        )
+        val methodsList = ArrayList<String>().apply {
+            add("Muslim World League")
+            add("Islamic Society of N.America (ISNA)")
+            add("Moonsighting Committee")
+            add("Egyptian General Authority of Survey")
+            add("Algerian Ministry of Awqaf and Religious Affairs")
+            add("Tunisian Ministry of Religious Affairs")
+            add("London Unified Prayer Timetable")
+            add("Umm Al-Quran University")
+            add("Umm Al-Qura University, Makkah")
+            add("Authority of Dubai - UAE")
+            add("Kuwait")
+            add("Singapore")
+            add("Other")
+            add("Authority of Qatar")
+            add("Karachi")
+        }
+        val juriList = arrayListOf<String>().apply {
+            add("Standard")
+            add("Hanafi")
+        }
+        val getPrayerTime =
+            GetAdhanDetails.getPrayTimeInLong(lat, long, method)
         try {
             try {
                 val intent = Intent(Intent.ACTION_SEND)
@@ -103,10 +149,52 @@ class RowItemMore(private val data: MoreData, private val activity: Activity) : 
                     "Feedback For " + activity.getString(R.string.app_name)
                 )
                 intent.putExtra(
-                    Intent.EXTRA_TEXT, """
-     Dear Development Team
-     Greetings,
-     
+                    Intent.EXTRA_TEXT,
+                    """Assalamu Alaikum, please specify your question, feature request, or bug report:
+
+
+
+
+===================
+Version: ${BuildConfig.VERSION_NAME}
+
+-------------------
+Phone Information
+-------------------
+Device: ${getDeviceName()}
+Version: Android ${getAndroidVersion()}
+Background: true
+
+-------------------
+Notifications
+-------------------
+Status: authorized
+Pending: 49
+Tray: 2
+
+-------------------
+Prayer Times
+-------------------
+Fajr: ${convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds())}
+Sunrise: ${convertToFunTime(getPrayerTime.sunrise.toEpochMilliseconds())}
+Dhuhr: ${convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds())}
+Asr: ${convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())}
+Maghrib: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}
+Isha: ${convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())}
+
+-------------------
+Prayer Parameters
+-------------------
+Method: ${methodsList[methodInt]}
+Jurisprudence: ${juriList[madhab]}
+Auto GPS: true
+Time zone: ${location?.timeZone}
+Locale: ${Locale.getDefault()}
+Region: ${location?.timeZone?.substringAfterLast("/")}
+Hijri offset: 0
+Adjustments: none
+Coordinates: true
+Cache: ${convertToFunDateTime(getCacheDirectoryLastModified(context))}
      """.trimIndent()
                 )
                 intent.type = "text/html"
@@ -119,4 +207,8 @@ class RowItemMore(private val data: MoreData, private val activity: Activity) : 
         }
     }
 
+    fun getCacheDirectoryLastModified(context: Context): Long {
+        val cacheDir = context.cacheDir
+        return cacheDir.lastModified()
+    }
 }

@@ -258,6 +258,21 @@ class DataPreference @Inject constructor(
         return mapJsonToList(jsonString)
     }
 
+    suspend fun removeNotificationData(index:Int) {
+        val jsonString = appContext.dataStore.data
+            .first()[NOTIFICATION_DATA]
+            ?: "[]" // Default to an empty array if the key is not present
+
+        val list: MutableList<NotificationData> = Json.decodeFromString(jsonString)
+        list.removeAt(index)
+
+        val updatedJsonString = Json.encodeToString(list)
+
+        appContext.dataStore.edit { preferences ->
+            preferences[NOTIFICATION_DATA] = updatedJsonString
+        }
+    }
+
     suspend fun updateNotificationData(position: Int, data: NotificationData) {
         val jsonString = appContext.dataStore.data
             .first()[NOTIFICATION_DATA]

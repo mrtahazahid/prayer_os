@@ -3,14 +3,20 @@ package com.iw.android.prayerapp.extension
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.iw.android.prayerapp.R
+import com.iw.android.prayerapp.databinding.DialogToolsBinding
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.chrono.HijrahDate
@@ -54,6 +60,66 @@ fun convertToFunTime(timestamp: Long): String {
     return formatter.format(Date(timestamp))
 
 
+}
+
+@SuppressLint("SimpleDateFormat")
+fun convertToFunDateTime(timestamp: Long): String {
+    val timeZoneID = TimeZone.getDefault().id
+    val formatter = SimpleDateFormat("MMM dd, hh:mm a", Locale.getDefault())
+    formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
+    return formatter.format(Date(timestamp))
+
+
+}
+
+fun showToolDialog(context: Context, title: String, des: String) {
+    val dialog = android.app.AlertDialog.Builder(context).create()
+    val dialogBinding: DialogToolsBinding = DataBindingUtil.inflate(
+        LayoutInflater.from(context),
+        R.layout.dialog_tools,
+        null,
+        false
+    )
+    dialog?.let { dialog ->
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setView(dialogBinding.root)
+        dialog.setCancelable(true)
+
+
+        dialogBinding.textViewGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogBinding.textViewActionTitle.text = title
+        dialogBinding.textViewDes.text = des
+
+        dialog.show()
+    }
+}
+
+fun getDeviceName(): String {
+    val manufacturer = Build.MANUFACTURER
+    val model = Build.MODEL
+    return if (model.startsWith(manufacturer)) {
+        capitalize(model)
+    } else {
+        capitalize(manufacturer) + " " + model
+    }
+}
+
+fun getAndroidVersion(): String {
+    val release = Build.VERSION.RELEASE
+    val sdkInt = Build.VERSION.SDK_INT
+    return "$sdkInt"
+}
+
+private fun capitalize(s: String): String {
+    if (s.isEmpty()) return s
+    val firstChar = s[0]
+    return if (Character.isUpperCase(firstChar)) {
+        s
+    } else {
+        Character.toUpperCase(firstChar) + s.substring(1)
+    }
 }
 
 fun showPermissionDialog(

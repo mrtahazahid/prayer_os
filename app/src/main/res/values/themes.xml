@@ -7,7 +7,11 @@
     </style>
 
     <style name="Theme.PrayerApp" parent="Base.Theme.PrayerApp" />
-
+    <style name="RoundedCornersStyle">
+        <item name="android:shape">rectangle</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:radius">20dp</item> <!-- Adjust the radius value -->
+    </style>
 
 <!--    <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">-->
 <!--        <item name="android:fontFamily">@font/inventionrg</item>-->

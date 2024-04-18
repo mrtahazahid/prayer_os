@@ -16,8 +16,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:overScrollMode="ifContentScrolls">
+            android:overScrollMode="ifContentScrolls"
+            android:scrollbars="none">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -39,8 +39,8 @@
                     android:id="@+id/notification"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_14sdp"
                     android:layout_marginStart="5dp"
+                    android:layout_marginTop="@dimen/_14sdp"
                     android:fontFamily="@font/sf_regular"
                     android:text="Notification"
                     android:textAllCaps="true"
@@ -73,16 +73,26 @@
 
                         <TextView
                             android:id="@+id/txt_snooze_time"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:drawablePadding="@dimen/_3sdp"
                             android:fontFamily="@font/sf_medium"
                             android:text="Snooze time"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_13ssp"
-                            app:drawableEndCompat="@drawable/ic_help"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageViewSnoozeHelp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_help"
+                            android:layout_marginStart="6dp"
+                            android:padding="6dp"
+                            app:layout_constraintBottom_toBottomOf="@id/txt_snooze_time"
+                            app:layout_constraintStart_toEndOf="@id/txt_snooze_time"
+                            app:layout_constraintTop_toTopOf="@id/txt_snooze_time" />
 
                         <TextView
                             android:id="@+id/sub_txt_snooze_time"
@@ -155,8 +165,8 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginStart="15dp"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:background="@color/view_separator" />
 
@@ -180,11 +190,20 @@
                             android:text="Adhan dua"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_13ssp"
-                            app:drawableEndCompat="@drawable/ic_help"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageVeiwAdhanHelp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_help"
+                            android:layout_marginStart="6dp"
+                            android:padding="6dp"
+                            app:layout_constraintBottom_toBottomOf="@id/txt_adhan_dua"
+                            app:layout_constraintStart_toEndOf="@id/txt_adhan_dua"
+                            app:layout_constraintTop_toTopOf="@id/txt_adhan_dua" />
 
                         <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/switch_adhan_dua"
@@ -232,10 +251,20 @@
                             android:text="Play on tap"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_13ssp"
-                            app:drawableEndCompat="@drawable/ic_help"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageViewPlayHelp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_help"
+                            android:layout_marginStart="6dp"
+                            android:padding="6dp"
+                            app:layout_constraintBottom_toBottomOf="@id/txt_play_on_tap"
+                            app:layout_constraintStart_toEndOf="@id/txt_play_on_tap"
+                            app:layout_constraintTop_toTopOf="@id/txt_play_on_tap" />
 
 
                         <com.google.android.material.materialswitch.MaterialSwitch
@@ -284,10 +313,20 @@
                             android:text="Scheduled reminders"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_13ssp"
-                            app:drawableEndCompat="@drawable/ic_help"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageViewSchHelp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_help"
+                            android:layout_marginStart="6dp"
+                            android:padding="6dp"
+                            app:layout_constraintBottom_toBottomOf="@id/txt_sch_reminder"
+                            app:layout_constraintStart_toEndOf="@id/txt_sch_reminder"
+                            app:layout_constraintTop_toTopOf="@id/txt_sch_reminder" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/textViewNotificationSound"
@@ -316,8 +355,8 @@
                     android:id="@+id/Prayer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_14sdp"
                     android:layout_marginStart="15dp"
+                    android:layout_marginTop="@dimen/_14sdp"
                     android:fontFamily="@font/sf_regular"
                     android:text="PRAYER"
                     android:textAllCaps="true"
@@ -331,7 +370,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                app:cardBackgroundColor="#1c1c1e"
+                    app:cardBackgroundColor="#1c1c1e"
                     app:cardElevation="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -398,7 +437,6 @@
                                 android:layout_marginStart="28dp"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginEnd="8dp"
-                                android:drawableEnd="@drawable/ic_help"
                                 android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:text="Method"
@@ -407,6 +445,17 @@
                                 app:layout_constraintBottom_toTopOf="@+id/view"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewMethodHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_help"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewMethodTitle"
+                                app:layout_constraintStart_toEndOf="@id/textViewMethodTitle"
+                                app:layout_constraintTop_toTopOf="@id/textViewMethodTitle" />
 
                             <androidx.appcompat.widget.AppCompatSpinner
                                 android:id="@+id/spinnerMethod"
@@ -421,7 +470,7 @@
                                 android:textSize="12sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/view"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/textViewMethodTitle"
+                                app:layout_constraintStart_toEndOf="@+id/imageViewMethodHelp"
                                 app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -442,7 +491,6 @@
                                 android:layout_marginStart="28dp"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginEnd="8dp"
-                                android:drawableEnd="@drawable/ic_help"
                                 android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:text="Jurisprudence "
@@ -450,6 +498,17 @@
                                 android:textSize="18sp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/view" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewJuriHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_help"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewJurisprudenceTitle"
+                                app:layout_constraintStart_toEndOf="@id/textViewJurisprudenceTitle"
+                                app:layout_constraintTop_toTopOf="@id/textViewJurisprudenceTitle" />
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewJurisprudenceDes"
@@ -477,7 +536,7 @@
                                 android:spinnerMode="dropdown"
                                 app:layout_constraintBottom_toBottomOf="@+id/textViewJurisprudenceTitle"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/textViewJurisprudenceTitle"
+                                app:layout_constraintStart_toEndOf="@+id/imageViewJuriHelp"
                                 app:layout_constraintTop_toBottomOf="@id/view" />
 
 
@@ -500,7 +559,6 @@
                                 android:layout_marginTop="10dp"
                                 android:layout_marginEnd="8dp"
                                 android:layout_marginBottom="15dp"
-                                android:drawableEnd="@drawable/ic_help"
                                 android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:text="Adjustments"
@@ -509,6 +567,17 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/view1" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewAdjHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_help"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewAdjustments"
+                                app:layout_constraintStart_toEndOf="@id/textViewAdjustments"
+                                app:layout_constraintTop_toTopOf="@id/textViewAdjustments" />
 
                             <Spinner
                                 android:id="@+id/spinnerElevation"
@@ -522,7 +591,7 @@
                                 android:spinnerMode="dropdown"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/textViewJurisprudenceTitle"
+                                app:layout_constraintStart_toEndOf="@+id/imageViewAdjHelp"
                                 app:layout_constraintTop_toBottomOf="@id/view1" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -633,9 +702,19 @@
                                 android:text="Geofence"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_13ssp"
-                                app:drawableEndCompat="@drawable/ic_help"
                                 app:layout_constraintStart_toStartOf="@id/viewSepAutomatic"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepAutomatic" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewGeoHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_help"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewGeofence"
+                                app:layout_constraintStart_toEndOf="@id/textViewGeofence"
+                                app:layout_constraintTop_toTopOf="@id/textViewGeofence" />
 
                             <TextView
                                 android:id="@+id/textViewGeofenceRadius"
@@ -870,15 +949,24 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="28dp"
                                 android:layout_marginEnd="8dp"
-                                android:drawableEnd="@drawable/ic_help"
                                 android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:text="24-hour Format"
                                 android:textColor="@color/white"
                                 android:textSize="18sp"
-
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageView24HourHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_help"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                app:layout_constraintBottom_toBottomOf="@id/textView24hourFormat"
+                                app:layout_constraintStart_toEndOf="@id/textView24hourFormat"
+                                app:layout_constraintTop_toTopOf="@id/textView24hourFormat" />
 
 
                             <com.google.android.material.materialswitch.MaterialSwitch
@@ -918,9 +1006,19 @@
                                 android:text="Adjust hijri date"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_13ssp"
-                                app:drawableEndCompat="@drawable/ic_help"
                                 app:layout_constraintStart_toStartOf="@id/view24HourFormat"
                                 app:layout_constraintTop_toBottomOf="@id/view24HourFormat" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewAdjustHijriHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_help"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewAdjustHijriDate"
+                                app:layout_constraintStart_toEndOf="@id/textViewAdjustHijriDate"
+                                app:layout_constraintTop_toTopOf="@id/textViewAdjustHijriDate" />
 
                             <TextView
                                 android:id="@+id/textViewAdjustHijriDateSetter"
@@ -1006,9 +1104,19 @@
                                 android:text="Auto increment hijri"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_13ssp"
-                                app:drawableEndCompat="@drawable/ic_help"
                                 app:layout_constraintStart_toStartOf="@id/viewAdjustHijri"
                                 app:layout_constraintTop_toBottomOf="@id/viewAdjustHijri" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewAutoIncrementHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_help"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewAutoIncrement"
+                                app:layout_constraintStart_toEndOf="@id/textViewAutoIncrement"
+                                app:layout_constraintTop_toTopOf="@id/textViewAutoIncrement" />
 
                             <com.google.android.material.materialswitch.MaterialSwitch
                                 android:id="@+id/switchAutoIncrementHijri"
@@ -1046,9 +1154,20 @@
                                 android:text="Prayer Abbreviations"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_13ssp"
-                                app:drawableEndCompat="@drawable/ic_help"
                                 app:layout_constraintStart_toStartOf="@id/viewIncrement"
                                 app:layout_constraintTop_toBottomOf="@id/viewIncrement" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewPrayerHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_help"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewPrayerAbbreviations"
+                                app:layout_constraintStart_toEndOf="@id/textViewPrayerAbbreviations"
+                                app:layout_constraintTop_toTopOf="@id/textViewPrayerAbbreviations" />
+
 
                             <com.google.android.material.materialswitch.MaterialSwitch
                                 android:id="@+id/switchPrayerAbbreviations"
@@ -1085,9 +1204,19 @@
                                 android:text="Count up Time"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_13ssp"
-                                app:drawableEndCompat="@drawable/ic_help"
                                 app:layout_constraintStart_toStartOf="@id/viewAbbrevation"
                                 app:layout_constraintTop_toBottomOf="@id/viewAbbrevation" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewCountDownHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_help"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewCountUpTime"
+                                app:layout_constraintStart_toEndOf="@id/textViewCountUpTime"
+                                app:layout_constraintTop_toTopOf="@id/textViewCountUpTime" />
 
                             <TextView
                                 android:id="@+id/textViewCountUpTimeSetter"
@@ -1173,7 +1302,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/_10sdp"
-                                android:drawableEnd="@drawable/ic_help"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Iqama  "
                                 android:textColor="@color/white"
@@ -1181,6 +1309,17 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewIqamaHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_help"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewIqamaTitle"
+                                app:layout_constraintStart_toEndOf="@id/textViewIqamaTitle"
+                                app:layout_constraintTop_toTopOf="@id/textViewIqamaTitle" />
 
 
                             <androidx.appcompat.widget.AppCompatImageView
@@ -1243,9 +1382,9 @@
                             android:layout_margin="15dp"
                             android:fontFamily="@font/sf_regular"
                             android:text="System"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             android:textColor="@color/white"
                             android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
