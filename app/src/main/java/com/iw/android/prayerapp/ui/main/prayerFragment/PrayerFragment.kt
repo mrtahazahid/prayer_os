@@ -78,9 +78,8 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     @SuppressLint("SimpleDateFormat")
     override fun initialize() {
-
+        getMethod()
         binding.progressbar.apply {
-
             // or with gradient
             progressBarColorStart = resources.getColor(R.color.app_green)
             progressBarColorEnd = resources.getColor(R.color.small_icon3)
@@ -99,13 +98,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             progressDirection = CircularProgressBar.ProgressDirection.TO_RIGHT
         }
 
-
-
-        lifecycleScope.launch {
-            Log.d("noti", viewModel.getAllNotificationData().size.toString())
-            Log.d("noti", viewModel.getAllNotificationData().toString())
-        }
-
         notifications = Notification(requireContext())
 
         val location = GetAdhanDetails.getTimeZoneAndCity(
@@ -116,13 +108,16 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
         currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.userLatLong?.longitude ?: 0.0
-        binding.textViewTodayIslamicDate.text = getIslamicDate()
 
-//        val madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 0) {
-//            Madhab.SHAFI
-//        } else {
-//            Madhab.HANAFI
-//        }
+
+        val getPrayerTime =
+            getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
+
+        binding.textViewTodayIslamicDate.text =  if (convertToFunTime(System.currentTimeMillis()) > convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())){
+            getIslamicDateByOffSet(1)
+        }else{
+            getIslamicDateByOffSet(0)
+        }
         upComingNamazTime()
     }
 
@@ -130,6 +125,10 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     override fun setOnClickListener() {
         binding.upComingPrayerTimeView.setOnClickListener(this)
+        binding.textViewFifthNamaz.setOnClickListener(this)
+        binding.textViewSecondNamaz.setOnClickListener(this)
+        binding.textViewThirdNamaz.setOnClickListener(this)
+        binding.textViewFourthNamaz.setOnClickListener(this)
         binding.topViewText.setOnClickListener(this)
         binding.incrementPlusTwoTextView.setOnClickListener(this)
         binding.incrementPlusOneTextView.setOnClickListener(this)
@@ -152,6 +151,42 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 findNavController().navigate(
                     PrayerFragmentDirections.actionPrayerFragmentToPrayerSoundFragment(
                         binding.textViewCurrentNamazName.text.toString()
+                    )
+                )
+            }
+
+
+            binding.textViewFifthNamaz.id -> {
+                findNavController().navigate(
+                    PrayerFragmentDirections.actionPrayerFragmentToPrayerSoundFragment(
+                        binding.textViewFifthNamaz.text.toString()
+                    )
+                )
+            }
+
+
+            binding.textViewFourthNamaz.id -> {
+                findNavController().navigate(
+                    PrayerFragmentDirections.actionPrayerFragmentToPrayerSoundFragment(
+                        binding.textViewFourthNamaz.text.toString()
+                    )
+                )
+            }
+
+
+            binding.textViewThirdNamaz.id -> {
+                findNavController().navigate(
+                    PrayerFragmentDirections.actionPrayerFragmentToPrayerSoundFragment(
+                        binding.textViewThirdNamaz.text.toString()
+                    )
+                )
+            }
+
+
+            binding.textViewSecondNamaz.id -> {
+                findNavController().navigate(
+                    PrayerFragmentDirections.actionPrayerFragmentToPrayerSoundFragment(
+                        binding.textViewSecondNamaz.text.toString()
                     )
                 )
             }
@@ -208,7 +243,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     @SuppressLint("SetTextI18n")
     private fun upComingNamazTime() {
-        getMethod()
+
 
         val getPrayerTime =
             getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
@@ -312,16 +347,21 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             }
 
         }
-        viewModel.addCurrentNamazToList(NotificationData(namazName =  currentNamaz.currentNamazName, namazTime =   convertToFunTime(currentNamaz.currentNamazTime), createdDate = getCurrentDate()))
+        viewModel.addCurrentNamazToList(
+            NotificationData(
+                namazName = currentNamaz.currentNamazName,
+                namazTime = convertToFunTime(currentNamaz.currentNamazTime),
+                createdDate = getCurrentDate()
+            )
+        )
 
     }
 
     private fun startCountdown(timeDifferenceMillis: Long, totalTime: Long) {
         countDownTimer = object : CountDownTimer(timeDifferenceMillis, 1000) {
-            override fun onTick(millisUntilFinished: Long)
-            {
+            override fun onTick(millisUntilFinished: Long) {
                 val secondsRemaining = (millisUntilFinished / 1000).toInt()
-                binding.progressbar. progressMax = totalTime.toFloat()
+                binding.progressbar.progressMax = totalTime.toFloat()
                 binding.progressbar.progress = millisUntilFinished.toFloat()
 
                 val remainingTime = formatRemainingTime(secondsRemaining)
@@ -562,4 +602,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
         }
     }
+
+
 }

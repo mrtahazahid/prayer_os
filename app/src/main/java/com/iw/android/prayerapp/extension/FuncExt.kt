@@ -191,7 +191,7 @@ fun getCurrentDateFormatted(): String {
 }
 
 fun getIslamicDate(): String {
-    val sdf = SimpleDateFormat("yyyy/M/dd")
+    val sdf = SimpleDateFormat("yyyy/MM/dd")
     val currentDate = sdf.format(Date())
 
     val splitDate = currentDate.split("/")

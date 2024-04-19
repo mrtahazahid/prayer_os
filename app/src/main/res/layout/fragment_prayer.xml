@@ -2,9 +2,9 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainView"
     android:background="@color/black"
     tools:context=".ui.main.prayerFragment.PrayerFragment">
 
@@ -24,11 +24,13 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewOffSet"
-                android:layout_width="150dp"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:elevation="50dp"
                 android:visibility="gone"
+                app:cardElevation="20dp"
+                tools:visibility="visible"
                 app:cardBackgroundColor="#1e1e1e"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="@+id/topViewText"
@@ -47,10 +49,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:fontFamily="@font/sf_regular"
-                        android:gravity="center"
+                        android:gravity="start"
+                        android:paddingVertical="5dp"
                         android:text="Adjust hijri date offset"
                         android:textColor="#7b7b80"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
 
                     <View
                         android:layout_width="match_parent"
@@ -63,10 +66,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:fontFamily="@font/sf_regular"
-                        android:gravity="center"
+                        android:gravity="start"
+                        android:paddingVertical="5dp"
                         android:text="+2 days"
-                        android:textColor="#7b7b80"
-                        android:textSize="14sp" />
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
 
                     <View
@@ -80,10 +84,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:fontFamily="@font/sf_regular"
-                        android:gravity="center"
+                        android:gravity="start"
+                        android:paddingVertical="5dp"
                         android:text="+1 days"
-                        android:textColor="#7b7b80"
-                        android:textSize="14sp" />
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
                     <View
                         android:layout_width="match_parent"
@@ -96,10 +101,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:fontFamily="@font/sf_regular"
-                        android:gravity="center"
+                        android:gravity="start"
+                        android:paddingVertical="5dp"
                         android:text="+0 days"
-                        android:textColor="#7b7b80"
-                        android:textSize="14sp" />
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
                     <View
                         android:layout_width="match_parent"
@@ -112,10 +118,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:fontFamily="@font/sf_regular"
-                        android:gravity="center"
+                        android:gravity="start"
+                        android:paddingVertical="5dp"
                         android:text="-1 days"
-                        android:textColor="#7b7b80"
-                        android:textSize="14sp" />
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
                     <View
                         android:layout_width="match_parent"
@@ -128,10 +135,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:fontFamily="@font/sf_regular"
-                        android:gravity="center"
+                        android:gravity="start"
+                        android:paddingVertical="5dp"
                         android:text="-2 days"
-                        android:textColor="#7b7b80"
-                        android:textSize="14sp" />
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -235,10 +243,10 @@
                 android:id="@+id/progressbar"
                 android:layout_width="@dimen/_250sdp"
                 android:layout_height="@dimen/_250sdp"
+                android:rotation="-180"
+                app:cpb_progress_max="100"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:cpb_progress_max="100"
-                android:rotation="-180"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

@@ -96,27 +96,30 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
             selectedSoundToneName =
                 viewModel.getCurrentNamazNotificationData()?.soundToneName ?: "Tones"
         }
-        when (args.title) {
-            "Fajr" -> {
-                binding.textViewTitle.text = "${args.title} Sound"
-            }
 
-            "Dhuhr" -> {
-                binding.textViewTitle.text = "${args.title} Sound"
-            }
 
-            "Asr" -> {
-                binding.textViewTitle.text = "${args.title} Sound"
-            }
-
-            "Maghrib" -> {
-                binding.textViewTitle.text = "${args.title} Sound"
-            }
-
-            "Isha" -> {
-                binding.textViewTitle.text = "${args.title} Sound"
-            }
-        }
+        binding.textViewTitle.text ="${args.title.split(Regex("\\s|:"))[0]} Sound"
+//        when (args.title) {
+//            "Fajr" -> {
+//                binding.textViewTitle.text = "${args.title} Sound"
+//            }
+//
+//            "Dhuhr" -> {
+//                binding.textViewTitle.text = "${args.title} Sound"
+//            }
+//
+//            "Asr" -> {
+//                binding.textViewTitle.text = "${args.title} Sound"
+//            }
+//
+//            "Maghrib" -> {
+//                binding.textViewTitle.text = "${args.title} Sound"
+//            }
+//
+//            "Isha" -> {
+//                binding.textViewTitle.text = "${args.title} Sound"
+//            }
+//        }
         setRecyclerView()
         addHolidayList()
     }

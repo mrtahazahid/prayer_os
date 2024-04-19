@@ -66,7 +66,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     }
 
     override fun initialize() {
-binding.textViewLocal1.text = Locale.getDefault().toString()
+        binding.textViewLocal1.text = Locale.getDefault().toString()
         lifecycleScope.launch {
             geofence = viewModel.getGeofenceRadius()
             binding.switchAdhanDua.isChecked =
@@ -98,38 +98,22 @@ binding.textViewLocal1.text = Locale.getDefault().toString()
     }
 
     private fun startSound() {
-        val uri =  Uri.parse("android.resource://" + requireActivity().packageName + "/" + R.raw.adhan_abdul_basit)
+        val uri =
+            Uri.parse("android.resource://" + requireActivity().packageName + "/" + R.raw.adhan_abdul_basit)
         mediaPlayer = MediaPlayer.create(context, uri)
         mediaPlayer?.isLooping = false // This will play sound in repeatable mode.
         mediaPlayer?.start()
     }
 
-    private fun stopSound() {
-        mediaPlayer?.release()
-        mediaPlayer = null
-    }
-
     override fun onStop() {
         super.onStop()
         // Release MediaPlayer resources when activity stops
         stopSound()
     }
 
-    private fun startSound() {
-        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.adhan_abdul_basit)
-        mediaPlayer?.isLooping = true
-        mediaPlayer?.start()
-    }
-
     private fun stopSound() {
         mediaPlayer?.release()
         mediaPlayer = null
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // Release MediaPlayer resources when activity stops
-        stopSound()
     }
 
     override fun setOnClickListener() {
@@ -251,93 +235,143 @@ binding.textViewLocal1.text = Locale.getDefault().toString()
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            binding.imageViewSnoozeHelp.id->{
-                CustomDialog(requireContext(),"Snooze Time","The number of minutes to remind you \n again later for prayer, like the \n functionality of an alarm clock.").show()
+            binding.imageViewSnoozeHelp.id -> {
+                CustomDialog(
+                    requireContext(),
+                    "Snooze Time",
+                    "The number of minutes to remind you \n again later for prayer, like the \n functionality of an alarm clock."
+                ).show()
             }
-                    binding.imageVeiwAdhanHelp.id->{
-                        CustomDialog(requireContext(),"Adhan duaa","Duaa will play after the adhan when \ntapped from a notification.").show()
-                    }
-                    binding.imageViewPlayHelp.id->{
-                        CustomDialog(requireContext(),"Play on tap","The full adhan will play when tapped \n from a notification.This setting will be \n ignored for maghrib in ramadan and \n will always play full adhan in that case.").show()
-                    }
-                    binding.imageViewSchHelp.id->{
-                        CustomDialog(requireContext(),"Title","This is the description").show()
-                    } binding.imageViewAuto.id->{
-                        CustomDialog(requireContext(),"Title","This is the description").show()
-                    }
-                    binding.imageViewMethodHelp.id->{
-                        CustomDialog(requireContext(),"Title","This is the description").show()
-                    }
-                    binding.imageViewJuriHelp.id->{
-                        CustomDialog(requireContext(),"Title","This is the description").show()
-                    }
-                    binding.imageViewAdjHelp.id->{
-                        CustomDialog(requireContext(),"Title","This is the description").show()
-                    }
-                    binding.imageView24HourHelp.id->{
-                        CustomDialog(requireContext(),"Title","This is the description").show()
-                    }
-                    binding.imageViewAdjustHijriHelp.id->{
-                        CustomDialog(requireContext(),"Title","This is the description").show()
-                    }
-                    binding.imageViewPrayerHelp.id->{
-                        CustomDialog(requireContext(),"Title","This is the description").show()
-                    }
-                    binding.imageViewCountDownHelp.id->{
-                        CustomDialog(requireContext(),"Title","This is the description").show()
-                    }
-                    binding.imageViewIqamaHelp.id->{
-                        CustomDialog(requireContext(),"Iqama","Specify your masjid iqama times to \n receive notifications for praying in \n congregation.").show()
-                    }
-                    binding.imageViewGeoHelp.id->{
-                        CustomDialog(requireContext(),"Title","This is the description").show()
-                    }
-                    binding.imageViewAutoIncrementHelp.id->{
-                        CustomDialog(requireContext(),"Title","This is the description").show()
-                    }
-            binding.imageViewSnoozeHelp.id->{
-                CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+
+            binding.imageVeiwAdhanHelp.id -> {
+                CustomDialog(
+                    requireContext(),
+                    "Adhan duaa",
+                    "Duaa will play after the adhan when \ntapped from a notification."
+                ).show()
             }
-                    binding.imageVeiwAdhanHelp.id->{
-                        CustomDialog(requireContext(),"Adhan duaa","Duaa will play after the adhan when \ntapped from a notification.").show()
-                    }
-                    binding.imageViewPlayHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
-                    }
-                    binding.imageViewSchHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
-                    }
-                    binding.imageViewMethodHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
-                    }
-                    binding.imageViewJuriHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
-                    }
-                    binding.imageViewAdjHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
-                    }
-                    binding.imageView24HourHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
-                    }
-                    binding.imageViewAdjustHijriHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
-                    }
-                    binding.imageViewPrayerHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
-                    }
-                    binding.imageViewCountDownHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
-                    }
-                    binding.imageViewIqamaHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
-                    }
-                    binding.imageViewGeoHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
-                    }
-                    binding.imageViewAutoIncrementHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
-                    }
-            binding.iqamaView.id->{
+
+            binding.imageViewPlayHelp.id -> {
+                CustomDialog(
+                    requireContext(),
+                    "Play on tap",
+                    "The full adhan will play when tapped \n from a notification.This setting will be \n ignored for maghrib in ramadan and \n will always play full adhan in that case."
+                ).show()
+            }
+
+            binding.imageViewSchHelp.id -> {
+                CustomDialog(requireContext(), "Title", "This is the description").show()
+            }
+
+            binding.imageViewAuto.id -> {
+                CustomDialog(requireContext(), "Title", "This is the description").show()
+            }
+
+            binding.imageViewMethodHelp.id -> {
+                CustomDialog(requireContext(), "Title", "This is the description").show()
+            }
+
+            binding.imageViewJuriHelp.id -> {
+                CustomDialog(requireContext(), "Title", "This is the description").show()
+            }
+
+            binding.imageViewAdjHelp.id -> {
+                CustomDialog(requireContext(), "Title", "This is the description").show()
+            }
+
+            binding.imageView24HourHelp.id -> {
+                CustomDialog(requireContext(), "Title", "This is the description").show()
+            }
+
+            binding.imageViewAdjustHijriHelp.id -> {
+                CustomDialog(requireContext(), "Title", "This is the description").show()
+            }
+
+            binding.imageViewPrayerHelp.id -> {
+                CustomDialog(requireContext(), "Title", "This is the description").show()
+            }
+
+            binding.imageViewCountDownHelp.id -> {
+                CustomDialog(requireContext(), "Title", "This is the description").show()
+            }
+
+            binding.imageViewIqamaHelp.id -> {
+                CustomDialog(
+                    requireContext(),
+                    "Iqama",
+                    "Specify your masjid iqama times to \n receive notifications for praying in \n congregation."
+                ).show()
+            }
+
+            binding.imageViewGeoHelp.id -> {
+                CustomDialog(requireContext(), "Title", "This is the description").show()
+            }
+
+            binding.imageViewAutoIncrementHelp.id -> {
+                CustomDialog(requireContext(), "Title", "This is the description").show()
+            }
+
+            binding.imageViewSnoozeHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.imageVeiwAdhanHelp.id -> {
+                CustomDialog(
+                    requireContext(),
+                    "Adhan duaa",
+                    "Duaa will play after the adhan when \ntapped from a notification."
+                ).show()
+            }
+
+            binding.imageViewPlayHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.imageViewSchHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.imageViewMethodHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.imageViewJuriHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.imageViewAdjHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.imageView24HourHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.imageViewAdjustHijriHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.imageViewPrayerHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.imageViewCountDownHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.imageViewIqamaHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.imageViewGeoHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.imageViewAutoIncrementHelp.id -> {
+                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+            }
+
+            binding.iqamaView.id -> {
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToIqamaFragment())
             }
 
@@ -363,7 +397,7 @@ binding.textViewLocal1.text = Locale.getDefault().toString()
             }
 
             binding.clSchReminder.id -> {
-            findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToNotificationFragment())
+                findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToNotificationFragment())
             }
 
             binding.timeView.id -> {
@@ -414,7 +448,6 @@ binding.textViewLocal1.text = Locale.getDefault().toString()
                 }
 
 
-
             }
 
             binding.imageViewAddGeofence.id -> {
@@ -427,7 +460,7 @@ binding.textViewLocal1.text = Locale.getDefault().toString()
                 viewModel.setGeofenceRadius(geofence)
             }
 
-            binding.calculationView.id,   binding.imageViewCalculationArrow.id -> {
+            binding.calculationView.id, binding.imageViewCalculationArrow.id -> {
                 if (!isCalViewShow) {
                     binding.imageViewCalculationArrow.setImageResource(R.drawable.ic_drop_down)
                     binding.calculationMainDetailViews.visibility = View.VISIBLE
@@ -442,7 +475,7 @@ binding.textViewLocal1.text = Locale.getDefault().toString()
                 }
             }
 
-          binding.locationView.id,  binding.imageViewLocationArrowButton.id -> {
+            binding.locationView.id, binding.imageViewLocationArrowButton.id -> {
                 if (!isLocViewShow) {
                     binding.imageViewLocationArrowButton.setImageResource(R.drawable.ic_drop_down)
                     binding.locationDetailViews.visibility = View.VISIBLE
