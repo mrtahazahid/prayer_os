@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.view.View
@@ -35,8 +36,12 @@ class RowItemMore(
     private val method: CalculationParameters,
     private val methodInt: Int,
     private val madhab: Int,
-    private val context: Context
+    private val context: Context,
+    private val listener: OnClickPlayAdhan
 ) : ViewType<MoreData> {
+
+    private var mediaPlayer: MediaPlayer? = null
+    private var isPlayAdhanChecked = false
     override fun layoutId(): Int {
         return R.layout.row_item_more
     }
@@ -47,7 +52,7 @@ class RowItemMore(
 
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemMoreBinding).also { binding ->
-            binding.view4.visibility = if (data.title == "Plan adhan") View.GONE else View.VISIBLE
+            binding.view4.visibility = if (data.title == "Play adhan") View.GONE else View.VISIBLE
             binding.imageView.setImageResource(data.image)
             binding.textViewTitle.text = data.title
 
@@ -93,12 +98,17 @@ class RowItemMore(
                         ).show()
                     }
 
-                    "Plan adhan" -> {
-                        Toast.makeText(
-                            binding.imageView.context,
-                            "Work in process",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    "Play adhan" -> {
+                        if (!isPlayAdhanChecked) {
+                            isPlayAdhanChecked = true
+                            binding.imageView.setImageResource(R.drawable.ic_mute_mike)
+                            binding.textViewTitle.text = "Stop adhan"
+                        } else {
+                            isPlayAdhanChecked = false
+                            binding.imageView.setImageResource(R.drawable.ic_mike)
+                            binding.textViewTitle.text = "Play adhan"
+                        }
+                        listener.onClick(isPlayAdhanChecked)
                     }
                 }
             }
@@ -211,4 +221,10 @@ Cache: ${convertToFunDateTime(getCacheDirectoryLastModified(context))}
         val cacheDir = context.cacheDir
         return cacheDir.lastModified()
     }
+
+
+}
+
+fun interface OnClickPlayAdhan {
+    fun onClick(isChecked: Boolean)
 }

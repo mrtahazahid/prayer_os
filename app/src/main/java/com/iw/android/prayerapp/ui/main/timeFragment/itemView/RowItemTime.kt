@@ -15,6 +15,7 @@ import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.PrayTime
 import com.iw.android.prayerapp.databinding.RowItemPrayTimeBinding
+import com.iw.android.prayerapp.extension.CustomDialog
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
 import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
@@ -51,6 +52,37 @@ class RowItemTime(
             _binding = binding
             binding.view4.visibility = if (data.title == "Last Third") View.GONE else View.VISIBLE
             prayerDetailData = data.namazDetail
+            binding.imageViewNotificationHelp.setOnClickListener {
+                CustomDialog(
+                    binding.imageViewNotificationHelp.context,
+                    "Notification sound",
+                    "The notification sound to play when \n the time has been reached."
+                ).show()
+            }
+
+            binding.imageViewReminderHelp.setOnClickListener {
+                CustomDialog(
+                    binding.imageViewReminderHelp.context,
+                    "Reminder sound",
+                    "The notification sound to play when \n the time approaches, or a snooze reminder was set."
+                ).show()
+            }
+
+            binding.imageViewReminderTimeHelp.setOnClickListener {
+                CustomDialog(
+                    binding.imageViewReminderTimeHelp.context,
+                    "Reminder time",
+                    "The number of minutes to remind you\n before Fajr starts, usually for Qiyam-ul-\n layl or sahoor."
+                ).show()
+            }
+
+            binding.imageViewDuaHelp.setOnClickListener {
+                CustomDialog(
+                    binding.imageViewDuaHelp.context,
+                    "Duha",
+                    "The time or number of minutes to \n remind you to pray duha after sunrise."
+                ).show()
+            }
 
             val color = if (data.isCurrentNamaz) ContextCompat.getColorStateList(
                 binding.textViewTime.context,

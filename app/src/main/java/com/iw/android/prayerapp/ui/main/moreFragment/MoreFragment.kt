@@ -1,6 +1,7 @@
 package com.iw.android.prayerapp.ui.main.moreFragment
 
 import android.app.AlertDialog
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,13 +16,16 @@ import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentMoreBinding
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.ui.main.moreFragment.itemView.OnClickPlayAdhan
 import com.iw.android.prayerapp.ui.main.moreFragment.itemView.RowItemMore
 
-class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener {
+class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener, OnClickPlayAdhan {
 
     private var _binding: FragmentMoreBinding? = null
     val binding
         get() = _binding!!
+
+    private var mediaPlayer: MediaPlayer? = null
     private val viewModel: MoreViewModel by viewModels()
     private var viewTypeArray = ArrayList<ViewType<*>>()
     private var isItemClick = true
@@ -70,7 +74,17 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener 
         viewTypeArray.clear()
         for (data in viewModel.moreList) {
             viewTypeArray.add(
-                RowItemMore(data,requireActivity(),viewModel.userLatLong?.latitude?:0.0,viewModel.userLatLong?.latitude?:0.0,viewModel.method!!,viewModel.methodInt!!,viewModel.madhabInt!!,requireContext())
+                RowItemMore(
+                    data,
+                    requireActivity(),
+                    viewModel.userLatLong?.latitude ?: 0.0,
+                    viewModel.userLatLong?.latitude ?: 0.0,
+                    viewModel.method!!,
+                    viewModel.methodInt!!,
+                    viewModel.madhabInt!!,
+                    requireContext(),
+                    this
+                )
             )
         }
         adapter.items = viewTypeArray
@@ -87,24 +101,27 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener 
     private fun setRecyclerView() {
         binding.recyclerView.adapter = adapter
     }
+
     override fun onClick(v: View?) {
-        when(v?.id){
-            binding.instagramViewClick.id->{
+        when (v?.id) {
+            binding.instagramViewClick.id -> {
                 openCustomTab("https://www.instagram.com/praywatchapp?igsh=MTBza2t0MHo2Yzdybw==")
             }
 
-            binding.twitteriewClick.id->{
+            binding.twitteriewClick.id -> {
                 openCustomTab("https://twitter.com/praywatchapp")
             }
 
-            binding.carViewProject.id->{
+            binding.carViewProject.id -> {
 //                openCustomTab("https://quranplus.app/")
                 showToast("Work in progress")
             }
-            binding.policyViewClick.id->{
+
+            binding.policyViewClick.id -> {
                 openCustomTab("https://praywatch.app/privacy/")
             }
-            binding.disclaimerClickView.id->{
+
+            binding.disclaimerClickView.id -> {
                 openCustomTab("https://praywatch.app/disclaimer/")
             }
         }
@@ -116,4 +133,32 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener 
         val customTabsIntent: CustomTabsIntent = builder.build()
         customTabsIntent.launchUrl(requireContext(), Uri.parse(url))
     }
+
+    private fun startSound() {
+        val uri =
+            Uri.parse("android.resource://" + requireActivity().packageName + "/" + R.raw.adhan_abdul_basit)
+        mediaPlayer = MediaPlayer.create(context, uri)
+        mediaPlayer?.isLooping = false // This will play sound in repeatable mode.
+        mediaPlayer?.start()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Release MediaPlayer resources when activity stops
+        stopSound()
+    }
+
+    private fun stopSound() {
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    override fun onClick(isChecked: Boolean) {
+        if (isChecked) {
+            startSound()
+        } else {
+            stopSound()
+        }
+    }
+
 }

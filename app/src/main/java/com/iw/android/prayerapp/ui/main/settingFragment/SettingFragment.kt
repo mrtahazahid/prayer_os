@@ -31,7 +31,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!!
-    private var mediaPlayer: MediaPlayer? = null
+
 
     private val viewModel: SettingViewModel by viewModels()
 
@@ -97,24 +97,6 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     override fun setObserver() {
     }
 
-    private fun startSound() {
-        val uri =
-            Uri.parse("android.resource://" + requireActivity().packageName + "/" + R.raw.adhan_abdul_basit)
-        mediaPlayer = MediaPlayer.create(context, uri)
-        mediaPlayer?.isLooping = false // This will play sound in repeatable mode.
-        mediaPlayer?.start()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // Release MediaPlayer resources when activity stops
-        stopSound()
-    }
-
-    private fun stopSound() {
-        mediaPlayer?.release()
-        mediaPlayer = null
-    }
 
     override fun setOnClickListener() {
         binding.imageViewCalculationArrow.setOnClickListener(this)
@@ -172,17 +154,6 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             viewModel.setLocationAutomaticValue(isChecked)
         }
 
-
-
-        binding.switchPlayOnTap.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // Play sound
-                startSound()
-            } else {
-                // Stop sound
-                stopSound()
-            }
-        }
         binding.switchAdhanDua.setOnCheckedChangeListener { _, isChecked ->
             // Do something with the isChecked value
             if (isChecked) {
@@ -216,10 +187,8 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                         isPrayOnTap = true
                     )
                 )
-                startSound()
             } else {
                 // Stop sound
-                stopSound()
                 viewModel.saveSettingNotificationData(
                     NotificationSettingData(
                         isAdhanDuaOn = isAdhanTap,

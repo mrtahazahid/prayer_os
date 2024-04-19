@@ -37,7 +37,7 @@
                 android:gravity="center"
                 android:text="Are you sure you want to delete \naccount?"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 app:fontFamily="@font/sf_regular"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -55,11 +55,13 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewGotIt"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:paddingVertical="10dp"
                 android:fontFamily="@font/sf_bold"
                 android:text="Got It!"
+                android:gravity="center"
                 android:textColor="@color/app_green"
                 android:textSize="14sp"
                 android:textStyle="bold"

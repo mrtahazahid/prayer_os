@@ -163,7 +163,7 @@ class MoreViewModel @Inject constructor(repository: MainRepository) :
         moreList.add(
             MoreData(
                 R.drawable.ic_mike,
-                "Plan adhan",
+                "Play adhan",
 
                 )
         )
