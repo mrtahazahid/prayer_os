@@ -516,20 +516,20 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
         val timeDifferenceMillis =
             prayerTimeList[currentPrayerTimeIndex].currentNamazTime - currentTimeMillis
 
-        val totalDifferenceMillis =
-            when (prayerTimeList[currentPrayerTimeIndex].currentNamazName) {
-                "Fajr" -> {
-                    prayerTimeList[currentPrayerTimeIndex].currentNamazTime - prayerTimeList[previousPrayerTimeIndex].currentNamazTime
-                }
-
-                "Isha" -> {
-                    prayerTimeList[nextPrayerTimeIndex].currentNamazTime - prayerTimeList[currentPrayerTimeIndex].currentNamazTime
-                }
-
-                else -> {
-                    prayerTimeList[nextPrayerTimeIndex].currentNamazTime - prayerTimeList[previousPrayerTimeIndex].currentNamazTime
-                }
-            }
+//        val totalDifferenceMillis =
+//            when (prayerTimeList[currentPrayerTimeIndex].currentNamazName) {
+//                "Fajr" -> {
+//                    prayerTimeList[currentPrayerTimeIndex].currentNamazTime - prayerTimeList[previousPrayerTimeIndex].currentNamazTime
+//                }
+//
+//                "Isha" -> {
+//                    prayerTimeList[nextPrayerTimeIndex].currentNamazTime - prayerTimeList[currentPrayerTimeIndex].currentNamazTime
+//                }
+//
+//                else -> {
+//                    prayerTimeList[nextPrayerTimeIndex].currentNamazTime - prayerTimeList[previousPrayerTimeIndex].currentNamazTime
+//                }
+//            }
 
         return if (currentTimeMillis >= prayerTimeList[4].currentNamazTime && currentTimeMillis <= currentTimeMillis1159) {
             return PrayerTime(
@@ -553,7 +553,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                 prayerTimeList[currentPrayerTimeIndex].currentNamazName,
                 prayerTimeList[currentPrayerTimeIndex].currentNamazTime,
                 timeDifferenceMillis,
-                totalDifferenceMillis
+                0
             )
         }
     }

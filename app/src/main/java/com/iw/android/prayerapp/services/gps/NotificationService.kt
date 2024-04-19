@@ -131,6 +131,7 @@ class NotificationService : Service() {
                                 false
                             )
                             prefrence.updateNotificationData(specifiedTime)
+                            prefrence.removeNotificationData(index)
                             delay(1500)
                             break
                         }
@@ -144,6 +145,7 @@ class NotificationService : Service() {
                                 false
                             )
                             prefrence.updateNotificationData(specifiedTime)
+                            prefrence.removeNotificationData(index)
                             delay(1500)
                             break
                         }
@@ -157,12 +159,14 @@ class NotificationService : Service() {
                             )
                             specifiedTime.reminderTime = ""
                             prefrence.saveNotificationData(specifiedTime)
+                            prefrence.removeNotificationData(index)
+
                             delay(1500)
                             break
                         }
 
                     }
-                    prefrence.removeNotificationData(index)
+
                 } else {
                     continue
                 }

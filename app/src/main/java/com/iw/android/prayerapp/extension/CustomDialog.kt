@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.databinding.DialogToolsBinding
 
@@ -27,7 +27,8 @@ class CustomDialog(context: Context, private val title: String, private val des:
         )
         setContentView(binding.root)
         val window = window
-        window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        window?.setBackgroundDrawable(ContextCompat.getDrawable(context,R.drawable.round_corner_bg))
         binding.textViewActionTitle.text = title
         binding.textViewDes.text = des
         binding.textViewGotIt.setOnClickListener(this)

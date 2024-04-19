@@ -1,13 +1,13 @@
 package com.iw.android.prayerapp.ui.main.settingFragment
 
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -17,13 +17,13 @@ import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.databinding.FragmentSettingBinding
 import com.iw.android.prayerapp.extension.CustomDialog
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
-import com.iw.android.prayerapp.extension.showToolDialog
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getTimeZoneAndCity
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
+import java.util.Locale
 
 class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickListener,
     OnDataSelected {
@@ -38,6 +38,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     private var isCalViewShow = false
     private var isLocViewShow = false
     private var isTimeViewShow = false
+    private var isSystemShow = false
     private var geofence = 75
     private var snoozeTime = 0
     private var adjustHijriDate = 0
@@ -64,7 +65,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     }
 
     override fun initialize() {
-
+binding.textViewLocal1.text = Locale.getDefault().toString()
         lifecycleScope.launch {
             geofence = viewModel.getGeofenceRadius()
             binding.switchAdhanDua.isChecked =
@@ -96,8 +97,9 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     }
 
     private fun startSound() {
-        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.adhan_abdul_basit)
-        mediaPlayer?.isLooping = true
+        val uri =  Uri.parse("android.resource://" + requireActivity().packageName + "/" + R.raw.adhan_abdul_basit)
+        mediaPlayer = MediaPlayer.create(context, uri)
+        mediaPlayer?.isLooping = false // This will play sound in repeatable mode.
         mediaPlayer?.start()
     }
 
@@ -142,6 +144,9 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewCountDownHelp.setOnClickListener(this)
         binding.imageViewIqamaHelp.setOnClickListener(this)
         binding.imageViewGeoHelp.setOnClickListener(this)
+        binding.imageViewAuto.setOnClickListener(this)
+
+        binding.system.setOnClickListener(this)
         binding.imageViewAutoIncrementHelp.setOnClickListener(this)
 
 
@@ -149,15 +154,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             viewModel.setLocationAutomaticValue(isChecked)
         }
 
-        binding.switchPlayOnTap.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // Play sound
-                startSound()
-            } else {
-                // Stop sound
-                stopSound()
-            }
-        }
+
         binding.switchAdhanDua.setOnCheckedChangeListener { _, isChecked ->
             // Do something with the isChecked value
             if (isChecked) {
@@ -191,7 +188,10 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                         isPrayOnTap = true
                     )
                 )
+                startSound()
             } else {
+                // Stop sound
+                stopSound()
                 viewModel.saveSettingNotificationData(
                     NotificationSettingData(
                         isAdhanDuaOn = isAdhanTap,
@@ -208,53 +208,51 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.imageViewSnoozeHelp.id->{
-                CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                CustomDialog(requireContext(),"Snooze Time","The number of minutes to remind you \n again later for prayer, like the \n functionality of an alarm clock.").show()
             }
                     binding.imageVeiwAdhanHelp.id->{
                         CustomDialog(requireContext(),"Adhan duaa","Duaa will play after the adhan when \ntapped from a notification.").show()
                     }
                     binding.imageViewPlayHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                        CustomDialog(requireContext(),"Play on tap","The full adhan will play when tapped \n from a notification.This setting will be \n ignored for maghrib in ramadan and \n will always play full adhan in that case.").show()
                     }
                     binding.imageViewSchHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                        CustomDialog(requireContext(),"Title","This is the description").show()
+                    } binding.imageViewAuto.id->{
+                        CustomDialog(requireContext(),"Title","This is the description").show()
                     }
                     binding.imageViewMethodHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                        CustomDialog(requireContext(),"Title","This is the description").show()
                     }
                     binding.imageViewJuriHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                        CustomDialog(requireContext(),"Title","This is the description").show()
                     }
                     binding.imageViewAdjHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                        CustomDialog(requireContext(),"Title","This is the description").show()
                     }
                     binding.imageView24HourHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                        CustomDialog(requireContext(),"Title","This is the description").show()
                     }
                     binding.imageViewAdjustHijriHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                        CustomDialog(requireContext(),"Title","This is the description").show()
                     }
                     binding.imageViewPrayerHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                        CustomDialog(requireContext(),"Title","This is the description").show()
                     }
                     binding.imageViewCountDownHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                        CustomDialog(requireContext(),"Title","This is the description").show()
                     }
                     binding.imageViewIqamaHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                        CustomDialog(requireContext(),"Iqama","Specify your masjid iqama times to \n receive notifications for praying in \n congregation.").show()
                     }
                     binding.imageViewGeoHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                        CustomDialog(requireContext(),"Title","This is the description").show()
                     }
                     binding.imageViewAutoIncrementHelp.id->{
-                        CustomDialog(requireContext(),"Snooze Time","Snooze Des").show()
+                        CustomDialog(requireContext(),"Title","This is the description").show()
                     }
             binding.iqamaView.id->{
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToIqamaFragment())
-            }
-
-            binding.system.id->{
-                Toast.makeText(binding.system.context, "Work in process", Toast.LENGTH_SHORT).show()
             }
 
 
@@ -291,6 +289,18 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                     binding.imageViewTimeArrowButton.setImageResource(R.drawable.ic_forward)
                     binding.timeDetailViews.visibility = View.GONE
                     isTimeViewShow = false
+                }
+            }
+
+            binding.system.id -> {
+                if (!isSystemShow) {
+                    binding.imageViewSystem.setImageResource(R.drawable.ic_drop_down)
+                    binding.systemDetailViews.visibility = View.VISIBLE
+                    isSystemShow = true
+                } else {
+                    binding.imageViewSystem.setImageResource(R.drawable.ic_forward)
+                    binding.systemDetailViews.visibility = View.GONE
+                    isSystemShow = false
                 }
             }
 
