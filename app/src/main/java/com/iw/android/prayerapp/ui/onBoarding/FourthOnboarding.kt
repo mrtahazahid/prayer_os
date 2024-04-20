@@ -115,6 +115,11 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     }
 
     private fun spinnerElevation() {
+        lifecycleScope.launch {
+            viewModel.savePrayerElevation(
+                0.toString()
+            )
+        }
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.elevation,
@@ -147,6 +152,11 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     }
 
     private fun spinnerJurisprudence() {
+        lifecycleScope.launch {
+            viewModel.savePrayerJurisprudence(
+                0.toString()
+            )
+        }
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.jurisprudence,
@@ -180,7 +190,11 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     }
 
     private fun spinnerMethod() {
-
+        lifecycleScope.launch {
+            viewModel.savePrayerMethod(
+                0.toString()
+            )
+        }
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.methods,

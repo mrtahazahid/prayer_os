@@ -118,7 +118,6 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewSnoozeHelp.setOnClickListener(this)
         binding.imageVeiwAdhanHelp.setOnClickListener(this)
         binding.imageViewPlayHelp.setOnClickListener(this)
-        binding.imageViewSchHelp.setOnClickListener(this)
         binding.imageViewMethodHelp.setOnClickListener(this)
         binding.imageViewJuriHelp.setOnClickListener(this)
         binding.imageViewAdjHelp.setOnClickListener(this)
@@ -137,7 +136,6 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewSnoozeHelp.setOnClickListener(this)
         binding.imageVeiwAdhanHelp.setOnClickListener(this)
         binding.imageViewPlayHelp.setOnClickListener(this)
-        binding.imageViewSchHelp.setOnClickListener(this)
         binding.imageViewMethodHelp.setOnClickListener(this)
         binding.imageViewJuriHelp.setOnClickListener(this)
         binding.imageViewAdjHelp.setOnClickListener(this)
@@ -228,9 +226,6 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 ).show()
             }
 
-            binding.imageViewSchHelp.id -> {
-                CustomDialog(requireContext(), "Title", "This is the description").show()
-            }
 
             binding.imageViewAuto.id -> {
                 CustomDialog(requireContext(), "Title", "This is the description").show()
@@ -293,10 +288,6 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             }
 
             binding.imageViewPlayHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
-            }
-
-            binding.imageViewSchHelp.id -> {
                 CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
             }
 

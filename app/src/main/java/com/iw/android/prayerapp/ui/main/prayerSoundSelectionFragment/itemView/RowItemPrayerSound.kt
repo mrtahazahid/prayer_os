@@ -1,6 +1,7 @@
 package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView
 
 import android.view.View
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.iw.android.prayerapp.R
@@ -18,7 +19,8 @@ class RowItemPrayerSound(
     private val fragment: Fragment,
     private val soundSelected: Int,
     private val soundSelectedName: String,
-    val listener: OnClick
+    private val soundToneSelectedName: String,
+    val listener: OnClick,
 ) : ViewType<PrayerSoundData>, OnDataSelected {
     private var position = 0
     private lateinit var _binding: RowItemPraySoundBinding
@@ -51,7 +53,13 @@ class RowItemPrayerSound(
                 if (data.isImageForwardShow) View.VISIBLE else View.GONE
             binding.imageView.setImageResource(data.icon)
             binding.textViewTitle.text = data.title
-            binding.textViewSelectSoundTitle.text = soundSelectedName
+            binding.textViewSelectSoundTitle.text =
+                if (data.type == PrayerEnumType.ADHAN.getValue()) {
+                    soundSelectedName
+                } else {
+                    soundToneSelectedName
+                }
+
 
             binding.mainView.setOnClickListener {
                 listener.onItemClick(position)
@@ -75,8 +83,7 @@ class RowItemPrayerSound(
         sound: Int?,
         isSoundForNotification: Boolean
     ) {
-        _binding.textViewSelectSoundTitle.text = soundName
-        listener.onSoundSelected(soundName, soundPosition, sound, position, isSoundForNotification)
+        listener.onSoundSelected(soundName, soundPosition, sound, position, isSoundForNotification,_binding.textViewSelectSoundTitle)
     }
 
     private fun openSoundDialogFragment(
@@ -103,6 +110,6 @@ interface OnClick {
         soundPosition: Int,
         sound: Int?,
         position: Int,
-        isForNotification: Boolean
+        isForNotification: Boolean,textView: AppCompatTextView
     )
 }

@@ -92,7 +92,10 @@ data class NotificationData(
     var duaReminderMinutes: String = "off",
     var isForNotification: Boolean = false,
     var currentNotificationTypePosition: Int = 0,
-    var isForNotificationList: Boolean = false
+    var isForNotificationList: Boolean = false,
+    var isSilent: Boolean = false,
+    var isVibrate: Boolean = false,
+    var isOff: Boolean = false,
 )
 
 data class MonthlyCalenderData(
@@ -142,8 +145,8 @@ data class PrayerSoundData(
     val type: String,
     val isImageForwardShow: Boolean,
     var isItemSelected: Boolean,
-    val selectedItemAdhanTitle: String = "",
-    val selectedItemTonesTitle: String = "",
+    var selectedItemAdhanTitle: String = "",
+    var selectedItemTonesTitle: String = "",
     val soundName: String = "Tones",
 )
 
