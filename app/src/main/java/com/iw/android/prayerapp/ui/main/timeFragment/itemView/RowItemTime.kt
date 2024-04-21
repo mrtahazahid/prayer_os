@@ -50,6 +50,7 @@ class RowItemTime(
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemPrayTimeBinding).also { binding ->
             _binding = binding
+            binding.group.visibility = if(data.title == "Sunrise")View.VISIBLE else View.GONE
             binding.view4.visibility = if (data.title == "Last Third") View.GONE else View.VISIBLE
             prayerDetailData = data.namazDetail
             binding.imageViewNotificationHelp.setOnClickListener {

@@ -22,9 +22,9 @@ class RowItemNotificationList(private val data: NotificationData) : ViewType<Not
 
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemNotificationListBinding).also { binding ->
-            Log.d("caad",formatDate(data.createdDate))
+
             if (data.isForNotificationList) {
-                binding.textViewTime.text = "${formatDate(data.createdDate)} at ${data.namazTime}"
+                binding.textViewTime.text = "${formatDate(data.createdDate,position)} at ${data.namazTime}"
                 binding.textViewTitle.text = "${data.namazName} at ${data.namazTime}"
                 binding.secondView.visibility = View.GONE
 
@@ -33,19 +33,19 @@ class RowItemNotificationList(private val data: NotificationData) : ViewType<Not
                 if (data.reminderTime == "") {
                     binding.secondView.visibility = View.GONE
 
-                    binding.textViewReminderTime.text = "${formatDate(data.createdDate)} at ${data.namazTime}"
+                    binding.textViewReminderTime.text = "${formatDate(data.createdDate,position)} at ${data.namazTime}"
                 } else {
                     binding.secondView.visibility = View.VISIBLE
                     binding.textViewReminderTitle.text = if (data.reminderTimeMinutes != "off") {
                         "${data.namazName} in ${data.reminderTimeMinutes}"
                     } else {
-                        data.namazName
+                        "${data.namazName} at ${data.reminderTime}"
                     }
 
                     binding.textViewReminderTime.text =
-                        "${formatDate(data.createdDate)} at ${data.reminderTime}"
+                        "${formatDate(data.createdDate,position)} at ${data.reminderTime}"
                 }
-                binding.textViewTime.text = "${formatDate(data.createdDate)} at ${data.namazTime}"
+                binding.textViewTime.text = "${formatDate(data.createdDate,position)} at ${data.namazTime}"
                 binding.textViewTitle.text = "${data.namazName} at ${data.namazTime}"
 
             }
@@ -54,11 +54,17 @@ class RowItemNotificationList(private val data: NotificationData) : ViewType<Not
         }
     }
 
-    fun formatDate(inputDate: String): String {
-        val inputFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd MMMM", Locale.getDefault())
+    fun formatDate(inputDate: String,position: Int): String {
+        if(inputDate == ""){
+            Log.d("pos",position.toString())
+            return ""
+        }else{
+            val inputFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("dd MMMM", Locale.getDefault())
 
-        val date = inputFormat.parse(inputDate)
-        return outputFormat.format(date)
+            val date = inputFormat.parse(inputDate)
+            return outputFormat.format(date)
+        }
+
     }
 }

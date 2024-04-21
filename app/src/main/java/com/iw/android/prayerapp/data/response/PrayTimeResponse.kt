@@ -64,12 +64,6 @@ data class PrayerTime(
     val totalTime: Long = 0
 )
 
-data class IqamaTimeList(
-    val namazName: String,
-    val nameTimeString: String,
-    val nameTimeLong: Long,
-)
-
 data class NotificationPrayerTime(
     val currentNamazName: String,
     val currentNamazTime: String,
@@ -85,9 +79,9 @@ data class NotificationData(
     var reminderSound: Int? = null,
     var reminderNotificationSound: String = "Tones",
     var duaType: String = DuaTypeEnum.OFF.getValue(),
-    var duaTime: String = "12:00 AM",
+    var duaTime: String = "",
     var reminderTimeMinutes: String = "off",
-    var reminderTime: String = "12:00 AM",
+    var reminderTime: String = "",
     var createdDate: String = "",
     var duaReminderMinutes: String = "off",
     var isForNotification: Boolean = false,

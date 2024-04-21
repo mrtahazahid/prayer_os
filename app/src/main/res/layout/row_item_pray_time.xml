@@ -79,12 +79,11 @@
                 android:layout_height="wrap_content"
                 android:background="#2c2c2e"
                 android:visibility="gone"
-                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mainView"
-                >
+                tools:visibility="visible">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textViewNotificationSoundTitle"
@@ -104,9 +103,9 @@
                     android:id="@+id/imageViewNotificationHelp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_help"
                     android:layout_marginStart="6dp"
                     android:padding="6dp"
+                    android:src="@drawable/ic_help"
                     app:layout_constraintBottom_toBottomOf="@id/textViewNotificationSoundTitle"
                     app:layout_constraintStart_toEndOf="@id/textViewNotificationSoundTitle"
                     app:layout_constraintTop_toTopOf="@id/textViewNotificationSoundTitle" />
@@ -158,9 +157,9 @@
                     android:id="@+id/imageViewReminderHelp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_help"
                     android:layout_marginStart="6dp"
                     android:padding="6dp"
+                    android:src="@drawable/ic_help"
                     app:layout_constraintBottom_toBottomOf="@id/textViewReminderSoundTitle"
                     app:layout_constraintStart_toEndOf="@id/textViewReminderSoundTitle"
                     app:layout_constraintTop_toTopOf="@id/textViewReminderSoundTitle" />
@@ -169,12 +168,12 @@
                     android:id="@+id/textViewReminderSound"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginHorizontal="8dp"
-                    android:gravity="end"
+                    android:layout_marginTop="10dp"
                     android:drawableEnd="@drawable/ic_forward"
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/sf_regular"
+                    android:gravity="end"
                     android:textColor="@color/app_grey"
                     android:textSize="14sp"
                     app:drawableTint="@color/app_grey"
@@ -211,9 +210,9 @@
                     android:id="@+id/imageViewReminderTimeHelp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_help"
                     android:layout_marginStart="6dp"
                     android:padding="6dp"
+                    android:src="@drawable/ic_help"
                     app:layout_constraintBottom_toBottomOf="@id/textViewReminderTimeTitle"
                     app:layout_constraintStart_toEndOf="@id/textViewReminderTimeTitle"
                     app:layout_constraintTop_toTopOf="@id/textViewReminderTimeTitle" />
@@ -226,6 +225,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="8dp"
                     android:drawablePadding="4dp"
+                    android:paddingBottom="5dp"
                     android:fontFamily="@font/sf_regular"
                     android:textColor="@color/app_grey"
                     android:textSize="12sp"
@@ -313,14 +313,108 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view2" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewSecondReminderTimeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/sf_regular"
+                    android:text="Second Reminder Time"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewSecondReminderSetTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:drawablePadding="4dp"
+                    android:paddingBottom="5dp"
+                    android:fontFamily="@font/sf_regular"
+                    android:textColor="@color/app_grey"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewSecondReminderTimeTitle"
+                    tools:text="off" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewSecondReminderTimeHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_help"
+                    app:layout_constraintBottom_toBottomOf="@id/textViewSecondReminderTimeTitle"
+                    app:layout_constraintStart_toEndOf="@id/textViewSecondReminderTimeTitle"
+                    app:layout_constraintTop_toTopOf="@id/textViewSecondReminderTimeTitle" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewSecondReminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="15dp"
+                    app:cardBackgroundColor="#3c3b40"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/view2"
+                    app:strokeWidth="0dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageViewSecondReminderRemove"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_minus"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <View
+                            android:id="@+id/view8"
+                            android:layout_width="1dp"
+                            android:layout_height="0dp"
+                            android:layout_marginVertical="5dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/imageViewSecondReminderAdd"
+                            app:layout_constraintStart_toEndOf="@+id/imageViewSecondReminderRemove"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageViewSecondReminderAdd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/plus"
+                            android:tint="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/view8"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imageViewDuaHelp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_help"
                     android:layout_marginStart="6dp"
                     android:padding="6dp"
+                    android:src="@drawable/ic_help"
                     app:layout_constraintBottom_toBottomOf="@id/textViewDuaReminder"
                     app:layout_constraintStart_toEndOf="@id/textViewDuaReminder"
                     app:layout_constraintTop_toTopOf="@id/textViewDuaReminder" />
@@ -332,18 +426,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="28dp"
                     android:layout_marginTop="4dp"
-                    android:visibility="gone"
-                    tools:visibility="visible"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="20dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/sf_regular"
+                    android:text="off"
                     android:textColor="@color/app_grey"
                     android:textSize="12sp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewDuaReminder"
-                    android:text="off" />
+                    tools:visibility="visible" />
 
 
                 <com.google.android.material.card.MaterialCardView
@@ -351,16 +445,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginEnd="20dp"
+                    android:visibility="gone"
                     app:cardBackgroundColor="#3c3b40"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="4dp"
-                    android:visibility="gone"
-                    tools:visibility="visible"
-                    android:layout_marginEnd="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/spinnerDuaReminderSwitch"
                     app:layout_constraintTop_toBottomOf="@+id/view2"
-                    app:strokeWidth="0dp">
+                    app:strokeWidth="0dp"
+                    tools:visibility="visible">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -408,27 +502,26 @@
                     android:layout_width="90dp"
                     android:layout_height="32dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginEnd="20dp"
+                    android:visibility="gone"
                     app:cardBackgroundColor="#3c3b40"
                     app:cardCornerRadius="8dp"
-                    android:visibility="gone"
-                    tools:visibility="visible"
                     app:cardElevation="40dp"
-                    android:layout_marginEnd="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/spinnerDuaReminderSwitch"
                     app:layout_constraintTop_toBottomOf="@+id/view2"
-                    app:strokeWidth="0dp">
+                    app:strokeWidth="0dp"
+                    tools:visibility="visible">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/textViewDuaTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="87dp"
+                        android:layout_height="wrap_content"
                         android:fontFamily="@font/sf_regular"
-                        android:text="12:00 AM"
                         android:gravity="center"
+                        android:text="12:00 AM"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
-               />
+                        android:textSize="18sp" />
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -445,6 +538,18 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view2" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="cardViewDuaAdjustmentTime,view2,textViewDuaSetTime,textViewDuaReminder,cardViewDuaTime,spinnerDuaReminderSwitch,imageViewDuaHelp" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupFajr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="textViewSecondReminderSetTime,cardViewSecondReminder,textViewSecondReminderTimeTitle,imageViewSecondReminderTimeHelp," />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -92,6 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mainView">
@@ -110,25 +112,28 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewReminderTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/sf_bold"
                 android:text="Fajr"
                 android:textColor="@color/white"
-                android:textSize="11sp"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toStartOf="@+id/textViewReminderTime"
                 app:layout_constraintStart_toEndOf="@+id/imageView1"
                 app:layout_constraintTop_toTopOf="@id/imageView1" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewReminderTime"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:fontFamily="@font/sf_regular"
                 android:text="5:37 AM"
+                android:gravity="end"
                 android:textColor="@color/text_color_gray"
-                android:textSize="11sp"
+                android:textSize="13sp"
+                app:layout_constraintStart_toEndOf="@+id/textViewReminderTitle"
                 app:layout_constraintEnd_toStartOf="@id/imageViewDropDownMenu1"
                 app:layout_constraintTop_toTopOf="@id/imageView1" />
 

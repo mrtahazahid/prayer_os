@@ -112,6 +112,7 @@ class CopyBottomSheet :
             fajrData?.isSilent = isSilent
             fajrData?.isVibrate = isVibrate
             fajrData?.isOff = isOff
+            fajrData?.createdDate = fajrData?.createdDate.toString()
             viewModel.saveFajrDetail(fajrData!!)
         } else {
             val fajrData = NotificationData(

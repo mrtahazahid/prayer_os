@@ -1,6 +1,7 @@
 package com.iw.android.prayerapp.ui.main.notificationList
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,6 +62,7 @@ class   NotificationFragment : BaseFragment(R.layout.fragment_notification_list)
 
     override fun setObserver() {
         viewTypeArray.clear()
+        Log.d("notiList",viewModel.notificationList.toString())
         for (data in viewModel.notificationList) {
             viewTypeArray.add(
                 RowItemNotificationList(data)

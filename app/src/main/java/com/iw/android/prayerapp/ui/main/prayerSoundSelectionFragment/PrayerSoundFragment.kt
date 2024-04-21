@@ -81,7 +81,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
-      //  setObserver()
+        setObserver()
         setOnClickListener()
     }
 
@@ -247,7 +247,6 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
             }
             Log.d("isis",viewModel.getIshaCurrentNamazNotificationData().toString())
 
-setObserver()
         }
 
 

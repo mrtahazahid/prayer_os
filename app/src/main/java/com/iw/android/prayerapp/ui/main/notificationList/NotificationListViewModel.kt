@@ -324,9 +324,57 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     namazTime = getFormattedDate(3)[5], createdDate = getFormattedCreatedDate(3)
                 )
             )
+
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Fajr",
+                    namazTime = getFormattedDate(4)[0], createdDate = getFormattedCreatedDate(4)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Sunrise",
+                    namazTime = getFormattedDate(4)[1], createdDate = getFormattedCreatedDate(4)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Dhuhr",
+                    namazTime = getFormattedDate(4)[2], createdDate = getFormattedCreatedDate(4)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Asr",
+                    namazTime = getFormattedDate(4)[3], createdDate = getFormattedCreatedDate(4)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Maghrib",
+                    namazTime = getFormattedDate(4)[4], createdDate = getFormattedCreatedDate(4)
+                )
+            )
+            notificationList.add(
+                NotificationData(
+                    isForNotificationList = true,
+                    namazName = "Isha",
+                    namazTime = getFormattedDate(4)[5], createdDate = getFormattedCreatedDate(4)
+                )
+            )
+
+
             for (data in getAllNotificationData()) {
                 if (data != null) {
-                    notificationList.add(data)
+                    if (data.createdDate != "" || data.namazName != "") {
+                        notificationList.add(data)
+                    }
+
                 }
             }
         }
