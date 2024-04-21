@@ -116,17 +116,47 @@ abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
     suspend fun getAllNotificationData(): List<NotificationData?> =
         repository.getAllNotificationData()
 
-    fun saveCurrentNamazNotificationData(data: CurrentNamazNotificationData) =
+    fun saveFajrCurrentNamazNotificationData(data: CurrentNamazNotificationData) =
         viewModelScope.launch {
-            repository.saveCurrentNamazNotificationData(data)
+            repository.saveFajrCurrentNamazNotificationData(data)
         }
 
-    fun deleteCurrentNamazNotificationData() = viewModelScope.launch {
-        repository.deleteCurrentNamazNotificationData()
-    }
+    suspend fun getFajrCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        repository.getFajrCurrentNamazNotificationData()
 
-    suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData? =
-        repository.getCurrentNamazNotificationData()
+    fun saveDhuhrCurrentNamazNotificationData(data: CurrentNamazNotificationData) =
+        viewModelScope.launch {
+            repository.saveDhuhrCurrentNamazNotificationData(data)
+        }
+
+    suspend fun getDhuhrCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        repository.getDhuhrCurrentNamazNotificationData()
+
+    fun saveAsrCurrentNamazNotificationData(data: CurrentNamazNotificationData) =
+        viewModelScope.launch {
+            repository.saveAsrCurrentNamazNotificationData(data)
+        }
+
+    suspend fun getAsrCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        repository.getAsrCurrentNamazNotificationData()
+
+
+    fun saveMaghribCurrentNamazNotificationData(data: CurrentNamazNotificationData) =
+        viewModelScope.launch {
+            repository.saveMaghribCurrentNamazNotificationData(data)
+        }
+
+    suspend fun getMaghribCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        repository.getMaghribCurrentNamazNotificationData()
+
+    suspend fun getIshaCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        repository.getIshaCurrentNamazNotificationData()
+
+    fun saveIshaCurrentNamazNotificationData(data: CurrentNamazNotificationData) =
+        viewModelScope.launch {
+            repository.saveIshaCurrentNamazNotificationData(data)
+        }
+
 
     suspend fun saveIqamaFajrDetail(prayerDetail: IqamaData) {
         repository.saveIqamaFajrDetail(prayerDetail)

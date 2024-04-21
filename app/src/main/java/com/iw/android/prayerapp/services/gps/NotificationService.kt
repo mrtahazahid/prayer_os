@@ -16,6 +16,7 @@ import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.prefrence.DataPreference
+import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.NotificationPrayerTime
 import com.iw.android.prayerapp.extension.convertToFunTime
 import com.iw.android.prayerapp.notificationService.Notification
@@ -251,13 +252,126 @@ class NotificationService : Service() {
     }
 
     private suspend fun checkDailyNamazTime() {
-        val notificationDetail = prefrence.getCurrentNamazNotificationData()
+
         val currentTime = millisToTimeFormat(System.currentTimeMillis())
         for (time in prayerList) {
+            val notificationDetail : CurrentNamazNotificationData? = when (time.currentNamazName) {
+                "Fajr" -> {
+                    if (prefrence.getFajrCurrentNamazNotificationData() != null) {
+                        prefrence.getFajrCurrentNamazNotificationData()!!
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Fajr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Dhuhr" -> {
+                    if (prefrence.getDhuhrCurrentNamazNotificationData() != null) {
+                        prefrence.getDhuhrCurrentNamazNotificationData()!!
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Dhuhr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Asr" -> {
+                    if (prefrence.getAsrCurrentNamazNotificationData() != null) {
+                        prefrence.getAsrCurrentNamazNotificationData()!!
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Asr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Maghrib" -> {
+                    if (prefrence.getMaghribCurrentNamazNotificationData() != null) {
+                        prefrence.getMaghribCurrentNamazNotificationData()!!
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Fajr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Isha" -> {
+                    if (prefrence.getIshaCurrentNamazNotificationData() != null) {
+                        prefrence.getIshaCurrentNamazNotificationData()!!
+
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Fajr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                else -> {
+                    CurrentNamazNotificationData(
+                        "Fajr",
+                        "Adhan",
+                        "Tones",
+                        0,
+                        false,
+                        true,
+                        false,
+                        false,
+                        false,
+                        R.raw.adhan_abdul_basit
+                    )
+                }
+            }
+
             if (currentTime == time.currentNamazTime && !time.isCalled && notificationDetail != null) {
                 notifications.notify(
                     time.currentNamazName, "Namaz Time",
-                    notificationDetail.sound ?: 0,
+                    notificationDetail.sound ?: R.raw.adhan_abdul_basit,
                     notificationDetail.isVibrate,
                     notificationDetail.isSilent
                 )

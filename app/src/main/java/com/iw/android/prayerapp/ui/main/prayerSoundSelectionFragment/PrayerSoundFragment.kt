@@ -81,20 +81,173 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
-        setObserver()
+      //  setObserver()
         setOnClickListener()
     }
 
 
     override fun initialize() {
         lifecycleScope.launch {
-            selectedSound = viewModel.getCurrentNamazNotificationData()?.sound ?: 0
-            selectedPosition = viewModel.getCurrentNamazNotificationData()?.position ?: 0
-            isForAdhan = viewModel.getCurrentNamazNotificationData()?.isForAdhan ?: false
-            selectedSoundAdhanName =
-                viewModel.getCurrentNamazNotificationData()?.soundName ?: "Adhan"
-            selectedSoundToneName =
-                viewModel.getCurrentNamazNotificationData()?.soundToneName ?: "Tones"
+            when (args.title.split(Regex("\\s|:"))[0]) {
+                "Fajr" -> {
+                    if (viewModel.getFajrCurrentNamazNotificationData() != null) {
+                        selectedSound = viewModel.getFajrCurrentNamazNotificationData()?.sound ?: 0
+                        selectedPosition =
+                            viewModel.getFajrCurrentNamazNotificationData()?.position ?: 0
+                        isForAdhan =
+                            viewModel.getFajrCurrentNamazNotificationData()?.isForAdhan ?: false
+                        selectedSoundAdhanName =
+                            viewModel.getFajrCurrentNamazNotificationData()?.soundName ?: "Adhan"
+                        selectedSoundToneName =
+                            viewModel.getFajrCurrentNamazNotificationData()?.soundToneName
+                                ?: "Tones"
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Fajr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Dhuhr" -> {
+                    if (viewModel.getDhuhrCurrentNamazNotificationData() != null) {
+                        selectedSound = viewModel.getDhuhrCurrentNamazNotificationData()?.sound ?: 0
+                        selectedPosition =
+                            viewModel.getDhuhrCurrentNamazNotificationData()?.position ?: 0
+                        isForAdhan =
+                            viewModel.getDhuhrCurrentNamazNotificationData()?.isForAdhan ?: false
+                        selectedSoundAdhanName =
+                            viewModel.getDhuhrCurrentNamazNotificationData()?.soundName ?: "Adhan"
+                        selectedSoundToneName =
+                            viewModel.getDhuhrCurrentNamazNotificationData()?.soundToneName
+                                ?: "Tones"
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Dhuhr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Asr" -> {
+                    if (viewModel.getAsrCurrentNamazNotificationData() != null) {
+                        selectedSound = viewModel.getAsrCurrentNamazNotificationData()?.sound ?: 0
+                        selectedPosition =
+                            viewModel.getAsrCurrentNamazNotificationData()?.position ?: 0
+                        isForAdhan =
+                            viewModel.getAsrCurrentNamazNotificationData()?.isForAdhan ?: false
+                        selectedSoundAdhanName =
+                            viewModel.getAsrCurrentNamazNotificationData()?.soundName ?: "Adhan"
+                        selectedSoundToneName =
+                            viewModel.getAsrCurrentNamazNotificationData()?.soundToneName ?: "Tones"
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Asr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Maghrib" -> {
+                    if (viewModel.getMaghribCurrentNamazNotificationData() != null) {
+                        selectedSound =
+                            viewModel.getMaghribCurrentNamazNotificationData()?.sound ?: 0
+                        selectedPosition =
+                            viewModel.getMaghribCurrentNamazNotificationData()?.position ?: 0
+                        isForAdhan =
+                            viewModel.getMaghribCurrentNamazNotificationData()?.isForAdhan ?: false
+                        selectedSoundAdhanName =
+                            viewModel.getMaghribCurrentNamazNotificationData()?.soundName ?: "Adhan"
+                        selectedSoundToneName =
+                            viewModel.getMaghribCurrentNamazNotificationData()?.soundToneName
+                                ?: "Tones"
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Maghrib",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Isha" -> {
+                    if (viewModel.getIshaCurrentNamazNotificationData() != null) {
+
+                        selectedSound = viewModel.getIshaCurrentNamazNotificationData()?.sound ?: 0
+                        selectedPosition =
+                            viewModel.getIshaCurrentNamazNotificationData()?.position ?: 0
+                        isForAdhan =
+                            viewModel.getIshaCurrentNamazNotificationData()?.isForAdhan ?: false
+                        selectedSoundAdhanName =
+                            viewModel.getIshaCurrentNamazNotificationData()?.soundName ?: "Adhan"
+                        selectedSoundToneName =
+                            viewModel.getIshaCurrentNamazNotificationData()?.soundToneName
+                                ?: "Tones"
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Isha",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                else -> {
+                    CurrentNamazNotificationData(
+                        "Fajr",
+                        "Adhan",
+                        "Tones",
+                        0,
+                        false,
+                        true,
+                        false,
+                        false,
+                        false,
+                        R.raw.adhan_abdul_basit
+                    )
+                }
+            }
+            Log.d("isis",viewModel.getIshaCurrentNamazNotificationData().toString())
+
+setObserver()
         }
 
 
@@ -132,21 +285,87 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                 if (isDataForSave) {
                     binding.progress.show()
                     lifecycleScope.launch {
-                        Log.d("tone", selectedSoundAdhanName)
-                        Log.d("tone", selectedSoundToneName)
-                        viewModel.saveCurrentNamazNotificationData(
-                            CurrentNamazNotificationData(
-                                args.title,
-                                selectedSoundAdhanName, selectedSoundToneName,
-                                notificationTypPosition,
-                                isSoundSelected,
-                                isForAdhan,
-                                isVibrateSelected,
-                                isSilentSelected,
-                                isOffSelected,
-                                sound,
-                            )
-                        )
+                        when (args.title.split(Regex("\\s|:"))[0]) {
+                            "Fajr" -> {
+                                viewModel.saveFajrCurrentNamazNotificationData(
+                                    CurrentNamazNotificationData(
+                                        args.title,
+                                        selectedSoundAdhanName, selectedSoundToneName,
+                                        notificationTypPosition,
+                                        isSoundSelected,
+                                        isForAdhan,
+                                        isVibrateSelected,
+                                        isSilentSelected,
+                                        isOffSelected,
+                                        sound,
+                                    )
+                                )
+                            }
+
+                            "Dhuhr" -> {
+                                viewModel.saveDhuhrCurrentNamazNotificationData(
+                                    CurrentNamazNotificationData(
+                                        args.title,
+                                        selectedSoundAdhanName, selectedSoundToneName,
+                                        notificationTypPosition,
+                                        isSoundSelected,
+                                        isForAdhan,
+                                        isVibrateSelected,
+                                        isSilentSelected,
+                                        isOffSelected,
+                                        sound,
+                                    )
+                                )
+                            }
+
+                            "Asr" -> {
+                                viewModel.saveAsrCurrentNamazNotificationData(
+                                    CurrentNamazNotificationData(
+                                        args.title,
+                                        selectedSoundAdhanName, selectedSoundToneName,
+                                        notificationTypPosition,
+                                        isSoundSelected,
+                                        isForAdhan,
+                                        isVibrateSelected,
+                                        isSilentSelected,
+                                        isOffSelected,
+                                        sound,
+                                    )
+                                )
+                            }
+
+                            "Maghrib" -> {
+                                viewModel.saveMaghribCurrentNamazNotificationData(
+                                    CurrentNamazNotificationData(
+                                        args.title,
+                                        selectedSoundAdhanName, selectedSoundToneName,
+                                        notificationTypPosition,
+                                        isSoundSelected,
+                                        isForAdhan,
+                                        isVibrateSelected,
+                                        isSilentSelected,
+                                        isOffSelected,
+                                        sound,
+                                    )
+                                )
+                            }
+
+                            "Isha" -> {
+                                viewModel.saveIshaCurrentNamazNotificationData(
+                                    CurrentNamazNotificationData(
+                                        args.title,
+                                        selectedSoundAdhanName, selectedSoundToneName,
+                                        notificationTypPosition,
+                                        isSoundSelected,
+                                        isForAdhan,
+                                        isVibrateSelected,
+                                        isSilentSelected,
+                                        isOffSelected,
+                                        sound,
+                                    )
+                                )
+                            }
+                        }
                         delay(3000)
                         binding.progress.hide()
                         findNavController().popBackStack()
@@ -163,7 +382,11 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                 val bottomSheet = CopyBottomSheet()
                 bottomSheet.soundName = selectedSoundAdhanName
                 bottomSheet.sound = sound ?: R.raw.adhan_abdul_basit
+                bottomSheet.selectedPosition = selectedPosition
+
                 bottomSheet.isSilent = isSilentSelected
+                bottomSheet.isForAdhan = isForAdhan
+                bottomSheet.isSoundSelected = isSoundSelected
                 bottomSheet.isVibrate = isVibrateSelected
                 bottomSheet.isOff = isOffSelected
 

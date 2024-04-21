@@ -1,7 +1,6 @@
 package com.iw.android.prayerapp.ui.main.prayerFragment
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -16,12 +15,12 @@ import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
+import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.PrayerTime
 import com.iw.android.prayerapp.databinding.FragmentPrayerBinding
 import com.iw.android.prayerapp.extension.convertToFunTime
 import com.iw.android.prayerapp.extension.formatRemainingTime
-import com.iw.android.prayerapp.extension.getIslamicDate
 import com.iw.android.prayerapp.extension.getIslamicDateByOffSet
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.notificationService.Notification
@@ -33,6 +32,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -113,15 +113,19 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         val getPrayerTime =
             getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
 
-        binding.textViewTodayIslamicDate.text =  if (convertToFunTime(System.currentTimeMillis()) > convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())){
-            getIslamicDateByOffSet(1)
-        }else{
-            getIslamicDateByOffSet(0)
-        }
+        binding.textViewTodayIslamicDate.text =
+            if (convertToFunTime(System.currentTimeMillis()) > convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())) {
+                getIslamicDateByOffSet(1)
+            } else {
+                getIslamicDateByOffSet(0)
+            }
         upComingNamazTime()
     }
 
-    override fun setObserver() {}
+    override fun setObserver() {
+
+    }
+
 
     override fun setOnClickListener() {
         binding.upComingPrayerTimeView.setOnClickListener(this)
@@ -249,6 +253,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
         val currentNamaz = getTimeDifferenceToNextPrayer()
 
+
         when (currentNamaz.currentNamazName) {
             "Fajr" -> {
                 binding.textViewFifthNamaz.text =
@@ -369,7 +374,8 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             }
 
             override fun onFinish() {
-                showNotification()
+                showNotification(currentNamazName)
+                upComingNamazTime()
 
             }
         }
@@ -382,14 +388,126 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         return currentDate.format(formatter)
     }
 
-    private fun showNotification() {
+    private fun showNotification(currentNamazName: String) {
         lifecycleScope.launch {
+            val currentNamazData: CurrentNamazNotificationData? = when (currentNamazName) {
+                "Fajr" -> {
+                    if (viewModel.getFajrCurrentNamazNotificationData() != null) {
+                        viewModel.getFajrCurrentNamazNotificationData()!!
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Fajr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Dhuhr" -> {
+                    if (viewModel.getDhuhrCurrentNamazNotificationData() != null) {
+                        viewModel.getDhuhrCurrentNamazNotificationData()!!
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Dhuhr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Asr" -> {
+                    if (viewModel.getAsrCurrentNamazNotificationData() != null) {
+                        viewModel.getAsrCurrentNamazNotificationData()!!
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Asr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Maghrib" -> {
+                    if (viewModel.getMaghribCurrentNamazNotificationData() != null) {
+                        viewModel.getMaghribCurrentNamazNotificationData()!!
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Fajr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Isha" -> {
+                    if (viewModel.getIshaCurrentNamazNotificationData() != null) {
+                        viewModel.getIshaCurrentNamazNotificationData()!!
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Fajr",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            false,
+                            true,
+                            false,
+                            false,
+                            false,
+                            R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                else -> {
+                    CurrentNamazNotificationData(
+                        "Fajr",
+                        "Adhan",
+                        "Tones",
+                        0,
+                        false,
+                        true,
+                        false,
+                        false,
+                        false,
+                        R.raw.adhan_abdul_basit
+                    )
+                }
+            }
+
             notifications.notify(
-                viewModel.getCurrentNamazNotificationData()?.currentNamazName ?: "",
+                currentNamazData?.currentNamazName ?: "",
                 "Namaz Time",
-                viewModel.getCurrentNamazNotificationData()?.sound ?: R.raw.adhan_abdul_basit,
-                viewModel.getCurrentNamazNotificationData()?.isVibrate ?: false,
-                viewModel.getCurrentNamazNotificationData()?.isSilent ?: false
+                currentNamazData?.sound ?: R.raw.adhan_abdul_basit,
+                currentNamazData?.isVibrate ?: false,
+                currentNamazData?.isSilent ?: false
             )
             getTimeDifferenceToNextPrayer()
         }
@@ -471,12 +589,40 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         currentNamazName = prayerTimeList[currentPrayerTimeIndex].currentNamazName
 
         return if (currentTimeMillis >= prayerTimeList[4].currentNamazTime && currentTimeMillis <= currentTimeMillis1159) {
+            val obj = DateTimeUtils()
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
+            var totalTime1: Long = 0
+            var totalTimeFromCurrent: Long = 0
+
+
+            try {
+                val startDateString =
+                    "${getFormattedDate(0)} ${convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())}"
+                val endDateString =
+                    "${getFormattedDate(1)} ${convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds())}"
+
+                val startDate = dateFormat.parse(startDateString)
+                val endDate = dateFormat.parse(endDateString)
+
+                val (totaltime, curentTimeDifference) = obj.calculateHoursAndMinutesBetween(
+                    startDate,
+                    endDate
+                )
+                Log.d("difference", "Difference: $totaltime")
+                Log.d("difference", "Difference: ${curentTimeDifference}")
+                totalTime1 = totaltime
+                totalTimeFromCurrent = curentTimeDifference
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
             return PrayerTime(
-                "No Namaz Left",
-                0,
-                0,
-                0
+                "Fajr",
+                getPrayerTime.fajr.toEpochMilliseconds(),
+                totalTimeFromCurrent,
+                totalTime1
             )
+
         } else if (currentTimeMillis >= currentTimeMillis12 && currentTimeMillis < prayerTimeList[0].currentNamazTime) {
             val timeDifferenceMillis1 = prayerTimeList[0].currentNamazTime - currentTimeMillis
             val totalDifferenceMillis1 = prayerTimeList[0].currentNamazTime - currentTimeMillis12
@@ -604,4 +750,22 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     }
 
 
+    private fun getFormattedDate(offset: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, offset)
+        val targetDate: Date = calendar.time
+
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return dateFormat.format(targetDate)
+    }
+}
+
+class DateTimeUtils {
+    fun calculateHoursAndMinutesBetween(startDate: Date, endDate: Date): Pair<Long, Long> {
+        val totaltimeDifference = Math.abs(endDate.time - startDate.time)
+        val currentTime = Calendar.getInstance().time
+        val totaltimeDifferenceFromCurrentToEndTime = Math.abs(endDate.time - currentTime.time)
+
+        return Pair(totaltimeDifference, totaltimeDifferenceFromCurrentToEndTime)
+    }
 }

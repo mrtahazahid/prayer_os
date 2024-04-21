@@ -112,15 +112,15 @@ data class MonthlyCalenderData(
 
 data class CurrentNamazNotificationData(
     val currentNamazName: String,
-    val soundName: String = "Adhan",
-    val soundToneName: String = "Tones",
-    val position: Int,
-    val isSoundSelected: Boolean,
+    var soundName: String = "Adhan",
+    var soundToneName: String = "Tones",
+    var position: Int,
+    var isSoundSelected: Boolean,
     val isForAdhan: Boolean,
-    val isVibrate: Boolean,
-    val isSilent: Boolean,
-    val isOff: Boolean,
-    val sound: Int? = null,
+    var isVibrate: Boolean,
+    var isSilent: Boolean,
+    var isOff: Boolean,
+    var sound: Int? = null,
 
     )
 

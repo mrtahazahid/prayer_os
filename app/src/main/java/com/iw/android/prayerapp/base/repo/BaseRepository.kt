@@ -211,25 +211,51 @@ abstract class BaseRepository(
         NotificationSettingData::class.java
     )
 
-    suspend fun saveCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
-        preferences.setStringData(
-            DataPreference.CURRENT_NAMAZ_NOTIFICATION_DATA,
-            Gson().toJson(currentNamazNotificationData)
-        )
+    suspend fun saveFajrCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        preferences.saveFajrCurrentNamazNotificationData(currentNamazNotificationData)
 
     }
 
-    suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData? = Gson().fromJson(
-        preferences.getStringData(DataPreference.CURRENT_NAMAZ_NOTIFICATION_DATA),
-        CurrentNamazNotificationData::class.java
-    )
+    suspend fun getFajrCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        preferences.getFajrCurrentNamazNotificationData()
 
-    suspend fun deleteCurrentNamazNotificationData() {
-        preferences.setStringData(
-            DataPreference.CURRENT_NAMAZ_NOTIFICATION_DATA,
-            Gson().toJson(null)
-        )
+    suspend fun saveDhuhrCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        preferences.saveDhuhrCurrentNamazNotificationData(currentNamazNotificationData)
+
     }
+
+    suspend fun getDhuhrCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        preferences.getDhuhrCurrentNamazNotificationData()
+
+
+    suspend fun saveAsrCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        preferences.saveAsrCurrentNamazNotificationData(currentNamazNotificationData)
+
+    }
+
+    suspend fun getAsrCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        preferences.getAsrCurrentNamazNotificationData()
+
+
+    suspend fun saveMaghribCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        preferences.saveMaghribCurrentNamazNotificationData(currentNamazNotificationData)
+
+    }
+
+    suspend fun getMaghribCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        preferences.getMaghribCurrentNamazNotificationData()
+
+    suspend fun saveIshaCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        preferences.saveIshaCurrentNamazNotificationData(currentNamazNotificationData)
+
+    }
+
+    suspend fun getIshaCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        preferences.getIshaCurrentNamazNotificationData()
+
+
+
+
 
     suspend fun saveIqamaFajrDetail(namazDetail: IqamaData) {
         preferences.setStringData(DataPreference.IQAMA_FAJR, Gson().toJson(namazDetail))
@@ -320,7 +346,6 @@ abstract class BaseRepository(
             IqamaNotificationData::class.java
         )
     }
-
 
 
 }

@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.iw.android.prayerapp.R
+import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.databinding.CopyDialogBinding
 import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
@@ -24,6 +25,9 @@ class CopyBottomSheet :
 
     var soundName: String = "Adhan"
     var sound: Int = R.raw.adhan_abdul_basit
+    var selectedPosition: Int = 0
+    var isForAdhan: Boolean = false
+    var isSoundSelected: Boolean = false
     var isSilent: Boolean = false
     var isVibrate: Boolean = false
     var isOff: Boolean = false
@@ -253,7 +257,151 @@ class CopyBottomSheet :
             viewModel.saveLastNightDetail(lastThirdData)
         }
 
-        delay(10000)
+        if (viewModel.getFajrCurrentNamazNotificationData() != null) {
+            val fajrData = viewModel.getFajrCurrentNamazNotificationData()
+            fajrData?.sound = sound
+            if (isForAdhan) {
+                fajrData?.soundName = soundName
+                fajrData?.soundToneName = "Tones"
+            } else {
+                fajrData?.soundName = "Adhan"
+                fajrData?.soundToneName = soundName
+            }
+            fajrData?.position = selectedPosition
+            fajrData?.isSilent = isSilent
+            fajrData?.isVibrate = isVibrate
+            fajrData?.isOff = isOff
+            fajrData?.isSoundSelected = isSoundSelected
+            viewModel.saveFajrCurrentNamazNotificationData(fajrData!!)
+        } else {
+            val fajrData =  CurrentNamazNotificationData(
+                sound = sound,
+                soundName = if(isForAdhan)soundName else "Adhan",
+                soundToneName =   if(!isForAdhan)soundName else "Tones",
+                isSilent = isSilent,
+                isVibrate = isVibrate,
+                isOff = isOff, currentNamazName = "Fajr", position = selectedPosition,isSoundSelected=isSoundSelected, isForAdhan = isForAdhan
+            )
+            viewModel.saveFajrCurrentNamazNotificationData(fajrData)
+        }
+
+        if (viewModel.getDhuhrCurrentNamazNotificationData() != null) {
+            val dhuhrData = viewModel.getDhuhrCurrentNamazNotificationData()
+            dhuhrData?.sound = sound
+            if (isForAdhan) {
+                dhuhrData?.soundName = soundName
+                dhuhrData?.soundToneName = "Tones"
+            } else {
+                dhuhrData?.soundName = "Adhan"
+                dhuhrData?.soundToneName = soundName
+            }
+            dhuhrData?.position = selectedPosition
+            dhuhrData?.isSilent = isSilent
+            dhuhrData?.isVibrate = isVibrate
+            dhuhrData?.isOff = isOff
+            dhuhrData?.isSoundSelected = isSoundSelected
+            viewModel.saveDhuhrCurrentNamazNotificationData(dhuhrData!!)
+        } else {
+            val dhuhrData =  CurrentNamazNotificationData(
+                sound = sound,
+                soundName = if(isForAdhan)soundName else "Adhan",
+                soundToneName =   if(!isForAdhan)soundName else "Tones",
+                isSilent = isSilent,
+                isVibrate = isVibrate,
+                isOff = isOff, currentNamazName = "Fajr", position = selectedPosition,isSoundSelected=isSoundSelected, isForAdhan = isForAdhan
+            )
+            viewModel.saveDhuhrCurrentNamazNotificationData(dhuhrData)
+        }
+
+
+        if (viewModel.getAsrCurrentNamazNotificationData() != null) {
+            val asrData = viewModel.getAsrCurrentNamazNotificationData()
+            asrData?.sound = sound
+            if (isForAdhan) {
+                asrData?.soundName = soundName
+                asrData?.soundToneName = "Tones"
+            } else {
+                asrData?.soundName = "Adhan"
+                asrData?.soundToneName = soundName
+            }
+            asrData?.position = selectedPosition
+            asrData?.isSilent = isSilent
+            asrData?.isVibrate = isVibrate
+            asrData?.isOff = isOff
+            asrData?.isSoundSelected = isSoundSelected
+            viewModel.saveAsrCurrentNamazNotificationData(asrData!!)
+        } else {
+            val asrData =  CurrentNamazNotificationData(
+                sound = sound,
+                soundName = if(isForAdhan)soundName else "Adhan",
+                soundToneName =   if(!isForAdhan)soundName else "Tones",
+                isSilent = isSilent,
+                isVibrate = isVibrate,
+                isOff = isOff, currentNamazName = "Fajr", position = selectedPosition,isSoundSelected=isSoundSelected, isForAdhan = isForAdhan
+            )
+            viewModel.saveAsrCurrentNamazNotificationData(asrData)
+        }
+
+
+        if (viewModel.getMaghribCurrentNamazNotificationData() != null) {
+            val maghribData = viewModel.getMaghribCurrentNamazNotificationData()
+            maghribData?.sound = sound
+            if (isForAdhan) {
+                maghribData?.soundName = soundName
+                maghribData?.soundToneName = "Tones"
+            } else {
+                maghribData?.soundName = "Adhan"
+                maghribData?.soundToneName = soundName
+            }
+            maghribData?.position = selectedPosition
+            maghribData?.isSilent = isSilent
+            maghribData?.isVibrate = isVibrate
+            maghribData?.isOff = isOff
+            maghribData?.isSoundSelected = isSoundSelected
+            viewModel.saveMaghribCurrentNamazNotificationData(maghribData!!)
+        } else {
+            val maghribData =  CurrentNamazNotificationData(
+                sound = sound,
+                soundName = if(isForAdhan)soundName else "Adhan",
+                soundToneName =   if(!isForAdhan)soundName else "Tones",
+                isSilent = isSilent,
+                isVibrate = isVibrate,
+                isOff = isOff, currentNamazName = "Fajr", position = selectedPosition,isSoundSelected=isSoundSelected, isForAdhan = isForAdhan
+            )
+            viewModel.saveMaghribCurrentNamazNotificationData(maghribData)
+        }
+
+
+        if (viewModel.getIshaCurrentNamazNotificationData() != null) {
+            val ishaData = viewModel.getIshaCurrentNamazNotificationData()
+            ishaData?.sound = sound
+            if (isForAdhan) {
+                ishaData?.soundName = soundName
+                ishaData?.soundToneName = "Tones"
+            } else {
+                ishaData?.soundName = "Adhan"
+                ishaData?.soundToneName = soundName
+            }
+            ishaData?.position = selectedPosition
+            ishaData?.isSilent = isSilent
+            ishaData?.isVibrate = isVibrate
+            ishaData?.isOff = isOff
+            ishaData?.isSoundSelected = isSoundSelected
+            viewModel.saveIshaCurrentNamazNotificationData(ishaData!!)
+        } else {
+            val ishaData =  CurrentNamazNotificationData(
+                sound = sound,
+                soundName = if(isForAdhan)soundName else "Adhan",
+                soundToneName =   if(!isForAdhan)soundName else "Tones",
+                isSilent = isSilent,
+                isVibrate = isVibrate,
+                isOff = isOff, currentNamazName = "Fajr", position = selectedPosition,isSoundSelected=isSoundSelected, isForAdhan = isForAdhan
+            )
+            viewModel.saveIshaCurrentNamazNotificationData(ishaData)
+        }
+
+
+        delay(5000)
         dismiss()
     }
 

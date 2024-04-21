@@ -10,7 +10,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.APPLICATION_ID
-import com.iw.android.prayerapp.base.response.LoginUserResponse
 import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.IqamaData
 import com.iw.android.prayerapp.data.response.IqamaNotificationData
@@ -128,15 +127,76 @@ class DataPreference @Inject constructor(
 
     }
 
-    suspend fun getCurrentNamazNotificationData(): CurrentNamazNotificationData? = Gson().fromJson(
-        getStringData(CURRENT_NAMAZ_NOTIFICATION_DATA),
-        CurrentNamazNotificationData::class.java
-    )
-
-    suspend fun setUpdateUserProfile(userInfo: LoginUserResponse) {
-        setStringData(USER_INFO, Gson().toJson(userInfo))
+    suspend fun saveFajrCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        setStringData(
+            CURRENT_NAMAZ_Fajr_NOTIFICATION_DATA,
+            Gson().toJson(currentNamazNotificationData)
+        )
 
     }
+
+    suspend fun getFajrCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        Gson().fromJson(
+            getStringData(CURRENT_NAMAZ_Fajr_NOTIFICATION_DATA),
+            CurrentNamazNotificationData::class.java
+        )
+
+    suspend fun saveDhuhrCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        setStringData(
+            CURRENT_NAMAZ_DHUHR_NOTIFICATION_DATA,
+            Gson().toJson(currentNamazNotificationData)
+        )
+
+    }
+
+    suspend fun getDhuhrCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        Gson().fromJson(
+            getStringData(CURRENT_NAMAZ_DHUHR_NOTIFICATION_DATA),
+            CurrentNamazNotificationData::class.java
+        )
+
+    suspend fun saveAsrCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        setStringData(
+            CURRENT_NAMAZ_ASR_NOTIFICATION_DATA,
+            Gson().toJson(currentNamazNotificationData)
+        )
+
+    }
+
+    suspend fun getAsrCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        Gson().fromJson(
+            getStringData(CURRENT_NAMAZ_ASR_NOTIFICATION_DATA),
+            CurrentNamazNotificationData::class.java
+        )
+
+
+    suspend fun saveMaghribCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        setStringData(
+            CURRENT_NAMAZ_MAGHRIB_NOTIFICATION_DATA,
+            Gson().toJson(currentNamazNotificationData)
+        )
+
+    }
+    suspend fun getMaghribCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        Gson().fromJson(
+            getStringData(CURRENT_NAMAZ_MAGHRIB_NOTIFICATION_DATA),
+            CurrentNamazNotificationData::class.java
+        )
+
+
+    suspend fun saveIshaCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        setStringData(
+            CURRENT_NAMAZ_ISHA_NOTIFICATION_DATA,
+            Gson().toJson(currentNamazNotificationData)
+        )
+
+    }
+    suspend fun getIshaCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        Gson().fromJson(
+            getStringData(CURRENT_NAMAZ_ISHA_NOTIFICATION_DATA),
+            CurrentNamazNotificationData::class.java
+        )
+
 
     suspend fun getIqamaNotificationSetting(): IqamaNotificationData? {
         return Gson().fromJson(
@@ -258,7 +318,7 @@ class DataPreference @Inject constructor(
         return mapJsonToList(jsonString)
     }
 
-    suspend fun removeNotificationData(index:Int) {
+    suspend fun removeNotificationData(index: Int) {
         val jsonString = appContext.dataStore.data
             .first()[NOTIFICATION_DATA]
             ?: "[]" // Default to an empty array if the key is not present
@@ -311,8 +371,16 @@ class DataPreference @Inject constructor(
         val SUNRISE_INFO = stringPreferencesKey("key_sunrise_info")
         val NOTIFICATION_DATA = stringPreferencesKey("key_notification_data")
         val SETTING_NOTIFICATION_DATA = stringPreferencesKey("key_setting_notification_data")
-        val CURRENT_NAMAZ_NOTIFICATION_DATA =
-            stringPreferencesKey("key_current_namaz_notification_data")
+        val CURRENT_NAMAZ_Fajr_NOTIFICATION_DATA =
+            stringPreferencesKey("key_current_namaz_fajr_notification_data")
+        val CURRENT_NAMAZ_DHUHR_NOTIFICATION_DATA =
+            stringPreferencesKey("key_current_namaz_dhuhr_notification_data")
+        val CURRENT_NAMAZ_ASR_NOTIFICATION_DATA =
+            stringPreferencesKey("key_current_namaz_asr_notification_data")
+        val CURRENT_NAMAZ_MAGHRIB_NOTIFICATION_DATA =
+            stringPreferencesKey("key_current_namaz_maghrib_notification_data")
+        val CURRENT_NAMAZ_ISHA_NOTIFICATION_DATA =
+            stringPreferencesKey("key_current_namaz_isha_notification_data")
         val DHUHR_INFO = stringPreferencesKey("key_dhuhr_info")
         val ASR_INFO = stringPreferencesKey("key_asr_info")
         val MAGRIB_INFO = stringPreferencesKey("key_magrib_info")
