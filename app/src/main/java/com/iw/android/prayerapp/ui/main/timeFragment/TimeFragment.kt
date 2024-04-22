@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
@@ -96,7 +95,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
             viewTypeArray.clear()
             for (data in viewModel.prayTimeArray) {
                 viewTypeArray.add(
-                    RowItemTime(data, binding.recyclerView, this@TimeFragment, viewModel)
+                    RowItemTime(data, binding.recyclerView, requireActivity(), viewModel)
                 )
             }
             adapter.items = viewTypeArray

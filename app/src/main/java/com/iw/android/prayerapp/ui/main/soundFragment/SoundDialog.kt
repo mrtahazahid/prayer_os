@@ -23,7 +23,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
 
     var title = ""
     var subTitle = ""
-    private var selectedItem = ""
+    var selectedItem = ""
     var selectedItemPosition = 0
     var selectedSound = 0
     var listener: OnDataSelected? = null
@@ -66,6 +66,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
     private fun initialize() {
         binding.textViewTitle.text = title
         binding.textViewNamazName.text = subTitle
+        Log.d("listener",selectedItem)
         setRecyclerView()
     }
 
@@ -102,6 +103,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
         when (v?.id) {
             binding.backView.id , binding.imageViewBack.id -> {
                 listener?.onDataPassed(selectedItem, selectedItemPosition, sound, isForNotification)
+
                 dismiss()
             }
         }

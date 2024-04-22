@@ -65,11 +65,11 @@ class RowItemPrayerSound(
                 listener.onItemClick(position)
                 when (data.type) {
                     PrayerEnumType.ADHAN.getValue() -> {
-                        openSoundDialogFragment("Adhan Sound", currentNamazName, true)
+                        openSoundDialogFragment(position,"Adhan Sound", currentNamazName, true)
                     }
 
                     PrayerEnumType.TONES.getValue() -> {
-                        openSoundDialogFragment("Tones Sound", currentNamazName, true)
+                        openSoundDialogFragment(position,"Tones Sound", currentNamazName, true)
                     }
                 }
             }
@@ -87,6 +87,7 @@ class RowItemPrayerSound(
     }
 
     private fun openSoundDialogFragment(
+        position: Int,
         title: String,
         subTitle: String,
         isForNotification: Boolean
@@ -94,6 +95,7 @@ class RowItemPrayerSound(
         val soundDialog = SoundDialog()
         soundDialog.listener = this
         soundDialog.title = title
+        soundDialog.selectedItem = if(position == 0) data.selectedItemAdhanTitle else data.selectedItemTonesTitle
         soundDialog.subTitle = subTitle
         soundDialog.selectedItemPosition = position
         soundDialog.selectedSound = soundSelected

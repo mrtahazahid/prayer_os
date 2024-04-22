@@ -74,22 +74,16 @@ data class NotificationPrayerTime(
 data class NotificationData(
     var namazName: String = "",
     var namazTime: String = "",
-    var notificationSound: String = "Tones",
-    var sound: Int? = null,
-    var reminderSound: Int? = null,
-    var reminderNotificationSound: String = "Tones",
+    var notificationSound: CurrentNamazNotificationData?=null,
+    var reminderSound: CurrentNamazNotificationData?=null,
+    var reminderTimeMinutes: String = "off",
+    var secondReminderTimeMinutes: String = "off",
+    var reminderTime: String = "",
+    var secondReminderTime: String = "",
+    var duaReminderMinutes: String = "off",
     var duaType: String = DuaTypeEnum.OFF.getValue(),
     var duaTime: String = "",
-    var reminderTimeMinutes: String = "off",
-    var reminderTime: String = "",
     var createdDate: String = "",
-    var duaReminderMinutes: String = "off",
-    var isForNotification: Boolean = false,
-    var currentNotificationTypePosition: Int = 0,
-    var isForNotificationList: Boolean = false,
-    var isSilent: Boolean = false,
-    var isVibrate: Boolean = false,
-    var isOff: Boolean = false,
 )
 
 data class MonthlyCalenderData(
@@ -103,14 +97,14 @@ data class MonthlyCalenderData(
     val ish: String,
     val hijri: String,
 )
-
+@Serializable
 data class CurrentNamazNotificationData(
     val currentNamazName: String,
     var soundName: String = "Adhan",
     var soundToneName: String = "Tones",
     var position: Int,
     var isSoundSelected: Boolean,
-    val isForAdhan: Boolean,
+    var isForAdhan: Boolean,
     var isVibrate: Boolean,
     var isSilent: Boolean,
     var isOff: Boolean,

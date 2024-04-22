@@ -23,7 +23,7 @@ class RowItemNotificationList(private val data: NotificationData) : ViewType<Not
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemNotificationListBinding).also { binding ->
 
-            if (data.isForNotificationList) {
+            if (true) {
                 binding.textViewTime.text = "${formatDate(data.createdDate,position)} at ${data.namazTime}"
                 binding.textViewTitle.text = "${data.namazName} at ${data.namazTime}"
                 binding.secondView.visibility = View.GONE

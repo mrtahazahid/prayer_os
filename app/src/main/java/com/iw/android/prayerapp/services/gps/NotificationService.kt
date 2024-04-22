@@ -127,46 +127,54 @@ class NotificationService : Service() {
                         if (isTimeMatch(specifiedTime.duaTime)) {
                             notifications.notify(
                                 specifiedTime.namazName, "${specifiedTime.namazName} Dhua Time",
-                                specifiedTime.sound ?: 0,
+                                specifiedTime.notificationSound?.sound ?: R.raw.adhan_abdul_basit,
                                 false,
                                 false
                             )
-                            prefrence.updateNotificationData(specifiedTime)
                             prefrence.removeNotificationData(index)
                             delay(1500)
                             break
                         }
-
-
-                        if (isTimeMatch(specifiedTime.namazTime)) {
-                            notifications.notify(
-                                specifiedTime.namazName, "Namaz Time",
-                                specifiedTime.sound ?: 0,
-                                false,
-                                false
-                            )
-                            prefrence.updateNotificationData(specifiedTime)
-                            prefrence.removeNotificationData(index)
-                            delay(1500)
-                            break
-                        }
-
-                        if (isTimeMatch(specifiedTime.reminderTime)) {
-                            notifications.notify(
-                                specifiedTime.namazName, "Namaz reminder",
-                                specifiedTime.sound ?: 0,
-                                false,
-                                false
-                            )
-                            specifiedTime.reminderTime = ""
-                            prefrence.saveNotificationData(specifiedTime)
-                            prefrence.removeNotificationData(index)
-
-                            delay(1500)
-                            break
-                        }
-
                     }
+
+
+                    if (isTimeMatch(specifiedTime.namazTime)) {
+                        notifications.notify(
+                            specifiedTime.namazName, "Namaz Time",
+                            specifiedTime.notificationSound?.sound ?: R.raw.adhan_abdul_basit,
+                            false,
+                            false
+                        )
+                        prefrence.removeNotificationData(index)
+                        delay(1500)
+                        break
+                    }
+
+                    if (isTimeMatch(specifiedTime.reminderTime)) {
+                        notifications.notify(
+                            specifiedTime.namazName, "Namaz reminder",
+                            specifiedTime.reminderSound?.sound ?: R.raw.adhan_abdul_basit,
+                            false,
+                            false
+                        )
+                        prefrence.removeNotificationData(index)
+                        delay(1500)
+                        break
+                    }
+                    if (specifiedTime.secondReminderTimeMinutes != "off") {
+                        if (isTimeMatch(specifiedTime.secondReminderTime)) {
+                            notifications.notify(
+                                specifiedTime.namazName, "Second fajr namaz reminder",
+                                specifiedTime.reminderSound?.sound ?: R.raw.adhan_abdul_basit,
+                                false,
+                                false
+                            )
+                            prefrence.removeNotificationData(index)
+                            delay(1500)
+                            break
+                        }
+                    }
+
                 } else {
                     continue
                 }
@@ -255,7 +263,7 @@ class NotificationService : Service() {
 
         val currentTime = millisToTimeFormat(System.currentTimeMillis())
         for (time in prayerList) {
-            val notificationDetail : CurrentNamazNotificationData? = when (time.currentNamazName) {
+            val notificationDetail: CurrentNamazNotificationData = when (time.currentNamazName) {
                 "Fajr" -> {
                     if (prefrence.getFajrCurrentNamazNotificationData() != null) {
                         prefrence.getFajrCurrentNamazNotificationData()!!

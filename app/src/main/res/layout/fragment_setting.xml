@@ -416,8 +416,7 @@
                             android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/mainView"
-                            tools:visibility="visible">
+                            app:layout_constraintTop_toBottomOf="@id/mainView">
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewMethodTitle"
@@ -636,7 +635,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/mainView"
-                            tools:visibility="visible">
+                            >
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewAutomatic"
@@ -941,9 +940,7 @@
                             app:layout_constraintBottom_toTopOf="@id/viewTimeSep"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/mainView"
-
-                            tools:visibility="visible">
+                            app:layout_constraintTop_toBottomOf="@id/mainView">
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textView24hourFormat"
@@ -1404,14 +1401,12 @@
                         android:id="@+id/systemDetailViews"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:background="#1c1c1e"
                         android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/textViewSystem"
-                        tools:visibility="gone">
+                        tools:visibility="visible">
 
                         <TextView
                             android:id="@+id/textViewLanguage"
@@ -1487,7 +1482,7 @@
 
 
                         <TextView
-                            android:id="@+id/textViewSett"
+                            android:id="@+id/textViewAsset"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="15dp"
@@ -1500,9 +1495,162 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/viewLocalMain" />
 
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageViewPhone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/ic_phone"
+                            android:tint="@color/small_icon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/viewLocalMain" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                        <View
+                            android:id="@+id/viewApp"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginStart="15dp"
+                            android:background="@color/view_separator"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/systemDetailViews" />
 
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/textViewApp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:fontFamily="@font/sf_regular"
+                            android:text="App"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/viewApp" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageViewApp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/ic_forward"
+                            android:tint="@color/small_icon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/viewApp" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/appDetailViews"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#1c1c1e"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/textViewApp"
+                            tools:visibility="visible">
+
+                            <TextView
+                                android:id="@+id/textViewVersion"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginStart="30dp"
+                                android:drawablePadding="@dimen/_3sdp"
+                                android:fontFamily="@font/sf_medium"
+                                android:text="Version"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_13ssp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/textViewVersions"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="15dp"
+                                android:fontFamily="@font/sf_medium"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="17.1.3(371)" />
+
+                            <View
+                                android:id="@+id/viewVersion"
+                                android:layout_width="0dp"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@color/view_separator"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@id/textViewVersion"
+                                app:layout_constraintTop_toBottomOf="@id/textViewVersion" />
+
+                            <TextView
+                                android:id="@+id/textViewCaches"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginStart="30dp"
+                                android:drawablePadding="@dimen/_3sdp"
+                                android:fontFamily="@font/sf_medium"
+                                android:text="Caches"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_13ssp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/viewVersion" />
+
+                            <TextView
+                                android:id="@+id/textViewCaches1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="15dp"
+                                android:fontFamily="@font/sf_medium"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/viewVersion"
+                                tools:text="en_pk" />
+
+                            <View
+                                android:id="@+id/viewCaches"
+                                android:layout_width="0dp"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@color/view_separator"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@id/textViewCaches"
+                                app:layout_constraintTop_toBottomOf="@id/textViewCaches" />
+
+
+                            <TextView
+                                android:id="@+id/textViewSett"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginStart="30dp"
+                                android:drawablePadding="@dimen/_3sdp"
+                                android:fontFamily="@font/sf_medium"
+                                android:text="Asset"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_13ssp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/viewCaches" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewAsset"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="15dp"
+                                app:tint="@color/text_color_gray"
+                                android:paddingStart="20dp"
+                                android:src="@drawable/ic_forward"
+                                android:tint="@color/small_icon"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/viewCaches" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>

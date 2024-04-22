@@ -1,6 +1,7 @@
 package com.iw.android.prayerapp.ui.main.settingFragment
 
-import android.media.MediaPlayer
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,13 +12,14 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.iw.android.prayerapp.BuildConfig
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.databinding.FragmentSettingBinding
 import com.iw.android.prayerapp.extension.CustomDialog
+import com.iw.android.prayerapp.extension.convertToFunDateTime
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
-import com.iw.android.prayerapp.extension.showToolDialog
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
@@ -40,6 +42,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     private var isLocViewShow = false
     private var isTimeViewShow = false
     private var isSystemShow = false
+    private var isAppShow = false
     private var geofence = 75
     private var snoozeTime = 0
     private var adjustHijriDate = 0
@@ -91,6 +94,8 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         )
         binding.textViewCityName.text = location?.city
         binding.textViewCityTimeZoneName.text = location?.timeZone
+        binding.textViewVersions.text = "${BuildConfig.VERSION_NAME}"
+        binding.textViewCaches1.text = convertToFunDateTime(getCacheDirectoryLastModified(requireContext()))
         binding.switchAutomatic.isChecked = viewModel.getAutomaticLocation
     }
 
@@ -129,7 +134,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewGeoHelp.setOnClickListener(this)
         binding.imageViewAuto.setOnClickListener(this)
 
-        binding.system.setOnClickListener(this)
+        binding.imageViewSystem.setOnClickListener(this)
         binding.imageViewAutoIncrementHelp.setOnClickListener(this)
 
 
@@ -146,6 +151,9 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewIqamaHelp.setOnClickListener(this)
         binding.imageViewGeoHelp.setOnClickListener(this)
         binding.imageViewAutoIncrementHelp.setOnClickListener(this)
+        binding.imageViewApp.setOnClickListener(this)
+        binding.imageViewPhone.setOnClickListener(this)
+        binding.imageViewAsset.setOnClickListener(this)
 
 
         binding.switchAutomatic.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -372,7 +380,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 }
             }
 
-            binding.system.id -> {
+            binding.imageViewSystem.id -> {
                 if (!isSystemShow) {
                     binding.imageViewSystem.setImageResource(R.drawable.ic_drop_down)
                     binding.systemDetailViews.visibility = View.VISIBLE
@@ -381,6 +389,17 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                     binding.imageViewSystem.setImageResource(R.drawable.ic_forward)
                     binding.systemDetailViews.visibility = View.GONE
                     isSystemShow = false
+                }
+            }
+            binding.imageViewApp.id -> {
+                if (!isAppShow) {
+                    binding.imageViewApp.setImageResource(R.drawable.ic_drop_down)
+                    binding.appDetailViews.visibility = View.VISIBLE
+                    isAppShow = true
+                } else {
+                    binding.imageViewApp.setImageResource(R.drawable.ic_forward)
+                    binding.appDetailViews.visibility = View.GONE
+                    isAppShow = false
                 }
             }
 
@@ -446,6 +465,13 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                     isLocViewShow = false
                 }
 
+            }
+
+            binding.imageViewPhone.id->{
+                openAppSettings()
+            }
+            binding.imageViewAsset.id->{
+           showToast("Work in process")
             }
         }
     }
@@ -620,5 +646,18 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             countUpTime = 0
             "off"
         }
+    }
+
+    private fun openAppSettings() {
+        val packageName = requireActivity().packageName
+        val intent = Intent()
+        intent.action = android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        intent.data = Uri.fromParts("package", packageName, null)
+        startActivity(intent)
+    }
+
+    fun getCacheDirectoryLastModified(context: Context): Long {
+        val cacheDir = context.cacheDir
+        return cacheDir.lastModified()
     }
 }

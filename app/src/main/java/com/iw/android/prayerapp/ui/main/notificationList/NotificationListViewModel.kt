@@ -47,7 +47,6 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                 "Fajr" -> {
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
                             namazName = "Fajr",
                             namazTime = getFormattedDate(0)[0],
                             createdDate = getFormattedCreatedDate(0)
@@ -55,7 +54,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     )
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Sunrise",
                             namazTime = getFormattedDate(0)[1],
                             createdDate = getFormattedCreatedDate(0)
@@ -63,7 +62,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     )
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Dhuhr",
                             namazTime = getFormattedDate(0)[2],
                             createdDate = getFormattedCreatedDate(0)
@@ -71,7 +70,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     )
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Asr",
                             namazTime = getFormattedDate(0)[3],
                             createdDate = getFormattedCreatedDate(0)
@@ -79,7 +78,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     )
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Maghrib",
                             namazTime = getFormattedDate(0)[4],
                             createdDate = getFormattedCreatedDate(0)
@@ -87,7 +86,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     )
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Isha",
                             namazTime = getFormattedDate(0)[5],
                             createdDate = getFormattedCreatedDate(0)
@@ -98,7 +97,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                 "Dhuhr" -> {
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Dhuhr",
                             namazTime = getFormattedDate(0)[2],
                             createdDate = getFormattedCreatedDate(0)
@@ -106,7 +105,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     )
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Asr",
                             namazTime = getFormattedDate(0)[3],
                             createdDate = getFormattedCreatedDate(0)
@@ -114,7 +113,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     )
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Maghrib",
                             namazTime = getFormattedDate(0)[4],
                             createdDate = getFormattedCreatedDate(0)
@@ -122,7 +121,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     )
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Isha",
                             namazTime = getFormattedDate(0)[5],
                             createdDate = getFormattedCreatedDate(0)
@@ -134,7 +133,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
 
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Asr",
                             namazTime = getFormattedDate(0)[3],
                             createdDate = getFormattedCreatedDate(0)
@@ -142,7 +141,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     )
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Maghrib",
                             namazTime = getFormattedDate(0)[4],
                             createdDate = getFormattedCreatedDate(0)
@@ -150,7 +149,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     )
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Isha",
                             namazTime = getFormattedDate(0)[5],
                             createdDate = getFormattedCreatedDate(0)
@@ -161,7 +160,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                 "Maghrib" -> {
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Maghrib",
                             namazTime = getFormattedDate(0)[4],
                             createdDate = getFormattedCreatedDate(0)
@@ -169,7 +168,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
                     )
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Isha",
                             namazTime = getFormattedDate(0)[5],
                             createdDate = getFormattedCreatedDate(0)
@@ -181,7 +180,7 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
 
                     notificationList.add(
                         NotificationData(
-                            isForNotificationList = true,
+
                             namazName = "Isha",
                             namazTime = getFormattedDate(0)[5],
                             createdDate = getFormattedCreatedDate(0)
@@ -198,42 +197,42 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
 
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Fajr",
                     namazTime = getFormattedDate(1)[0], createdDate = getFormattedCreatedDate(1)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Sunrise",
                     namazTime = getFormattedDate(1)[1], createdDate = getFormattedCreatedDate(1)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Dhuhr",
                     namazTime = getFormattedDate(1)[2], createdDate = getFormattedCreatedDate(1)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Asr",
                     namazTime = getFormattedDate(1)[3], createdDate = getFormattedCreatedDate(1)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Maghrib",
                     namazTime = getFormattedDate(1)[4], createdDate = getFormattedCreatedDate(1)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Isha",
                     namazTime = getFormattedDate(1)[5], createdDate = getFormattedCreatedDate(1)
                 )
@@ -241,42 +240,42 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
 
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Fajr",
                     namazTime = getFormattedDate(2)[0], createdDate = getFormattedCreatedDate(2)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Sunrise",
                     namazTime = getFormattedDate(2)[1], createdDate = getFormattedCreatedDate(2)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Dhuhr",
                     namazTime = getFormattedDate(2)[2], createdDate = getFormattedCreatedDate(2)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Asr",
                     namazTime = getFormattedDate(2)[3], createdDate = getFormattedCreatedDate(2)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Maghrib",
                     namazTime = getFormattedDate(2)[4], createdDate = getFormattedCreatedDate(2)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Isha",
                     namazTime = getFormattedDate(2)[5], createdDate = getFormattedCreatedDate(2)
                 )
@@ -284,42 +283,42 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
 
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Fajr",
                     namazTime = getFormattedDate(3)[0], createdDate = getFormattedCreatedDate(3)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Sunrise",
                     namazTime = getFormattedDate(3)[1], createdDate = getFormattedCreatedDate(3)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Dhuhr",
                     namazTime = getFormattedDate(3)[2], createdDate = getFormattedCreatedDate(3)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Asr",
                     namazTime = getFormattedDate(3)[3], createdDate = getFormattedCreatedDate(3)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Maghrib",
                     namazTime = getFormattedDate(3)[4], createdDate = getFormattedCreatedDate(3)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Isha",
                     namazTime = getFormattedDate(3)[5], createdDate = getFormattedCreatedDate(3)
                 )
@@ -327,42 +326,42 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
 
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Fajr",
                     namazTime = getFormattedDate(4)[0], createdDate = getFormattedCreatedDate(4)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Sunrise",
                     namazTime = getFormattedDate(4)[1], createdDate = getFormattedCreatedDate(4)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Dhuhr",
                     namazTime = getFormattedDate(4)[2], createdDate = getFormattedCreatedDate(4)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Asr",
                     namazTime = getFormattedDate(4)[3], createdDate = getFormattedCreatedDate(4)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Maghrib",
                     namazTime = getFormattedDate(4)[4], createdDate = getFormattedCreatedDate(4)
                 )
             )
             notificationList.add(
                 NotificationData(
-                    isForNotificationList = true,
+
                     namazName = "Isha",
                     namazTime = getFormattedDate(4)[5], createdDate = getFormattedCreatedDate(4)
                 )
