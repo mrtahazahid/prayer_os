@@ -55,7 +55,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
     private var magnetometerReading = FloatArray(3)
 
     lateinit var getQibla: Qibla
-    private val ALPHA = 0.8f
+    private val ALPHA = 0.4f
 
 
     @SuppressLint("SetTextI18n")
@@ -83,6 +83,8 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
         currentLatitude = viewModel.getUserLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.getUserLatLong?.longitude ?: 0.0
 
+        Log.d("currentLatitude",(viewModel.getUserLatLong?.latitude ?: 0.0).toString())
+        Log.d("currentLongitude",(viewModel.getUserLatLong?.longitude ?: 0.0).toString())
         Log.d("currentLatitude", (viewModel.getUserLatLong?.latitude ?: 0.0).toString())
         Log.d("currentLongitude", (viewModel.getUserLatLong?.longitude ?: 0.0).toString())
 
@@ -179,15 +181,24 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
 
             qiblaDegree = ((qiblaRadians - radian) * 180 / Math.PI).toFloat()
 //            binding.textViewCurrentDirection.text = "%.2f".format(qiblaDegree)
+            binding.textViewCurrentDirection.text = "${"%.2f".format((getQibla.direction - radian) - 1.35)}°"
             binding.textViewCurrentDirection.text =
                 "${"%.2f".format((getQibla.direction - radian) - 1.35)}°"
 
+            Log.d("qiblaDegree","mainDegree -->>> ${getQibla.direction}")
+            Log.d("qiblaDegree","SecondDegree -->>> ${binding.textViewCurrentDirection.text}")
             Log.d("qiblaDegree", "mainDegree -->>> ${getQibla.direction}")
             Log.d("qiblaDegree", "SecondDegree -->>> ${binding.textViewCurrentDirection.text}")
 
 
             val tolerance = 0.01 // Set your tolerance level as needed
 
+
+            if (abs(getQibla.direction - ("${"%.2f".format((getQibla.direction - radian) - 1.35)}").toDouble()) < tolerance) {
+                binding.imageViewQiblaDirection.imageTintList =  ContextCompat.getColorStateList(requireContext(),R.color.app_green)
+            } else {
+                binding.imageViewQiblaDirection.imageTintList =   ContextCompat.getColorStateList(requireContext(),R.color.white)
+            }
 
             binding.imageViewQiblaDirection.imageTintList =
                 if (abs(getQibla.direction - ("${"%.2f".format((getQibla.direction - radian) - 1.35)}").toDouble()) < tolerance) {
@@ -197,6 +208,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla), SensorEventListener
                 }
 
             if (binding.textViewCurrentDirection.text == "%.2f".format((getQibla.direction - radian) - 1.35)) {
+                Log.d("qiblaDegree","matched -->>> ")
                 Log.d("qiblaDegree", "matched -->>> ")
             }
 

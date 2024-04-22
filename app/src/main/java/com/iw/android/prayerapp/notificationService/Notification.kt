@@ -97,7 +97,7 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                         player?.isLooping = false // This will play sound in repeatable mode.
                         player?.start()
                         delay(10000)
-                        player?.stop()
+                        player?.release()
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()

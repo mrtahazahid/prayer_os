@@ -34,7 +34,6 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
-
 @AndroidEntryPoint
 class NotificationService : Service() {
     @Inject
@@ -326,7 +325,7 @@ class NotificationService : Service() {
                         prefrence.getMaghribCurrentNamazNotificationData()!!
                     } else {
                         CurrentNamazNotificationData(
-                            "Fajr",
+                            "Maghrib",
                             "Adhan",
                             "Tones",
                             0,
@@ -346,7 +345,7 @@ class NotificationService : Service() {
 
                     } else {
                         CurrentNamazNotificationData(
-                            "Fajr",
+                            "Isha",
                             "Adhan",
                             "Tones",
                             0,
@@ -362,7 +361,7 @@ class NotificationService : Service() {
 
                 else -> {
                     CurrentNamazNotificationData(
-                        "Fajr",
+                        "",
                         "Adhan",
                         "Tones",
                         0,

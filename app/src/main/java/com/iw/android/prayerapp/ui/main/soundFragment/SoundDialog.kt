@@ -1,11 +1,13 @@
 package com.iw.android.prayerapp.ui.main.soundFragment
 
+import android.app.Dialog
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.DialogFragment
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
@@ -46,6 +48,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.DialogFragmentStyle)
+
     }
 
     override fun onCreateView(
@@ -56,6 +59,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
@@ -64,10 +68,12 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
     }
 
     private fun initialize() {
+        setOnBackPressedListener()
         binding.textViewTitle.text = title
         binding.textViewNamazName.text = subTitle
         Log.d("listener",selectedItem)
         setRecyclerView()
+
     }
 
     override fun onDestroyView() {
@@ -149,6 +155,17 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
         mediaPlayer?.setOnCompletionListener {
             stopMediaPlayer()
         }
+    }
+
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    listener?.onDataPassed(selectedItem, selectedItemPosition, sound, isForNotification)
+                    dismiss()
+                }
+            })
     }
 }
 

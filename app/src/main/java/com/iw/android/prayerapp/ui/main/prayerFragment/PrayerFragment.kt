@@ -374,7 +374,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             }
 
             override fun onFinish() {
-                showNotification(currentNamazName)
+                //showNotification(currentNamazName)
                 upComingNamazTime()
 
             }
