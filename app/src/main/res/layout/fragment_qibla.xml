@@ -52,7 +52,7 @@
         android:id="@+id/imageViewQiblaDirection"
         android:layout_width="0dp"
         android:layout_height="360dp"
-        android:src="@drawable/ic_qibla_direction"
+        android:src="@drawable/ic_dir_circle"
         android:tint="@color/white"
         android:rotation="-29"
         android:backgroundTint="@color/app_green"

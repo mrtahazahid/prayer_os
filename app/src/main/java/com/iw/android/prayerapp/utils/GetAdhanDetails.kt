@@ -2,8 +2,10 @@ package com.iw.android.prayerapp.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Address
 import android.location.Geocoder
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.batoulapps.adhan2.CalculationParameters
@@ -12,15 +14,25 @@ import com.batoulapps.adhan2.PrayerTimes
 import com.batoulapps.adhan2.Qibla
 import com.batoulapps.adhan2.data.DateComponents
 import com.iw.android.prayerapp.data.response.LocationData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 object GetAdhanDetails : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat")
-    fun getPrayTime(latitude: Double, longitude: Double, param: CalculationParameters, date: Date): ArrayList<String> {
+    fun getPrayTime(
+        latitude: Double,
+        longitude: Double,
+        param: CalculationParameters,
+        date: Date
+    ): ArrayList<String> {
         val coordinates = Coordinates(latitude, longitude)
         val timeZoneID = TimeZone.getDefault().id
 
@@ -48,13 +60,35 @@ object GetAdhanDetails : AppCompatActivity() {
         )
     }
 
+    fun calculatePrayerTimesForYear(
+        latitude: Double,
+        longitude: Double,
+        param: CalculationParameters
+    ): List<PrayerTimeData> {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val prayerTimeDataList = mutableListOf<PrayerTimeData>()
 
+        val sdf = SimpleDateFormat("yyyy/M/dd")
+
+        for (month in 0 until 12) {
+            for (dayOfMonth in 1..calendar.getActualMaximum(Calendar.DAY_OF_YEAR)) {
+                calendar.set(year, month, dayOfMonth)
+                val date = calendar.time
+                val prayerTimes = getPrayTime(latitude, longitude, param, date)
+                prayerTimeDataList.add(PrayerTimeData(date, prayerTimes))
+            }
+        }
+
+        return prayerTimeDataList
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentPrayerTime(prayerTimes: List<Long>, currentTime: Long): Pair<String, Long>? {
         for (i in prayerTimes.indices) {
             val currentPrayerTime = prayerTimes[i]
-            val nextPrayerTime = if (i < prayerTimes.size - 1) prayerTimes[i + 1] else prayerTimes[0]
+            val nextPrayerTime =
+                if (i < prayerTimes.size - 1) prayerTimes[i + 1] else prayerTimes[0]
 
             if (currentTime < nextPrayerTime) {
                 val remainingTime = nextPrayerTime - currentTime
@@ -75,7 +109,12 @@ object GetAdhanDetails : AppCompatActivity() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun getPrayTimeWithNames(latitude: Double, longitude: Double, param: CalculationParameters, date: Date): List<Pair<String, String>> {
+    fun getPrayTimeWithNames(
+        latitude: Double,
+        longitude: Double,
+        param: CalculationParameters,
+        date: Date
+    ): List<Pair<String, String>> {
         val coordinates = Coordinates(latitude, longitude)
         val timeZoneID = TimeZone.getDefault().id
 
@@ -114,7 +153,11 @@ object GetAdhanDetails : AppCompatActivity() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun getPrayTimeInLong(latitude: Double, longitude: Double,params: CalculationParameters): PrayerTimes {
+    fun getPrayTimeInLong(
+        latitude: Double,
+        longitude: Double,
+        params: CalculationParameters
+    ): PrayerTimes {
         val coordinates = Coordinates(latitude, longitude);
 
         val sdf = SimpleDateFormat("yyyy/M/dd")
@@ -142,12 +185,11 @@ object GetAdhanDetails : AppCompatActivity() {
         val geocoder = Geocoder(context, Locale.getDefault())
 
         try {
-            val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+            val addresses = geocoder.getFromLocation(latitude, longitude, 2)
 
             if (addresses!!.isNotEmpty()) {
                 val timeZone = TimeZone.getDefault().id
-                val cityName = addresses[0].locality ?: "Unknown City"
-
+                val cityName = addresses[0].locality ?: extractCityName(addresses[1].locality)
                 return LocationData(timeZone, cityName)
             }
         } catch (e: Exception) {
@@ -157,3 +199,39 @@ object GetAdhanDetails : AppCompatActivity() {
         return null
     }
 }
+
+private suspend fun Geocoder.getAddress(
+    latitude: Double,
+    longitude: Double,
+): Address? = withContext(Dispatchers.IO) {
+    try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            suspendCoroutine { cont ->
+                getFromLocation(latitude, longitude, 1) {
+                    cont.resume(it.firstOrNull())
+                }
+            }
+        } else {
+            suspendCoroutine { cont ->
+                @Suppress("DEPRECATION")
+                val address = getFromLocation(latitude, longitude, 1)?.firstOrNull()
+                cont.resume(address)
+            }
+        }
+    } catch (e: Exception) {
+        Log.d("Location Exception", e.toString())
+        null
+    }
+}
+
+fun extractCityName(subAdmin: String): String {
+    val parts = subAdmin.split("=")
+    if (parts.size == 2) {
+        val cityNameWithSpace = parts[1].trim()
+        val cityName = cityNameWithSpace.split(" ")[0] // Extracting only the first word
+        return cityName
+    }
+    return "" // Return an empty string if the format is not as expected
+}
+
+data class PrayerTimeData(val date: Date, val prayerTimes: List<String>)

@@ -77,6 +77,14 @@ class RowItemTime(
                 ).show()
             }
 
+            _binding.imageViewSecondReminderTimeHelp.id -> {
+                CustomDialog(
+                    _binding.imageViewReminderHelp.context,
+                    "Second reminder",
+                    "The number of mintues to remind you \n to finish sahoor before Fajr starts."
+                ).show()
+            }
+
             _binding.imageViewReminderTimeHelp.id -> {
                 CustomDialog(
                     _binding.imageViewReminderTimeHelp.context,
@@ -326,6 +334,7 @@ class RowItemTime(
         _binding.imageViewRemove.setOnClickListener(this)
         _binding.imageViewDuaMinus.setOnClickListener(this)
         _binding.imageViewDuaAdd.setOnClickListener(this)
+        _binding.imageViewSecondReminderTimeHelp.setOnClickListener(this)
         _binding.cardViewDuaTime.setOnClickListener(this)
         _binding.textViewNotificationSound.setOnClickListener(this)
         _binding.textViewReminderSound.setOnClickListener(this)

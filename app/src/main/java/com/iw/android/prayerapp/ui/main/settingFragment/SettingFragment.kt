@@ -123,7 +123,6 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewSnoozeHelp.setOnClickListener(this)
         binding.imageVeiwAdhanHelp.setOnClickListener(this)
         binding.imageViewPlayHelp.setOnClickListener(this)
-        binding.imageViewMethodHelp.setOnClickListener(this)
         binding.imageViewJuriHelp.setOnClickListener(this)
         binding.imageViewAdjHelp.setOnClickListener(this)
         binding.imageView24HourHelp.setOnClickListener(this)
@@ -133,6 +132,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewIqamaHelp.setOnClickListener(this)
         binding.imageViewGeoHelp.setOnClickListener(this)
         binding.imageViewAuto.setOnClickListener(this)
+        binding.imageViewAssetHelp.setOnClickListener(this)
 
         binding.imageViewSystem.setOnClickListener(this)
         binding.imageViewAutoIncrementHelp.setOnClickListener(this)
@@ -217,14 +217,15 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                     "The number of minutes to remind you \n again later for prayer, like the \n functionality of an alarm clock."
                 ).show()
             }
-
-            binding.imageVeiwAdhanHelp.id -> {
+            binding.imageViewAssetHelp.id -> {
                 CustomDialog(
                     requireContext(),
-                    "Adhan duaa",
-                    "Duaa will play after the adhan when \ntapped from a notification."
+                    "Assets",
+                    "The Sound assets stored locally for \n notifications and reminders."
                 ).show()
             }
+
+
 
             binding.imageViewPlayHelp.id -> {
                 CustomDialog(
@@ -236,7 +237,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
 
             binding.imageViewAuto.id -> {
-                CustomDialog(requireContext(), "Title", "This is the description").show()
+                CustomDialog(requireContext(), "Automatic", "Use your device GPS location to \n calculate prayers and updates  \n automatically, otherwise input a \n manual address.").show()
             }
 
             binding.imageViewMethodHelp.id -> {
@@ -244,7 +245,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             }
 
             binding.imageViewJuriHelp.id -> {
-                CustomDialog(requireContext(), "Title", "This is the description").show()
+                CustomDialog(requireContext(), "Jurisprudence", "The School of thought used to \n calculate Asr.The ${"standard"} selection\n encompresses Maliki, Shafi'i, Hanbali,\n and Ja'fari schools of thought.").show()
             }
 
             binding.imageViewAdjHelp.id -> {
@@ -255,16 +256,12 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 CustomDialog(requireContext(), "Title", "This is the description").show()
             }
 
-            binding.imageViewAdjustHijriHelp.id -> {
-                CustomDialog(requireContext(), "Title", "This is the description").show()
-            }
-
             binding.imageViewPrayerHelp.id -> {
                 CustomDialog(requireContext(), "Title", "This is the description").show()
             }
 
             binding.imageViewCountDownHelp.id -> {
-                CustomDialog(requireContext(), "Title", "This is the description").show()
+                CustomDialog(requireContext(), "Count up time", "Specify how long the timers should \n count 'up' since the last adhan.").show()
             }
 
             binding.imageViewIqamaHelp.id -> {
@@ -276,16 +273,9 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             }
 
             binding.imageViewGeoHelp.id -> {
-                CustomDialog(requireContext(), "Title", "This is the description").show()
+                CustomDialog(requireContext(), "Geo-fence", "The distance from the centre of your\n geographic region. Traveling outside of\n this boundary will trigger a notification \n for rescheduling notifications.").show()
             }
 
-            binding.imageViewAutoIncrementHelp.id -> {
-                CustomDialog(requireContext(), "Title", "This is the description").show()
-            }
-
-            binding.imageViewSnoozeHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
-            }
 
             binding.imageVeiwAdhanHelp.id -> {
                 CustomDialog(
@@ -295,48 +285,15 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 ).show()
             }
 
-            binding.imageViewPlayHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
-            }
-
-            binding.imageViewMethodHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
-            }
-
-            binding.imageViewJuriHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
-            }
-
-            binding.imageViewAdjHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
-            }
-
-            binding.imageView24HourHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
-            }
 
             binding.imageViewAdjustHijriHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+                CustomDialog(requireContext(), "Adjust hijri date", "Allows you to  add or subtract days \n from the hijri date until the Ummah can \n decide on a single calender.Pray \n Watch uses Umm al-Qura to stay in \n sync with hajj.").show()
             }
 
-            binding.imageViewPrayerHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
-            }
 
-            binding.imageViewCountDownHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
-            }
-
-            binding.imageViewIqamaHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
-            }
-
-            binding.imageViewGeoHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
-            }
 
             binding.imageViewAutoIncrementHelp.id -> {
-                CustomDialog(requireContext(), "Snooze Time", "Snooze Des").show()
+                CustomDialog(requireContext(), "Auto increment hijri", "The hijri days are incremented at \n maghrib instead of midnight.").show()
             }
 
             binding.iqamaView.id -> {

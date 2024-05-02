@@ -414,6 +414,7 @@
                             android:layout_height="wrap_content"
                             android:background="#1c1c1e"
                             android:visibility="gone"
+                            tools:visibility="visible"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/mainView">
@@ -631,6 +632,7 @@
                             android:layout_marginBottom="8dp"
                             android:background="#1c1c1e"
                             android:visibility="gone"
+                            tools:visibility="visible"
                             app:layout_constraintBottom_toTopOf="@id/viewLocSep"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -937,6 +939,7 @@
                             android:layout_marginBottom="8dp"
                             android:background="#1c1c1e"
                             android:visibility="gone"
+                            tools:visibility="vislble"
                             app:layout_constraintBottom_toTopOf="@id/viewTimeSep"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -1639,6 +1642,16 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/viewCaches" />
 
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewAssetHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_help"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewSett"
+                                app:layout_constraintStart_toEndOf="@id/textViewSett"
+                                app:layout_constraintTop_toTopOf="@id/textViewSett" />
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/imageViewAsset"
                                 android:layout_width="wrap_content"

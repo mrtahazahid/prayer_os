@@ -95,7 +95,7 @@
                     android:fontFamily="@font/sf_regular"
                     android:text="Notification Sound"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -149,7 +149,7 @@
                     android:fontFamily="@font/sf_regular"
                     android:text="Reminder Sound"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view" />
 
@@ -202,7 +202,7 @@
                     android:fontFamily="@font/sf_regular"
                     android:text="Reminder Time"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view1" />
 
@@ -308,7 +308,7 @@
                     android:fontFamily="@font/sf_regular"
                     android:text="Duha"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view2" />
@@ -323,7 +323,7 @@
                     android:fontFamily="@font/sf_regular"
                     android:text="Second Reminder Time"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view2"/>
 

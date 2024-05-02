@@ -1,18 +1,12 @@
 package com.iw.android.prayerapp.ui.main
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Context.SENSOR_SERVICE
-import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
