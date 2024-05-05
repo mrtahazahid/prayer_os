@@ -1,17 +1,15 @@
 package com.iw.android.prayerapp.ui.onBoarding
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFifthOnboardingBinding
-import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 
 class FifthOnboarding : BaseFragment(R.layout.fragment_fifth_onboarding) {
 
@@ -74,7 +72,9 @@ class FifthOnboarding : BaseFragment(R.layout.fragment_fifth_onboarding) {
         requireActivity().onBackPressedDispatcher.addCallback(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-
+                    if (!(requireActivity() as OnBoardingActivity).data.isNullOrEmpty() && (requireActivity() as OnBoardingActivity).data != "null") {
+                        requireActivity().finish()
+                    }
                 }
             })
     }

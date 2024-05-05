@@ -24,6 +24,7 @@ import com.iw.android.prayerapp.services.gps.LocationEvent
 import com.iw.android.prayerapp.services.gps.LocationService
 import com.iw.android.prayerapp.services.gps.TurnOnGps
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
@@ -251,7 +252,9 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
         requireActivity().onBackPressedDispatcher.addCallback(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-
+                    if (!(requireActivity() as OnBoardingActivity).data.isNullOrEmpty() && (requireActivity() as OnBoardingActivity).data != "null") {
+                        requireActivity().finish()
+                    }
                 }
             })
     }

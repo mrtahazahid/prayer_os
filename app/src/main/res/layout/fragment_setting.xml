@@ -557,30 +557,21 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/view1" />
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/imageViewAdjHelp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_help"
-                                android:layout_marginStart="6dp"
-                                android:padding="6dp"
-                                app:layout_constraintBottom_toBottomOf="@id/textViewAdjustments"
-                                app:layout_constraintStart_toEndOf="@id/textViewAdjustments"
-                                app:layout_constraintTop_toTopOf="@id/textViewAdjustments" />
 
                             <Spinner
                                 android:id="@+id/spinnerElevation"
                                 android:layout_width="0dp"
                                 android:layout_height="0dp"
-                                android:layout_marginStart="@dimen/_4sdp"
+                                android:layout_marginStart="@dimen/_10sdp"
                                 android:backgroundTint="@color/app_green"
                                 android:forceHasOverlappingRendering="false"
                                 android:gravity="center"
+                                android:paddingStart="4dp"
                                 android:overlapAnchor="false"
                                 android:spinnerMode="dropdown"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/imageViewAdjHelp"
+                                app:layout_constraintStart_toEndOf="@+id/textViewAdjustments"
                                 app:layout_constraintTop_toBottomOf="@id/view1" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -939,7 +930,7 @@
                             android:layout_marginBottom="8dp"
                             android:background="#1c1c1e"
                             android:visibility="gone"
-                            tools:visibility="vislble"
+                            tools:visibility="visible"
                             app:layout_constraintBottom_toTopOf="@id/viewTimeSep"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -959,16 +950,6 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/imageView24HourHelp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_help"
-                                android:layout_marginStart="6dp"
-                                android:padding="6dp"
-                                app:layout_constraintBottom_toBottomOf="@id/textView24hourFormat"
-                                app:layout_constraintStart_toEndOf="@id/textView24hourFormat"
-                                app:layout_constraintTop_toTopOf="@id/textView24hourFormat" />
 
 
                             <com.google.android.material.materialswitch.MaterialSwitch
@@ -1158,18 +1139,6 @@
                                 android:textSize="@dimen/_13ssp"
                                 app:layout_constraintStart_toStartOf="@id/viewIncrement"
                                 app:layout_constraintTop_toBottomOf="@id/viewIncrement" />
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/imageViewPrayerHelp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_help"
-                                android:layout_marginStart="6dp"
-                                android:padding="6dp"
-                                app:layout_constraintBottom_toBottomOf="@id/textViewPrayerAbbreviations"
-                                app:layout_constraintStart_toEndOf="@id/textViewPrayerAbbreviations"
-                                app:layout_constraintTop_toTopOf="@id/textViewPrayerAbbreviations" />
-
 
                             <com.google.android.material.materialswitch.MaterialSwitch
                                 android:id="@+id/switchPrayerAbbreviations"

@@ -7,6 +7,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import android.service.notification.NotificationListenerService
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -112,6 +113,8 @@ class NotificationService : Service() {
                 checkDailyNamazTime()
                 checkIqamaTime()
                 jummahTimeCheck()
+                val intent = Intent(applicationContext, NotificationListenerService::class.java)
+                startService(intent)
                 delay(60000)
             }
         }
@@ -137,17 +140,17 @@ class NotificationService : Service() {
                     }
 
 
-                    if (isTimeMatch(specifiedTime.namazTime)) {
-                        notifications.notify(
-                            specifiedTime.namazName, "Namaz Time",
-                            specifiedTime.notificationSound?.sound ?: R.raw.adhan_abdul_basit,
-                            false,
-                            false
-                        )
-                        prefrence.removeNotificationData(index)
-                        delay(1500)
-                        break
-                    }
+//                    if (isTimeMatch(specifiedTime.namazTime)) {
+//                        notifications.notify(
+//                            specifiedTime.namazName, "Namaz Time",
+//                            specifiedTime.notificationSound?.sound ?: R.raw.adhan_abdul_basit,
+//                            false,
+//                            false
+//                        )
+//                        prefrence.removeNotificationData(index)
+//                        delay(1500)
+//                        break
+//                    }
 
                     if (isTimeMatch(specifiedTime.reminderTime)) {
                         notifications.notify(

@@ -22,6 +22,7 @@ import com.iw.android.prayerapp.databinding.FragmentSecondOnboardingBinding
 import com.iw.android.prayerapp.extension.NotificationPermissionTextProvider
 import com.iw.android.prayerapp.extension.showPermissionDialog
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 
 class SecondOnboarding : BaseFragment(R.layout.fragment_second_onboarding) {
 
@@ -117,7 +118,7 @@ class SecondOnboarding : BaseFragment(R.layout.fragment_second_onboarding) {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                findNavController().navigate(R.id.action_secondOnboarding_to_thirdOnboarding)
+
             } else {
                 showPermissionDialog(
                     permissionTextProvider = NotificationPermissionTextProvider(),
@@ -173,7 +174,9 @@ class SecondOnboarding : BaseFragment(R.layout.fragment_second_onboarding) {
         requireActivity().onBackPressedDispatcher.addCallback(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-
+                    if (!(requireActivity() as OnBoardingActivity).data.isNullOrEmpty() && (requireActivity() as OnBoardingActivity).data != "null") {
+                        requireActivity().finish()
+                    }
                 }
             })
     }

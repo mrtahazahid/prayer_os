@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Build
 import android.view.View
 import android.widget.Toast
 import androidx.browser.customtabs.CustomTabsIntent
@@ -24,8 +23,6 @@ import com.iw.android.prayerapp.extension.getAndroidVersion
 import com.iw.android.prayerapp.extension.getDeviceName
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 import com.iw.android.prayerapp.utils.GetAdhanDetails
-import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 class RowItemMore(
@@ -69,11 +66,14 @@ class RowItemMore(
                     }
 
                     "Read tutorial" -> {
+                        val intent = Intent(
+                            binding.imageView.context,
+                            OnBoardingActivity::class.java
+                        )
+                        intent.putExtra("data","value")
                         activity.startActivity(
-                            Intent(
-                                binding.imageView.context,
-                                OnBoardingActivity::class.java
-                            )
+                         intent
+
                         )
                     }
 

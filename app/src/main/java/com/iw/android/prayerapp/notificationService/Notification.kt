@@ -106,6 +106,9 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         }
 
 
+
+
+
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -132,6 +135,10 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         } else {
             context.startService(notificationIntent)
         }
+    }
+
+    fun stopPrayer(){
+        player?.release()
     }
 }
 

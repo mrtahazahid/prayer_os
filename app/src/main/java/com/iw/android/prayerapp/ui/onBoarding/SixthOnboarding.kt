@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentSixthOnboardingBinding
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 
 class SixthOnboarding : BaseFragment(R.layout.fragment_sixth_onboarding) {
 
@@ -73,7 +74,9 @@ class SixthOnboarding : BaseFragment(R.layout.fragment_sixth_onboarding) {
         requireActivity().onBackPressedDispatcher.addCallback(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-
+                    if (!(requireActivity() as OnBoardingActivity).data.isNullOrEmpty() && (requireActivity() as OnBoardingActivity).data != "null") {
+                        requireActivity().finish()
+                    }
                 }
             })
     }

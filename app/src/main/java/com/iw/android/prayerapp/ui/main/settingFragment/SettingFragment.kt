@@ -18,6 +18,7 @@ import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.databinding.FragmentSettingBinding
 import com.iw.android.prayerapp.extension.CustomDialog
+import com.iw.android.prayerapp.extension.MethodDialog
 import com.iw.android.prayerapp.extension.convertToFunDateTime
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
@@ -124,33 +125,15 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageVeiwAdhanHelp.setOnClickListener(this)
         binding.imageViewPlayHelp.setOnClickListener(this)
         binding.imageViewJuriHelp.setOnClickListener(this)
-        binding.imageViewAdjHelp.setOnClickListener(this)
-        binding.imageView24HourHelp.setOnClickListener(this)
         binding.imageViewAdjustHijriHelp.setOnClickListener(this)
-        binding.imageViewPrayerHelp.setOnClickListener(this)
         binding.imageViewCountDownHelp.setOnClickListener(this)
         binding.imageViewIqamaHelp.setOnClickListener(this)
         binding.imageViewGeoHelp.setOnClickListener(this)
         binding.imageViewAuto.setOnClickListener(this)
         binding.imageViewAssetHelp.setOnClickListener(this)
-
         binding.imageViewSystem.setOnClickListener(this)
         binding.imageViewAutoIncrementHelp.setOnClickListener(this)
-
-
-        binding.imageViewSnoozeHelp.setOnClickListener(this)
-        binding.imageVeiwAdhanHelp.setOnClickListener(this)
-        binding.imageViewPlayHelp.setOnClickListener(this)
         binding.imageViewMethodHelp.setOnClickListener(this)
-        binding.imageViewJuriHelp.setOnClickListener(this)
-        binding.imageViewAdjHelp.setOnClickListener(this)
-        binding.imageView24HourHelp.setOnClickListener(this)
-        binding.imageViewAdjustHijriHelp.setOnClickListener(this)
-        binding.imageViewPrayerHelp.setOnClickListener(this)
-        binding.imageViewCountDownHelp.setOnClickListener(this)
-        binding.imageViewIqamaHelp.setOnClickListener(this)
-        binding.imageViewGeoHelp.setOnClickListener(this)
-        binding.imageViewAutoIncrementHelp.setOnClickListener(this)
         binding.imageViewApp.setOnClickListener(this)
         binding.imageViewPhone.setOnClickListener(this)
         binding.imageViewAsset.setOnClickListener(this)
@@ -241,24 +224,18 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             }
 
             binding.imageViewMethodHelp.id -> {
-                CustomDialog(requireContext(), "Title", "This is the description").show()
+                val location = getTimeZoneAndCity(
+                    requireContext(), viewModel.getUserLatLong?.latitude ?: 0.0,
+                    viewModel.getUserLatLong?.longitude ?: 0.0
+                )
+
+                MethodDialog(requireContext(), "Method", "Calculation methods are entirely based \n on location, so it's very important to \n choose the method the best matches \n'${location?.city}'.If none of the method match \n your region, Moonsighting Committee \n or Muslim world League  are suitable \n defaults in most cases, if you notice a \nlarge difference between the prayer \n times in the app and those of your \n local masjid, especially for Fajr and \n Isha, your masjid may be using custom \n twilight angles to generate their prayer \n times, which can be adjusted in the\n Elevation Rule section.You may swipe \n the row and tap recommend to let the \n app suggest a calculation method.").show()
             }
 
             binding.imageViewJuriHelp.id -> {
                 CustomDialog(requireContext(), "Jurisprudence", "The School of thought used to \n calculate Asr.The ${"standard"} selection\n encompresses Maliki, Shafi'i, Hanbali,\n and Ja'fari schools of thought.").show()
             }
 
-            binding.imageViewAdjHelp.id -> {
-                CustomDialog(requireContext(), "Title", "This is the description").show()
-            }
-
-            binding.imageView24HourHelp.id -> {
-                CustomDialog(requireContext(), "Title", "This is the description").show()
-            }
-
-            binding.imageViewPrayerHelp.id -> {
-                CustomDialog(requireContext(), "Title", "This is the description").show()
-            }
 
             binding.imageViewCountDownHelp.id -> {
                 CustomDialog(requireContext(), "Count up time", "Specify how long the timers should \n count 'up' since the last adhan.").show()

@@ -1,6 +1,5 @@
 package com.iw.android.prayerapp.ui.onBoarding
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +10,12 @@ import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFirstOnboardingBinding
-import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 
 class FirstOnboarding : BaseFragment(R.layout.fragment_first_onboarding) {
 
     private var _binding: FragmentFirstOnboardingBinding? = null
     private val binding get() = _binding!!
-
 
 
     override fun onCreateView(
@@ -85,7 +83,9 @@ class FirstOnboarding : BaseFragment(R.layout.fragment_first_onboarding) {
         requireActivity().onBackPressedDispatcher.addCallback(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-
+                    if (!(requireActivity() as OnBoardingActivity).data.isNullOrEmpty() && (requireActivity() as OnBoardingActivity).data != "null") {
+                        requireActivity().finish()
+                    }
                 }
             })
     }

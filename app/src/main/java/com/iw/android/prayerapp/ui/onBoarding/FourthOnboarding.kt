@@ -17,6 +17,7 @@ import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFourthOnboardingBinding
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import kotlinx.coroutines.launch
@@ -252,7 +253,9 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
         requireActivity().onBackPressedDispatcher.addCallback(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-
+                    if (!(requireActivity() as OnBoardingActivity).data.isNullOrEmpty() && (requireActivity() as OnBoardingActivity).data != "null") {
+                        requireActivity().finish()
+                    }
                 }
             })
     }

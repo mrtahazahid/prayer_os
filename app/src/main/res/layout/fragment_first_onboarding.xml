@@ -85,6 +85,7 @@
         android:fontFamily="@font/sf_regular"
         android:gravity="center"
         android:letterSpacing=".03"
+        android:visibility="invisible"
         android:padding="@dimen/_15sdp"
         android:text="@string/first_bottom_text"
         android:textColor="@color/white"
@@ -99,6 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/_20sdp"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/btn_get_started"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
