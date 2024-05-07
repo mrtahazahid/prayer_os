@@ -54,7 +54,7 @@
         android:layout_height="360dp"
         android:src="@drawable/ic_dir_circle"
         android:tint="@color/white"
-        android:rotation="-29"
+        android:rotation="-54"
         android:backgroundTint="@color/app_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
