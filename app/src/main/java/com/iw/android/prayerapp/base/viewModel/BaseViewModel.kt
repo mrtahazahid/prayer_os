@@ -22,6 +22,13 @@ abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
 
     suspend fun savePrayerMethod(prayerMethod: String) = repository.savePrayerMethod(prayerMethod)
     suspend fun getPrayerMethod() = repository.getPrayerMethod()
+
+
+    suspend fun saveFloat(value: Float) = repository.saveFloat(value)
+    suspend fun getFloat() = repository.getFloat()
+
+    suspend fun setBoolean(value:Boolean) = repository.saveBoolean(value)
+    suspend fun getBoolean() = repository.getBoolean()
     suspend fun savePrayerElevation(prayerElevation: String) =
         repository.savePrayerElevationRule(prayerElevation)
 

@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/qiblaFragment"
-        android:name="com.iw.android.prayerapp.ui.main.QiblaFragment"
+        android:name="com.iw.android.prayerapp.ui.main.qibla.QiblaFragment"
         android:label="fragment_qibla"
         tools:layout="@layout/fragment_qibla" />
     <fragment

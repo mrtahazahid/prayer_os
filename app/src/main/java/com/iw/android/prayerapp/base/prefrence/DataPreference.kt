@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -70,6 +71,16 @@ class DataPreference @Inject constructor(
             preferences[AUTOMATIC_LOCATION] ?: false
         }
 
+    val float: Flow<Float>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[FLOAT] ?: 0f
+        }
+
+    val boolean: Flow<Boolean>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[BOOLEAN] ?: false
+        }
+
 
     suspend fun getBooleanData(key: Preferences.Key<Boolean>): Boolean =
         appContext.dataStore.data.map { preferences ->
@@ -81,6 +92,18 @@ class DataPreference @Inject constructor(
             preferences[key] = value
         }
     }
+
+    suspend fun setFloatData(key: Preferences.Key<Float>, value: Float) {
+        appContext.dataStore.edit { preferences ->
+            preferences[key] = value
+        }
+    }
+
+    suspend fun getFloatData(key: Preferences.Key<Float>): Float =
+        appContext.dataStore.data.map { preferences ->
+            preferences[key] ?: 0f
+        }.first()
+
 
     suspend fun getStringData(key: Preferences.Key<String>): String =
         appContext.dataStore.data.map { preferences ->
@@ -359,7 +382,9 @@ class DataPreference @Inject constructor(
         private val ACCESS_TOKEN = stringPreferencesKey("key_access_token")
         private val REFRESH_TOKEN = stringPreferencesKey("key_refresh_token")
         val IS_ONBOARDING = booleanPreferencesKey("key_is_onboarding")
+        val BOOLEAN = booleanPreferencesKey("key_boolean")
         val USER_ID = stringPreferencesKey("key_user_id")
+        val FLOAT = floatPreferencesKey("key_float")
         val GEOFENCE_RADIUS = intPreferencesKey("key_geofence_radius")
         val AUTOMATIC_LOCATION = booleanPreferencesKey("key_automatic_location")
         val PRAYER_METHOD = stringPreferencesKey("key_method")

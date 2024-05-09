@@ -5,6 +5,8 @@ import com.iw.android.prayerapp.base.network.BaseApi
 import com.iw.android.prayerapp.base.network.SafeApiCall
 import com.iw.android.prayerapp.base.prefrence.DataPreference
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.AUTOMATIC_LOCATION
+import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.BOOLEAN
+import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.FLOAT
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.GEOFENCE_RADIUS
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.IS_ONBOARDING
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_ELEVATION_RULE
@@ -34,6 +36,17 @@ abstract class BaseRepository(
         return preferences.loginUserId.first()
     }
 
+    suspend fun saveFloat(value: Float) {
+        preferences.setFloatData(FLOAT, value)
+    }
+
+    suspend fun getFloat(): Float = preferences.float.first()
+
+    suspend fun saveBoolean(value: Boolean) {
+        preferences.setBooleanData(BOOLEAN, value)
+    }
+
+    suspend fun getBoolean(): Boolean = preferences.boolean.first()
     suspend fun getPrayerMethod(): String {
         return preferences.prayerMethod.first()
     }
