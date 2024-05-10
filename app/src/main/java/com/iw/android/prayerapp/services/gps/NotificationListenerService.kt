@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class NotificationListenerService : NotificationListenerService() {
+class NotificationListenerService() : NotificationListenerService() {
 
 
     @Inject
@@ -21,22 +21,23 @@ class NotificationListenerService : NotificationListenerService() {
         return START_STICKY
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        Log.d("createdService", "Called")
+    }
+
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
-        Log.d("notif",sbn.toString())
+        Log.d("aaaaa", sbn.toString())
     }
+
 
     override fun onNotificationRemoved(
         sbn: StatusBarNotification?,
         rankingMap: RankingMap?,
         reason: Int
     ) {
-        Log.d("notif",sbn.toString())
-        if (sbn?.packageName == "com.iw.android.prayerapp") {
-            if (reason == REASON_APP_CANCEL || reason == REASON_APP_CANCEL_ALL) {
-                notifications.stopPrayer()
-            }
-        }
+        notifications.stopPrayer()
     }
 
 }

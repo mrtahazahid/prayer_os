@@ -3,7 +3,7 @@ package com.iw.android.prayerapp.ui.activities.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.NotificationManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,7 +14,6 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -30,6 +29,7 @@ import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.services.gps.GpsStatusListener
 import com.iw.android.prayerapp.services.gps.LocationEvent
 import com.iw.android.prayerapp.services.gps.LocationService
+import com.iw.android.prayerapp.services.gps.NotificationListenerService
 import com.iw.android.prayerapp.services.gps.NotificationService
 import com.iw.android.prayerapp.services.gps.TurnOnGps
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
@@ -123,7 +123,7 @@ class MainActivity : BaseActivity() {
         navController.addOnDestinationChangedListener(destinationChangedListener)
 
         service = Intent(this, LocationService::class.java)
-
+        startNotificationListenerService()
         gpsStatusListener = GpsStatusListener(this)
         turnOnGps = TurnOnGps(this)
         startForegroundService()
@@ -295,6 +295,25 @@ class MainActivity : BaseActivity() {
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
     }
+    private fun startNotificationListenerService() {
+        val componentName = ComponentName(this, NotificationListenerService::class.java)
+        val intent = Intent()
+        intent.component = componentName
 
+        if (!isNotificationServiceEnabled()) {
+            startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+        } else {
+            startService(intent)
+        }
+    }
+
+    private fun isNotificationServiceEnabled(): Boolean {
+        val cn = ComponentName(this, NotificationListenerService::class.java)
+        val flat = android.provider.Settings.Secure.getString(
+            contentResolver,
+            "enabled_notification_listeners"
+        )
+        return flat != null && flat.contains(cn.flattenToString())
+    }
 
 }

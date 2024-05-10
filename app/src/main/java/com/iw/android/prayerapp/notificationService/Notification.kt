@@ -16,7 +16,6 @@ import androidx.lifecycle.lifecycleScope
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -96,8 +95,8 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                         player = MediaPlayer.create(context, uri)
                         player?.isLooping = false // This will play sound in repeatable mode.
                         player?.start()
-                        delay(10000)
-                        player?.release()
+//                        delay(10000)
+//                        player?.release()
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
