@@ -35,6 +35,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+
 @AndroidEntryPoint
 class NotificationService : Service() {
     @Inject
@@ -130,8 +131,8 @@ class NotificationService : Service() {
                             notifications.notify(
                                 specifiedTime.namazName, "${specifiedTime.namazName} Dhua Time",
                                 specifiedTime.notificationSound?.sound ?: R.raw.adhan_abdul_basit,
-                                specifiedTime.reminderSound?.isVibrate?:false,
-                                specifiedTime.reminderSound?.isSilent?:false
+                                specifiedTime.reminderSound?.isVibrate ?: false,
+                                specifiedTime.reminderSound?.isSilent ?: false
                             )
                             prefrence.removeNotificationData(index)
                             delay(1500)
@@ -154,10 +155,11 @@ class NotificationService : Service() {
 
                     if (isTimeMatch(specifiedTime.reminderTime)) {
                         notifications.notify(
-                            specifiedTime.namazName, "${specifiedTime.namazName} at ${specifiedTime.namazTime}",
+                            specifiedTime.namazName,
+                            "${specifiedTime.namazName} at ${specifiedTime.namazTime}",
                             specifiedTime.reminderSound?.sound ?: R.raw.adhan_abdul_basit,
-                            specifiedTime.reminderSound?.isVibrate?:false,
-                            specifiedTime.reminderSound?.isSilent?:false
+                            specifiedTime.reminderSound?.isVibrate ?: false,
+                            specifiedTime.reminderSound?.isSilent ?: false
                         )
                         prefrence.removeNotificationData(index)
                         delay(1500)
@@ -168,8 +170,8 @@ class NotificationService : Service() {
                             notifications.notify(
                                 specifiedTime.namazName, "Second fajr namaz reminder",
                                 specifiedTime.reminderSound?.sound ?: R.raw.adhan_abdul_basit,
-                                specifiedTime.reminderSound?.isVibrate?:false,
-                                specifiedTime.reminderSound?.isSilent?:false
+                                specifiedTime.reminderSound?.isVibrate ?: false,
+                                specifiedTime.reminderSound?.isSilent ?: false
                             )
                             prefrence.removeNotificationData(index)
                             delay(1500)
@@ -380,7 +382,7 @@ class NotificationService : Service() {
 
             if (currentTime == time.currentNamazTime && !time.isCalled && notificationDetail != null) {
                 notifications.notify(
-                    "${time.currentNamazName} at ${time.currentNamazTime}", "",
+                    "${time.currentNamazName}", "Namaz time",
                     notificationDetail.sound ?: R.raw.adhan_abdul_basit,
                     notificationDetail.isVibrate,
                     notificationDetail.isSilent

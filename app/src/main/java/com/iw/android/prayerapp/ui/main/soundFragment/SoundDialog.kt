@@ -137,7 +137,6 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
             checked.isSoundSelected = false
         }
 
-        Log.d("onClick", "onClick:${data.soundFile} ")
         // Select the clicked item
         notificationList[position].isSoundSelected = true
         // Notify the adapter about the change in the entire dataset

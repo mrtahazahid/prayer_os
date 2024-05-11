@@ -9,6 +9,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -46,6 +47,7 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         isForVibrate: Boolean,
         isForSilent: Boolean
     ) {
+        Log.d("Notify","called")
         val intent = Intent(context, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }

@@ -368,7 +368,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 val secondsRemaining = (millisUntilFinished / 1000).toInt()
                 binding.progressbar.progressMax = totalTime.toFloat()
                 binding.progressbar.progress = millisUntilFinished.toFloat()
-
                 val remainingTime = formatRemainingTime(secondsRemaining)
                 binding.textViewRemainingTime.text = remainingTime
             }

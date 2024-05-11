@@ -55,7 +55,7 @@ fun formatRemainingTime(secondsRemaining: Int): String {
 @SuppressLint("SimpleDateFormat")
 fun convertToFunTime(timestamp: Long): String {
     val timeZoneID = TimeZone.getDefault().id
-    val formatter = SimpleDateFormat("hh:mm a")
+    val formatter = SimpleDateFormat("h:mm a")
     formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
     return formatter.format(Date(timestamp))
 

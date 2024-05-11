@@ -22,6 +22,7 @@ import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -176,7 +177,8 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla) {
             animation.repeatCount = 0
             animation.fillAfter = true
             binding.imageViewQiblaDirection.startAnimation(animation)
-            binding.textViewCurrentDirection.text = currentAzimuth.toInt().toString()
+            val formattedNumber = DecimalFormat("#.#").format(currentAzimuth)
+            binding.textViewCurrentDirection.text = formattedNumber
         }
 
     }
