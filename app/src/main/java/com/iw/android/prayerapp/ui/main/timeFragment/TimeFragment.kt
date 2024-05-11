@@ -176,7 +176,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
 
         setObserver()
 
-        val dateFormat = SimpleDateFormat("EEEE dd MMMM yyyy", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
         return dateFormat.format(targetDate)
     }
 

@@ -274,17 +274,17 @@ class RowItemTime(
         _binding.imageView.setImageResource(data.image)
         _binding.textViewTitle.text = data.title
         _binding.textViewTime.text = data.time
-        _binding.textViewNotificationSound.text = data.namazDetail.notificationSound?.soundName
-        _binding.textViewReminderSound.text = data.namazDetail.reminderSound?.soundName
+      //  _binding.textViewNotificationSound.text = data.namazDetail.notificationSound?.soundName
+       // _binding.textViewReminderSound.text = data.namazDetail.reminderSound?.soundName
         _binding.textViewSetTime.text = data.namazDetail.reminderTimeMinutes
         _binding.textViewSecondReminderSetTime.text = data.namazDetail.secondReminderTimeMinutes
         _binding.textViewNotificationSound.text =
             if (data.namazDetail.notificationSound?.isForAdhan == true) data.namazDetail.notificationSound?.soundName
-                ?: "Adhan" else data.namazDetail.notificationSound?.soundToneName ?: "Tone"
+                ?: "Adhan" else data.namazDetail.notificationSound?.soundToneName ?: "Adhan"
         if (data.namazDetail.notificationSound?.isSoundSelected == false) {
             _binding.textViewNotificationSound.text =
                 if (data.namazDetail.notificationSound?.isForAdhan == true) data.namazDetail.notificationSound?.soundName
-                    ?: "Adhan" else data.namazDetail.notificationSound?.soundToneName ?: "Tone"
+                    ?: "Adhan" else data.namazDetail.notificationSound?.soundToneName ?: "Adhan"
         } else {
             if (data.namazDetail.notificationSound?.isSilent == true) {
                 _binding.textViewNotificationSound.text = "Silent"
@@ -298,11 +298,11 @@ class RowItemTime(
         }
         _binding.textViewReminderSound.text =
             if (data.namazDetail.reminderSound?.isForAdhan == true) data.namazDetail.reminderSound?.soundName
-                ?: "Adhan" else data.namazDetail.reminderSound?.soundToneName ?: "Tone"
+                ?: "Tone" else data.namazDetail.reminderSound?.soundToneName ?: "Tone"
         if (data.namazDetail.reminderSound?.isSoundSelected == false) {
             _binding.textViewReminderSound.text =
                 if (data.namazDetail.reminderSound?.isForAdhan == true) data.namazDetail.reminderSound?.soundName
-                    ?: "Adhan" else data.namazDetail.reminderSound?.soundToneName ?: "Tone"
+                    ?: "Tone" else data.namazDetail.reminderSound?.soundToneName ?: "Tone"
         } else {
 
             if (data.namazDetail.reminderSound?.isSilent == true) {

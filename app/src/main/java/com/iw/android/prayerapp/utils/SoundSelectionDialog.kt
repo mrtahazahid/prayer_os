@@ -71,6 +71,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
             parentFragmentManager.fragments[0].childFragmentManager.fragments[0]
         viewModel = ViewModelProvider(fragment)[SoundViewModel::class.java]
         setStyle(STYLE_NORMAL, R.style.DialogFragmentStyle)
+        isCancelable =  false
     }
 
     override fun onCreateView(

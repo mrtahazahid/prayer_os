@@ -1,6 +1,5 @@
 package com.iw.android.prayerapp.ui.main.soundFragment
 
-import android.app.Dialog
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
@@ -32,7 +31,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
     var sound: Int? = null
     var isForNotification = false
 
-    private val notificationList = GetAdhanSound.notificationSound
+    private var notificationList = arrayListOf<SoundData>()
 
     private var viewTypeArray = ArrayList<ViewType<*>>()
     private var mediaPlayer: MediaPlayer? = null
@@ -48,6 +47,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.DialogFragmentStyle)
+        isCancelable = false
 
     }
 
@@ -71,7 +71,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
         setOnBackPressedListener()
         binding.textViewTitle.text = title
         binding.textViewNamazName.text = subTitle
-        Log.d("listener",selectedItem)
+        Log.d("listener", selectedItem)
         setRecyclerView()
 
     }
@@ -90,7 +90,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
 
     private fun setObserver() {
         viewTypeArray.clear()
-
+        notificationList = if (selectedItemPosition == 0) GetAdhanSound.adhanSound else GetAdhanSound.notificationSound
         for (data in notificationList) {
             viewTypeArray.add(
                 RowItemSound(data, this, selectedSound)
@@ -107,7 +107,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            binding.backView.id , binding.imageViewBack.id -> {
+            binding.backView.id, binding.imageViewBack.id -> {
                 listener?.onDataPassed(selectedItem, selectedItemPosition, sound, isForNotification)
 
                 dismiss()
@@ -162,7 +162,12 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    listener?.onDataPassed(selectedItem, selectedItemPosition, sound, isForNotification)
+                    listener?.onDataPassed(
+                        selectedItem,
+                        selectedItemPosition,
+                        sound,
+                        isForNotification
+                    )
                     dismiss()
                 }
             })

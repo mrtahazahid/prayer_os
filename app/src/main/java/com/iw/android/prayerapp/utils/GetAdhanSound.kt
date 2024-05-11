@@ -6,7 +6,6 @@ import com.iw.android.prayerapp.data.response.SoundData
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerEnumType
 
 object GetAdhanSound {
-
     val adhanSound = arrayListOf<SoundData>()
     val notificationSound = arrayListOf<SoundData>()
     val duaSound = arrayListOf<SoundData>()
@@ -125,12 +124,12 @@ object GetAdhanSound {
         notificationSound.add(SoundData("Adventure",R.raw.noti_adventure,false))
         notificationSound.add(SoundData("Adventure Long",R.raw.noti_adventure_long,false))
         notificationSound.add(SoundData("Allahu Ya'Rabbi",R.raw.noti_alalhu_ya_rabbi,false))
-        notificationSound.add(SoundData("Alaram Beats",R.raw.noti_alarm_beats,false))
-        notificationSound.add(SoundData("Alaram Beats Long",R.raw.noti_alarm_beats_long,false))
+        notificationSound.add(SoundData("Alarm  Beats",R.raw.noti_alarm_beats,false))
+        notificationSound.add(SoundData("Alarm  Beats Long",R.raw.noti_alarm_beats_long,false))
         notificationSound.add(SoundData("Alert",R.raw.noti_alert,false))
         notificationSound.add(SoundData("Allahs Name",R.raw.noti_allahs_names,false))
-        notificationSound.add(SoundData("Allah Akbar",R.raw.noti_allahu_akbar,false))
-        notificationSound.add(SoundData("Allah Akbar Allah Akbar",R.raw.noti_allahu_akbar_allahu_akbar,false))
+        notificationSound.add(SoundData("Allahu Akbar",R.raw.noti_allahu_akbar,false))
+        notificationSound.add(SoundData("Allahu Akbar Allahu Akbar",R.raw.noti_allahu_akbar_allahu_akbar,false))
         notificationSound.add(SoundData("Allahu Ya Allah",R.raw.noti_allahu_ya_allah,false))
         notificationSound.add(SoundData("Allahu Ya Allah Long",R.raw.noti_allahu_ya_allah_long,false))
         notificationSound.add(SoundData("Announce Asr Soon",R.raw.noti_announce_asr_soon,false))
