@@ -106,9 +106,6 @@ class NotificationService : Service() {
     }
 
     fun startPeriodicTask() {
-        val inputString = "30 min"
-        val extractedNumber = extractNumberFromString(inputString)
-        Log.d("extractedNumber", "startPeriodicTask: $extractedNumber")
         applicationScope.launch {
             while (true) {
                 checkAndTriggerNotification()
@@ -190,26 +187,15 @@ class NotificationService : Service() {
 
 
     fun convertTimeToMillis(timeString: String): Long {
-        val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
         val date = dateFormat.parse(timeString)
         return date?.time ?: 0
     }
 
     fun millisToTimeFormat(millis: Long): String {
-        val dateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
         val date = Date(millis)
         return dateFormat.format(date)
-    }
-
-    fun extractNumberFromString(input: String): Int {
-        // Split the input string by spaces
-        val parts = input.split(" ")
-
-        // Find the first part that is a number
-        val numberString = parts.find { it.toIntOrNull() != null }
-
-        // Convert the found number string to an integer or return 0 if not found
-        return numberString?.toInt() ?: 0
     }
 
     private fun isTimeMatch(specifiedTime: String): Boolean {
@@ -225,7 +211,7 @@ class NotificationService : Service() {
     }
 
     fun getCurrentTimeIn12HourFormat(): String {
-        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+        val formatter = DateTimeFormatter.ofPattern("h:mm a")
         return LocalTime.now().format(formatter)
     }
 
@@ -267,7 +253,10 @@ class NotificationService : Service() {
     private suspend fun checkDailyNamazTime() {
 
         val currentTime = millisToTimeFormat(System.currentTimeMillis())
+        Log.d("ss",currentTime.toString())
+
         for (time in prayerList) {
+            Log.d("ss",time.currentNamazTime)
             val notificationDetail: CurrentNamazNotificationData = when (time.currentNamazName) {
                 "Fajr" -> {
                     if (prefrence.getFajrCurrentNamazNotificationData() != null) {
