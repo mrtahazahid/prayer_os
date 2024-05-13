@@ -52,6 +52,7 @@ class NotificationService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        Log.d("Service","Called")
         prefrence = DataPreference(this)
         applicationScope.launch {
             getMethod()
@@ -380,7 +381,8 @@ class NotificationService : Service() {
                 }
             }
 
-            if (currentTime == time.currentNamazTime && !time.isCalled && notificationDetail != null) {
+            if (currentTime == time.currentNamazTime) {
+                Log.d("Current",time.toString())
                 notifications.notify(
                     "${time.currentNamazName}", "Namaz time",
                     notificationDetail.sound ?: R.raw.adhan_abdul_basit,
