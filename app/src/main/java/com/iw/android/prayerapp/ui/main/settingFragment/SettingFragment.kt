@@ -214,7 +214,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 CustomDialog(
                     requireContext(),
                     "Play on tap",
-                    "The full adhan will play when tapped \n from a notification.This setting will be \n ignored for maghrib in ramadan and \n will always play full adhan in that case."
+                    "The full adhan will play when tapped \n from a notification. This setting will be \n ignored for maghrib in Ramadan and \n will always play full adhan in that case."
                 ).show()
             }
 
@@ -257,8 +257,8 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             binding.imageVeiwAdhanHelp.id -> {
                 CustomDialog(
                     requireContext(),
-                    "Adhan duaa",
-                    "Duaa will play after the adhan when \ntapped from a notification."
+                    "Adhan dua",
+                    "Dua will play after the adhan when \ntapped from a notification."
                 ).show()
             }
 
