@@ -113,8 +113,8 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener,
             }
 
             binding.carViewProject.id -> {
-//                openCustomTab("https://quranplus.app/")
-                showToast("Work in progress")
+                openCustomTab("https://quranplus.app/apple/")
+//                showToast("Work in progress")
             }
 
             binding.policyViewClick.id -> {
