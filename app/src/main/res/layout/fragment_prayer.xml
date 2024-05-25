@@ -241,8 +241,8 @@
 
             <com.mikhaellopez.circularprogressbar.CircularProgressBar
                 android:id="@+id/progressbar"
-                android:layout_width="@dimen/_250sdp"
-                android:layout_height="@dimen/_250sdp"
+                android:layout_width="@dimen/_270sdp"
+                android:layout_height="@dimen/_270sdp"
                 android:rotation="-180"
                 app:cpb_progress_max="100"
                 app:layout_constraintBottom_toBottomOf="parent"
