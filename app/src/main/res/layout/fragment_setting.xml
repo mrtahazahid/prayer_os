@@ -636,7 +636,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="28dp"
                                 android:layout_marginEnd="8dp"
-
+android:layout_marginTop="10dp"
                                 android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:text="Automatic"
@@ -685,6 +685,12 @@
                                 app:layout_constraintStart_toStartOf="@id/textViewAutomatic"
                                 app:layout_constraintTop_toBottomOf="@id/switchAutomatic" />
 
+                            <androidx.constraintlayout.widget.Group
+                                android:id="@+id/group"
+                                android:visibility="gone"
+                                app:constraint_referenced_ids="textViewGeofence,imageViewGeoHelp,textViewGeofenceRadius,viewSepGeofence,cardView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
                             <TextView
                                 android:id="@+id/textViewGeofence"
@@ -736,14 +742,22 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginTop="15dp"
+                                android:layout_marginStart="28dp"
                                 android:drawablePadding="@dimen/_3sdp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="City"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_13ssp"
-                                app:layout_constraintStart_toStartOf="@id/viewSepGeofence"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepGeofence" />
 
+                            <View
+                                android:id="@+id/cityView"
+                                android:layout_width="0dp"
+                                android:layout_height="45dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/viewSepGeofence" />
                             <TextView
                                 android:id="@+id/textViewCityName"
                                 android:layout_width="0dp"
@@ -752,7 +766,7 @@
                                 android:fontFamily="@font/sf_medium"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
-                                app:layout_constraintEnd_toEndOf="@id/viewSepGeofence"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepGeofence"
                                 tools:text="Karachi" />
 
@@ -828,6 +842,7 @@
 
 
                             <com.google.android.material.card.MaterialCardView
+                              android:id="@+id/cardView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="30dp"
                                 android:layout_marginEnd="15dp"
@@ -1632,6 +1647,8 @@
                                 android:tint="@color/small_icon"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/viewCaches" />
+
+
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

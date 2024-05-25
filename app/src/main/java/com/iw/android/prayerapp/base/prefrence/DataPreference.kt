@@ -11,6 +11,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.APPLICATION_ID
+import com.iw.android.prayerapp.base.response.LocationResponse
 import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.IqamaData
 import com.iw.android.prayerapp.data.response.IqamaNotificationData
@@ -68,7 +69,7 @@ class DataPreference @Inject constructor(
 
     val automaticLocation: Flow<Boolean>
         get() = appContext.dataStore.data.map { preferences ->
-            preferences[AUTOMATIC_LOCATION] ?: false
+            preferences[AUTOMATIC_LOCATION] ?: true
         }
 
     val float: Flow<Float>
@@ -314,6 +315,26 @@ class DataPreference @Inject constructor(
             preferences[NOTIFICATION_DATA] = updatedJsonString
         }
     }
+    suspend fun saveRecentLocationDataIntoList(newItem: LocationResponse) {
+        val jsonString = appContext.dataStore.data
+            .first()[RECENT_LOCATION_ITEM_DATA]
+            ?: "[]" // Default to an empty array if the key is not present
+
+        val list: MutableList<LocationResponse> = Json.decodeFromString(jsonString)
+
+        list.add(newItem)
+
+        val updatedJsonString = Json.encodeToString(list)
+
+        appContext.dataStore.edit { preferences ->
+            preferences[RECENT_LOCATION_ITEM_DATA] = updatedJsonString
+        }
+    }
+
+    suspend fun getRecentLocationDataIntoList(): List<LocationResponse> {
+        val jsonString = appContext.dataStore.data.first()[RECENT_LOCATION_ITEM_DATA] ?: return emptyList()
+        return mapJsonToList2(jsonString)
+    }
 
     suspend fun updateNotificationData(newItem: NotificationData) {
         val jsonString = appContext.dataStore.data
@@ -377,6 +398,11 @@ class DataPreference @Inject constructor(
         return json.decodeFromString(jsonString)
     }
 
+    private fun mapJsonToList2(jsonString: String): List<LocationResponse> {
+        val json = Json { ignoreUnknownKeys = true } // adjust settings if needed
+        return json.decodeFromString(jsonString)
+    }
+
 
     companion object {
         private val ACCESS_TOKEN = stringPreferencesKey("key_access_token")
@@ -386,8 +412,8 @@ class DataPreference @Inject constructor(
         val USER_ID = stringPreferencesKey("key_user_id")
         val FLOAT = floatPreferencesKey("key_float")
         val GEOFENCE_RADIUS = intPreferencesKey("key_geofence_radius")
-        val AUTOMATIC_LOCATION = booleanPreferencesKey("key_automatic_location")
         val PRAYER_METHOD = stringPreferencesKey("key_method")
+        val AUTOMATIC_LOCATION = booleanPreferencesKey("key_automatic_location")
         val USER_LAT_LONG = stringPreferencesKey("key_user_lat_long")
         val PRAYER_JURISPRUDENCE = stringPreferencesKey("key_jurisprudence")
         val PRAYER_ELEVATION_RULE = stringPreferencesKey("key_user_elevation")
@@ -395,6 +421,7 @@ class DataPreference @Inject constructor(
         val FAJR_INFO = stringPreferencesKey("key_fajr_info")
         val SUNRISE_INFO = stringPreferencesKey("key_sunrise_info")
         val NOTIFICATION_DATA = stringPreferencesKey("key_notification_data")
+        val RECENT_LOCATION_ITEM_DATA = stringPreferencesKey("key_recent_data")
         val SETTING_NOTIFICATION_DATA = stringPreferencesKey("key_setting_notification_data")
         val CURRENT_NAMAZ_Fajr_NOTIFICATION_DATA =
             stringPreferencesKey("key_current_namaz_fajr_notification_data")

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,22 +16,27 @@ import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.BuildConfig
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
+import com.iw.android.prayerapp.base.response.LocationResponse
 import com.iw.android.prayerapp.data.response.NotificationSettingData
+import com.iw.android.prayerapp.data.response.UserLatLong
 import com.iw.android.prayerapp.databinding.FragmentSettingBinding
 import com.iw.android.prayerapp.extension.CustomDialog
 import com.iw.android.prayerapp.extension.MethodDialog
 import com.iw.android.prayerapp.extension.convertToFunDateTime
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
+import com.iw.android.prayerapp.services.gps.LocationService
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getTimeZoneAndCity
+import com.iw.android.prayerapp.utils.MapDialog
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.util.Locale
 
 class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickListener,
-    OnDataSelected {
+    OnDataSelected, MapDialog.MapDialogListener {
 
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!!
@@ -96,7 +102,8 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.textViewCityName.text = location?.city
         binding.textViewCityTimeZoneName.text = location?.timeZone
         binding.textViewVersions.text = "${BuildConfig.VERSION_NAME}"
-        binding.textViewCaches1.text = convertToFunDateTime(getCacheDirectoryLastModified(requireContext()))
+        binding.textViewCaches1.text =
+            convertToFunDateTime(getCacheDirectoryLastModified(requireContext()))
         binding.switchAutomatic.isChecked = viewModel.getAutomaticLocation
     }
 
@@ -137,10 +144,34 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewApp.setOnClickListener(this)
         binding.imageViewPhone.setOnClickListener(this)
         binding.imageViewAsset.setOnClickListener(this)
+        if (!viewModel.getAutomaticLocation) {
+            binding.cityView.setOnClickListener(this)
+        }
 
 
         binding.switchAutomatic.setOnCheckedChangeListener { buttonView, isChecked ->
             viewModel.setLocationAutomaticValue(isChecked)
+            if (isChecked) {
+                binding.cityView.isClickable = false
+                binding.cityView.setOnClickListener(this)
+                binding.group.show()
+                requireActivity().startService(
+                    Intent(
+                        requireActivity(),
+                        LocationService::class.java
+                    )
+                )
+                initialize()
+            } else {
+                binding.group.gone()
+                binding.cityView.isClickable = true
+                requireActivity().stopService(
+                    Intent(
+                        requireActivity(),
+                        LocationService::class.java
+                    )
+                )
+            }
         }
 
         binding.switchAdhanDua.setOnCheckedChangeListener { _, isChecked ->
@@ -200,6 +231,11 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                     "The number of minutes to remind you \n again later for prayer, like the \n functionality of an alarm clock."
                 ).show()
             }
+
+            binding.cityView.id -> {
+                openLocationDialog()
+            }
+
             binding.imageViewAssetHelp.id -> {
                 CustomDialog(
                     requireContext(),
@@ -207,7 +243,6 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                     "The Sound assets stored locally for \n notifications and reminders."
                 ).show()
             }
-
 
 
             binding.imageViewPlayHelp.id -> {
@@ -220,7 +255,11 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
 
             binding.imageViewAuto.id -> {
-                CustomDialog(requireContext(), "Automatic", "Use your device GPS location to \n calculate prayers and updates  \n automatically, otherwise input a \n manual address.").show()
+                CustomDialog(
+                    requireContext(),
+                    "Automatic",
+                    "Use your device GPS location to \n calculate prayers and updates  \n automatically, otherwise input a \n manual address."
+                ).show()
             }
 
             binding.imageViewMethodHelp.id -> {
@@ -229,16 +268,28 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                     viewModel.getUserLatLong?.longitude ?: 0.0
                 )
 
-                MethodDialog(requireContext(), "Method", "Calculation methods are entirely based \n on location, so it's very important to \n choose the method the best matches \n'${location?.city}'.If none of the method match \n your region, Moonsighting Committee \n or Muslim world League  are suitable \n defaults in most cases, if you notice a \nlarge difference between the prayer \n times in the app and those of your \n local masjid, especially for Fajr and \n Isha, your masjid may be using custom \n twilight angles to generate their prayer \n times, which can be adjusted in the\n Elevation Rule section.You may swipe \n the row and tap recommend to let the \n app suggest a calculation method.").show()
+                MethodDialog(
+                    requireContext(),
+                    "Method",
+                    "Calculation methods are entirely based \n on location, so it's very important to \n choose the method the best matches \n'${location?.city}'.If none of the method match \n your region, Moonsighting Committee \n or Muslim world League  are suitable \n defaults in most cases, if you notice a \nlarge difference between the prayer \n times in the app and those of your \n local masjid, especially for Fajr and \n Isha, your masjid may be using custom \n twilight angles to generate their prayer \n times, which can be adjusted in the\n Elevation Rule section.You may swipe \n the row and tap recommend to let the \n app suggest a calculation method."
+                ).show()
             }
 
             binding.imageViewJuriHelp.id -> {
-                CustomDialog(requireContext(), "Jurisprudence", "The School of thought used to \n calculate Asr.The ${"standard"} selection\n encompresses Maliki, Shafi'i, Hanbali,\n and Ja'fari schools of thought.").show()
+                CustomDialog(
+                    requireContext(),
+                    "Jurisprudence",
+                    "The School of thought used to \n calculate Asr.The ${"standard"} selection\n encompresses Maliki, Shafi'i, Hanbali,\n and Ja'fari schools of thought."
+                ).show()
             }
 
 
             binding.imageViewCountDownHelp.id -> {
-                CustomDialog(requireContext(), "Count up time", "Specify how long the timers should \n count 'up' since the last adhan.").show()
+                CustomDialog(
+                    requireContext(),
+                    "Count up time",
+                    "Specify how long the timers should \n count 'up' since the last adhan."
+                ).show()
             }
 
             binding.imageViewIqamaHelp.id -> {
@@ -250,7 +301,11 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             }
 
             binding.imageViewGeoHelp.id -> {
-                CustomDialog(requireContext(), "Geo-fence", "The distance from the centre of your\n geographic region. Traveling outside of\n this boundary will trigger a notification \n for rescheduling notifications.").show()
+                CustomDialog(
+                    requireContext(),
+                    "Geo-fence",
+                    "The distance from the centre of your\n geographic region. Traveling outside of\n this boundary will trigger a notification \n for rescheduling notifications."
+                ).show()
             }
 
 
@@ -264,13 +319,20 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
 
             binding.imageViewAdjustHijriHelp.id -> {
-                CustomDialog(requireContext(), "Adjust hijri date", "Allows you to  add or subtract days \n from the hijri date until the Ummah can \n decide on a single calender.Pray \n Watch uses Umm al-Qura to stay in \n sync with hajj.").show()
+                CustomDialog(
+                    requireContext(),
+                    "Adjust hijri date",
+                    "Allows you to  add or subtract days \n from the hijri date until the Ummah can \n decide on a single calender.Pray \n Watch uses Umm al-Qura to stay in \n sync with hajj."
+                ).show()
             }
 
 
-
             binding.imageViewAutoIncrementHelp.id -> {
-                CustomDialog(requireContext(), "Auto increment hijri", "The hijri days are incremented at \n maghrib instead of midnight.").show()
+                CustomDialog(
+                    requireContext(),
+                    "Auto increment hijri",
+                    "The hijri days are incremented at \n maghrib instead of midnight."
+                ).show()
             }
 
             binding.iqamaView.id -> {
@@ -325,6 +387,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                     isSystemShow = false
                 }
             }
+
             binding.imageViewApp.id -> {
                 if (!isAppShow) {
                     binding.imageViewApp.setImageResource(R.drawable.ic_drop_down)
@@ -401,11 +464,12 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
             }
 
-            binding.imageViewPhone.id->{
+            binding.imageViewPhone.id -> {
                 openAppSettings()
             }
-            binding.imageViewAsset.id->{
-           showToast("Work in process")
+
+            binding.imageViewAsset.id -> {
+                showToast("Work in process")
             }
         }
     }
@@ -594,4 +658,32 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         val cacheDir = context.cacheDir
         return cacheDir.lastModified()
     }
+
+    private fun openLocationDialog() {
+        val locationDialog = MapDialog()
+        locationDialog.listener = this
+        lifecycleScope.launch {
+            locationDialog.recentLocationList = viewModel.getRecentLocationData()
+            Log.d("lsit", viewModel.getRecentLocationData().toString())
+        }
+        locationDialog.show(requireActivity().supportFragmentManager, "SoundDialogFragment")
+    }
+
+    override fun onDataPassed(data: LocationResponse) {
+
+        binding.textViewCityName.text = data.locationName
+        binding.textViewCityTimeZoneName.text = data.timeZone
+
+        binding.textViewCoordinatesPoint.text = getFormattedCoordinates(
+            data.lat,
+            data.long
+        )
+        lifecycleScope.launch {
+            viewModel.saveRecentLocationData(data)
+            viewModel.saveUserLatLong(UserLatLong(data.lat, data.long))
+            delay(1500)
+
+        }
+    }
+
 }

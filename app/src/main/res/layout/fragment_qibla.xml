@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_15sdp"
         android:gravity="center"
@@ -48,17 +48,31 @@
 
     </LinearLayout>
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-15dp"
+        android:fontFamily="@font/sf_regular"
+        android:text="City"
+        android:textColor="@color/yellow_text"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewQiblaDirection"
         android:layout_width="0dp"
-        android:layout_height="360dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/app_green"
         android:src="@drawable/ic_dir_circle"
         android:tint="@color/white"
-        android:backgroundTint="@color/app_green"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewMakkah"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -77,14 +91,28 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewMakkah"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="25dp"
         android:src="@drawable/ic_makkah"
-        app:layout_constraintBottom_toTopOf="@+id/imageViewQiblaDirection"
-        app:layout_constraintEnd_toEndOf="@+id/imageViewQiblaDirection"
-        app:layout_constraintStart_toStartOf="@+id/imageViewQiblaDirection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
         tools:ignore="ContentDescription" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewAccuracy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:drawableEnd="@drawable/ic_check"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/sf_bold"
+        android:text="Accuracy 88%"
+        android:textColor="@color/text_color_gray"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

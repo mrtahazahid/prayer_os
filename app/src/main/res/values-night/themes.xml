@@ -9,6 +9,18 @@
     <style name="spinnerTheme">
         <item name="android:textColor">@color/app_green</item>
     </style>
+    <style name="CustomTimePickerDialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/app_green</item>
+        <item name="android:textColorPrimary">@color/app_green</item>
+        <item name="android:textColorSecondary">@color/app_green</item>
+    </style>
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorControlNormal">@color/app_green</item>
+        <item name="colorAccent">@color/app_green</item>
+        <item name="android:textColor">@color/app_green</item>
+        <item name="android:textColorPrimary">@color/app_green</item>
+        <item name="android:textColorSecondary">@color/app_green</item>
+    </style>
 
     <style name="RoundedCornersStyle">
         <item name="android:shape">rectangle</item>

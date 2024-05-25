@@ -15,6 +15,24 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
     </style>
 
+    <style name="CustomTimePickerDialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/app_green</item>
+        <item name="android:textColorPrimary">@color/app_green</item>
+        <item name="android:textColorSecondary">@color/app_green</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorControlNormal">@color/app_green</item>
+        <item name="colorAccent">@color/app_green</item>
+        <item name="android:textColor">@color/app_green</item>
+        <item name="android:textColorPrimary">@color/app_green</item>
+        <item name="android:textColorSecondary">@color/app_green</item>
+    </style>
+
+    <!-- Custom style for buttons in the TimePickerDialog -->
+    <style name="CustomDialogButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/app_green</item>
+    </style>
 <!--    <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">-->
 <!--        <item name="android:fontFamily">@font/inventionrg</item>-->
 <!--        <item name="android:textSize">12sp</item>-->

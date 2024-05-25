@@ -2,10 +2,12 @@ package com.iw.android.prayerapp.ui.main.iqamaFragment.itemView
 
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TimePicker
+import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -88,7 +90,7 @@ class RowItemIqama(
                 openTimePicker(binding.cardViewIqamaTime.context, 12, 0) { hourOfDay, minute ->
                     // Handle the selected time (hourOfDay and minute)
                     val formattedTime =
-                        SimpleDateFormat("hh:mm a").format(Calendar.getInstance().apply {
+                        SimpleDateFormat("h:mm a").format(Calendar.getInstance().apply {
                             set(Calendar.HOUR_OF_DAY, hourOfDay)
                             set(Calendar.MINUTE, minute)
                         }.time)
@@ -205,18 +207,19 @@ class RowItemIqama(
         }
     }
 
-    fun openTimePicker(
+   private fun openTimePicker(
         context: Context,
         initialHour: Int,
         initialMinute: Int,
         onTimeSetListener: (hourOfDay: Int, minute: Int) -> Unit
+
     ) {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, initialHour)
         calendar.set(Calendar.MINUTE, initialMinute)
-
         val timePickerDialog = TimePickerDialog(
             context,
+            R.style.DialogTheme, // Apply the custom theme here
             { _: TimePicker, hourOfDay: Int, minute: Int ->
                 onTimeSetListener(hourOfDay, minute)
             },
@@ -227,8 +230,19 @@ class RowItemIqama(
 
         // Customize the TimePickerDialog
         timePickerDialog.setTitle("Duha Time")
+
+        timePickerDialog.setOnShowListener {
+            // Get the button instances
+            val cancelButton = timePickerDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            val okButton = timePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+
+            // Set the text color using your custom color
+            cancelButton.setTextColor(ContextCompat.getColor(context, R.color.app_green))
+            okButton.setTextColor(ContextCompat.getColor(context, R.color.app_green))
+        }
         timePickerDialog.show()
     }
+
 
     private fun savePrayerDetailData() = fragment.lifecycleScope.launch {
         when (data.namazName) {

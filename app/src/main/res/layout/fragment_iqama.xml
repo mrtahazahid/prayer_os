@@ -299,14 +299,24 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:drawableEnd="@drawable/ic_help"
-                                android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:text="Reminder Time"
                                 android:textColor="@color/white"
                                 android:textSize="18sp"
                                 app:layout_constraintStart_toStartOf="@+id/viewKhutba"
                                 app:layout_constraintTop_toBottomOf="@+id/viewKhutba" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewReminderHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                android:src="@drawable/ic_help"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewReminderTimeTitle"
+                                app:layout_constraintStart_toEndOf="@id/textViewReminderTimeTitle"
+                                app:layout_constraintTop_toTopOf="@id/textViewReminderTimeTitle" />
+
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewSetTime"
@@ -496,7 +506,6 @@
                                 android:layout_marginStart="28dp"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginEnd="8dp"
-                                android:drawableEnd="@drawable/ic_help"
                                 android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:text="Reminder Sound"
@@ -504,6 +513,18 @@
                                 android:textSize="18sp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewSoundHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                android:elevation="6dp"
+                                android:src="@drawable/ic_help"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewReminderSoundTitle"
+                                app:layout_constraintStart_toEndOf="@id/textViewReminderSoundTitle"
+                                app:layout_constraintTop_toTopOf="@id/textViewReminderSoundTitle" />
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewNotificationReminderSound"
@@ -540,7 +561,6 @@
                                 android:layout_marginStart="28dp"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginEnd="8dp"
-                                android:drawableEnd="@drawable/ic_help"
                                 android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:text="Reminder Time"
@@ -548,6 +568,17 @@
                                 android:textSize="18sp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/view1" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewReminderTimeHelp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                android:src="@drawable/ic_help"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewNotificationReminderTimeTitle"
+                                app:layout_constraintStart_toEndOf="@id/textViewNotificationReminderTimeTitle"
+                                app:layout_constraintTop_toTopOf="@id/textViewNotificationReminderTimeTitle" />
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewNotificationSetTime"

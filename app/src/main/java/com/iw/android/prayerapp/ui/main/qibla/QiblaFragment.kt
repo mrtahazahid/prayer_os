@@ -69,6 +69,12 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla) {
         currentLatitude = viewModel.getUserLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.getUserLatLong?.longitude ?: 0.0
 
+        val location = GetAdhanDetails.getTimeZoneAndCity(
+            requireContext(), currentLatitude,
+            currentLongitude
+        )
+        binding.textViewTitle.text = location?.city ?: "City"
+
         getQibla = GetAdhanDetails.getQiblaDirection(currentLatitude, currentLongitude)
         binding.txtQiblaHeading.text =
             "Qibla direction is ${"%.2f".format(getQibla.direction)}\u00B0 from North"

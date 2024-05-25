@@ -65,7 +65,7 @@ fun convertToFunTime(timestamp: Long): String {
 @SuppressLint("SimpleDateFormat")
 fun convertToFunDateTime(timestamp: Long): String {
     val timeZoneID = TimeZone.getDefault().id
-    val formatter = SimpleDateFormat("MMM dd, hh:mm a", Locale.getDefault())
+    val formatter = SimpleDateFormat("MMM dd, h:mm a", Locale.getDefault())
     formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
     return formatter.format(Date(timestamp))
 

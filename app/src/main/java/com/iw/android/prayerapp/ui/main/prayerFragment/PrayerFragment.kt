@@ -82,8 +82,9 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         binding.progressbar.apply {
             // or with gradient
             progressBarColorStart = resources.getColor(R.color.app_green)
+
             progressBarColorEnd = resources.getColor(R.color.small_icon3)
-            progressBarColorDirection = CircularProgressBar.GradientDirection.TOP_TO_BOTTOM
+            progressBarColorDirection = CircularProgressBar.GradientDirection.RIGHT_TO_LEFT
 
             // Set background ProgressBar Color
             backgroundProgressBarColor = resources.getColor(R.color.progress_bg)
@@ -247,8 +248,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     @SuppressLint("SetTextI18n")
     private fun upComingNamazTime() {
-
-
         val getPrayerTime =
             getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
         val currentNamaz = getTimeDifferenceToNextPrayer()
@@ -257,13 +256,13 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         when (currentNamaz.currentNamazName) {
             "Fajr" -> {
                 binding.textViewFifthNamaz.text =
-                    "Isha: ${convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())}"
-                binding.textViewSecondNamaz.text =
                     "Dhuhr: ${convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds())}"
-                binding.textViewThirdNamaz.text =
+                binding.textViewSecondNamaz.text =
                     "Asr: ${convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())}"
-                binding.textViewFourthNamaz.text =
+                binding.textViewThirdNamaz.text =
                     "Maghrib: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}"
+                binding.textViewFourthNamaz.text =
+                    "Isha: ${convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())}"
                 binding.textViewCurrentNamazName.text = "Fajr"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
@@ -274,13 +273,13 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
             "Dhuhr" -> {
                 binding.textViewFifthNamaz.text =
-                    "Fajr: ${convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds())}"
-                binding.textViewSecondNamaz.text =
                     "Asr: ${convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())}"
-                binding.textViewThirdNamaz.text =
+                binding.textViewSecondNamaz.text =
                     "Maghrib: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}"
-                binding.textViewFourthNamaz.text =
+                binding.textViewThirdNamaz.text =
                     "Isha: ${convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())}"
+                binding.textViewFourthNamaz.text =
+                    "Fajr: ${convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds())}"
                 binding.textViewCurrentNamazName.text = "Dhuhr"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
@@ -290,13 +289,13 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
             "Asr" -> {
                 binding.textViewFifthNamaz.text =
-                    "Dhuhr: ${convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds())}"
-                binding.textViewSecondNamaz.text =
                     "Maghrib: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}"
-                binding.textViewThirdNamaz.text =
+                binding.textViewSecondNamaz.text =
                     "Isha: ${convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())}"
-                binding.textViewFourthNamaz.text =
+                binding.textViewThirdNamaz.text =
                     "Fajr: ${convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds())}"
+                binding.textViewFourthNamaz.text =
+                    "Dhuhr: ${convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds())}"
                 binding.textViewCurrentNamazName.text = "Asr"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
@@ -306,13 +305,13 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
             "Maghrib" -> {
                 binding.textViewFifthNamaz.text =
-                    "Asr: ${convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())}"
-                binding.textViewSecondNamaz.text =
                     "Isha: ${convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())}"
-                binding.textViewThirdNamaz.text =
+                binding.textViewSecondNamaz.text =
                     "Fajr: ${convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds())}"
-                binding.textViewFourthNamaz.text =
+                binding.textViewThirdNamaz.text =
                     "Dhuhr: ${convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds())}"
+                binding.textViewFourthNamaz.text =
+                    "Asr: ${convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())}"
                 binding.textViewCurrentNamazName.text = "Maghrib"
                 binding.textViewCurrentNamazTime.text =
                     convertToFunTime(currentNamaz.currentNamazTime)
@@ -322,13 +321,13 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
             "Isha" -> {
                 binding.textViewFifthNamaz.text =
-                    "Maghrib: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}"
+                    "Fajr: ${convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds())}"
                 binding.textViewSecondNamaz.text =
-                    "Fajr: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}"
-                binding.textViewThirdNamaz.text =
                     "Dhuhr: ${convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds())}"
-                binding.textViewFourthNamaz.text =
+                binding.textViewThirdNamaz.text =
                     "Asr: ${convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())}"
+                binding.textViewFourthNamaz.text =
+                    "Maghrib: ${convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())}"
                 binding.textViewCurrentNamazName.text = "Isha"
                 currentNamazName = "Isha"
                 binding.textViewCurrentNamazTime.text =

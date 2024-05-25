@@ -20,12 +20,12 @@ class IqamaViewModel @Inject constructor(repository: MainRepository) :
     BaseViewModel(repository) {
 
     var iqamaList = arrayListOf<IqamaData>()
-    var lat = 0.0
+    private var lat = 0.0
     var long = 0.0
     private var method: CalculationParameters? = null
     private var madhab: Madhab? = null
-    var getSavedPrayerJurisprudence = ""
-    var getMethod = ""
+    private var getSavedPrayerJurisprudence = ""
+    private var getMethod = ""
 
     init {
         viewModelScope.launch {
@@ -78,7 +78,7 @@ class IqamaViewModel @Inject constructor(repository: MainRepository) :
 
     }
 
-    suspend fun getMethod1(){
+     private fun getMethod1(){
         if (!getSavedPrayerJurisprudence.isNullOrEmpty()) {
             madhab = if (getSavedPrayerJurisprudence.toInt() == 1) {
                 Madhab.HANAFI

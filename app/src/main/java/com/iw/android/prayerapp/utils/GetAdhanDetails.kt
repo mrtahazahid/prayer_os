@@ -47,7 +47,7 @@ object GetAdhanDetails : AppCompatActivity() {
         val dateComponents = DateComponents(year.toInt(), month.toInt(), day.toInt())
 
         val prayerTimes = PrayerTimes(coordinates, dateComponents, param)
-        val formatter = SimpleDateFormat("hh:mm a")
+        val formatter = SimpleDateFormat("h:mm a")
         formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
 
         return arrayListOf(
@@ -129,7 +129,7 @@ object GetAdhanDetails : AppCompatActivity() {
         val dateComponents = DateComponents(year.toInt(), month.toInt(), day.toInt())
 
         val prayerTimes = PrayerTimes(coordinates, dateComponents, param)
-        val formatter = SimpleDateFormat("hh:mm a")
+        val formatter = SimpleDateFormat("h:mm a")
         formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
 
         val prayerNames = listOf("Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha")

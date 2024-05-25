@@ -3,6 +3,7 @@ package com.iw.android.prayerapp.base.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iw.android.prayerapp.base.repo.BaseRepository
+import com.iw.android.prayerapp.base.response.LocationResponse
 import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.IqamaData
 import com.iw.android.prayerapp.data.response.IqamaDisplaySetting
@@ -27,7 +28,7 @@ abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
     suspend fun saveFloat(value: Float) = repository.saveFloat(value)
     suspend fun getFloat() = repository.getFloat()
 
-    suspend fun setBoolean(value:Boolean) = repository.saveBoolean(value)
+    suspend fun setBoolean(value: Boolean) = repository.saveBoolean(value)
     suspend fun getBoolean() = repository.getBoolean()
     suspend fun savePrayerElevation(prayerElevation: String) =
         repository.savePrayerElevationRule(prayerElevation)
@@ -200,6 +201,11 @@ abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
     }
 
     suspend fun getJummuahSetting() = repository.getJummuahSetting()
+    suspend fun saveRecentLocationData(data: LocationResponse) {
+        repository.saveRecentLocationData(data)
+    }
+
+    suspend fun getRecentLocationData() = repository.getRecentLocationData()
 
 
     suspend fun saveIqamaNotificationSetting(data: IqamaNotificationData) {

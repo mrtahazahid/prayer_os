@@ -17,11 +17,8 @@ import com.iw.android.prayerapp.utils.GetAdhanDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -47,7 +44,7 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         }
     }
 
-   suspend fun getPrayList()  {
+   suspend fun getPrayList()  = viewModelScope.launch {
 
 
         val getPrayerTime = GetAdhanDetails.getPrayTime(
@@ -291,25 +288,6 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
             .toEpochMilli()
     }
 
-    fun convertTimeToEpochMilliseconds(timeString: String): Long {
-        // Define a formatter for the time pattern
-        val timeFormatter = DateTimeFormatter.ofPattern("h:mm a", Locale.getDefault())
-
-        try {
-            // Parse the time string to obtain a LocalTime object
-            val localTime = LocalTime.parse(timeString, timeFormatter)
-
-            // Get the current date and set the obtained LocalTime
-            val dateTime = localTime.atDate(LocalDate.now())
-
-            // Convert the LocalDateTime to epoch milliseconds
-            return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return 0
-    }
 
     private fun getMethod()  {
         madhab = if (!getSavedPrayerJurisprudence.isNullOrEmpty()) {
@@ -390,5 +368,4 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
             }
         }
     }
-
 }

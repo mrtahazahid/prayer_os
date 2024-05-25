@@ -8,7 +8,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.service.notification.NotificationListenerService
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -40,7 +39,7 @@ import javax.inject.Inject
 class NotificationService : Service() {
     @Inject
     lateinit var notifications: Notification
-    lateinit var prefrence: DataPreference
+    private lateinit var prefrence: DataPreference
 
     private var prayerList = arrayListOf<NotificationPrayerTime>()
     private var method: CalculationParameters? = null
@@ -52,8 +51,11 @@ class NotificationService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("Service","Called")
         prefrence = DataPreference(this)
+        startPeriodicTask()
+    }
+
+    private fun startPeriodicTask() {
         applicationScope.launch {
             getMethod()
             if (!prefrence.prayerJurisprudence.first().isNullOrEmpty()) {
@@ -69,7 +71,6 @@ class NotificationService : Service() {
                 userLatLong?.latitude ?: 0.0,
                 userLatLong?.longitude ?: 0.0, method!!
             )
-
 
             prayerList = arrayListOf(
                 NotificationPrayerTime(
@@ -99,14 +100,7 @@ class NotificationService : Service() {
                 NotificationPrayerTime("Midnight", "11:42 PM"),
                 NotificationPrayerTime("LastThird", "01:40 AM")
             )
-        }
 
-        startPeriodicTask()
-
-    }
-
-    fun startPeriodicTask() {
-        applicationScope.launch {
             while (true) {
                 checkAndTriggerNotification()
                 checkDailyNamazTime()
@@ -114,6 +108,21 @@ class NotificationService : Service() {
                 jummahTimeCheck()
                 val intent = Intent(applicationContext, NotificationListenerService::class.java)
                 startService(intent)
+                if (prefrence.automaticLocation.first()) {
+                    startService(
+                        Intent(
+                            applicationContext,
+                            LocationService::class.java
+                        )
+                    )
+                } else {
+                    stopService(
+                        Intent(
+                            applicationContext,
+                            LocationService::class.java
+                        )
+                    )
+                }
                 delay(60000)
             }
         }
@@ -124,6 +133,7 @@ class NotificationService : Service() {
         if (specifiedTimes.isNotEmpty()) {
             for ((index, specifiedTime) in specifiedTimes.withIndex()) {
                 if (specifiedTime.namazTime != "") {
+
                     if (specifiedTime.duaTime != "off") {
                         if (isTimeMatch(specifiedTime.duaTime)) {
                             notifications.notify(
@@ -138,30 +148,33 @@ class NotificationService : Service() {
                         }
                     }
 
-
-//                    if (isTimeMatch(specifiedTime.namazTime)) {
-//                        notifications.notify(
-//                            specifiedTime.namazName, "Namaz Time",
-//                            specifiedTime.notificationSound?.sound ?: R.raw.adhan_abdul_basit,
-//                            false,
-//                            false
-//                        )
-//                        prefrence.removeNotificationData(index)
-//                        delay(1500)
-//                        break
-//                    }
+                    if (isTimeMatch(specifiedTime.namazTime)) {
+                        if (specifiedTime.notificationSound?.isOff != true) {
+                            notifications.notify(
+                                specifiedTime.namazName, "Namaz Time",
+                                specifiedTime.notificationSound?.sound ?: R.raw.adhan_abdul_basit,
+                                specifiedTime.notificationSound?.isVibrate ?: false,
+                                specifiedTime.notificationSound?.isSilent ?: false
+                            )
+                            prefrence.removeNotificationData(index)
+                            delay(1500)
+                            break
+                        }
+                    }
 
                     if (isTimeMatch(specifiedTime.reminderTime)) {
-                        notifications.notify(
-                            specifiedTime.namazName,
-                            "${specifiedTime.namazName} at ${specifiedTime.namazTime}",
-                            specifiedTime.reminderSound?.sound ?: R.raw.adhan_abdul_basit,
-                            specifiedTime.reminderSound?.isVibrate ?: false,
-                            specifiedTime.reminderSound?.isSilent ?: false
-                        )
-                        prefrence.removeNotificationData(index)
-                        delay(1500)
-                        break
+                        if (specifiedTime.reminderSound?.isOff != true) {
+                            notifications.notify(
+                                specifiedTime.namazName,
+                                "${specifiedTime.namazName} at ${specifiedTime.namazTime}",
+                                specifiedTime.reminderSound?.sound ?: R.raw.adhan_abdul_basit,
+                                specifiedTime.reminderSound?.isVibrate ?: false,
+                                specifiedTime.reminderSound?.isSilent ?: false
+                            )
+                            prefrence.removeNotificationData(index)
+                            delay(1500)
+                            break
+                        }
                     }
                     if (specifiedTime.secondReminderTimeMinutes != "off") {
                         if (isTimeMatch(specifiedTime.secondReminderTime)) {
@@ -186,13 +199,13 @@ class NotificationService : Service() {
     }
 
 
-    fun convertTimeToMillis(timeString: String): Long {
+    private fun convertTimeToMillis(timeString: String): Long {
         val dateFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
         val date = dateFormat.parse(timeString)
         return date?.time ?: 0
     }
 
-    fun millisToTimeFormat(millis: Long): String {
+    private fun millisToTimeFormat(millis: Long): String {
         val dateFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
         val date = Date(millis)
         return dateFormat.format(date)
@@ -210,7 +223,7 @@ class NotificationService : Service() {
 
     }
 
-    fun getCurrentTimeIn12HourFormat(): String {
+    private fun getCurrentTimeIn12HourFormat(): String {
         val formatter = DateTimeFormatter.ofPattern("h:mm a")
         return LocalTime.now().format(formatter)
     }
@@ -239,24 +252,20 @@ class NotificationService : Service() {
 
     override fun onBind(intent: Intent): IBinder? = null
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val serviceChannel = NotificationChannel(
-                "113",
-                "Prayer is running in background",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            val manager = getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(serviceChannel)
-        }
+        val serviceChannel = NotificationChannel(
+            "113",
+            "Prayer is running in background",
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        val manager = getSystemService(NotificationManager::class.java)
+        manager.createNotificationChannel(serviceChannel)
     }
 
     private suspend fun checkDailyNamazTime() {
 
         val currentTime = millisToTimeFormat(System.currentTimeMillis())
-        Log.d("ss",currentTime.toString())
 
         for (time in prayerList) {
-            Log.d("ss",time.currentNamazTime)
             val notificationDetail: CurrentNamazNotificationData = when (time.currentNamazName) {
                 "Fajr" -> {
                     if (prefrence.getFajrCurrentNamazNotificationData() != null) {
@@ -267,12 +276,12 @@ class NotificationService : Service() {
                             "Adhan",
                             "Tones",
                             0,
-                            false,
-                            true,
-                            false,
-                            false,
-                            false,
-                            R.raw.adhan_abdul_basit
+                            isSoundSelected = false,
+                            isForAdhan = true,
+                            isVibrate = false,
+                            isSilent = false,
+                            isOff = false,
+                            sound = R.raw.adhan_abdul_basit
                         )
                     }
                 }
@@ -286,12 +295,12 @@ class NotificationService : Service() {
                             "Adhan",
                             "Tones",
                             0,
-                            false,
-                            true,
-                            false,
-                            false,
-                            false,
-                            R.raw.adhan_abdul_basit
+                            isSoundSelected = false,
+                            isForAdhan = true,
+                            isVibrate = false,
+                            isSilent = false,
+                            isOff = false,
+                            sound = R.raw.adhan_abdul_basit
                         )
                     }
                 }
@@ -305,12 +314,12 @@ class NotificationService : Service() {
                             "Adhan",
                             "Tones",
                             0,
-                            false,
-                            true,
-                            false,
-                            false,
-                            false,
-                            R.raw.adhan_abdul_basit
+                            isSoundSelected = false,
+                            isForAdhan = true,
+                            isVibrate = false,
+                            isSilent = false,
+                            isOff = false,
+                            sound = R.raw.adhan_abdul_basit
                         )
                     }
                 }
@@ -324,12 +333,12 @@ class NotificationService : Service() {
                             "Adhan",
                             "Tones",
                             0,
-                            false,
-                            true,
-                            false,
-                            false,
-                            false,
-                            R.raw.adhan_abdul_basit
+                            isSoundSelected = false,
+                            isForAdhan = true,
+                            isVibrate = false,
+                            isSilent = false,
+                            isOff = false,
+                            sound = R.raw.adhan_abdul_basit
                         )
                     }
                 }
@@ -344,12 +353,12 @@ class NotificationService : Service() {
                             "Adhan",
                             "Tones",
                             0,
-                            false,
-                            true,
-                            false,
-                            false,
-                            false,
-                            R.raw.adhan_abdul_basit
+                            isSoundSelected = false,
+                            isForAdhan = true,
+                            isVibrate = false,
+                            isSilent = false,
+                            isOff = false,
+                            sound = R.raw.adhan_abdul_basit
                         )
                     }
                 }
@@ -360,24 +369,25 @@ class NotificationService : Service() {
                         "Adhan",
                         "Tones",
                         0,
-                        false,
-                        true,
-                        false,
-                        false,
-                        false,
-                        R.raw.adhan_abdul_basit
+                        isSoundSelected = false,
+                        isForAdhan = true,
+                        isVibrate = false,
+                        isSilent = false,
+                        isOff = false,
+                        sound = R.raw.adhan_abdul_basit
                     )
                 }
             }
 
             if (currentTime == time.currentNamazTime) {
-                Log.d("Current",time.toString())
-                notifications.notify(
-                    "${time.currentNamazName}", "Namaz time",
-                    notificationDetail.sound ?: R.raw.adhan_abdul_basit,
-                    notificationDetail.isVibrate,
-                    notificationDetail.isSilent
-                )
+                if (!notificationDetail.isOff) {
+                    notifications.notify(
+                        time.currentNamazName, "Namaz time",
+                        notificationDetail.sound ?: R.raw.adhan_abdul_basit,
+                        notificationDetail.isVibrate,
+                        notificationDetail.isSilent
+                    )
+                }
                 break
             } else {
                 continue
@@ -480,10 +490,10 @@ class NotificationService : Service() {
 
         if (isTimeMatch(time)) {
             notifications.notify(
-                "Jummah", "Iqama time",
+                namazName, "Iqama time",
                 prefrence.getIqamaNotificationSetting()?.reminderSound ?: 0,
-                false,
-                false
+                isForVibrate = false,
+                isForSilent = false
             )
         } else {
             null
@@ -499,13 +509,11 @@ class NotificationService : Service() {
                     notifications.notify(
                         "Jummah", "Khutba reminder",
                         prefrence.getIqamaNotificationSetting()?.reminderSound ?: 0,
-                        false,
-                        false
+                        isForVibrate = false,
+                        isForSilent = false
                     )
                 }
-
             }
-
         }
     }
 

@@ -13,6 +13,7 @@ import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_E
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_JURISPRUDENCE
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_METHOD
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.USER_ID
+import com.iw.android.prayerapp.base.response.LocationResponse
 import com.iw.android.prayerapp.base.response.LoginUserResponse
 import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.IqamaData
@@ -267,9 +268,6 @@ abstract class BaseRepository(
         preferences.getIshaCurrentNamazNotificationData()
 
 
-
-
-
     suspend fun saveIqamaFajrDetail(namazDetail: IqamaData) {
         preferences.setStringData(DataPreference.IQAMA_FAJR, Gson().toJson(namazDetail))
     }
@@ -358,6 +356,15 @@ abstract class BaseRepository(
             preferences.getStringData(DataPreference.IQAMA_NOTIFICATION_SETTING),
             IqamaNotificationData::class.java
         )
+    }
+
+
+    suspend fun saveRecentLocationData(data: LocationResponse) {
+        preferences.saveRecentLocationDataIntoList(data)
+    }
+
+    suspend fun getRecentLocationData(): List<LocationResponse> {
+        return preferences.getRecentLocationDataIntoList()
     }
 
 

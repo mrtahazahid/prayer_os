@@ -75,7 +75,7 @@ class LocationService : Service() {
 
     private fun onNewLocation(locationResult: LocationResult) {
         location = locationResult.lastLocation
-        Log.d("CheckABC", "onNewLocation: ")
+        Log.d("CheckABC", "onNewLocation:${location?.latitude} ")
         EventBus.getDefault().post(LocationEvent(
             latitude = location?.latitude,
             longitude = location?.longitude

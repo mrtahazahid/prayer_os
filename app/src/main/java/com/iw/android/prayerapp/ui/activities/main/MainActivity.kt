@@ -14,7 +14,6 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +32,7 @@ import com.iw.android.prayerapp.services.gps.NotificationListenerService
 import com.iw.android.prayerapp.services.gps.NotificationService
 import com.iw.android.prayerapp.services.gps.TurnOnGps
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -42,7 +42,6 @@ class MainActivity : BaseActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
-
 
 
     private lateinit var navController: NavController
@@ -64,29 +63,29 @@ class MainActivity : BaseActivity() {
     private val pushNotificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
-        if(!granted){
+        if (!granted) {
             showPermissionAlertDialog()
-        }else{
+        } else {
             startForegroundService()
         }
     }
     private val locationPermissions =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
             when {
-                it.getOrDefault(android.Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                it.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         if (ActivityCompat.checkSelfPermission(
                                 this,
-                                android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                                Manifest.permission.ACCESS_BACKGROUND_LOCATION
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
-                            backgroundLocation.launch(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                            backgroundLocation.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
                         }
                     }
                 }
 
-                it.getOrDefault(android.Manifest.permission.ACCESS_FINE_LOCATION, false) -> {}
+                it.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {}
             }
         }
 
@@ -97,7 +96,6 @@ class MainActivity : BaseActivity() {
             EventBus.getDefault().register(this)
         }
     }
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -127,11 +125,11 @@ class MainActivity : BaseActivity() {
         gpsStatusListener = GpsStatusListener(this)
         turnOnGps = TurnOnGps(this)
         startForegroundService()
-        if(!checkPermission()){
+        if (!checkPermission()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
                 showPermissionAlertDialog()
-            }else{
-                pushNotificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            } else {
+                pushNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
 
@@ -160,21 +158,31 @@ class MainActivity : BaseActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (ActivityCompat.checkSelfPermission(
                     this,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                    Manifest.permission.ACCESS_FINE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
                     this,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 locationPermissions.launch(
                     arrayOf(
-                        android.Manifest.permission.ACCESS_FINE_LOCATION,
-                        android.Manifest.permission.ACCESS_COARSE_LOCATION
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
                     )
                 )
                 enableGPSLocation()
             } else {
-                startService(service)
+                lifecycleScope.launch {
+                    if (viewModel.repository.preferences.automaticLocation.first()) {
+                        startService(
+                            service
+                        )
+                    } else {
+                        stopService(service)
+
+                    }
+                }
+
                 enableGPSLocation()
             }
         }
@@ -212,9 +220,9 @@ class MainActivity : BaseActivity() {
 
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { activityResult ->
-            if (activityResult.resultCode == AppCompatActivity.RESULT_OK) {
+            if (activityResult.resultCode == RESULT_OK) {
 
-            } else if (activityResult.resultCode == AppCompatActivity.RESULT_CANCELED) {
+            } else if (activityResult.resultCode == RESULT_CANCELED) {
 
             }
         }
@@ -232,11 +240,11 @@ class MainActivity : BaseActivity() {
         Log.d("CheckViewModel", "receiveLocationEvent: lon => ${locationEvent.longitude}")
     }
 
-    fun hideBottomSheet(){
+    fun hideBottomSheet() {
         binding.bottomNavigationView.visibility = View.GONE
     }
 
-    fun showBottomSheet(){
+    fun showBottomSheet() {
         binding.bottomNavigationView.visibility = View.VISIBLE
     }
 
@@ -254,7 +262,7 @@ class MainActivity : BaseActivity() {
     private val destinationChangedListener =
         NavController.OnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.prayerFragment, R.id.qiblaFragment ,R.id.timeFragment,R.id.moreFragment,R.id.settingFragment-> {
+                R.id.prayerFragment, R.id.qiblaFragment, R.id.timeFragment, R.id.moreFragment, R.id.settingFragment -> {
                     binding.bottomNavigationView.show()
                 }
 
@@ -264,7 +272,6 @@ class MainActivity : BaseActivity() {
 
             }
         }
-
 
 
     // Request notification permission
@@ -295,6 +302,7 @@ class MainActivity : BaseActivity() {
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
     }
+
     private fun startNotificationListenerService() {
         val componentName = ComponentName(this, NotificationListenerService::class.java)
         val intent = Intent()
@@ -309,7 +317,7 @@ class MainActivity : BaseActivity() {
 
     private fun isNotificationServiceEnabled(): Boolean {
         val cn = ComponentName(this, NotificationListenerService::class.java)
-        val flat = android.provider.Settings.Secure.getString(
+        val flat = Settings.Secure.getString(
             contentResolver,
             "enabled_notification_listeners"
         )
