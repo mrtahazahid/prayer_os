@@ -1,6 +1,10 @@
 package com.iw.android.prayerapp.ui.main.prayerFragment
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -8,14 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.batoulapps.adhan2.CalculationMethod
 import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
-import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.PrayerTime
 import com.iw.android.prayerapp.databinding.FragmentPrayerBinding
@@ -23,12 +26,10 @@ import com.iw.android.prayerapp.extension.convertToFunTime
 import com.iw.android.prayerapp.extension.formatRemainingTime
 import com.iw.android.prayerapp.extension.getIslamicDateByOffSet
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
-import com.iw.android.prayerapp.notificationService.Notification
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -41,15 +42,15 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     private var _binding: FragmentPrayerBinding? = null
     private val binding get() = _binding!!
+    private lateinit var notificationReceiver: BroadcastReceiver
 
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
     private var countDownTimer: CountDownTimer? = null
 
+
     val viewModel: PrayerViewModel by viewModels()
     private var currentNamazName = ""
-
-    lateinit var notifications: Notification
 
     private lateinit var namazTimesList: ArrayList<String>
     private var method: CalculationParameters? = null
@@ -64,6 +65,23 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         setStatusBarWithBlackIcon(R.color.bg_color)
         (requireActivity() as MainActivity).showBottomSheet()
         binding.progressbar.visibility = View.VISIBLE
+
+        notificationReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val showImage = intent.getBooleanExtra("show_image", false)
+                if(showImage){
+                            _binding?.imageViewPause?.show()
+
+                }
+
+            }
+        }
+
+
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
+            notificationReceiver,
+            IntentFilter("com.iw.android.prayerapp.NOTIFICATION")
+        )
         namazTimesList = ArrayList()
         return binding.root
     }
@@ -99,7 +117,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             progressDirection = CircularProgressBar.ProgressDirection.TO_RIGHT
         }
 
-        notifications = Notification(requireContext())
 
         val location = GetAdhanDetails.getTimeZoneAndCity(
             requireContext(), viewModel.userLatLong?.latitude ?: 0.0,
@@ -125,6 +142,8 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     override fun setObserver() {
 
+
+
     }
 
 
@@ -141,6 +160,10 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         binding.incrementMinusOneTextView.setOnClickListener(this)
         binding.incrementMinusTwoTextView.setOnClickListener(this)
         binding.mainView.setOnClickListener(this)
+        binding.imageViewPause.setOnClickListener {
+            notifications.stopPrayer()
+            binding.imageViewPause.gone()
+        }
     }
 
     override fun onDestroyView() {
@@ -386,131 +409,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         return currentDate.format(formatter)
     }
 
-    private fun showNotification(currentNamazName: String) {
-        lifecycleScope.launch {
-            val currentNamazData: CurrentNamazNotificationData? = when (currentNamazName) {
-                "Fajr" -> {
-                    if (viewModel.getFajrCurrentNamazNotificationData() != null) {
-                        viewModel.getFajrCurrentNamazNotificationData()!!
-                    } else {
-                        CurrentNamazNotificationData(
-                            "Fajr",
-                            "Adhan",
-                            "Tones",
-                            0,
-                            false,
-                            true,
-                            false,
-                            false,
-                            false,
-                            R.raw.adhan_abdul_basit
-                        )
-                    }
-                }
-
-                "Dhuhr" -> {
-                    if (viewModel.getDhuhrCurrentNamazNotificationData() != null) {
-                        viewModel.getDhuhrCurrentNamazNotificationData()!!
-                    } else {
-                        CurrentNamazNotificationData(
-                            "Dhuhr",
-                            "Adhan",
-                            "Tones",
-                            0,
-                            false,
-                            true,
-                            false,
-                            false,
-                            false,
-                            R.raw.adhan_abdul_basit
-                        )
-                    }
-                }
-
-                "Asr" -> {
-                    if (viewModel.getAsrCurrentNamazNotificationData() != null) {
-                        viewModel.getAsrCurrentNamazNotificationData()!!
-                    } else {
-                        CurrentNamazNotificationData(
-                            "Asr",
-                            "Adhan",
-                            "Tones",
-                            0,
-                            false,
-                            true,
-                            false,
-                            false,
-                            false,
-                            R.raw.adhan_abdul_basit
-                        )
-                    }
-                }
-
-                "Maghrib" -> {
-                    if (viewModel.getMaghribCurrentNamazNotificationData() != null) {
-                        viewModel.getMaghribCurrentNamazNotificationData()!!
-                    } else {
-                        CurrentNamazNotificationData(
-                            "Fajr",
-                            "Adhan",
-                            "Tones",
-                            0,
-                            false,
-                            true,
-                            false,
-                            false,
-                            false,
-                            R.raw.adhan_abdul_basit
-                        )
-                    }
-                }
-
-                "Isha" -> {
-                    if (viewModel.getIshaCurrentNamazNotificationData() != null) {
-                        viewModel.getIshaCurrentNamazNotificationData()!!
-                    } else {
-                        CurrentNamazNotificationData(
-                            "Fajr",
-                            "Adhan",
-                            "Tones",
-                            0,
-                            false,
-                            true,
-                            false,
-                            false,
-                            false,
-                            R.raw.adhan_abdul_basit
-                        )
-                    }
-                }
-
-                else -> {
-                    CurrentNamazNotificationData(
-                        "Fajr",
-                        "Adhan",
-                        "Tones",
-                        0,
-                        false,
-                        true,
-                        false,
-                        false,
-                        false,
-                        R.raw.adhan_abdul_basit
-                    )
-                }
-            }
-
-            notifications.notify(
-                currentNamazData?.currentNamazName ?: "",
-                "Namaz Time",
-                currentNamazData?.sound ?: R.raw.adhan_abdul_basit,
-                currentNamazData?.isVibrate ?: false,
-                currentNamazData?.isSilent ?: false
-            )
-            getTimeDifferenceToNextPrayer()
-        }
-
-    }
 
     private fun getTimeDifferenceToNextPrayer(): PrayerTime {
         val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
@@ -570,7 +468,8 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         val timeDifferenceMillis =
             prayerTimeList[currentPrayerTimeIndex].currentNamazTime - currentTimeMillis
 
-                val totalDifferenceMillis =  prayerTimeList[currentPrayerTimeIndex].currentNamazTime - prayerTimeList[previousPrayerTimeIndex].currentNamazTime
+        val totalDifferenceMillis =
+            prayerTimeList[currentPrayerTimeIndex].currentNamazTime - prayerTimeList[previousPrayerTimeIndex].currentNamazTime
         currentNamazName = prayerTimeList[currentPrayerTimeIndex].currentNamazName
 
         return if (currentTimeMillis >= prayerTimeList[4].currentNamazTime && currentTimeMillis <= currentTimeMillis1159) {
@@ -742,6 +641,10 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         return dateFormat.format(targetDate)
+    }
+
+    fun toggleImageVisibility() {
+        binding.imageViewPause.show()
     }
 }
 

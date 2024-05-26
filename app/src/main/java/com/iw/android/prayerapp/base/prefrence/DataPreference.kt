@@ -201,6 +201,7 @@ class DataPreference @Inject constructor(
         )
 
     }
+
     suspend fun getMaghribCurrentNamazNotificationData(): CurrentNamazNotificationData? =
         Gson().fromJson(
             getStringData(CURRENT_NAMAZ_MAGHRIB_NOTIFICATION_DATA),
@@ -215,6 +216,7 @@ class DataPreference @Inject constructor(
         )
 
     }
+
     suspend fun getIshaCurrentNamazNotificationData(): CurrentNamazNotificationData? =
         Gson().fromJson(
             getStringData(CURRENT_NAMAZ_ISHA_NOTIFICATION_DATA),
@@ -299,14 +301,9 @@ class DataPreference @Inject constructor(
         // Check if NotificationData with the same createdDate already exists
         val existingItem =
             list.find { it.createdDate == newItem.createdDate && it.namazName == newItem.namazName }
-        if (existingItem != null) {
-
-            list.remove(existingItem)
+        if (existingItem == null) {
             list.add(newItem)
             // Update other fields as needed
-        } else {
-            // If the item doesn't exist, add it to the list
-            list.add(newItem)
         }
 
         val updatedJsonString = Json.encodeToString(list)
@@ -315,14 +312,18 @@ class DataPreference @Inject constructor(
             preferences[NOTIFICATION_DATA] = updatedJsonString
         }
     }
+
     suspend fun saveRecentLocationDataIntoList(newItem: LocationResponse) {
         val jsonString = appContext.dataStore.data
             .first()[RECENT_LOCATION_ITEM_DATA]
             ?: "[]" // Default to an empty array if the key is not present
 
         val list: MutableList<LocationResponse> = Json.decodeFromString(jsonString)
-
-        list.add(newItem)
+        val existingItem =
+            list.find { it.locationName == newItem.locationName }
+        if (existingItem == null) {
+            list.add(newItem)
+        }
 
         val updatedJsonString = Json.encodeToString(list)
 
@@ -332,7 +333,8 @@ class DataPreference @Inject constructor(
     }
 
     suspend fun getRecentLocationDataIntoList(): List<LocationResponse> {
-        val jsonString = appContext.dataStore.data.first()[RECENT_LOCATION_ITEM_DATA] ?: return emptyList()
+        val jsonString =
+            appContext.dataStore.data.first()[RECENT_LOCATION_ITEM_DATA] ?: return emptyList()
         return mapJsonToList2(jsonString)
     }
 

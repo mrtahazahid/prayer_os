@@ -572,14 +572,14 @@ class RowItemTime(
     }
 
     private fun decrementReminderTimeMinutes(): String {
-
+        reminderTimeMinutes--
         return if (reminderTimeMinutes > 0) {
-            reminderTimeMinutes--
             "$reminderTimeMinutes min"
         } else {
             "off"
         }
     }
+
 
     private fun incrementSecondReminderTimeMinutes(): String {
         secondReminderTimeMinutes++
@@ -587,9 +587,9 @@ class RowItemTime(
     }
 
     private fun decrementSecondReminderTimeMinutes(): String {
-
+        secondReminderTimeMinutes--
         return if (secondReminderTimeMinutes > 0) {
-            secondReminderTimeMinutes--
+
             "$secondReminderTimeMinutes min"
         } else {
             "off"
@@ -602,9 +602,8 @@ class RowItemTime(
     }
 
     private fun decrementDuaReminderMinutes(): String {
-
+        duaReminderTimeMinutes--
         return if (duaReminderTimeMinutes > 0) {
-            duaReminderTimeMinutes--
             "$duaReminderTimeMinutes min"
         } else {
             "off"

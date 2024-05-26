@@ -28,6 +28,7 @@ import com.iw.android.prayerapp.services.gps.LocationService
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
+import com.iw.android.prayerapp.utils.AssetDialog
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getTimeZoneAndCity
 import com.iw.android.prayerapp.utils.MapDialog
 import kotlinx.coroutines.delay
@@ -144,16 +145,16 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewApp.setOnClickListener(this)
         binding.imageViewPhone.setOnClickListener(this)
         binding.imageViewAsset.setOnClickListener(this)
+        binding.cityView.setOnClickListener(this)
+        binding.viewAsset.setOnClickListener(this)
         if (!viewModel.getAutomaticLocation) {
-            binding.cityView.setOnClickListener(this)
+            binding.group.gone()
+        } else {
+            binding.group.show()
         }
-
-
-        binding.switchAutomatic.setOnCheckedChangeListener { buttonView, isChecked ->
-            viewModel.setLocationAutomaticValue(isChecked)
-            if (isChecked) {
-                binding.cityView.isClickable = false
-                binding.cityView.setOnClickListener(this)
+        binding.switchAutomatic.setOnClickListener {
+            binding.cityView.isClickable = !binding.switchAutomatic.isChecked
+            if (binding.switchAutomatic.isChecked) {
                 binding.group.show()
                 requireActivity().startService(
                     Intent(
@@ -161,7 +162,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                         LocationService::class.java
                     )
                 )
-                initialize()
+
             } else {
                 binding.group.gone()
                 binding.cityView.isClickable = true
@@ -172,6 +173,19 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                     )
                 )
             }
+            binding.textViewGeofenceRadius.text = "$geofence Kilometers"
+
+            binding.textViewCoordinatesPoint.text = getFormattedCoordinates(
+                viewModel.getUserLatLong?.latitude ?: 0.0,
+                viewModel.getUserLatLong?.longitude ?: 0.0
+            )
+            val location = getTimeZoneAndCity(
+                requireContext(), viewModel.getUserLatLong?.latitude ?: 0.0,
+                viewModel.getUserLatLong?.longitude ?: 0.0
+            )
+            binding.textViewCityName.text = location?.city
+            binding.textViewCityTimeZoneName.text = location?.timeZone
+            viewModel.setLocationAutomaticValue(binding.switchAutomatic.isChecked)
         }
 
         binding.switchAdhanDua.setOnCheckedChangeListener { _, isChecked ->
@@ -469,7 +483,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             }
 
             binding.imageViewAsset.id -> {
-                showToast("Work in process")
+                AssetDialog().show(this.childFragmentManager, "SoundDialogFragment")
             }
         }
     }
@@ -567,18 +581,18 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
     private fun incrementGeofence(incrementBy: Int): String {
         geofence = (geofence + incrementBy).coerceIn(
-            75,
-            105
+            0,
+            300
         ) // Ensure the value is within the specified range
         return "$geofence Kilometers"
     }
 
     private fun decrementGeofence(decrementBy: Int): String {
         geofence = (geofence - decrementBy).coerceIn(
-            75,
-            105
+            0,
+            300
         ) // Ensure the value is within the specified range
-        return "$geofence Kilometers"
+        return if(geofence == 0) "off" else "$geofence Kilometers"
     }
 
     private fun incrementSnoozeMinute(): String {
@@ -590,7 +604,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         snoozeTime--
         return if (snoozeTime > 0) "$snoozeTime min" else {
             snoozeTime = 0
-            "off"
+            "0 min"
         }
     }
 

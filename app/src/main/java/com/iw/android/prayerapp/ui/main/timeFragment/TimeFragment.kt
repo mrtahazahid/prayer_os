@@ -11,22 +11,26 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.fragment.BaseFragment
+import com.iw.android.prayerapp.base.response.LocationResponse
 import com.iw.android.prayerapp.databinding.FragmentTimeBinding
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.timeFragment.itemView.RowItemTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails
+import com.iw.android.prayerapp.utils.MapDialog
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener {
+class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener,
+    MapDialog.MapDialogListener {
 
     private var _binding: FragmentTimeBinding? = null
     val binding
@@ -38,6 +42,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
 
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
+    private var isDialogOpen = false
 
 
     val adapter by lazy {
@@ -74,7 +79,10 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     override fun initialize() {
         setRecyclerView()
         lifecycleScope.launch {
-            viewModel.getPrayList()
+            viewModel.getPrayList(
+                viewModel.userLatLong?.latitude ?: 0.0,
+                viewModel.userLatLong?.longitude ?: 0.0
+            )
         }
 
         currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
@@ -92,13 +100,13 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
     }
 
     override fun setObserver() {
-            viewTypeArray.clear()
-            for (data in viewModel.prayTimeArray) {
-                viewTypeArray.add(
-                    RowItemTime(data, binding.recyclerView, requireActivity(), viewModel)
-                )
-            }
-            adapter.items = viewTypeArray
+        viewTypeArray.clear()
+        for (data in viewModel.prayTimeArray) {
+            viewTypeArray.add(
+                RowItemTime(data, binding.recyclerView, requireActivity(), viewModel)
+            )
+        }
+        adapter.items = viewTypeArray
     }
 
 
@@ -119,8 +127,32 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            binding.textViewTitle.id -> lifecycleScope.launch {
-                Log.d("NamazDetailFajr", viewModel.getFajrDetail().toString())
+            binding.textViewTitle.id -> {
+                if (!isDialogOpen) {
+                    isDialogOpen = true
+                    openLocationDialog()
+
+                } else {
+                    isDialogOpen = false
+                    viewModel.prayTimeArray.clear()
+                    lifecycleScope.launch {
+                        viewModel.getPrayList(
+                            currentLatitude,
+                            currentLongitude
+                        )
+                    }
+                    binding.imageViewTitle.gone()
+                    binding.textViewTitleJuri.gone()
+                    val location = GetAdhanDetails.getTimeZoneAndCity(
+                        requireContext(), currentLatitude,
+                        currentLongitude
+                    )
+
+                    binding.textViewTitle.text = location?.city ?: "City"
+                    setObserver()
+                }
+
+
             }
 
             binding.imageViewForward.id -> {
@@ -134,15 +166,19 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
             }
 
             binding.islamicHolidayClickView.id -> {
-                Toast.makeText(binding.islamicHolidayClickView.context, "Work in process", Toast.LENGTH_SHORT).show()
-//                findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToIslamicHolidayFragment2())
+                findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToIslamicHolidayFragment2())
             }
 
             binding.masjidClickView.id -> {
                 openGoogleMapsNearbyPlaces(currentLatitude, currentLongitude)
             }
-            binding.monthlyClickView.id->{
-                Toast.makeText(binding.monthlyClickView.context, "Work in process", Toast.LENGTH_SHORT).show()
+
+            binding.monthlyClickView.id -> {
+                Toast.makeText(
+                    binding.monthlyClickView.context,
+                    "Work in process",
+                    Toast.LENGTH_SHORT
+                ).show()
 //                findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToFragmentMonthlyCalender())
             }
 
@@ -170,7 +206,10 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
         viewModel.selectedPrayerDate = targetDate
         viewModel.prayTimeArray.clear()
         lifecycleScope.launch {
-            viewModel.getPrayList()
+            viewModel.getPrayList(
+                viewModel.userLatLong?.latitude ?: 0.0,
+                viewModel.userLatLong?.longitude ?: 0.0
+            )
         }
 
 
@@ -180,5 +219,36 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener 
         return dateFormat.format(targetDate)
     }
 
+    private fun openLocationDialog() {
+        val locationDialog = MapDialog()
+        locationDialog.listener = this
+        lifecycleScope.launch {
+            locationDialog.recentLocationList = viewModel.getRecentLocationData()
+            Log.d("lsit", viewModel.getRecentLocationData().toString())
+        }
+        locationDialog.show(requireActivity().supportFragmentManager, "SoundDialogFragment")
+    }
 
+    override fun onDataPassed(data: LocationResponse) {
+        viewModel.prayTimeArray.clear()
+        lifecycleScope.launch {
+            viewModel.getPrayList(
+                data.lat,
+                data.long
+            )
+        }
+        val location = GetAdhanDetails.getTimeZoneAndCity(
+            requireContext(), data.lat,
+            data.long
+        )
+        binding.textViewTitle.text = location?.city ?: "City"
+
+        binding.imageViewTitle.show()
+        val duaArray: Array<String> = resources.getStringArray(R.array.methods)
+        binding.textViewTitleJuri.text =
+            duaArray[viewModel.getSavedPrayerJurisprudence.toInt()]
+        binding.textViewTitleJuri.show()
+
+        setObserver()
+    }
 }

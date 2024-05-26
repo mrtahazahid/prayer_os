@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
@@ -11,6 +12,7 @@ import android.service.notification.NotificationListenerService
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.batoulapps.adhan2.CalculationMethod
 import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
@@ -143,6 +145,7 @@ class NotificationService : Service() {
                                 specifiedTime.reminderSound?.isSilent ?: false
                             )
                             prefrence.removeNotificationData(index)
+                            sendNotification(applicationContext,true)
                             delay(1500)
                             break
                         }
@@ -156,6 +159,7 @@ class NotificationService : Service() {
                                 specifiedTime.notificationSound?.isVibrate ?: false,
                                 specifiedTime.notificationSound?.isSilent ?: false
                             )
+                            sendNotification(applicationContext,true)
                             prefrence.removeNotificationData(index)
                             delay(1500)
                             break
@@ -171,6 +175,7 @@ class NotificationService : Service() {
                                 specifiedTime.reminderSound?.isVibrate ?: false,
                                 specifiedTime.reminderSound?.isSilent ?: false
                             )
+                            sendNotification(applicationContext,true)
                             prefrence.removeNotificationData(index)
                             delay(1500)
                             break
@@ -184,6 +189,7 @@ class NotificationService : Service() {
                                 specifiedTime.reminderSound?.isVibrate ?: false,
                                 specifiedTime.reminderSound?.isSilent ?: false
                             )
+                            sendNotification(applicationContext,true)
                             prefrence.removeNotificationData(index)
                             delay(1500)
                             break
@@ -387,6 +393,7 @@ class NotificationService : Service() {
                         notificationDetail.isVibrate,
                         notificationDetail.isSilent
                     )
+                    sendNotification(applicationContext,true)
                 }
                 break
             } else {
@@ -495,6 +502,7 @@ class NotificationService : Service() {
                 isForVibrate = false,
                 isForSilent = false
             )
+            sendNotification(applicationContext,true)
         } else {
             null
         }
@@ -512,6 +520,7 @@ class NotificationService : Service() {
                         isForVibrate = false,
                         isForSilent = false
                     )
+                    sendNotification(applicationContext,true)
                 }
             }
         }
@@ -594,5 +603,11 @@ class NotificationService : Service() {
                 }
             }
         }
+    }
+
+    fun sendNotification(context: Context, showImage: Boolean) {
+        val intent = Intent("com.iw.android.prayerapp.NOTIFICATION")
+        intent.putExtra("show_image", showImage)
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
 }

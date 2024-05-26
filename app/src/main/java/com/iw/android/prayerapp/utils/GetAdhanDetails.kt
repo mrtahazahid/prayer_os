@@ -12,11 +12,15 @@ import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Coordinates
 import com.batoulapps.adhan2.PrayerTimes
 import com.batoulapps.adhan2.Qibla
+import com.batoulapps.adhan2.SunnahTimes
 import com.batoulapps.adhan2.data.DateComponents
 import com.iw.android.prayerapp.data.response.LocationData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -46,9 +50,18 @@ object GetAdhanDetails : AppCompatActivity() {
 
         val dateComponents = DateComponents(year.toInt(), month.toInt(), day.toInt())
 
+        Log.d("cordinate",coordinates.latitude.toString() + coordinates.longitude.toString()  )
+
         val prayerTimes = PrayerTimes(coordinates, dateComponents, param)
         val formatter = SimpleDateFormat("h:mm a")
         formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
+
+
+
+
+        val sunnahTimes = SunnahTimes(prayerTimes)
+
+        Log.d(":check middleOfTheNight",convertToReadableForm(sunnahTimes.middleOfTheNight.toString()))
 
         return arrayListOf(
             formatter.format(Date(prayerTimes.fajr.toEpochMilliseconds())),
@@ -56,10 +69,24 @@ object GetAdhanDetails : AppCompatActivity() {
             formatter.format(Date(prayerTimes.dhuhr.toEpochMilliseconds())),
             formatter.format(Date(prayerTimes.asr.toEpochMilliseconds())),
             formatter.format(Date(prayerTimes.maghrib.toEpochMilliseconds())),
-            formatter.format(Date(prayerTimes.isha.toEpochMilliseconds()))
+            formatter.format(Date(prayerTimes.isha.toEpochMilliseconds())),
+            formatter.format(Date(sunnahTimes.middleOfTheNight.toEpochMilliseconds())),
+            formatter.format(Date(sunnahTimes.lastThirdOfTheNight.toEpochMilliseconds()))
         )
     }
 
+    fun convertToReadableForm(isoDateTime: String): String {
+        // Parse the ISO 8601 timestamp
+        val instant = Instant.parse(isoDateTime)
+
+        // Convert to the default time zone
+        val defaultZoneId = ZoneId.systemDefault()
+        val zonedDateTime = instant.atZone(defaultZoneId)
+
+        // Format the date-time to "h:mm a"
+        val formatter = DateTimeFormatter.ofPattern("h:mm a")
+        return zonedDateTime.format(formatter)
+    }
     fun calculatePrayerTimesForYear(
         latitude: Double,
         longitude: Double,

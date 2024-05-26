@@ -54,21 +54,25 @@
 
     <ImageView
         android:id="@+id/center_image"
-        android:layout_width="@dimen/_180sdp"
-        android:layout_height="@dimen/_180sdp"
+        android:layout_width="@dimen/_280sdp"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/_15sdp"
+        android:paddingStart="20dp"
         android:contentDescription="@string/center_image"
+        android:layout_marginBottom="100dp"
         android:src="@drawable/third_screen"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sub_heading" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/rounded_corners"
         android:fontFamily="@font/sf_regular"
         android:gravity="center"
@@ -78,9 +82,9 @@
         android:textColor="@color/yellow_text"
         android:textSize="@dimen/_12ssp"
         android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/btn_enable_notification"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/center_image" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <LinearLayout

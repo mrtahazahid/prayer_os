@@ -188,6 +188,9 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
         binding.imageViewReminderHelp.setOnClickListener(this)
         binding.imageViewSoundHelp.setOnClickListener(this)
         binding.imageViewReminderTimeHelp.setOnClickListener(this)
+        binding.imageViewUpdateInterval1.setOnClickListener(this)
+        binding.imageViewShowList.setOnClickListener(this)
+        binding.imageViewTimer.setOnClickListener(this)
         binding.switchEnabled.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.textViewNone.gone()
@@ -223,6 +226,28 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
     @SuppressLint("SimpleDateFormat")
     override fun onClick(v: View?) {
         when (v?.id) {
+            binding.imageViewTimer.id->{
+                CustomDialog(
+                    requireContext(),
+                    "Timer countdown",
+                    "Displays the iqama countdown in \n timers after the adhan."
+                ).show()
+            }
+            binding.imageViewShowList.id->{
+                CustomDialog(
+                    requireContext(),
+                    "Show in list",
+                    "Display the selected iqama times on\n the Times screen."
+                ).show()
+            }
+            binding.imageViewUpdateInterval1.id -> {
+                CustomDialog(
+                    requireContext(),
+                    "Update interval",
+                    "Specify an interval to remind you to\n check the masjib iqama times for\n updates."
+                ).show()
+            }
+
             binding.imageViewReminderHelp.id -> {
                 CustomDialog(
                     requireContext(),

@@ -16,7 +16,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/actionBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -78,14 +78,37 @@
                     android:id="@+id/textViewTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/sf_bold"
+                    android:fontFamily="@font/sf_regular"
                     android:text="City"
                     android:textColor="@color/yellow_text"
-                    android:textSize="20sp"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textViewTitleJuri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_regular"
+                    android:layout_marginTop="6dp"
+                    android:text="City"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="11sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewTitle"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="8dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_search_with_location"
+                    app:layout_constraintStart_toEndOf="@+id/textViewTitle"
+                    app:layout_constraintBottom_toBottomOf="@+id/textViewTitle"
+                    app:layout_constraintTop_toTopOf="@+id/textViewTitle" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardViewMain"
@@ -96,7 +119,7 @@
                     app:cardElevation="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+                    app:layout_constraintTop_toBottomOf="@id/textViewTitleJuri"
                     app:strokeWidth="0dp">
 
                     <FrameLayout

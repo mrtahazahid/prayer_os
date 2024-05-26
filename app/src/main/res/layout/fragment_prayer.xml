@@ -252,7 +252,7 @@
 
             <LinearLayout
                 android:id="@+id/upComingPrayerTimeView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
@@ -303,6 +303,15 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15ssp" />
 
+                <ImageView
+                    android:id="@+id/imageViewPause"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:visibility="gone"
+                    android:elevation="20dp"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/ic_pause"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -326,6 +335,8 @@
                     android:text="Asr"
                     android:textColor="@color/app_grey"
                     android:textSize="@dimen/_15ssp" />
+
+
 
             </LinearLayout>
 

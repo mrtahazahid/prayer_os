@@ -664,7 +664,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="15dp"
-                                android:drawableEnd="@drawable/ic_help"
                                 android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:text="Update interval"
@@ -673,6 +672,18 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/view2"
                                 app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewUpdateInterval1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                android:src="@drawable/ic_help"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewUpdateInterval1"
+                                app:layout_constraintStart_toEndOf="@id/textViewUpdateInterval1"
+                                app:layout_constraintTop_toTopOf="@id/textViewUpdateInterval1" />
+
 
                             <androidx.appcompat.widget.AppCompatSpinner
                                 android:id="@+id/spinnerIqamaReminderSwitch1"
@@ -754,6 +765,18 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewTimer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                android:src="@drawable/ic_help"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewTimer"
+                                app:layout_constraintStart_toEndOf="@id/textViewTimer"
+                                app:layout_constraintTop_toTopOf="@id/textViewTimer" />
+
+
                             <com.google.android.material.materialswitch.MaterialSwitch
                                 android:id="@+id/switchCountDown"
                                 android:layout_width="0dp"
@@ -792,6 +815,17 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/viewTimer" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewShowList"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:padding="6dp"
+                                android:src="@drawable/ic_help"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewShowList"
+                                app:layout_constraintStart_toEndOf="@id/textViewShowList"
+                                app:layout_constraintTop_toTopOf="@id/textViewShowList" />
 
                             <com.google.android.material.materialswitch.MaterialSwitch
                                 android:id="@+id/switchShowList"

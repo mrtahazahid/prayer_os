@@ -137,9 +137,11 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
             context.startService(notificationIntent)
         }
     }
-
     fun stopPrayer(){
         player?.release()
     }
+
+
 }
+
 

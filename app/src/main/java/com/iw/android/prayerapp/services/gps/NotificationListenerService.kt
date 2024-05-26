@@ -37,7 +37,6 @@ class NotificationListenerService() : NotificationListenerService() {
         rankingMap: RankingMap?,
         reason: Int
     ) {
-        notifications.stopPrayer()
+      notifications. stopPrayer()
     }
-
 }

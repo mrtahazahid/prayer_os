@@ -32,7 +32,7 @@ class GooglePlaceHelper(
             listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG)
 
         // Start the autocomplete intent.
-        val autocompleteActivityMode: AutocompleteActivityMode = AutocompleteActivityMode.FULLSCREEN
+        val autocompleteActivityMode: AutocompleteActivityMode = AutocompleteActivityMode.OVERLAY
         intent = Autocomplete.IntentBuilder(autocompleteActivityMode, fields).build(activity)
         fragment.startActivityForResult(intent, REQUEST_CODE_PLACE_HELPER)
     }

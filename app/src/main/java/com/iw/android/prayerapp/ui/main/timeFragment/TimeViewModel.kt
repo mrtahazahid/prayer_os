@@ -1,6 +1,7 @@
 package com.iw.android.prayerapp.ui.main.timeFragment
 
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.batoulapps.adhan2.CalculationMethod
 import com.batoulapps.adhan2.CalculationParameters
@@ -44,15 +45,19 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         }
     }
 
-   suspend fun getPrayList()  = viewModelScope.launch {
+   suspend fun getPrayList(lat:Double,long:Double)  = viewModelScope.launch {
 
 
         val getPrayerTime = GetAdhanDetails.getPrayTime(
-            userLatLong?.latitude ?: 0.0,
-            userLatLong?.longitude ?: 0.0,
+            lat,
+            long,
             method?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.HANAFI),
             selectedPrayerDate
         )
+
+       Log.d("middleNight",getPrayerTime[6])
+       Log.d("middleNight",getPrayerTime[7])
+       Log.d("getPrayerTime",getPrayerTime.toString())
 
         prayTimeArray.add(
             PrayTime(
@@ -114,7 +119,7 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
             PrayTime(
                 R.drawable.ic_notification_mute,
                 "Midnight",
-                convertToFunTime(1712083320000),
+                getPrayerTime[6],
                 formatDateWithCurrentTime(selectedPrayerDate),
                 getMidNightDetail() ?: NotificationData()
             )
@@ -124,7 +129,7 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
             PrayTime(
                 R.drawable.ic_notification_mute,
                 "Last Third",
-                convertToFunTime(1712004000000),
+                getPrayerTime[7],
                 formatDateWithCurrentTime(selectedPrayerDate),
                 getLastNightDetail() ?: NotificationData()
             )
@@ -133,7 +138,7 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
 
 
         // Get the upcoming namaz using getTimeDifferenceToNextPrayer function
-        val upcomingNamaz = getTimeDifferenceToNextPrayer()
+        val upcomingNamaz = getTimeDifferenceToNextPrayer(lat,long)
 
         // Iterate through the prayTimeArray and set isCurrentNamaz accordingly
         for (prayTime in prayTimeArray) {
@@ -158,7 +163,7 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         return dateFormat.format(calendar.time)
     }
 
-    private fun getTimeDifferenceToNextPrayer(): PrayerTime {
+    private fun getTimeDifferenceToNextPrayer(lat:Double,long:Double): PrayerTime {
 
         madhab = if(!getSavedPrayerJurisprudence.isNullOrEmpty()){
             if (getSavedPrayerJurisprudence.toInt() == 1) {
@@ -173,8 +178,8 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
 
 
         val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
-            userLatLong?.latitude ?: 0.0,
-            userLatLong?.longitude ?: 0.0,
+            lat,
+            long,
             method?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
         )
 

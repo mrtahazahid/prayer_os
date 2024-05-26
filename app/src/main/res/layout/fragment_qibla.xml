@@ -109,6 +109,7 @@
         android:drawablePadding="10dp"
         android:fontFamily="@font/sf_bold"
         android:text="Accuracy 88%"
+        android:visibility="gone"
         android:textColor="@color/text_color_gray"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"

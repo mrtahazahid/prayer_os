@@ -17,6 +17,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.databinding.DialogToolsBinding
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.chrono.HijrahDate
@@ -229,3 +234,56 @@ fun getIslamicDateByOffSet(offset: Int): String {
 
     return formattedHijrahDate.replace(" ", " ") // Customize space as needed
 }
+
+fun getRawFileSize(rawResId: Int, context: Context): String {
+    val inputStream: InputStream = context.resources.openRawResource(rawResId)
+    val byteArrayOutputStream = ByteArrayOutputStream()
+
+    try {
+        val buffer = ByteArray(1024)
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } != -1) {
+            byteArrayOutputStream.write(buffer, 0, length)
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+    } finally {
+        try {
+            inputStream.close()
+            byteArrayOutputStream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    val fileSizeInBytes = byteArrayOutputStream.size()
+
+    // Convert bytes to KB
+    val fileSizeInKB = fileSizeInBytes / 1024.0
+
+    // Format the size to 2 decimal places
+    val formattedSize = String.format("%.2f", fileSizeInKB)
+
+    return "${formattedSize} KB"
+}
+
+private fun copyRawResourceToFile(rawResId: Int, fileName: String,context: Context): String {
+    val inputStream: InputStream = context.resources.openRawResource(rawResId)
+    val outputFile = File(context.filesDir, fileName)
+
+    try {
+        val outputStream = FileOutputStream(outputFile)
+        val buffer = ByteArray(1024)
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } != -1) {
+            outputStream.write(buffer, 0, length)
+        }
+        outputStream.close()
+        inputStream.close()
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+
+    return outputFile.absolutePath
+}
+

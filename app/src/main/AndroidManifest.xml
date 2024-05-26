@@ -81,6 +81,13 @@
                 android:name="android.service.notification.disabled_filter_types"
                 android:value="ongoing|silent" />
         </service>
+
+        <receiver android:name=".ui.main.prayerFragment.NotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.iw.android.prayerapp.NOTIFICATION" />
+            </intent-filter>
+        </receiver>
     </application>
 
     <queries>

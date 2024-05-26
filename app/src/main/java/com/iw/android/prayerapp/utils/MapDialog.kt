@@ -71,7 +71,7 @@ class MapDialog : DialogFragment(),
         viewTypeArray.clear()
         for (data in recentLocationList) {
             viewTypeArray.add(
-                RowItemRecent(data, this)
+                RowItemRecent(data, this,recentLocationList.size -1)
             )
         }
         adapter.items = viewTypeArray

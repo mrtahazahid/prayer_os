@@ -103,23 +103,23 @@ class IslamicHolidayFragment : BaseFragment(R.layout.fragment_islamic_holiday), 
     private fun addHolidayList() {
         islamicHolidayArray.add(
             IslamicHolidayResponse(
-                "Isra' & Mi'raj",
-                "27 Rajab 1445",
-                "8 February 2024"
+                "Hajj",
+                "8 Dhu'l-Hijjah 1445",
+                "14 june 2024"
             )
         )
         islamicHolidayArray.add(
             IslamicHolidayResponse(
-                "Ramadan",
-                "1 Ramadan 1445",
-                "11 March 2024"
+                "Day of Arafah",
+                "9 Dhu'l-Hijjah 1445",
+                "15 june 2024"
             )
         )
         islamicHolidayArray.add(
             IslamicHolidayResponse(
-                "Eid al-Fitr",
-                "2 Shawwal 1445",
-                "10 April 2024"
+                "Eid al-Adha",
+                "10 Dhu'l-Hijjah 1445",
+                "16 june 2024"
             )
         )
         islamicHolidayArray.add(
