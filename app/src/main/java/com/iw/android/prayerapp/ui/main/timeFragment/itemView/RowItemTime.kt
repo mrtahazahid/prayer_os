@@ -28,6 +28,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Locale
 
 class RowItemTime(
     private val data: PrayTime,
@@ -275,8 +276,8 @@ class RowItemTime(
         _binding.imageView.setImageResource(data.image)
         _binding.textViewTitle.text = data.title
         _binding.textViewTime.text = data.time
-      //  _binding.textViewNotificationSound.text = data.namazDetail.notificationSound?.soundName
-       // _binding.textViewReminderSound.text = data.namazDetail.reminderSound?.soundName
+        //  _binding.textViewNotificationSound.text = data.namazDetail.notificationSound?.soundName
+        // _binding.textViewReminderSound.text = data.namazDetail.reminderSound?.soundName
         _binding.textViewSetTime.text = data.namazDetail.reminderTimeMinutes
         _binding.textViewSecondReminderSetTime.text = data.namazDetail.secondReminderTimeMinutes
         _binding.textViewNotificationSound.text =
@@ -358,6 +359,7 @@ class RowItemTime(
             duaType = prayerDetailData?.duaType ?: "off",
             createdDate = getCurrentDate(),
         )
+        
         when (data.title) {
             "Fajr" -> viewModel.saveFajrDetail(saveData)
 
@@ -542,6 +544,14 @@ class RowItemTime(
         return currentDate.format(formatter)
     }
 
+    fun isDateToday(dateString: String): Boolean {
+        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val currentDate = Calendar.getInstance().time
+        val formattedCurrentDate = dateFormat.format(currentDate)
+
+        return formattedCurrentDate == dateString
+    }
+
     fun subtractMinutesFromTime(currentTime: String, minutesToSubtract: Int): String {
         // Parse the current time string
         val formatter = DateTimeFormatter.ofPattern("h:mm a")
@@ -617,6 +627,8 @@ class RowItemTime(
                 _binding.textViewNotificationSound.text =
                     if (data.isForAdhan) data.soundName else data.soundToneName
             } else {
+                data.soundName = "Adhan"
+                data.soundToneName = "Tones"
                 if (data.isSilent) {
                     _binding.textViewNotificationSound.text = "Silent"
                 }
@@ -634,6 +646,8 @@ class RowItemTime(
                 _binding.textViewReminderSound.text =
                     if (data.isForAdhan) data.soundName else data.soundToneName
             } else {
+                data.soundName = "Adhan"
+                data.soundToneName = "Tones"
                 if (data.isSilent) {
                     _binding.textViewReminderSound.text = "Silent"
                 }

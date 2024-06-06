@@ -135,7 +135,6 @@ class NotificationService : Service() {
         if (specifiedTimes.isNotEmpty()) {
             for ((index, specifiedTime) in specifiedTimes.withIndex()) {
                 if (specifiedTime.namazTime != "") {
-
                     if (specifiedTime.duaTime != "off") {
                         if (isTimeMatch(specifiedTime.duaTime)) {
                             notifications.notify(
@@ -144,22 +143,7 @@ class NotificationService : Service() {
                                 specifiedTime.reminderSound?.isVibrate ?: false,
                                 specifiedTime.reminderSound?.isSilent ?: false
                             )
-                            prefrence.removeNotificationData(index)
-                            sendNotification(applicationContext,true)
-                            delay(1500)
-                            break
-                        }
-                    }
-
-                    if (isTimeMatch(specifiedTime.namazTime)) {
-                        if (specifiedTime.notificationSound?.isOff != true) {
-                            notifications.notify(
-                                specifiedTime.namazName, "Namaz Time",
-                                specifiedTime.notificationSound?.sound ?: R.raw.adhan_abdul_basit,
-                                specifiedTime.notificationSound?.isVibrate ?: false,
-                                specifiedTime.notificationSound?.isSilent ?: false
-                            )
-                            sendNotification(applicationContext,true)
+                            sendNotification(applicationContext)
                             prefrence.removeNotificationData(index)
                             delay(1500)
                             break
@@ -175,7 +159,7 @@ class NotificationService : Service() {
                                 specifiedTime.reminderSound?.isVibrate ?: false,
                                 specifiedTime.reminderSound?.isSilent ?: false
                             )
-                            sendNotification(applicationContext,true)
+                            sendNotification(applicationContext)
                             prefrence.removeNotificationData(index)
                             delay(1500)
                             break
@@ -189,7 +173,7 @@ class NotificationService : Service() {
                                 specifiedTime.reminderSound?.isVibrate ?: false,
                                 specifiedTime.reminderSound?.isSilent ?: false
                             )
-                            sendNotification(applicationContext,true)
+                            sendNotification(applicationContext)
                             prefrence.removeNotificationData(index)
                             delay(1500)
                             break
@@ -384,21 +368,46 @@ class NotificationService : Service() {
                     )
                 }
             }
+            val specifiedTimes = prefrence.getNotificationData()
+            if (specifiedTimes.isNotEmpty()) {
+                for ((index, specifiedTime) in specifiedTimes.withIndex()) {
+                    if (specifiedTime.namazTime != "") {
+                        if (currentTime == time.currentNamazTime) {
+                            if (!notificationDetail.isOff) {
+                                notifications.notify(
+                                    notificationDetail.currentNamazName, "Namaz Time",
+                                    notificationDetail.sound ?: R.raw.adhan_abdul_basit,
+                                    notificationDetail.isVibrate,
+                                    notificationDetail.isSilent
+                                )
+                                sendNotification(applicationContext)
+                                prefrence.removeNotificationData(index)
+                                delay(1500)
+                                break
 
-            if (currentTime == time.currentNamazTime) {
-                if (!notificationDetail.isOff) {
-                    notifications.notify(
-                        time.currentNamazName, "Namaz time",
-                        notificationDetail.sound ?: R.raw.adhan_abdul_basit,
-                        notificationDetail.isVibrate,
-                        notificationDetail.isSilent
-                    )
-                    sendNotification(applicationContext,true)
+                            } else if (isTimeMatch(specifiedTime.namazTime)) {
+                                if(specifiedTime.notificationSound?.isOff != true){
+                                    notifications.notify(
+                                        specifiedTime.namazName, "Namaz Time",
+                                        specifiedTime.notificationSound?.sound
+                                            ?: R.raw.adhan_abdul_basit,
+                                        specifiedTime.notificationSound?.isVibrate ?: false,
+                                        specifiedTime.notificationSound?.isSilent
+                                            ?: false
+                                    )
+                                    sendNotification(applicationContext)
+                                    prefrence.removeNotificationData(index)
+                                    delay(1500)
+                                    break
+                                }
+                            }
+                        } else {
+                            continue
+                        }
+                    }
                 }
-                break
-            } else {
-                continue
             }
+
         }
     }
 
@@ -502,7 +511,7 @@ class NotificationService : Service() {
                 isForVibrate = false,
                 isForSilent = false
             )
-            sendNotification(applicationContext,true)
+            sendNotification(applicationContext)
         } else {
             null
         }
@@ -520,7 +529,7 @@ class NotificationService : Service() {
                         isForVibrate = false,
                         isForSilent = false
                     )
-                    sendNotification(applicationContext,true)
+                    sendNotification(applicationContext)
                 }
             }
         }
@@ -605,9 +614,9 @@ class NotificationService : Service() {
         }
     }
 
-    fun sendNotification(context: Context, showImage: Boolean) {
+    private fun sendNotification(context: Context) {
         val intent = Intent("com.iw.android.prayerapp.NOTIFICATION")
-        intent.putExtra("show_image", showImage)
+        intent.putExtra("show_image", true)
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
 }

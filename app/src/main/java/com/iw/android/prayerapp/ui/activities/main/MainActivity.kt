@@ -265,7 +265,9 @@ class MainActivity : BaseActivity() {
                 R.id.prayerFragment, R.id.qiblaFragment, R.id.timeFragment, R.id.moreFragment, R.id.settingFragment -> {
                     binding.bottomNavigationView.show()
                 }
-
+                R.id.iqamaFragment->{
+                    binding.bottomNavigationView.gone()
+                }
                 else -> {
                     binding.bottomNavigationView.gone()
                 }

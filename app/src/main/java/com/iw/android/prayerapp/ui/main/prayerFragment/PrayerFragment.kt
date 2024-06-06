@@ -66,22 +66,16 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         (requireActivity() as MainActivity).showBottomSheet()
         binding.progressbar.visibility = View.VISIBLE
 
-        notificationReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                val showImage = intent.getBooleanExtra("show_image", false)
-                if(showImage){
-                            _binding?.imageViewPause?.show()
 
-                }
+        notificationReceiver = NotificationReceiver()
 
-            }
-        }
-
-
+        // Register the receiver for local broadcasts
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
             notificationReceiver,
             IntentFilter("com.iw.android.prayerapp.NOTIFICATION")
         )
+
+
         namazTimesList = ArrayList()
         return binding.root
     }
@@ -141,9 +135,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     }
 
     override fun setObserver() {
-
-
-
     }
 
 
@@ -644,7 +635,19 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     }
 
     fun toggleImageVisibility() {
-        binding.imageViewPause.show()
+        _binding?.imageViewPause?.show()
+    }
+
+    inner class NotificationReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val showImage = intent?.getBooleanExtra("show_image", true) ?: false
+            if (showImage) {
+                toggleImageVisibility()
+            }else{
+                notifications.stopPrayer()
+            }
+
+        }
     }
 }
 

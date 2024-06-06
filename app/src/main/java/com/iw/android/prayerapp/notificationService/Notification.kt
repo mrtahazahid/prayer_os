@@ -30,6 +30,11 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
 
     private val applicationScope = ProcessLifecycleOwner.get().lifecycleScope
 
+    init {
+        createNotificationChannel()
+    }
+
+
     companion object {
         private const val channelId = "110"
         private const val NOTIFICATION_ID_MULTIPLIER = 1000
@@ -110,17 +115,8 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
 
 
 
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                NOTIFICATION_CHANNEL_NAME,
-                NOTIFICATION_IMPORTANCE
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
 
         val notificationId = System.currentTimeMillis().toInt() * Random.nextInt(
             NOTIFICATION_ID_MULTIPLIER
@@ -128,18 +124,27 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         notificationManager.notify(notificationId, notificationBuilder.build())
     }
 
-    private val notificationIntent = Intent(context, MainActivity::class.java)
-    fun startForegroundService() {
-        notificationIntent.putExtra("fromNotification", true)
+    private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(notificationIntent)
-        } else {
-            context.startService(notificationIntent)
+            val channelName = "Channel Name"
+            val channelDescription = "Channel Description"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+
+            val channel = NotificationChannel(channelId, channelName, importance).apply {
+                description = channelDescription
+                enableVibration(true)
+                vibrationPattern = longArrayOf(0, 100, 200, 300, 400, 500)
+            }
+
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
+
     fun stopPrayer(){
         player?.release()
     }
+
 
 
 }

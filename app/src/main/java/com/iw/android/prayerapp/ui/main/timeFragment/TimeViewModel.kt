@@ -1,7 +1,6 @@
 package com.iw.android.prayerapp.ui.main.timeFragment
 
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.batoulapps.adhan2.CalculationMethod
 import com.batoulapps.adhan2.CalculationParameters
@@ -46,18 +45,12 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
     }
 
    suspend fun getPrayList(lat:Double,long:Double)  = viewModelScope.launch {
-
-
         val getPrayerTime = GetAdhanDetails.getPrayTime(
             lat,
             long,
             method?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.HANAFI),
             selectedPrayerDate
         )
-
-       Log.d("middleNight",getPrayerTime[6])
-       Log.d("middleNight",getPrayerTime[7])
-       Log.d("getPrayerTime",getPrayerTime.toString())
 
         prayTimeArray.add(
             PrayTime(
