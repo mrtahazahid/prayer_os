@@ -1,6 +1,7 @@
 package com.iw.android.prayerapp.utils
 
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -97,8 +98,9 @@ class AssetDialog : DialogFragment(), OnItemClick {
         arraList[position].isSoundSelected = true
         // Notify the adapter about the change in the entire dataset
         binding.recyclerView.adapter?.notifyDataSetChanged()
-        stopMediaPlayer()
-        mediaPlayer = MediaPlayer.create(requireContext(), data.soundFile)
+        //stopMediaPlayer()
+        val uri =  Uri.parse("android.resource://" + requireContext().packageName + "/" + data.soundFile)
+        mediaPlayer = MediaPlayer.create(requireContext(),uri )
         // Create a new MediaPlayer instance
         if (isSoundOn) {
             stopMediaPlayer()

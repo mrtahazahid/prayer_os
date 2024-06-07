@@ -50,18 +50,19 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imageViewDropDownMenu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="6dp"
+                    android:layout_marginEnd="5dp"
                     android:src="@drawable/ic_forward"
                     android:tint="@color/small_icon"
-                    android:visibility="gone"
+
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
+            <!--                    android:visibility="gone"-->
 
             <View
                 android:id="@+id/view4"

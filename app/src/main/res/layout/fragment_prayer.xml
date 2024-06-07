@@ -41,6 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
+                    android:visibility="gone"
                     app:cardBackgroundColor="#1e1e1e">
 
                     <TextView
@@ -245,6 +246,7 @@
                 android:layout_height="@dimen/_270sdp"
                 android:rotation="-180"
                 app:cpb_progress_max="100"
+                android:layout_marginTop="60dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -257,10 +259,10 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/progressbar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="@+id/progressbar">
 
                 <TextView
                     android:id="@+id/textViewRemainingTime"
@@ -307,10 +309,10 @@
                     android:id="@+id/imageViewPause"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:visibility="gone"
-                    android:elevation="20dp"
                     android:layout_margin="20dp"
-                    android:src="@drawable/ic_pause"/>
+                    android:elevation="20dp"
+                    android:src="@drawable/ic_pause"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

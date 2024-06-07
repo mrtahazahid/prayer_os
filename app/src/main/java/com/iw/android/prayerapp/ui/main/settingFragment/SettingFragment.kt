@@ -145,6 +145,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.imageViewApp.setOnClickListener(this)
         binding.imageViewPhone.setOnClickListener(this)
         binding.imageViewAsset.setOnClickListener(this)
+        binding.assetView.setOnClickListener(this)
         binding.cityView.setOnClickListener(this)
         binding.viewAsset.setOnClickListener(this)
         if (!viewModel.getAutomaticLocation) {
@@ -250,7 +251,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 openLocationDialog()
             }
 
-            binding.imageViewAssetHelp.id -> {
+      binding.imageViewAssetHelp.id -> {
                 CustomDialog(
                     requireContext(),
                     "Assets",
@@ -380,7 +381,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
             binding.timeView.id -> {
                 if (!isTimeViewShow) {
-                    binding.imageViewTimeArrowButton.setImageResource(R.drawable.ic_drop_down)
+                    binding.imageViewTimeArrowButton.setImageResource(R.drawable.ic_down)
                     binding.timeDetailViews.visibility = View.VISIBLE
                     isTimeViewShow = true
                 } else {
@@ -392,7 +393,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
             binding.imageViewSystem.id -> {
                 if (!isSystemShow) {
-                    binding.imageViewSystem.setImageResource(R.drawable.ic_drop_down)
+                    binding.imageViewSystem.setImageResource(R.drawable.ic_down)
                     binding.systemDetailViews.visibility = View.VISIBLE
                     isSystemShow = true
                 } else {
@@ -404,7 +405,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
             binding.imageViewApp.id -> {
                 if (!isAppShow) {
-                    binding.imageViewApp.setImageResource(R.drawable.ic_drop_down)
+                    binding.imageViewApp.setImageResource(R.drawable.ic_down)
                     binding.appDetailViews.visibility = View.VISIBLE
                     isAppShow = true
                 } else {
@@ -452,7 +453,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
             binding.calculationView.id, binding.imageViewCalculationArrow.id -> {
                 if (!isCalViewShow) {
-                    binding.imageViewCalculationArrow.setImageResource(R.drawable.ic_drop_down)
+                    binding.imageViewCalculationArrow.setImageResource(R.drawable.ic_down)
                     binding.calculationMainDetailViews.visibility = View.VISIBLE
                     isCalViewShow = true
                     spinnerMethod()
@@ -467,7 +468,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
             binding.locationView.id, binding.imageViewLocationArrowButton.id -> {
                 if (!isLocViewShow) {
-                    binding.imageViewLocationArrowButton.setImageResource(R.drawable.ic_drop_down)
+                    binding.imageViewLocationArrowButton.setImageResource(R.drawable.ic_down)
                     binding.locationDetailViews.visibility = View.VISIBLE
                     isLocViewShow = true
                 } else {
@@ -482,7 +483,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 openAppSettings()
             }
 
-            binding.imageViewAsset.id -> {
+            binding.assetView.id, binding.imageViewAsset.id -> {
                 AssetDialog().show(this.childFragmentManager, "SoundDialogFragment")
             }
         }
@@ -627,7 +628,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         sound: Int?,
         isSoundForNotification: Boolean
     ) {
-        binding.textViewNotificationSound.text = soundName
+
     }
 
     private fun incrementAdjustHijriDate(): String {

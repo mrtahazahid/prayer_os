@@ -67,7 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_marginBottom="@dimen/_6sdp">
 
@@ -79,7 +79,7 @@
                             android:fontFamily="@font/sf_medium"
                             android:text="Snooze time"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_13ssp"
+                            android:textSize="14dp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -87,9 +87,8 @@
                             android:id="@+id/imageViewSnoozeHelp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_help"
-                            android:layout_marginStart="6dp"
                             android:padding="6dp"
+                            android:src="@drawable/ic_help"
                             app:layout_constraintBottom_toBottomOf="@id/txt_snooze_time"
                             app:layout_constraintStart_toEndOf="@id/txt_snooze_time"
                             app:layout_constraintTop_toTopOf="@id/txt_snooze_time" />
@@ -166,8 +165,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_marginStart="15dp"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:layout_marginBottom="@dimen/_2sdp"
                         android:background="@color/view_separator" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -175,9 +172,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_6sdp"
-
-                        android:layout_marginBottom="@dimen/_6sdp">
+                        android:layout_marginTop="@dimen/_1sdp"
+                      >
 
                         <TextView
                             android:id="@+id/txt_adhan_dua"
@@ -189,7 +185,7 @@
                             android:gravity="center"
                             android:text="Adhan dua"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_13ssp"
+                            android:textSize="14dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -198,9 +194,8 @@
                             android:id="@+id/imageVeiwAdhanHelp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_help"
-                            android:layout_marginStart="6dp"
                             android:padding="6dp"
+                            android:src="@drawable/ic_help"
                             app:layout_constraintBottom_toBottomOf="@id/txt_adhan_dua"
                             app:layout_constraintStart_toEndOf="@id/txt_adhan_dua"
                             app:layout_constraintTop_toTopOf="@id/txt_adhan_dua" />
@@ -227,7 +222,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_marginStart="15dp"
-                        android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:background="@color/view_separator" />
 
@@ -235,10 +229,7 @@
                         android:id="@+id/cl_elevation"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_30sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_6sdp"
-
-                        android:layout_marginBottom="@dimen/_6sdp">
+                        android:layout_marginStart="@dimen/_10sdp">
 
                         <TextView
                             android:id="@+id/txt_play_on_tap"
@@ -250,7 +241,7 @@
                             android:gravity="center"
                             android:text="Play on tap"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_13ssp"
+                            android:textSize="14dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -259,9 +250,8 @@
                             android:id="@+id/imageViewPlayHelp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_help"
-                            android:layout_marginStart="6dp"
                             android:padding="6dp"
+                            android:src="@drawable/ic_help"
                             app:layout_constraintBottom_toBottomOf="@id/txt_play_on_tap"
                             app:layout_constraintStart_toEndOf="@id/txt_play_on_tap"
                             app:layout_constraintTop_toTopOf="@id/txt_play_on_tap" />
@@ -289,7 +279,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_marginStart="15dp"
-                        android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:background="@color/view_separator" />
 
@@ -298,9 +287,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_4sdp"
                         android:layout_marginEnd="@dimen/_6sdp"
-                        android:layout_marginBottom="@dimen/_6sdp">
+                        android:layout_marginBottom="@dimen/_4sdp">
 
                         <TextView
                             android:id="@+id/txt_sch_reminder"
@@ -312,29 +300,24 @@
                             android:gravity="center"
                             android:text="Scheduled reminders"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_13ssp"
+                            android:textSize="14dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
+
+
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/textViewNotificationSound"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginEnd="8dp"
-                            android:drawableEnd="@drawable/ic_forward"
-                            android:drawablePadding="4dp"
-                            android:fontFamily="@font/sf_regular"
-                            android:gravity="end"
-                            android:textColor="@color/app_grey"
-                            android:textSize="14sp"
-                            app:drawableTint="@color/app_grey"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:padding="6dp"
+                            android:src="@drawable/ic_forward"
+                            android:tint="@color/text_color_gray"
                             app:layout_constraintBottom_toBottomOf="@+id/txt_sch_reminder"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/txt_sch_reminder"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:text="Tone" />
+                            app:layout_constraintTop_toTopOf="@+id/txt_sch_reminder" />
+
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -397,14 +380,15 @@
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/imageViewCalculationArrow"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="15dp"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="10dp"
+                                android:padding="6dp"
                                 android:src="@drawable/ic_forward"
                                 android:tint="@color/small_icon"
-                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintBottom_toBottomOf="@+id/textViewTitle"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="@+id/textViewTitle" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -414,10 +398,10 @@
                             android:layout_height="wrap_content"
                             android:background="#1c1c1e"
                             android:visibility="gone"
-                            tools:visibility="visible"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/mainView">
+                            app:layout_constraintTop_toBottomOf="@id/mainView"
+                            >
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewMethodTitle"
@@ -438,10 +422,9 @@
                                 android:id="@+id/imageViewMethodHelp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_help"
-                                android:layout_marginStart="6dp"
                                 android:layout_marginTop="4dp"
                                 android:padding="6dp"
+                                android:src="@drawable/ic_help"
                                 app:layout_constraintBottom_toBottomOf="@id/textViewMethodTitle"
                                 app:layout_constraintStart_toEndOf="@id/textViewMethodTitle"
                                 app:layout_constraintTop_toTopOf="@id/textViewMethodTitle" />
@@ -449,11 +432,11 @@
                             <androidx.appcompat.widget.AppCompatSpinner
                                 android:id="@+id/spinnerMethod"
                                 android:layout_width="0dp"
-                                android:layout_height="0dp"
+                                android:layout_height="40dp"
                                 android:layout_marginStart="@dimen/_4sdp"
                                 android:backgroundTint="@color/app_green"
                                 android:forceHasOverlappingRendering="false"
-                                android:gravity="center"
+                                android:gravity="end"
                                 android:overlapAnchor="false"
                                 android:spinnerMode="dropdown"
                                 android:textSize="12sp"
@@ -467,7 +450,7 @@
                                 android:id="@+id/view"
                                 android:layout_width="0dp"
                                 android:layout_height="1dp"
-                                android:layout_marginTop="10dp"
+                                android:layout_marginTop="15dp"
                                 android:background="@color/view_separator"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="@id/textViewMethodTitle"
@@ -492,9 +475,8 @@
                                 android:id="@+id/imageViewJuriHelp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_help"
-                                android:layout_marginStart="6dp"
                                 android:padding="6dp"
+                                android:src="@drawable/ic_help"
                                 app:layout_constraintBottom_toBottomOf="@id/textViewJurisprudenceTitle"
                                 app:layout_constraintStart_toEndOf="@id/textViewJurisprudenceTitle"
                                 app:layout_constraintTop_toTopOf="@id/textViewJurisprudenceTitle" />
@@ -566,8 +548,8 @@
                                 android:backgroundTint="@color/app_green"
                                 android:forceHasOverlappingRendering="false"
                                 android:gravity="center"
-                                android:paddingStart="4dp"
                                 android:overlapAnchor="false"
+                                android:paddingStart="4dp"
                                 android:spinnerMode="dropdown"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -605,14 +587,15 @@
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/imageViewLocationArrowButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="15dp"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="10dp"
+                                android:padding="6dp"
                                 android:src="@drawable/ic_forward"
                                 android:tint="@color/small_icon"
-                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintBottom_toBottomOf="@+id/textViewLocationTitle"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="@+id/textViewLocationTitle" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -623,12 +606,11 @@
                             android:layout_marginBottom="8dp"
                             android:background="#1c1c1e"
                             android:visibility="gone"
-                            tools:visibility="visible"
                             app:layout_constraintBottom_toTopOf="@id/viewLocSep"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/mainView"
-                            >
+                           >
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewAutomatic"
@@ -649,14 +631,12 @@
                                 android:id="@+id/imageViewAuto"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_help"
-                                android:layout_marginStart="6dp"
                                 android:layout_marginTop="6dp"
                                 android:padding="6dp"
+                                android:src="@drawable/ic_help"
                                 app:layout_constraintBottom_toBottomOf="@id/textViewAutomatic"
                                 app:layout_constraintStart_toEndOf="@id/textViewAutomatic"
                                 app:layout_constraintTop_toTopOf="@id/textViewAutomatic" />
-
 
 
                             <com.google.android.material.materialswitch.MaterialSwitch
@@ -687,10 +667,10 @@
 
                             <androidx.constraintlayout.widget.Group
                                 android:id="@+id/group"
-                                android:visibility="gone"
-                                app:constraint_referenced_ids="textViewGeofence,imageViewGeoHelp,textViewGeofenceRadius,viewSepGeofence,cardView"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                app:constraint_referenced_ids="textViewGeofence,imageViewGeoHelp,textViewGeofenceRadius,viewSepGeofence,cardView" />
 
                             <TextView
                                 android:id="@+id/textViewGeofence"
@@ -701,7 +681,7 @@
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Geofence"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="@id/viewSepAutomatic"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepAutomatic" />
 
@@ -709,9 +689,8 @@
                                 android:id="@+id/imageViewGeoHelp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_help"
-                                android:layout_marginStart="6dp"
                                 android:padding="6dp"
+                                android:src="@drawable/ic_help"
                                 app:layout_constraintBottom_toBottomOf="@id/textViewGeofence"
                                 app:layout_constraintStart_toEndOf="@id/textViewGeofence"
                                 app:layout_constraintTop_toTopOf="@id/textViewGeofence" />
@@ -741,13 +720,13 @@
                                 android:id="@+id/textViewCity"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_marginTop="10dp"
                                 android:layout_marginStart="28dp"
+                                android:layout_marginTop="10dp"
                                 android:drawablePadding="@dimen/_3sdp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="City"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepGeofence" />
 
@@ -755,18 +734,19 @@
                                 android:id="@+id/cityView"
                                 android:layout_width="0dp"
                                 android:layout_height="45dp"
-                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepGeofence" />
+
                             <TextView
                                 android:id="@+id/textViewCityName"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_marginEnd="15dp"
                                 android:layout_marginTop="10dp"
+                                android:layout_marginEnd="15dp"
                                 android:fontFamily="@font/sf_medium"
                                 android:textColor="@color/white"
-                                android:textSize="16sp"
+                                android:textSize="14dp"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepGeofence"
                                 tools:text="Karachi" />
@@ -790,7 +770,7 @@
                                 android:fontFamily="@font/sf_medium"
                                 android:text="TimeZone"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="@id/viewSepCity"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepCity" />
 
@@ -798,11 +778,11 @@
                                 android:id="@+id/textViewCityTimeZoneName"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_marginEnd="15dp"
                                 android:layout_marginTop="10dp"
+                                android:layout_marginEnd="15dp"
                                 android:fontFamily="@font/sf_medium"
                                 android:textColor="@color/white"
-                                android:textSize="16sp"
+                                android:textSize="14dp"
                                 app:layout_constraintEnd_toEndOf="@id/viewSepCity"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepCity"
                                 tools:text="Asia/Karachi" />
@@ -826,7 +806,7 @@
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Coordinates"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="@id/viewSepTimeZone"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepTimeZone" />
 
@@ -834,18 +814,18 @@
                                 android:id="@+id/textViewCoordinatesPoint"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_marginEnd="15dp"
                                 android:layout_marginTop="10dp"
+                                android:layout_marginEnd="15dp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="24/0,67.11"
                                 android:textColor="@color/white"
-                                android:textSize="16sp"
+                                android:textSize="14dp"
                                 app:layout_constraintEnd_toEndOf="@id/viewSepTimeZone"
                                 app:layout_constraintTop_toBottomOf="@id/viewSepTimeZone" />
 
 
                             <com.google.android.material.card.MaterialCardView
-                              android:id="@+id/cardView"
+                                android:id="@+id/cardView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="30dp"
                                 android:layout_marginEnd="15dp"
@@ -930,14 +910,15 @@
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/imageViewTimeArrowButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="15dp"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="10dp"
+                                android:padding="6dp"
                                 android:src="@drawable/ic_forward"
                                 android:tint="@color/small_icon"
-                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintBottom_toBottomOf="@+id/textViewTimeTitle"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="@+id/textViewTimeTitle" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -948,7 +929,6 @@
                             android:layout_marginBottom="8dp"
                             android:background="#1c1c1e"
                             android:visibility="gone"
-                            tools:visibility="visible"
                             app:layout_constraintBottom_toTopOf="@id/viewTimeSep"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -967,7 +947,6 @@
                                 android:textSize="18sp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
-
 
 
                             <com.google.android.material.materialswitch.MaterialSwitch
@@ -1006,7 +985,7 @@
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Adjust hijri date"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="@id/view24HourFormat"
                                 app:layout_constraintTop_toBottomOf="@id/view24HourFormat" />
 
@@ -1014,9 +993,8 @@
                                 android:id="@+id/imageViewAdjustHijriHelp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_help"
-                                android:layout_marginStart="6dp"
                                 android:padding="6dp"
+                                android:src="@drawable/ic_help"
                                 app:layout_constraintBottom_toBottomOf="@id/textViewAdjustHijriDate"
                                 app:layout_constraintStart_toEndOf="@id/textViewAdjustHijriDate"
                                 app:layout_constraintTop_toTopOf="@id/textViewAdjustHijriDate" />
@@ -1104,7 +1082,7 @@
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Auto increment hijri"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="@id/viewAdjustHijri"
                                 app:layout_constraintTop_toBottomOf="@id/viewAdjustHijri" />
 
@@ -1112,9 +1090,8 @@
                                 android:id="@+id/imageViewAutoIncrementHelp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_help"
-                                android:layout_marginStart="6dp"
                                 android:padding="6dp"
+                                android:src="@drawable/ic_help"
                                 app:layout_constraintBottom_toBottomOf="@id/textViewAutoIncrement"
                                 app:layout_constraintStart_toEndOf="@id/textViewAutoIncrement"
                                 app:layout_constraintTop_toTopOf="@id/textViewAutoIncrement" />
@@ -1154,7 +1131,7 @@
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Prayer Abbreviations"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="@id/viewIncrement"
                                 app:layout_constraintTop_toBottomOf="@id/viewIncrement" />
 
@@ -1192,7 +1169,7 @@
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Count up Time"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="@id/viewAbbrevation"
                                 app:layout_constraintTop_toBottomOf="@id/viewAbbrevation" />
 
@@ -1200,9 +1177,8 @@
                                 android:id="@+id/imageViewCountDownHelp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_help"
-                                android:layout_marginStart="6dp"
                                 android:padding="6dp"
+                                android:src="@drawable/ic_help"
                                 app:layout_constraintBottom_toBottomOf="@id/textViewCountUpTime"
                                 app:layout_constraintStart_toEndOf="@id/textViewCountUpTime"
                                 app:layout_constraintTop_toTopOf="@id/textViewCountUpTime" />
@@ -1303,9 +1279,8 @@
                                 android:id="@+id/imageViewIqamaHelp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_help"
-                                android:layout_marginStart="6dp"
                                 android:padding="6dp"
+                                android:src="@drawable/ic_help"
                                 app:layout_constraintBottom_toBottomOf="@id/textViewIqamaTitle"
                                 app:layout_constraintStart_toEndOf="@id/textViewIqamaTitle"
                                 app:layout_constraintTop_toTopOf="@id/textViewIqamaTitle" />
@@ -1313,9 +1288,10 @@
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/imageViewIqamaArrowButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="15dp"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="10dp"
+                                android:padding="6dp"
                                 android:src="@drawable/ic_forward"
                                 android:tint="@color/small_icon"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -1361,8 +1337,8 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/system"
                         android:layout_width="match_parent"
-                        android:paddingBottom="20dp"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:paddingBottom="6dp">
 
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -1379,130 +1355,133 @@
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageViewSystem"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="15dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:padding="6dp"
                             android:src="@drawable/ic_forward"
                             android:tint="@color/small_icon"
+                            app:layout_constraintBottom_toBottomOf="@+id/textViewSystem"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="@+id/textViewSystem" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/systemDetailViews"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#1c1c1e"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textViewSystem"
-                        tools:visibility="visible">
-
-                        <TextView
-                            android:id="@+id/textViewLanguage"
-                            android:layout_width="0dp"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/systemDetailViews"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginStart="30dp"
-                            android:drawablePadding="@dimen/_3sdp"
-                            android:fontFamily="@font/sf_medium"
-                            android:text="Language"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_13ssp"
+                            android:background="#1c1c1e"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@id/textViewSystem">
 
-                        <TextView
-                            android:id="@+id/textViewLang"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="15dp"
-                            android:fontFamily="@font/sf_medium"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:text="English" />
+                            <TextView
+                                android:id="@+id/textViewLanguage"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="30dp"
+                                android:layout_marginTop="10dp"
+                                android:drawablePadding="@dimen/_3sdp"
+                                android:fontFamily="@font/sf_medium"
+                                android:text="Language"
+                                android:textColor="@color/white"
+                                android:textSize="14dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-                        <View
-                            android:id="@+id/viewLang"
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/view_separator"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/textViewLanguage"
-                            app:layout_constraintTop_toBottomOf="@id/textViewLanguage" />
+                            <TextView
+                                android:id="@+id/textViewLang"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="15dp"
+                                android:fontFamily="@font/sf_medium"
+                                android:text="English"
+                                android:textColor="@color/white"
+                                android:textSize="14dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/textViewLocal"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginStart="30dp"
-                            android:drawablePadding="@dimen/_3sdp"
-                            android:fontFamily="@font/sf_medium"
-                            android:text="Local"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_13ssp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/viewLang" />
+                            <View
+                                android:id="@+id/viewLang"
+                                android:layout_width="0dp"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@color/view_separator"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@id/textViewLanguage"
+                                app:layout_constraintTop_toBottomOf="@id/textViewLanguage" />
 
-                        <TextView
-                            android:id="@+id/textViewLocal1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="15dp"
-                            android:fontFamily="@font/sf_medium"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/viewLang"
-                            tools:text="en_pk" />
+                            <TextView
+                                android:id="@+id/textViewLocal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="30dp"
+                                android:layout_marginTop="10dp"
+                                android:drawablePadding="@dimen/_3sdp"
+                                android:fontFamily="@font/sf_medium"
+                                android:text="Local"
+                                android:textColor="@color/white"
+                                android:textSize="14dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/viewLang" />
 
-                        <View
-                            android:id="@+id/viewLocalMain"
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/view_separator"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/textViewLocal"
-                            app:layout_constraintTop_toBottomOf="@id/textViewLocal" />
+                            <TextView
+                                android:id="@+id/textViewLocal1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="15dp"
+                                android:fontFamily="@font/sf_medium"
+                                android:textColor="@color/white"
+                                android:textSize="14dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/viewLang"
+                                tools:text="en_pk" />
+
+                            <View
+                                android:id="@+id/viewLocalMain"
+                                android:layout_width="0dp"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@color/view_separator"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@id/textViewLocal"
+                                app:layout_constraintTop_toBottomOf="@id/textViewLocal" />
 
 
-                        <TextView
-                            android:id="@+id/textViewAsset"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginStart="30dp"
-                            android:drawablePadding="@dimen/_3sdp"
-                            android:fontFamily="@font/sf_medium"
-                            android:text="Android Settings"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_13ssp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/viewLocalMain" />
+                            <TextView
+                                android:id="@+id/textViewAsset"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="30dp"
+                                android:layout_marginTop="15dp"
+                                android:drawablePadding="@dimen/_3sdp"
+                                android:fontFamily="@font/sf_medium"
+                                android:text="Android Settings"
+                                android:textColor="@color/white"
+                                android:textSize="14dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/viewLocalMain" />
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/imageViewPhone"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="15dp"
-                            android:src="@drawable/ic_phone"
-                            android:tint="@color/small_icon"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/viewLocalMain" />
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewPhone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="15dp"
+                                android:src="@drawable/ic_phone"
+                                android:tint="@color/small_icon"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/viewLocalMain" />
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <View
                             android:id="@+id/viewApp"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
-                            android:layout_marginTop="15dp"
                             android:layout_marginStart="15dp"
+                            android:layout_marginTop="10dp"
                             android:background="@color/view_separator"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -1513,7 +1492,8 @@
                             android:id="@+id/textViewApp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="15dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="10dp"
                             android:fontFamily="@font/sf_regular"
                             android:text="App"
                             android:textColor="@color/white"
@@ -1523,13 +1503,15 @@
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageViewApp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="15dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:padding="6dp"
                             android:src="@drawable/ic_forward"
                             android:tint="@color/small_icon"
+                            app:layout_constraintBottom_toBottomOf="@+id/textViewApp"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/viewApp" />
+                            app:layout_constraintTop_toTopOf="@+id/textViewApp" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/appDetailViews"
@@ -1540,19 +1522,19 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/textViewApp"
-                            tools:visibility="visible">
+                           >
 
                             <TextView
                                 android:id="@+id/textViewVersion"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp"
                                 android:layout_marginStart="30dp"
+                                android:layout_marginTop="15dp"
                                 android:drawablePadding="@dimen/_3sdp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Version"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -1560,13 +1542,13 @@
                                 android:id="@+id/textViewVersions"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="15dp"
+                                android:layout_margin="10dp"
                                 android:fontFamily="@font/sf_medium"
+                                android:text="17.1.3(371)"
                                 android:textColor="@color/white"
-                                android:textSize="16sp"
+                                android:textSize="14dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:text="17.1.3(371)" />
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <View
                                 android:id="@+id/viewVersion"
@@ -1582,13 +1564,13 @@
                                 android:id="@+id/textViewCaches"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp"
                                 android:layout_marginStart="30dp"
+                                android:layout_marginTop="10dp"
                                 android:drawablePadding="@dimen/_3sdp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Caches"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/viewVersion" />
 
@@ -1596,10 +1578,11 @@
                                 android:id="@+id/textViewCaches1"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="15dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="15dp"
                                 android:fontFamily="@font/sf_medium"
                                 android:textColor="@color/white"
-                                android:textSize="16sp"
+                                android:textSize="14dp"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/viewVersion"
                                 tools:text="en_pk" />
@@ -1619,37 +1602,46 @@
                                 android:id="@+id/textViewSett"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp"
                                 android:layout_marginStart="30dp"
+                                android:layout_marginTop="10dp"
                                 android:drawablePadding="@dimen/_3sdp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Asset"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/viewCaches" />
+
+                            <View
+                                android:id="@+id/assetView"
+                                android:layout_width="0dp"
+                                android:layout_height="45dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                               app:layout_constraintTop_toTopOf="@+id/textViewSett"
+                                app:layout_constraintBottom_toBottomOf="@+id/textViewSett"/>
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/imageViewAssetHelp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_help"
-                                android:layout_marginStart="6dp"
                                 android:padding="6dp"
+                                android:src="@drawable/ic_help"
                                 app:layout_constraintBottom_toBottomOf="@id/textViewSett"
                                 app:layout_constraintStart_toEndOf="@id/textViewSett"
                                 app:layout_constraintTop_toTopOf="@id/textViewSett" />
+
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/imageViewAsset"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="15dp"
-                                app:tint="@color/text_color_gray"
-                                android:paddingStart="20dp"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="15dp"
                                 android:src="@drawable/ic_forward"
                                 android:tint="@color/small_icon"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/viewCaches" />
+                                app:layout_constraintTop_toBottomOf="@+id/viewCaches"
+                                app:tint="@color/text_color_gray" />
 
                             <View
                                 android:id="@+id/viewAsset"
@@ -1665,13 +1657,13 @@
                                 android:id="@+id/textViewThemes"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp"
                                 android:layout_marginStart="30dp"
+                                android:layout_marginTop="10dp"
                                 android:drawablePadding="@dimen/_3sdp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Theme"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/viewAsset" />
 
@@ -1679,14 +1671,15 @@
                                 android:id="@+id/textViewTheme"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="15dp"
-                                android:fontFamily="@font/sf_medium"
-                                android:textColor="@color/white"
-                                android:textSize="16sp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="15dp"
                                 android:drawablePadding="6dp"
+                                android:fontFamily="@font/sf_medium"
+                                android:text="Default"
+                                android:textColor="@color/white"
+                                android:textSize="14dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/viewAsset"
-                                android:text="Default" />
+                                app:layout_constraintTop_toBottomOf="@+id/viewAsset" />
 
                             <View
                                 android:id="@+id/viewTheme"
@@ -1702,13 +1695,13 @@
                                 android:id="@+id/textViewAppearences"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp"
                                 android:layout_marginStart="30dp"
+                                android:layout_marginTop="10dp"
                                 android:drawablePadding="@dimen/_3sdp"
                                 android:fontFamily="@font/sf_medium"
                                 android:text="Appearence"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_13ssp"
+                                android:textSize="14dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/viewTheme" />
 
@@ -1716,14 +1709,15 @@
                                 android:id="@+id/textViewAppearence"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="15dp"
-                                android:fontFamily="@font/sf_medium"
-                                android:textColor="@color/white"
-                                android:textSize="16sp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="15dp"
                                 android:drawablePadding="6dp"
+                                android:fontFamily="@font/sf_medium"
+                                android:text="Dark"
+                                android:textColor="@color/white"
+                                android:textSize="14dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/viewTheme"
-                                android:text="Dark" />
+                                app:layout_constraintTop_toBottomOf="@+id/viewTheme" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

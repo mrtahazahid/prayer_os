@@ -27,10 +27,10 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:src="@drawable/ic_mike"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -41,11 +41,12 @@
                     android:id="@+id/textViewTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="16dp"
                     android:fontFamily="@font/sf_bold"
                     android:text="Fajr"
                     android:textColor="@color/white"
                     android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
                     app:layout_constraintStart_toEndOf="@+id/imageView"
                     app:layout_constraintTop_toTopOf="@id/imageView" />
 
@@ -53,23 +54,34 @@
                     android:id="@+id/textViewTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="6dp"
                     android:fontFamily="@font/sf_regular"
                     android:text="5:37 AM"
                     android:textColor="@color/text_color_gray"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageViewDropDownMenu"
                     app:layout_constraintEnd_toStartOf="@id/imageViewDropDownMenu"
-                    app:layout_constraintTop_toTopOf="@id/imageView" />
+                    app:layout_constraintTop_toTopOf="@+id/imageViewDropDownMenu" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imageViewDropDownMenu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginEnd="15dp"
                     android:src="@drawable/ic_forward"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+                <View
+                    android:id="@+id/view5"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="55dp"
+                    android:background="@color/view_separator"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -133,7 +145,7 @@
                     android:id="@+id/view"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:background="@color/view_separator"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/textViewNotificationSoundTitle"
@@ -186,7 +198,7 @@
                     android:id="@+id/view1"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:background="@color/view_separator"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/textViewReminderSoundTitle"
@@ -552,18 +564,18 @@
                     android:layout_height="wrap_content"
                     app:constraint_referenced_ids="textViewSecondReminderSetTime,cardViewSecondReminder,textViewSecondReminderTimeTitle,imageViewSecondReminderTimeHelp," />
 
-
+                <View
+                    android:id="@+id/view4"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="50dp"
+                    android:background="@color/view_separator"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:id="@+id/view4"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginStart="50dp"
-                android:background="@color/view_separator"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/detailViews" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

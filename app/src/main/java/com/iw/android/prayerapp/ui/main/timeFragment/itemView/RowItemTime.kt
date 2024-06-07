@@ -106,7 +106,7 @@ class RowItemTime(
 
             _binding.mainView.id -> {
                 if (!isViewShow) {
-                    _binding.imageViewDropDownMenu.setImageResource(R.drawable.ic_drop_down)
+                    _binding.imageViewDropDownMenu.setImageDrawable(ContextCompat.getDrawable(_binding.textViewTime.context,R.drawable.ic_down))
                     _binding.detailViews.visibility = View.VISIBLE
                     recyclerView.smoothScrollToPosition(0)
                     _binding.textViewTime.setTextColor(
@@ -118,7 +118,7 @@ class RowItemTime(
                     isViewShow = true
                 } else {
                     _binding.detailViews.visibility = View.GONE
-                    _binding.imageViewDropDownMenu.setImageResource(R.drawable.ic_forward)
+                    _binding.imageViewDropDownMenu.setImageDrawable(ContextCompat.getDrawable(_binding.textViewTime.context,R.drawable.ic_forward))
                     _binding.textViewTime.setTextColor(
                         ContextCompat.getColorStateList(
                             _binding.textViewTime.context,
@@ -131,7 +131,7 @@ class RowItemTime(
 
             _binding.imageViewDropDownMenu.id -> {
                 if (!isViewShow) {
-                    _binding.imageViewDropDownMenu.setImageResource(R.drawable.ic_drop_down)
+                    _binding.imageViewDropDownMenu.setImageDrawable(ContextCompat.getDrawable(_binding.textViewTime.context,R.drawable.ic_down))
                     _binding.detailViews.visibility = View.VISIBLE
                     recyclerView.smoothScrollToPosition(0)
                     _binding.textViewTime.setTextColor(
@@ -143,7 +143,7 @@ class RowItemTime(
                     isViewShow = true
                 } else {
                     _binding.detailViews.visibility = View.GONE
-                    _binding.imageViewDropDownMenu.setImageResource(R.drawable.ic_forward)
+                    _binding.imageViewDropDownMenu.setImageDrawable(ContextCompat.getDrawable(_binding.textViewTime.context,R.drawable.ic_forward))
                     _binding.textViewTime.setTextColor(
                         ContextCompat.getColorStateList(
                             _binding.textViewTime.context,
@@ -263,6 +263,8 @@ class RowItemTime(
             }
         }
         _binding.view4.visibility = if (data.title == "Last Third") View.GONE else View.VISIBLE
+        _binding.view5.visibility = if (data.title == "Last Third") View.GONE else View.VISIBLE
+
         val color = if (data.isCurrentNamaz) ContextCompat.getColorStateList(
             _binding.textViewTime.context,
             R.color.yellow_text

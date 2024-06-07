@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             app:itemActiveIndicatorStyle="@color/white"
-            app:itemBackground="@color/bg_color"
+            app:itemBackground="@color/black"
             app:itemTextColor="@color/bottom_selector_text"
             app:itemIconTint="@color/bottom_selector_text"
             app:labelVisibilityMode="labeled"
