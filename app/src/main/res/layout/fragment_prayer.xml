@@ -172,7 +172,7 @@
                         android:gravity="center"
                         android:text="15 Jumada"
                         android:textColor="@color/yellow_text"
-                        android:textSize="@dimen/_18ssp" />
+                        android:textSize="@dimen/_22ssp" />
 
 
                 </LinearLayout>
@@ -181,7 +181,7 @@
                     android:id="@id/textViewCity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
                     android:fontFamily="@font/sf_regular"
                     android:text="Karachi"
                     android:textColor="@color/yellow_text"

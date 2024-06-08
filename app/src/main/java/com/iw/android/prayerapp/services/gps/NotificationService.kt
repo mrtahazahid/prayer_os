@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.service.notification.NotificationListenerService
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -69,10 +70,21 @@ class NotificationService : Service() {
             }
 
             val userLatLong = prefrence.getUserLatLong()
+            var selectedPrayerDate = Date()
             val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
                 userLatLong?.latitude ?: 0.0,
                 userLatLong?.longitude ?: 0.0, method!!
             )
+
+            val getPrayerTime1 = GetAdhanDetails.getPrayTime(
+                userLatLong?.latitude ?: 0.0,
+                userLatLong?.longitude ?: 0.0,
+                method ?: CalculationMethod.NORTH_AMERICA.parameters.copy(
+                    madhab = madhab ?: Madhab.HANAFI
+                ),
+                selectedPrayerDate
+            )
+
 
             prayerList = arrayListOf(
                 NotificationPrayerTime(
@@ -99,8 +111,8 @@ class NotificationService : Service() {
                     "Isha",
                     convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())
                 ),
-                NotificationPrayerTime("Midnight", "11:42 PM"),
-                NotificationPrayerTime("LastThird", "01:40 AM")
+                NotificationPrayerTime("Mid night", getPrayerTime1[6]),
+                NotificationPrayerTime("Last third", getPrayerTime1[7])
             )
 
             while (true) {
@@ -256,7 +268,7 @@ class NotificationService : Service() {
         val currentTime = millisToTimeFormat(System.currentTimeMillis())
 
         for (time in prayerList) {
-            val notificationDetail: CurrentNamazNotificationData = when (time.currentNamazName) {
+            val notificationDetail: CurrentNamazNotificationData? = when (time.currentNamazName) {
                 "Fajr" -> {
                     if (prefrence.getFajrCurrentNamazNotificationData() != null) {
                         prefrence.getFajrCurrentNamazNotificationData()!!
@@ -353,6 +365,46 @@ class NotificationService : Service() {
                     }
                 }
 
+                "Mid night" -> {
+                    if (prefrence.getMidnightCurrentNamazNotificationData() != null) {
+                        prefrence.getMidnightCurrentNamazNotificationData()!!
+
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Mid night",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            isSoundSelected = false,
+                            isForAdhan = true,
+                            isVibrate = false,
+                            isSilent = false,
+                            isOff = false,
+                            sound = R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
+                "Last third" -> {
+                    if (prefrence.getLastNightCurrentNamazNotificationData() != null) {
+                        prefrence.getLastNightCurrentNamazNotificationData()!!
+
+                    } else {
+                        CurrentNamazNotificationData(
+                            "Last third",
+                            "Adhan",
+                            "Tones",
+                            0,
+                            isSoundSelected = false,
+                            isForAdhan = true,
+                            isVibrate = false,
+                            isSilent = false,
+                            isOff = false,
+                            sound = R.raw.adhan_abdul_basit
+                        )
+                    }
+                }
+
                 else -> {
                     CurrentNamazNotificationData(
                         "",
@@ -369,47 +421,51 @@ class NotificationService : Service() {
                 }
             }
             val specifiedTimes = prefrence.getNotificationData()
+            Log.d("notificationDetail",notificationDetail.toString())
             if (specifiedTimes.isNotEmpty()) {
                 for ((index, specifiedTime) in specifiedTimes.withIndex()) {
-                    if (specifiedTime.namazTime != "") {
+Log.d("s",(currentTime == time.currentNamazTime).toString())
                         if (currentTime == time.currentNamazTime) {
-                            if (!notificationDetail.isOff) {
+                            if (notificationDetail?.isOff !=true) {
                                 notifications.notify(
-                                    notificationDetail.currentNamazName, "Namaz Time",
-                                    notificationDetail.sound ?: R.raw.adhan_abdul_basit,
-                                    notificationDetail.isVibrate,
-                                    notificationDetail.isSilent
+                                    time.currentNamazName, "Namaz Time",
+                                    notificationDetail?.sound ?: R.raw.adhan_abdul_basit,
+                                    notificationDetail?.isVibrate?:false,
+                                    notificationDetail?.isSilent?:false
                                 )
                                 sendNotification(applicationContext)
                                 prefrence.removeNotificationData(index)
                                 delay(1500)
                                 break
 
-                            } else if (isTimeMatch(specifiedTime.namazTime)) {
-                                if(specifiedTime.notificationSound?.isOff != true){
-                                    notifications.notify(
-                                        specifiedTime.namazName, "Namaz Time",
-                                        specifiedTime.notificationSound?.sound
-                                            ?: R.raw.adhan_abdul_basit,
-                                        specifiedTime.notificationSound?.isVibrate ?: false,
-                                        specifiedTime.notificationSound?.isSilent
-                                            ?: false
-                                    )
-                                    sendNotification(applicationContext)
-                                    prefrence.removeNotificationData(index)
-                                    delay(1500)
-                                    break
+                            } else if (specifiedTime.namazTime != "") {
+                                if (isTimeMatch(specifiedTime.namazTime)) {
+                                    if (specifiedTime.notificationSound?.isOff != true) {
+                                        notifications.notify(
+                                            specifiedTime.namazName, "Namaz Time",
+                                            specifiedTime.notificationSound?.sound
+                                                ?: R.raw.adhan_abdul_basit,
+                                            specifiedTime.notificationSound?.isVibrate ?: false,
+                                            specifiedTime.notificationSound?.isSilent
+                                                ?: false
+                                        )
+                                        sendNotification(applicationContext)
+                                        prefrence.removeNotificationData(index)
+                                        delay(1500)
+                                        break
+                                    }
                                 }
                             }
                         } else {
                             continue
                         }
-                    }
+
                 }
             }
 
         }
     }
+
 
     private suspend fun checkIqamaTime() {
         when (prefrence.getIqamaFajrDetail()?.iqamaType) {

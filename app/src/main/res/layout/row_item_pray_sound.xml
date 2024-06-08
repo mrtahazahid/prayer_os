@@ -6,22 +6,12 @@
 
     </data>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:overScrollMode="ifContentScrolls">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#1c1c1e">
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/mainView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
+                android:background="#1c1c1e"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
@@ -75,8 +65,8 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/imageViewDropDownMenu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_margin="15dp"
                         android:src="@drawable/ic_forward"
                         android:tint="@color/small_icon"
@@ -97,22 +87,16 @@
                     app:layout_constraintEnd_toStartOf="@id/endView"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <View
+                    android:id="@+id/view4"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/view_separator"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/textViewTitle"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:id="@+id/view4"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="@color/view_separator"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-
 
 </layout>

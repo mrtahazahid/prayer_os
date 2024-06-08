@@ -165,6 +165,25 @@ abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
             repository.saveIshaCurrentNamazNotificationData(data)
         }
 
+    suspend fun getMidNightCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        repository.getMidNightCurrentNamazNotificationData()
+
+    fun saveMidNightCurrentNamazNotificationData(data: CurrentNamazNotificationData) =
+        viewModelScope.launch {
+            repository.saveMidNightCurrentNamazNotificationData(data)
+        }
+
+
+
+    suspend fun getLastThirdCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        repository.getLastThirdCurrentNamazNotificationData()
+
+    fun saveLastThirdCurrentNamazNotificationData(data: CurrentNamazNotificationData) =
+        viewModelScope.launch {
+            repository.saveLastThirdCurrentNamazNotificationData(data)
+        }
+
+
 
     suspend fun saveIqamaFajrDetail(prayerDetail: IqamaData) {
         repository.saveIqamaFajrDetail(prayerDetail)

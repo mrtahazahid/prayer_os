@@ -223,6 +223,35 @@ class DataPreference @Inject constructor(
             CurrentNamazNotificationData::class.java
         )
 
+    suspend fun saveMidnightCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        setStringData(
+            MIDNIGHT_INFO,
+            Gson().toJson(currentNamazNotificationData)
+        )
+
+    }
+
+    suspend fun getMidnightCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        Gson().fromJson(
+            getStringData(MIDNIGHT_INFO),
+            CurrentNamazNotificationData::class.java
+        )
+
+    suspend fun saveLastNightCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        setStringData(
+            LASTTHIRD_INFO,
+            Gson().toJson(currentNamazNotificationData)
+        )
+
+    }
+
+    suspend fun getLastNightCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        Gson().fromJson(
+            getStringData(LASTTHIRD_INFO),
+            CurrentNamazNotificationData::class.java
+        )
+
+
 
     suspend fun getIqamaNotificationSetting(): IqamaNotificationData? {
         return Gson().fromJson(

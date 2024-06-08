@@ -102,8 +102,8 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             backgroundProgressBarColor = resources.getColor(R.color.progress_bg)
 
             // Set Width
-            progressBarWidth = 22f // in DP
-            backgroundProgressBarWidth = 22f // in DP
+            progressBarWidth = 21f // in DP
+            backgroundProgressBarWidth = 21f // in DP
 
             // Other
             roundBorder = true
@@ -756,6 +756,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                     toggleImageVisibility()
                 } else {
                     notifications.stopPrayer()
+                    _binding?.imageViewPause?.gone()
                 }
 
             }

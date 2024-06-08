@@ -124,27 +124,6 @@ class IslamicHolidayFragment : BaseFragment(R.layout.fragment_islamic_holiday), 
         )
         islamicHolidayArray.add(
             IslamicHolidayResponse(
-                "Hajj",
-                "8 Dhu'l-Hijjah 1445",
-                "14 June 2024"
-            )
-        )
-        islamicHolidayArray.add(
-            IslamicHolidayResponse(
-                "Day of Arafah",
-                "9 Dhu'l-Hijjah 1445",
-                "15 June 2024"
-            )
-        )
-        islamicHolidayArray.add(
-            IslamicHolidayResponse(
-                "Eid al-Adha",
-                "10 Dhu'l-Hijjah 1445",
-                "16 June 2024"
-            )
-        )
-        islamicHolidayArray.add(
-            IslamicHolidayResponse(
                 "New Year",
                 "1 Muharram 1446",
                 "7 July 2024"
@@ -157,5 +136,27 @@ class IslamicHolidayFragment : BaseFragment(R.layout.fragment_islamic_holiday), 
                 "16 July 2024"
             )
         )
+        islamicHolidayArray.add(
+            IslamicHolidayResponse(
+                "Isra' & Mi'raj",
+                "27 Rajab 1446",
+                "27 Jaanuary 2025"
+            )
+        )
+        islamicHolidayArray.add(
+            IslamicHolidayResponse(
+                "Ramadan",
+                "1 Ramadan 1446",
+                "1 March 2025"
+            )
+        )
+        islamicHolidayArray.add(
+            IslamicHolidayResponse(
+                "Eid al-Fitr",
+                "1 Shawwal 1446",
+                "30 March 2024"
+            )
+        )
+
     }
 }

@@ -98,8 +98,6 @@ class CopyBottomSheet :
                 copy()
 
             }
-
-
         }
 
     }
@@ -109,7 +107,7 @@ class CopyBottomSheet :
             val fajrData = viewModel.getFajrDetail()
             fajrData!!.notificationSound?.sound = sound
             fajrData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            fajrData.notificationSound?.soundToneName = if (isForAdhan) soundName else "Tone"
+            fajrData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
             fajrData.notificationSound?.position = selectedPosition
             fajrData.notificationSound?.isSoundSelected = isSoundSelected
             fajrData.notificationSound?.isSilent = isSilent
@@ -122,7 +120,7 @@ class CopyBottomSheet :
                 notificationSound = CurrentNamazNotificationData(
                     currentNamazName = "Fajr",
                     soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (isForAdhan) soundName else "Tone",
+                    soundToneName = if (!isForAdhan) soundName else "Tone",
                     position = selectedPosition,
                     isSoundSelected = isSoundSelected,
                     isForAdhan = isForAdhan,
@@ -139,7 +137,7 @@ class CopyBottomSheet :
             val sunRiseData = viewModel.getSunriseDetail()
             sunRiseData!!.notificationSound?.sound = sound
             sunRiseData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            sunRiseData.notificationSound?.soundToneName = if (isForAdhan) soundName else "Tone"
+            sunRiseData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
             sunRiseData.notificationSound?.position = selectedPosition
             sunRiseData.notificationSound?.isSoundSelected = isSoundSelected
             sunRiseData.notificationSound?.isSilent = isSilent
@@ -152,7 +150,7 @@ class CopyBottomSheet :
                 notificationSound = CurrentNamazNotificationData(
                     currentNamazName = "Sunrise",
                     soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (isForAdhan) soundName else "Tone",
+                    soundToneName = if (!isForAdhan) soundName else "Tone",
                     position = selectedPosition,
                     isSoundSelected = isSoundSelected,
                     isForAdhan = isForAdhan,
@@ -169,7 +167,7 @@ class CopyBottomSheet :
             val duhrData = viewModel.getDuhrDetail()
             duhrData!!.notificationSound?.sound = sound
             duhrData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            duhrData.notificationSound?.soundToneName = if (isForAdhan) soundName else "Tone"
+            duhrData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
             duhrData.notificationSound?.position = selectedPosition
             duhrData.notificationSound?.isSoundSelected = isSoundSelected
             duhrData.notificationSound?.isSilent = isSilent
@@ -182,7 +180,7 @@ class CopyBottomSheet :
                 notificationSound = CurrentNamazNotificationData(
                     currentNamazName = "Dhuhr",
                     soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (isForAdhan) soundName else "Tone",
+                    soundToneName = if (!isForAdhan) soundName else "Tone",
                     position = selectedPosition,
                     isSoundSelected = isSoundSelected,
                     isForAdhan = isForAdhan,
@@ -199,7 +197,7 @@ class CopyBottomSheet :
             val asrData = viewModel.getAsrDetail()
             asrData!!.notificationSound?.sound = sound
             asrData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            asrData.notificationSound?.soundToneName = if (isForAdhan) soundName else "Tone"
+            asrData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
             asrData.notificationSound?.position = selectedPosition
             asrData.notificationSound?.isSoundSelected = isSoundSelected
             asrData.notificationSound?.isSilent = isSilent
@@ -212,7 +210,7 @@ class CopyBottomSheet :
                 notificationSound = CurrentNamazNotificationData(
                     currentNamazName = "Asr",
                     soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (isForAdhan) soundName else "Tone",
+                    soundToneName = if (!isForAdhan) soundName else "Tone",
                     position = selectedPosition,
                     isSoundSelected = isSoundSelected,
                     isForAdhan = isForAdhan,
@@ -229,7 +227,7 @@ class CopyBottomSheet :
             val maghribData = viewModel.getMagribDetail()
             maghribData!!.notificationSound?.sound = sound
             maghribData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            maghribData.notificationSound?.soundToneName = if (isForAdhan) soundName else "Tone"
+            maghribData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
             maghribData.notificationSound?.position = selectedPosition
             maghribData.notificationSound?.isSoundSelected = isSoundSelected
             maghribData.notificationSound?.isSilent = isSilent
@@ -242,7 +240,7 @@ class CopyBottomSheet :
                 notificationSound = CurrentNamazNotificationData(
                     currentNamazName = "Maghrib",
                     soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (isForAdhan) soundName else "Tone",
+                    soundToneName = if (!isForAdhan) soundName else "Tone",
                     position = selectedPosition,
                     isSoundSelected = isSoundSelected,
                     isForAdhan = isForAdhan,
@@ -259,7 +257,7 @@ class CopyBottomSheet :
             val ishaData = viewModel.getIshaDetail()
             ishaData!!.notificationSound?.sound = sound
             ishaData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            ishaData.notificationSound?.soundToneName = if (isForAdhan) soundName else "Tone"
+            ishaData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
             ishaData.notificationSound?.position = selectedPosition
             ishaData.notificationSound?.isSoundSelected = isSoundSelected
             ishaData.notificationSound?.isSilent = isSilent
@@ -272,7 +270,7 @@ class CopyBottomSheet :
                 notificationSound = CurrentNamazNotificationData(
                     currentNamazName = "Isha",
                     soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (isForAdhan) soundName else "Tone",
+                    soundToneName = if (!isForAdhan) soundName else "Tone",
                     position = selectedPosition,
                     isSoundSelected = isSoundSelected,
                     isForAdhan = isForAdhan,
@@ -289,7 +287,7 @@ class CopyBottomSheet :
             val midnightData = viewModel.getMidNightDetail()
             midnightData!!.notificationSound?.sound = sound
             midnightData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            midnightData.notificationSound?.soundToneName = if (isForAdhan) soundName else "Tone"
+            midnightData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
             midnightData.notificationSound?.position = selectedPosition
             midnightData.notificationSound?.isSoundSelected = isSoundSelected
             midnightData.notificationSound?.isSilent = isSilent
@@ -302,7 +300,7 @@ class CopyBottomSheet :
                 notificationSound = CurrentNamazNotificationData(
                     currentNamazName = "Mid night",
                     soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (isForAdhan) soundName else "Tone",
+                    soundToneName = if (!isForAdhan) soundName else "Tone",
                     position = selectedPosition,
                     isSoundSelected = isSoundSelected,
                     isForAdhan = isForAdhan,
@@ -319,7 +317,7 @@ class CopyBottomSheet :
             val lastThirdData = viewModel.getLastNightDetail()
             lastThirdData!!.notificationSound?.sound = sound
             lastThirdData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            lastThirdData.notificationSound?.soundToneName = if (isForAdhan) soundName else "Tone"
+            lastThirdData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
             lastThirdData.notificationSound?.position = selectedPosition
             lastThirdData.notificationSound?.isSoundSelected = isSoundSelected
             lastThirdData.notificationSound?.isSilent = isSilent
@@ -332,7 +330,7 @@ class CopyBottomSheet :
                 notificationSound = CurrentNamazNotificationData(
                     currentNamazName = "Last Night",
                     soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (isForAdhan) soundName else "Tone",
+                    soundToneName = if (!isForAdhan) soundName else "Tones",
                     position = selectedPosition,
                     isSoundSelected = isSoundSelected,
                     isForAdhan = isForAdhan,
@@ -506,6 +504,70 @@ class CopyBottomSheet :
                 isForAdhan = isForAdhan
             )
             viewModel.saveIshaCurrentNamazNotificationData(ishaData)
+        }
+
+        if (viewModel.getMidNightCurrentNamazNotificationData() != null) {
+            val ishaData = viewModel.getMidNightCurrentNamazNotificationData()
+            ishaData?.sound = sound
+            if (isForAdhan) {
+                ishaData?.soundName = soundName
+                ishaData?.soundToneName = "Tones"
+            } else {
+                ishaData?.soundName = "Adhan"
+                ishaData?.soundToneName = soundName
+            }
+            ishaData?.position = selectedPosition
+            ishaData?.isSilent = isSilent
+            ishaData?.isVibrate = isVibrate
+            ishaData?.isOff = isOff
+            ishaData?.isSoundSelected = isSoundSelected
+            viewModel.saveMidNightCurrentNamazNotificationData(ishaData!!)
+        } else {
+            val ishaData = CurrentNamazNotificationData(
+                sound = sound,
+                soundName = if (isForAdhan) soundName else "Adhan",
+                soundToneName = if (!isForAdhan) soundName else "Tones",
+                isSilent = isSilent,
+                isVibrate = isVibrate,
+                isOff = isOff,
+                currentNamazName = "Isha",
+                position = selectedPosition,
+                isSoundSelected = isSoundSelected,
+                isForAdhan = isForAdhan
+            )
+            viewModel.saveMidNightCurrentNamazNotificationData(ishaData)
+        }
+
+        if (viewModel.getLastThirdCurrentNamazNotificationData() != null) {
+            val ishaData = viewModel.getLastThirdCurrentNamazNotificationData()
+            ishaData?.sound = sound
+            if (isForAdhan) {
+                ishaData?.soundName = soundName
+                ishaData?.soundToneName = "Tones"
+            } else {
+                ishaData?.soundName = "Adhan"
+                ishaData?.soundToneName = soundName
+            }
+            ishaData?.position = selectedPosition
+            ishaData?.isSilent = isSilent
+            ishaData?.isVibrate = isVibrate
+            ishaData?.isOff = isOff
+            ishaData?.isSoundSelected = isSoundSelected
+            viewModel.saveLastThirdCurrentNamazNotificationData(ishaData!!)
+        } else {
+            val ishaData = CurrentNamazNotificationData(
+                sound = sound,
+                soundName = if (isForAdhan) soundName else "Adhan",
+                soundToneName = if (!isForAdhan) soundName else "Tones",
+                isSilent = isSilent,
+                isVibrate = isVibrate,
+                isOff = isOff,
+                currentNamazName = "Isha",
+                position = selectedPosition,
+                isSoundSelected = isSoundSelected,
+                isForAdhan = isForAdhan
+            )
+            viewModel.saveLastThirdCurrentNamazNotificationData(ishaData)
         }
 
         delay(5000)

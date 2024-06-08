@@ -267,6 +267,24 @@ abstract class BaseRepository(
     suspend fun getIshaCurrentNamazNotificationData(): CurrentNamazNotificationData? =
         preferences.getIshaCurrentNamazNotificationData()
 
+    suspend fun saveMidNightCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        preferences.saveMidnightCurrentNamazNotificationData(currentNamazNotificationData)
+
+    }
+
+    suspend fun getMidNightCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        preferences.getMidnightCurrentNamazNotificationData()
+
+
+    suspend fun saveLastThirdCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
+        preferences.saveMidnightCurrentNamazNotificationData(currentNamazNotificationData)
+
+    }
+
+    suspend fun getLastThirdCurrentNamazNotificationData(): CurrentNamazNotificationData? =
+        preferences.getMidnightCurrentNamazNotificationData()
+
+
 
     suspend fun saveIqamaFajrDetail(namazDetail: IqamaData) {
         preferences.setStringData(DataPreference.IQAMA_FAJR, Gson().toJson(namazDetail))

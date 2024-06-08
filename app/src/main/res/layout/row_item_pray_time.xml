@@ -58,7 +58,7 @@
                     android:fontFamily="@font/sf_regular"
                     android:text="5:37 AM"
                     android:textColor="@color/text_color_gray"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageViewDropDownMenu"
                     app:layout_constraintEnd_toStartOf="@id/imageViewDropDownMenu"
                     app:layout_constraintTop_toTopOf="@+id/imageViewDropDownMenu" />
@@ -115,7 +115,6 @@
                     android:id="@+id/imageViewNotificationHelp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
                     android:padding="6dp"
                     android:src="@drawable/ic_help"
                     app:layout_constraintBottom_toBottomOf="@id/textViewNotificationSoundTitle"
@@ -128,18 +127,28 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="8dp"
-                    android:drawableEnd="@drawable/ic_forward"
-                    android:drawablePadding="4dp"
                     android:fontFamily="@font/sf_regular"
                     android:gravity="end"
                     android:textColor="@color/app_grey"
                     android:textSize="14sp"
                     app:drawableTint="@color/app_grey"
                     app:layout_constraintBottom_toBottomOf="@+id/textViewNotificationSoundTitle"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imageViewNotificationReminderDropDownMenu"
                     app:layout_constraintStart_toEndOf="@+id/imageViewNotificationHelp"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Tone" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewNotificationReminderDropDownMenu"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_forward"
+                    app:tint="@color/app_grey"
+                    app:layout_constraintBottom_toBottomOf="@+id/textViewNotificationSound"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textViewNotificationSound" />
+
 
                 <View
                     android:id="@+id/view"
@@ -169,7 +178,6 @@
                     android:id="@+id/imageViewReminderHelp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
                     android:padding="6dp"
                     android:src="@drawable/ic_help"
                     app:layout_constraintBottom_toBottomOf="@id/textViewReminderSoundTitle"
@@ -182,17 +190,26 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="10dp"
-                    android:drawableEnd="@drawable/ic_forward"
-                    android:drawablePadding="4dp"
                     android:fontFamily="@font/sf_regular"
                     android:gravity="end"
                     android:textColor="@color/app_grey"
                     android:textSize="14sp"
                     app:drawableTint="@color/app_grey"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imageViewReminderDropDownMenu"
                     app:layout_constraintStart_toEndOf="@+id/imageViewReminderHelp"
                     app:layout_constraintTop_toBottomOf="@id/view"
                     tools:text="Tone" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewReminderDropDownMenu"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_forward"
+                    app:tint="@color/app_grey"
+                    app:layout_constraintBottom_toBottomOf="@+id/textViewReminderSound"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textViewReminderSound" />
 
                 <View
                     android:id="@+id/view1"
@@ -222,7 +239,6 @@
                     android:id="@+id/imageViewReminderTimeHelp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
                     android:padding="6dp"
                     android:src="@drawable/ic_help"
                     app:layout_constraintBottom_toBottomOf="@id/textViewReminderTimeTitle"
@@ -359,7 +375,6 @@
                     android:id="@+id/imageViewSecondReminderTimeHelp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
                     android:padding="6dp"
                     android:src="@drawable/ic_help"
                     app:layout_constraintBottom_toBottomOf="@id/textViewSecondReminderTimeTitle"
@@ -424,7 +439,6 @@
                     android:id="@+id/imageViewDuaHelp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
                     android:padding="6dp"
                     android:src="@drawable/ic_help"
                     app:layout_constraintBottom_toBottomOf="@id/textViewDuaReminder"
