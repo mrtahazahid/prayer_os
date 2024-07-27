@@ -1,8 +1,8 @@
 package com.iw.android.prayerapp.utils
 
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +19,8 @@ class AssetDialog : DialogFragment(), OnItemClick {
 
     private var viewTypeArray = ArrayList<ViewType<*>>()
     private var mediaPlayer: MediaPlayer? = null
-    val arraList = arrayListOf<SoundData>()
+    var arraList = arrayListOf<SoundData>()
+    private var previousPosition: Int? = null
 
     val adapter by lazy {
         GenericListAdapter(object : OnItemClickListener<ViewType<*>> {
@@ -51,13 +52,13 @@ class AssetDialog : DialogFragment(), OnItemClick {
 
     private fun initialize() {
         binding.recyclerView.adapter = adapter
+        arraList = GetAdhanSound.assetList
     }
 
     private fun setObserver() {
         viewTypeArray.clear()
 
-        arraList.addAll(GetAdhanSound.adhanSound)
-        arraList.addAll(GetAdhanSound.notificationSound)
+
         for (data in arraList) {
             viewTypeArray.add(
                 RowItemAsset(data, this)
@@ -90,29 +91,43 @@ class AssetDialog : DialogFragment(), OnItemClick {
 
 
     override fun onClick(isSoundOn: Boolean, data: SoundData, position: Int) {
-        for (checked in arraList) {
-            checked.isSoundSelected = false
-        }
-
-        // Select the clicked item
-        arraList[position].isSoundSelected = true
-        // Notify the adapter about the change in the entire dataset
-        binding.recyclerView.adapter?.notifyDataSetChanged()
-        //stopMediaPlayer()
-        val uri =  Uri.parse("android.resource://" + requireContext().packageName + "/" + data.soundFile)
-        mediaPlayer = MediaPlayer.create(requireContext(),uri )
-        // Create a new MediaPlayer instance
+        Log.d("isSoundOn",isSoundOn.toString())
         if (isSoundOn) {
             stopMediaPlayer()
-        } else {
-            mediaPlayer?.start()
+            return
+        }
+        previousPosition?.let {
+            arraList[it].isSoundSelected = false
+            adapter.notifyItemChanged(it)
         }
 
+        // Update current item
+        arraList[position].isSoundSelected = true
+        adapter.notifyItemChanged(position)
+        previousPosition = position
+
+        stopMediaPlayer()
+        mediaPlayer = MediaPlayer.create(requireContext(), data.soundFile)
+        startMediaPlayer()
 
         // Set an event listener to release the MediaPlayer when playback is completed
         mediaPlayer?.setOnCompletionListener {
             stopMediaPlayer()
+            arraList[position].isSoundSelected = false
+            adapter.notifyItemChanged(position)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopMediaPlayer()
 
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        stopMediaPlayer()
+    }
+
+
 }

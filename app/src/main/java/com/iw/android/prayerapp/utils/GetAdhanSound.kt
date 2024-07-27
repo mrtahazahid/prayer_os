@@ -9,6 +9,7 @@ object GetAdhanSound {
     val adhanSound = arrayListOf<SoundData>()
     val notificationSound = arrayListOf<SoundData>()
     val duaSound = arrayListOf<SoundData>()
+    val assetList = arrayListOf<SoundData>()
     var prayerSoundList = arrayListOf<PrayerSoundData>()
 
 
@@ -192,6 +193,18 @@ object GetAdhanSound {
         notificationSound.add(SoundData("Wake Up Long",R.raw.noti_wake_up_long,false))
         notificationSound.add(SoundData("Winds",R.raw.noti_winds,false))
         notificationSound.add(SoundData("Xylophone",R.raw.noti_xylophone,false))
+
+
+
+        for (sound in adhanSound){
+            sound.isSoundSelected = false
+            assetList.add(sound)
+        }
+
+        for (sound in notificationSound){
+            sound.isSoundSelected = false
+            assetList.add(sound)
+        }
 
         prayerSoundList.add(
             PrayerSoundData(

@@ -105,15 +105,15 @@ class RowItemIqama(
     }
 
     fun addMinutesToTime(currentTime: String, minutesToAdd: Int): String {
-        // Parse the current time string
-        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+        // Parse the current time string with optional leading zero for the hour
+        val formatter = DateTimeFormatter.ofPattern("[h:mm a][hh:mm a]")
         val parsedTime = LocalTime.parse(currentTime, formatter)
 
         // Add minutes to the parsed time
         val resultTime = parsedTime.plusMinutes(minutesToAdd.toLong())
 
         // Format the result time back to "hh:mm a" format
-        return resultTime.format(formatter)
+        return resultTime.format(DateTimeFormatter.ofPattern("h:mm a"))
     }
 
     private fun spinnerDua(binding: RowItemIqamaBinding) {
@@ -148,7 +148,7 @@ class RowItemIqama(
                 binding.cardViewIqamaAdjustmentTime.visibility = View.GONE
                 binding.cardViewIqamaTime.visibility = View.VISIBLE
                 binding.textViewIqamaSetTime.visibility = View.GONE
-                binding.textViewIqamaSetTime.text = "${data.iqamaTime?.iqamaMinutes} mins"
+                binding.textViewIqamaSetTime.text = if(data.iqamaTime?.iqamaMinutes != "off")"${data.iqamaTime?.iqamaMinutes} mins" else "off"
                 binding.spinnerIqamaReminderSwitch.setSelection(2)
 
             }
@@ -199,10 +199,11 @@ class RowItemIqama(
 
     private fun decrementDuaMinute(): String {
 
-        return if (iqamaReminderTime > 0) {
+        return if (iqamaReminderTime > 1) {
             iqamaReminderTime--
             "$iqamaReminderTime min"
         } else {
+            iqamaReminderTime =0
             "off"
         }
     }

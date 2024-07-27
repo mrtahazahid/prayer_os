@@ -36,4 +36,5 @@ abstract class BaseFragment(layout: Int) : Fragment(layout) {
         this.visibility = View.GONE
     }
 
+
 }

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.viewModels
 import com.iw.android.prayerapp.R
@@ -67,9 +68,18 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener,
 
     override fun initialize() {
         setRecyclerView()
+        setOnBackPressedListener()
 
     }
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
 
+
+                }
+            })
+    }
     override fun setObserver() {
         viewTypeArray.clear()
         for (data in viewModel.moreList) {

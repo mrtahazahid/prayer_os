@@ -476,6 +476,7 @@ class DataPreference @Inject constructor(
         val IQAMA_MAGHRIB = stringPreferencesKey("key_iqama_magrib")
         val IQAMA_ISHA = stringPreferencesKey("key_iqama_isha")
         val JUMMUAH_SETTING = stringPreferencesKey("key_jummuah_setting")
+        val TIME_DATA_SETTING = stringPreferencesKey("key_time_data_setting")
         val IQAMA_NOTIFICATION_SETTING = stringPreferencesKey("key_iqama_notification_setting")
         val IQAMA_DISPLAY_SETTING = stringPreferencesKey("key_iqama_display_setting")
         val APPLICATION_ID = "com.iw.android.prayerapp"

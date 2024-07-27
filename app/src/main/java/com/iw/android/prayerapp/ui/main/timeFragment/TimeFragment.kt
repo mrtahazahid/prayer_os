@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -78,6 +79,7 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener,
 
     override fun initialize() {
         setRecyclerView()
+        setOnBackPressedListener()
         lifecycleScope.launch {
             viewModel.getPrayList(
                 viewModel.userLatLong?.latitude ?: 0.0,
@@ -98,7 +100,15 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener,
 
 
     }
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
 
+
+                }
+            })
+    }
     override fun setObserver() {
         viewTypeArray.clear()
         for (data in viewModel.prayTimeArray) {
@@ -251,4 +261,5 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener,
 
         setObserver()
     }
+
 }

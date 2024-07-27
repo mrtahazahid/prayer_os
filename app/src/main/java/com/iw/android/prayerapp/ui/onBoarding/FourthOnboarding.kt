@@ -16,12 +16,16 @@ import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFourthOnboardingBinding
+import com.iw.android.prayerapp.extension.CustomDialog
+import com.iw.android.prayerapp.extension.MethodDialog
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
 
@@ -111,6 +115,42 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
                 Intent(requireContext(), MainActivity::class.java)
             )
             requireActivity().finish()
+        }
+
+
+        binding.txtMethod.setOnClickListener {
+            val location = GetAdhanDetails.getTimeZoneAndCity(requireContext(), lat, long)
+
+            MethodDialog(
+                requireContext(),
+                "Method",
+                "Calculation methods are entirely based \n on location, so it's very important to \n choose the method the best matches \n'${location?.city}'.If none of the method match \n your region, Moonsighting Committee \n or Muslim world League  are suitable \n defaults in most cases, if you notice a \nlarge difference between the prayer \n times in the app and those of your \n local masjid, especially for Fajr and \n Isha, your masjid may be using custom \n twilight angles to generate their prayer \n times, which can be adjusted in the\n Elevation Rule section.You may swipe \n the row and tap recommend to let the \n app suggest a calculation method."
+            ).show()
+
+        }
+
+
+        binding.textViwJurisprudence.setOnClickListener {
+
+
+            CustomDialog(
+                requireContext(),
+                "Jurisprudence",
+                "The School of thought used to \n calculate Asr.The ${"standard"} selection\n encompresses Maliki, Shafi'i, Hanbali,\n and Ja'fari schools of thought."
+            ).show()
+
+        }
+
+
+        binding.textViewElevation.setOnClickListener {
+
+
+            CustomDialog(
+                requireContext(),
+                "Elevation rule",
+                "Rule for approximating Fajr and Isha at \n high latitudes. Relevant for locations \n above 45° latitude and should match \n your local masjid rule."
+            ).show()
+
         }
 
     }
@@ -236,18 +276,27 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
 
     private fun setPrayerTime() {
         val getPrayerTime = GetAdhanDetails.getPrayTime(
-            lat, long, viewModel.method?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = Madhab.SHAFI),
+            lat,
+            long,
+            viewModel.method
+                ?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = Madhab.SHAFI),
             Date()
         )
 
-        binding.textViewFajrTime.text = getPrayerTime[0]
-        binding.textViewSunriseTime.text = getPrayerTime[1]
-        binding.textViewDuhrTime.text = getPrayerTime[2]
-        binding.textViewAsrTime.text = getPrayerTime[3]
-        binding.textViewMagribTime.text = getPrayerTime[4]
-        binding.textViewIshaTime.text = getPrayerTime[5]
+        binding.textViewFajrTime.text = formatTime(getPrayerTime[0])
+        binding.textViewSunriseTime.text = formatTime(getPrayerTime[1])
+        binding.textViewDuhrTime.text = formatTime(getPrayerTime[2])
+        binding.textViewAsrTime.text = formatTime(getPrayerTime[3])
+        binding.textViewMagribTime.text = formatTime(getPrayerTime[4])
+        binding.textViewIshaTime.text = formatTime(getPrayerTime[5])
     }
 
+    fun formatTime(time: String): String {
+        val inputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("h:mm", Locale.getDefault())
+        val date: Date = inputFormat.parse(time) ?: return time
+        return outputFormat.format(date)
+    }
 
     private fun setOnBackPressedListener() {
         requireActivity().onBackPressedDispatcher.addCallback(

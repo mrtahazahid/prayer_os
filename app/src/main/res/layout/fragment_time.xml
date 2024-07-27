@@ -127,21 +127,20 @@
                     <FrameLayout
                         android:id="@+id/frameLayoutRecyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/frameLayoutTabLayout">
 
-                        <androidx.recyclerview.widget.RecyclerView
+                        <com.iw.android.prayerapp.utils.NonScrollableRecyclerView
                             android:id="@+id/recyclerView"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:clipToPadding="false"
                             android:orientation="vertical"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            app:spanCount="2"
-                            tools:itemCount="1"
+                            tools:itemCount="2"
                             tools:listitem="@layout/row_item_pray_time" />
 
                     </FrameLayout>

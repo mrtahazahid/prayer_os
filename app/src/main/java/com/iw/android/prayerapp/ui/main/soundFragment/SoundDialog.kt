@@ -30,6 +30,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
     var listener: OnDataSelected? = null
     var sound: Int? = null
     var isForNotification = false
+    private var previousPosition: Int? = null
 
     private var notificationList = arrayListOf<SoundData>()
 
@@ -92,6 +93,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
         viewTypeArray.clear()
         notificationList = if (selectedItemPosition == 0) GetAdhanSound.adhanSound else GetAdhanSound.notificationSound
         for (data in notificationList) {
+            data.isSoundSelected = false
             viewTypeArray.add(
                 RowItemSound(data, this, selectedSound)
             )
@@ -133,14 +135,16 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
 
 
     override fun onClick(position: Int, data: SoundData) {
-        for (checked in notificationList) {
-            checked.isSoundSelected = false
+        previousPosition?.let {
+            notificationList[it].isSoundSelected = false
+            adapter.notifyItemChanged(it)
         }
 
-        // Select the clicked item
+        // Update current item
         notificationList[position].isSoundSelected = true
-        // Notify the adapter about the change in the entire dataset
-        binding.recyclerView.adapter?.notifyDataSetChanged()
+        adapter.notifyItemChanged(position)
+        previousPosition = position
+
         stopMediaPlayer()
         mediaPlayer = MediaPlayer.create(requireContext(), data.soundFile)
         // Create a new MediaPlayer instance
@@ -149,6 +153,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
         sound = data.soundFile
         // Start playing the selected sound
         mediaPlayer?.start()
+
 
         // Set an event listener to release the MediaPlayer when playback is completed
         mediaPlayer?.setOnCompletionListener {

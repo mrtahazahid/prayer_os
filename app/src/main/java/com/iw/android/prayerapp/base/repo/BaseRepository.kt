@@ -22,6 +22,7 @@ import com.iw.android.prayerapp.data.response.IqamaNotificationData
 import com.iw.android.prayerapp.data.response.JummuahData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.NotificationSettingData
+import com.iw.android.prayerapp.data.response.TimeData
 import com.iw.android.prayerapp.data.response.UserLatLong
 import kotlinx.coroutines.flow.first
 import javax.inject.Singleton
@@ -174,6 +175,18 @@ abstract class BaseRepository(
         return Gson().fromJson(
             preferences.getStringData(DataPreference.LASTTHIRD_INFO),
             NotificationData::class.java
+        )
+    }
+
+    suspend fun saveTimeSettingData(timeData: TimeData) {
+        preferences.setStringData(DataPreference.TIME_DATA_SETTING, Gson().toJson(timeData))
+
+    }
+
+    suspend fun getTimeSettingData(): TimeData? {
+        return Gson().fromJson(
+            preferences.getStringData(DataPreference.TIME_DATA_SETTING),
+            TimeData::class.java
         )
     }
 

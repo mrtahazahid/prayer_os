@@ -11,6 +11,7 @@ import com.iw.android.prayerapp.data.response.IqamaNotificationData
 import com.iw.android.prayerapp.data.response.JummuahData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.NotificationSettingData
+import com.iw.android.prayerapp.data.response.TimeData
 import com.iw.android.prayerapp.data.response.UserLatLong
 import kotlinx.coroutines.launch
 
@@ -106,6 +107,14 @@ abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
 
     suspend fun getUserLatLong(): UserLatLong? {
         return repository.getUserLatLong()
+    }
+
+    suspend fun setTimeData(value: TimeData) {
+        repository.saveTimeSettingData(value)
+    }
+
+    suspend fun getTimeData(): TimeData? {
+        return repository.getTimeSettingData()
     }
 
     fun setGeofenceRadius(value: Int) = viewModelScope.launch {

@@ -74,8 +74,8 @@ data class NotificationPrayerTime(
 data class NotificationData(
     var namazName: String = "",
     var namazTime: String = "",
-    var notificationSound: CurrentNamazNotificationData?=null,
-    var reminderSound: CurrentNamazNotificationData?=null,
+    var notificationSound: CurrentNamazNotificationData? = null,
+    var reminderSound: CurrentNamazNotificationData? = null,
     var reminderTimeMinutes: String = "off",
     var secondReminderTimeMinutes: String = "off",
     var reminderTime: String = "",
@@ -84,6 +84,16 @@ data class NotificationData(
     var duaType: String = DuaTypeEnum.OFF.getValue(),
     var duaTime: String = "",
     var createdDate: String = "",
+)
+
+data class TimeData(
+    var is24HourFormat: Boolean = false,
+    var isAutomaticIncrementHijri: Boolean = false,
+    var isPrayerAbbreviationEnabled: Boolean = false,
+    var hijriDays: String = "",
+    var hijriDaysCount: Int = 0,
+    var countUpTime: String = "",
+    var countUpCount: Int = 0,
 )
 
 data class MonthlyCalenderData(
@@ -97,6 +107,7 @@ data class MonthlyCalenderData(
     val ish: String,
     val hijri: String,
 )
+
 @Serializable
 data class CurrentNamazNotificationData(
     val currentNamazName: String,
@@ -114,6 +125,7 @@ data class CurrentNamazNotificationData(
 
 data class NotificationSettingData(
     val snoozeTime: String? = null,
+    val snoozeCount: Int? = null,
     val isAdhanDuaOn: Boolean? = null,
     val isPrayOnTap: Boolean? = null,
 

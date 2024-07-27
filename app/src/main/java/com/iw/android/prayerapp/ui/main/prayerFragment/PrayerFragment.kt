@@ -7,10 +7,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
@@ -91,6 +91,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     @SuppressLint("SimpleDateFormat")
     override fun initialize() {
         getMethod()
+        setOnBackPressedListener()
         binding.progressbar.apply {
             // or with gradient
             progressBarColorStart = resources.getColor(R.color.app_green)
@@ -109,6 +110,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             roundBorder = true
             startAngle = 180f
             progressDirection = CircularProgressBar.ProgressDirection.TO_RIGHT
+            setOnBackPressedListener()
         }
 
 
@@ -534,7 +536,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             val currentTimeMillis1159 = convertTimeToMillis("11:59 PM")
             val currentTimeMillis12 = convertTimeToMillis("12:00 AM")
 
-            var nextPrayerTimeIndex = 0
             var currentPrayerTimeIndex = 0
             var previousPrayerTimeIndex = 0
             for ((index, _) in prayerTimeList.withIndex()) {
@@ -542,15 +543,12 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                     if (prayerTimeList[index].currentNamazName == "Fajr") {
                         previousPrayerTimeIndex = 4
                         currentPrayerTimeIndex = index
-                        nextPrayerTimeIndex = index + 1
                     } else if (prayerTimeList[index].currentNamazName == "Isha") {
                         previousPrayerTimeIndex = index - 1
                         currentPrayerTimeIndex = index
-                        nextPrayerTimeIndex = 0
                     } else {
                         previousPrayerTimeIndex = index - 1
                         currentPrayerTimeIndex = index
-                        nextPrayerTimeIndex = index + 1
                     }
                     break
                 } else {
@@ -587,8 +585,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                         startDate,
                         endDate
                     )
-                    Log.d("difference", "Difference: $totaltime")
-                    Log.d("difference", "Difference: ${curentTimeDifference}")
                     totalTime1 = totaltime
                     totalTimeFromCurrent = curentTimeDifference
 
@@ -734,7 +730,15 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
             }
         }
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
 
+
+                }
+            })
+    }
 
         private fun getFormattedDate(offset: Int): String {
             val calendar = Calendar.getInstance()

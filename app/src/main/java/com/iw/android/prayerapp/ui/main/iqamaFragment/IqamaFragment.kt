@@ -468,10 +468,11 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
 
     private fun decrementDuaMinute(): String {
 
-        return if (khutbaReminderTime > 0) {
+        return if (khutbaReminderTime > 1) {
             khutbaReminderTime--
             "$khutbaReminderTime min"
         } else {
+            khutbaReminderTime = 0
             "off"
         }
     }
@@ -482,10 +483,11 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
     }
 
     private fun decrementNotificationCountMinute(): String {
-        return if (reminderTimeCount > 0) {
+        return if (reminderTimeCount > 1) {
             reminderTimeCount--
             "$reminderTimeCount min"
         } else {
+            reminderTimeCount = 0
             "off"
         }
     }
