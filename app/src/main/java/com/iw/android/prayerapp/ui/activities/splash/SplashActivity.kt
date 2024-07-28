@@ -37,6 +37,7 @@ class SplashActivity : BaseActivity() {
                 OnBoardingActivity::class.java
             }
             startActivity(Intent(this@SplashActivity, activity))
+            finish()
 
         }
     }

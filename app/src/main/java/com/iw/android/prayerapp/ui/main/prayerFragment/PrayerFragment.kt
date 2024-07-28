@@ -1,16 +1,20 @@
 package com.iw.android.prayerapp.ui.main.prayerFragment
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
@@ -21,6 +25,7 @@ import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.PrayerTime
+import com.iw.android.prayerapp.databinding.DialogExitBinding
 import com.iw.android.prayerapp.databinding.FragmentPrayerBinding
 import com.iw.android.prayerapp.extension.convertToFunTime
 import com.iw.android.prayerapp.extension.formatRemainingTime
@@ -57,6 +62,9 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     private var madhab: Madhab? = null
     private var isOffsetViewShow = false
 
+    private var dialogExitBinding: DialogExitBinding? = null
+    private var dialog: AlertDialog? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -85,13 +93,14 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         initialize()
         setObserver()
         setOnClickListener()
+        setOnBackPressedListener()
     }
 
 
     @SuppressLint("SimpleDateFormat")
     override fun initialize() {
         getMethod()
-        setOnBackPressedListener()
+
         binding.progressbar.apply {
             // or with gradient
             progressBarColorStart = resources.getColor(R.color.app_green)
@@ -110,7 +119,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             roundBorder = true
             startAngle = 180f
             progressDirection = CircularProgressBar.ProgressDirection.TO_RIGHT
-            setOnBackPressedListener()
+
         }
 
 
@@ -479,306 +488,352 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         }
     }
 
-        private fun startCountdown(timeDifferenceMillis: Long, totalTime: Long) {
-            countDownTimer = object : CountDownTimer(timeDifferenceMillis, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    val secondsRemaining = (millisUntilFinished / 1000).toInt()
-                    binding.progressbar.progressMax = totalTime.toFloat()
-                    binding.progressbar.progress = millisUntilFinished.toFloat()
-                    val remainingTime = formatRemainingTime(secondsRemaining)
-                    binding.textViewRemainingTime.text = remainingTime
-                }
-
-                override fun onFinish() {
-                    //showNotification(currentNamazName)
-                    upComingNamazTime()
-
-                }
+    private fun startCountdown(timeDifferenceMillis: Long, totalTime: Long) {
+        countDownTimer = object : CountDownTimer(timeDifferenceMillis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val secondsRemaining = (millisUntilFinished / 1000).toInt()
+                binding.progressbar.progressMax = totalTime.toFloat()
+                binding.progressbar.progress = millisUntilFinished.toFloat()
+                val remainingTime = formatRemainingTime(secondsRemaining)
+                binding.textViewRemainingTime.text = remainingTime
             }
-            countDownTimer?.start()
+
+            override fun onFinish() {
+                //showNotification(currentNamazName)
+                upComingNamazTime()
+
+            }
         }
+        countDownTimer?.start()
+    }
 
-        fun getCurrentDate(): String {
-            val currentDate = LocalDate.now()
-            val formatter =
-                DateTimeFormatter.ofPattern("dd MMM yyyy") // Customize the format as needed
-            return currentDate.format(formatter)
-        }
+    fun getCurrentDate(): String {
+        val currentDate = LocalDate.now()
+        val formatter =
+            DateTimeFormatter.ofPattern("dd MMM yyyy") // Customize the format as needed
+        return currentDate.format(formatter)
+    }
 
 
-        private fun getTimeDifferenceToNextPrayer(): PrayerTime {
-            val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
-            val prayerTimeList = listOf(
-                PrayerTime(
-                    "Fajr",
-                    convertTimeToMillis(convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds()))
-                ),
-                PrayerTime(
-                    "Dhuhr",
-                    convertTimeToMillis(convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds()))
-                ),
-                PrayerTime(
-                    "Asr",
-                    convertTimeToMillis(convertToFunTime(getPrayerTime.asr.toEpochMilliseconds()))
-                ),
-                PrayerTime(
-                    "Maghrib",
-                    convertTimeToMillis(convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds()))
-                ),
-                PrayerTime(
-                    "Isha",
-                    convertTimeToMillis(convertToFunTime(getPrayerTime.isha.toEpochMilliseconds()))
-                )
+    private fun getTimeDifferenceToNextPrayer(): PrayerTime {
+        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
+        val prayerTimeList = listOf(
+            PrayerTime(
+                "Fajr",
+                convertTimeToMillis(convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds()))
+            ),
+            PrayerTime(
+                "Dhuhr",
+                convertTimeToMillis(convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds()))
+            ),
+            PrayerTime(
+                "Asr",
+                convertTimeToMillis(convertToFunTime(getPrayerTime.asr.toEpochMilliseconds()))
+            ),
+            PrayerTime(
+                "Maghrib",
+                convertTimeToMillis(convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds()))
+            ),
+            PrayerTime(
+                "Isha",
+                convertTimeToMillis(convertToFunTime(getPrayerTime.isha.toEpochMilliseconds()))
             )
+        )
 
-            val currentTimeMillis =
-                convertTimeToMillis(convertToFunTime(System.currentTimeMillis()))
-            val currentTimeMillis1159 = convertTimeToMillis("11:59 PM")
-            val currentTimeMillis12 = convertTimeToMillis("12:00 AM")
+        val currentTimeMillis =
+            convertTimeToMillis(convertToFunTime(System.currentTimeMillis()))
+        val currentTimeMillis1159 = convertTimeToMillis("11:59 PM")
+        val currentTimeMillis12 = convertTimeToMillis("12:00 AM")
 
-            var currentPrayerTimeIndex = 0
-            var previousPrayerTimeIndex = 0
-            for ((index, _) in prayerTimeList.withIndex()) {
-                if (prayerTimeList[index].currentNamazTime > currentTimeMillis) {
-                    if (prayerTimeList[index].currentNamazName == "Fajr") {
-                        previousPrayerTimeIndex = 4
-                        currentPrayerTimeIndex = index
-                    } else if (prayerTimeList[index].currentNamazName == "Isha") {
-                        previousPrayerTimeIndex = index - 1
-                        currentPrayerTimeIndex = index
-                    } else {
-                        previousPrayerTimeIndex = index - 1
-                        currentPrayerTimeIndex = index
-                    }
-                    break
+        var currentPrayerTimeIndex = 0
+        var previousPrayerTimeIndex = 0
+        for ((index, _) in prayerTimeList.withIndex()) {
+            if (prayerTimeList[index].currentNamazTime > currentTimeMillis) {
+                if (prayerTimeList[index].currentNamazName == "Fajr") {
+                    previousPrayerTimeIndex = 4
+                    currentPrayerTimeIndex = index
+                } else if (prayerTimeList[index].currentNamazName == "Isha") {
+                    previousPrayerTimeIndex = index - 1
+                    currentPrayerTimeIndex = index
                 } else {
-                    continue
+                    previousPrayerTimeIndex = index - 1
+                    currentPrayerTimeIndex = index
                 }
-
-
-            }
-
-            val timeDifferenceMillis =
-                prayerTimeList[currentPrayerTimeIndex].currentNamazTime - currentTimeMillis
-
-            val totalDifferenceMillis =
-                prayerTimeList[currentPrayerTimeIndex].currentNamazTime - prayerTimeList[previousPrayerTimeIndex].currentNamazTime
-            currentNamazName = prayerTimeList[currentPrayerTimeIndex].currentNamazName
-
-            return if (currentTimeMillis >= prayerTimeList[4].currentNamazTime && currentTimeMillis <= currentTimeMillis1159) {
-                val obj = DateTimeUtils()
-                val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
-                var totalTime1: Long = 0
-                var totalTimeFromCurrent: Long = 0
-
-
-                try {
-                    val startDateString =
-                        "${getFormattedDate(0)} ${convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())}"
-                    val endDateString =
-                        "${getFormattedDate(1)} ${convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds())}"
-
-                    val startDate = dateFormat.parse(startDateString)
-                    val endDate = dateFormat.parse(endDateString)
-
-                    val (totaltime, curentTimeDifference) = obj.calculateHoursAndMinutesBetween(
-                        startDate,
-                        endDate
-                    )
-                    totalTime1 = totaltime
-                    totalTimeFromCurrent = curentTimeDifference
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                return PrayerTime(
-                    "Fajr",
-                    getPrayerTime.fajr.toEpochMilliseconds(),
-                    totalTimeFromCurrent,
-                    totalTime1
-                )
-
-            } else if (currentTimeMillis >= currentTimeMillis12 && currentTimeMillis < prayerTimeList[0].currentNamazTime) {
-                val timeDifferenceMillis1 = prayerTimeList[0].currentNamazTime - currentTimeMillis
-                val totalDifferenceMillis1 =
-                    prayerTimeList[0].currentNamazTime - currentTimeMillis12
-
-                return PrayerTime(
-                    "Fajr",
-                    prayerTimeList[0].currentNamazTime,
-                    timeDifferenceMillis1,
-                    totalDifferenceMillis1
-                )
+                break
             } else {
-                PrayerTime(
-                    prayerTimeList[currentPrayerTimeIndex].currentNamazName,
-                    prayerTimeList[currentPrayerTimeIndex].currentNamazTime,
-                    timeDifferenceMillis,
-                    totalDifferenceMillis
-                )
+                continue
             }
+
+
         }
 
+        val timeDifferenceMillis =
+            prayerTimeList[currentPrayerTimeIndex].currentNamazTime - currentTimeMillis
 
-        fun convertTimeToMillis(timeString: String): Long {
+        val totalDifferenceMillis =
+            prayerTimeList[currentPrayerTimeIndex].currentNamazTime - prayerTimeList[previousPrayerTimeIndex].currentNamazTime
+        currentNamazName = prayerTimeList[currentPrayerTimeIndex].currentNamazName
 
-            // Set the date to a fixed value (e.g., today's date) to avoid unexpected behavior
-            val currentDate = Date()
+        return if (currentTimeMillis >= prayerTimeList[4].currentNamazTime && currentTimeMillis <= currentTimeMillis1159) {
+            val obj = DateTimeUtils()
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
+            var totalTime1: Long = 0
+            var totalTimeFromCurrent: Long = 0
+
 
             try {
-                // Parse the time string by combining it with the current date
-                val combinedDateTime = SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.getDefault())
-                    .parse(
-                        "${
-                            SimpleDateFormat(
-                                "yyyy-MM-dd",
-                                Locale.getDefault()
-                            ).format(currentDate)
-                        } $timeString"
-                    )
+                val startDateString =
+                    "${getFormattedDate(0)} ${convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())}"
+                val endDateString =
+                    "${getFormattedDate(1)} ${convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds())}"
 
-                return combinedDateTime?.time ?: 0
+                val startDate = dateFormat.parse(startDateString)
+                val endDate = dateFormat.parse(endDateString)
+
+                val (totaltime, curentTimeDifference) = obj.calculateHoursAndMinutesBetween(
+                    startDate,
+                    endDate
+                )
+                totalTime1 = totaltime
+                totalTimeFromCurrent = curentTimeDifference
+
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+            return PrayerTime(
+                "Fajr",
+                getPrayerTime.fajr.toEpochMilliseconds(),
+                totalTimeFromCurrent,
+                totalTime1
+            )
 
-            return 0
+        } else if (currentTimeMillis >= currentTimeMillis12 && currentTimeMillis < prayerTimeList[0].currentNamazTime) {
+            val timeDifferenceMillis1 = prayerTimeList[0].currentNamazTime - currentTimeMillis
+            val totalDifferenceMillis1 =
+                prayerTimeList[0].currentNamazTime - currentTimeMillis12
+
+            return PrayerTime(
+                "Fajr",
+                prayerTimeList[0].currentNamazTime,
+                timeDifferenceMillis1,
+                totalDifferenceMillis1
+            )
+        } else {
+            PrayerTime(
+                prayerTimeList[currentPrayerTimeIndex].currentNamazName,
+                prayerTimeList[currentPrayerTimeIndex].currentNamazTime,
+                timeDifferenceMillis,
+                totalDifferenceMillis
+            )
+        }
+    }
+
+
+    fun convertTimeToMillis(timeString: String): Long {
+
+        // Set the date to a fixed value (e.g., today's date) to avoid unexpected behavior
+        val currentDate = Date()
+
+        try {
+            // Parse the time string by combining it with the current date
+            val combinedDateTime = SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.getDefault())
+                .parse(
+                    "${
+                        SimpleDateFormat(
+                            "yyyy-MM-dd",
+                            Locale.getDefault()
+                        ).format(currentDate)
+                    } $timeString"
+                )
+
+            return combinedDateTime?.time ?: 0
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
 
-        private fun getMethod() {
-            if (!viewModel.getSavedPrayerJurisprudence.isNullOrEmpty()) {
-                madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 1) {
-                    Madhab.HANAFI
-                } else {
-                    Madhab.SHAFI
-                }
-            }
+        return 0
+    }
 
-            if (!viewModel.getMethods.isNullOrEmpty()) {
-                method = when (viewModel.getMethods.toInt()) {
-                    0 -> {
-                        CalculationMethod.MUSLIM_WORLD_LEAGUE.parameters.copy(
-                            madhab = madhab ?: Madhab.SHAFI
-                        )
-                    }
-
-                    1 -> {
-                        CalculationMethod.NORTH_AMERICA.parameters.copy(
-                            madhab = madhab ?: Madhab.SHAFI
-                        )
-                    }
-
-                    2 -> {
-                        CalculationMethod.MOON_SIGHTING_COMMITTEE.parameters.copy(
-                            madhab = madhab ?: Madhab.SHAFI
-                        )
-                    }
-
-                    3 -> {
-                        CalculationMethod.EGYPTIAN.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
-                    }
-
-                    4 -> {
-                        CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
-                    }
-
-                    5 -> {
-                        CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
-                    }
-
-                    6 -> {
-                        CalculationMethod.UMM_AL_QURA.parameters.copy(
-                            madhab = madhab ?: Madhab.SHAFI
-                        )
-                    }
-
-                    8 -> {
-                        CalculationMethod.UMM_AL_QURA.parameters.copy(
-                            madhab = madhab ?: Madhab.SHAFI
-                        )
-                    }
-
-                    9 -> {
-                        CalculationMethod.DUBAI.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
-                    }
-
-                    10 -> {
-                        CalculationMethod.KUWAIT.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
-                    }
-
-                    11 -> {
-                        CalculationMethod.SINGAPORE.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
-                    }
-
-                    12 -> {
-                        CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
-                    }
-
-                    13 -> {
-                        CalculationMethod.QATAR.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
-                    }
-
-                    14 -> {
-                        CalculationMethod.KARACHI.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
-                    }
-
-                    else -> {
-                        CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
-                    }
-                }
+    private fun getMethod() {
+        if (!viewModel.getSavedPrayerJurisprudence.isNullOrEmpty()) {
+            madhab = if (viewModel.getSavedPrayerJurisprudence.toInt() == 1) {
+                Madhab.HANAFI
             } else {
-                CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                Madhab.SHAFI
             }
         }
+
+        if (!viewModel.getMethods.isNullOrEmpty()) {
+            method = when (viewModel.getMethods.toInt()) {
+                0 -> {
+                    CalculationMethod.MUSLIM_WORLD_LEAGUE.parameters.copy(
+                        madhab = madhab ?: Madhab.SHAFI
+                    )
+                }
+
+                1 -> {
+                    CalculationMethod.NORTH_AMERICA.parameters.copy(
+                        madhab = madhab ?: Madhab.SHAFI
+                    )
+                }
+
+                2 -> {
+                    CalculationMethod.MOON_SIGHTING_COMMITTEE.parameters.copy(
+                        madhab = madhab ?: Madhab.SHAFI
+                    )
+                }
+
+                3 -> {
+                    CalculationMethod.EGYPTIAN.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                4 -> {
+                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                5 -> {
+                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                6 -> {
+                    CalculationMethod.UMM_AL_QURA.parameters.copy(
+                        madhab = madhab ?: Madhab.SHAFI
+                    )
+                }
+
+                8 -> {
+                    CalculationMethod.UMM_AL_QURA.parameters.copy(
+                        madhab = madhab ?: Madhab.SHAFI
+                    )
+                }
+
+                9 -> {
+                    CalculationMethod.DUBAI.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                10 -> {
+                    CalculationMethod.KUWAIT.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                11 -> {
+                    CalculationMethod.SINGAPORE.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                12 -> {
+                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                13 -> {
+                    CalculationMethod.QATAR.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                14 -> {
+                    CalculationMethod.KARACHI.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+
+                else -> {
+                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                }
+            }
+        } else {
+            CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+        }
+    }
+
     private fun setOnBackPressedListener() {
         requireActivity().onBackPressedDispatcher.addCallback(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-
+                    showExitMessageBox()
 
                 }
             })
     }
 
-        private fun getFormattedDate(offset: Int): String {
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DAY_OF_YEAR, offset)
-            val targetDate: Date = calendar.time
+    private fun getFormattedDate(offset: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, offset)
+        val targetDate: Date = calendar.time
 
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            return dateFormat.format(targetDate)
-        }
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return dateFormat.format(targetDate)
+    }
 
-        fun toggleImageVisibility() {
-            _binding?.imageViewPause?.show()
-        }
+    fun toggleImageVisibility() {
+        _binding?.imageViewPause?.show()
+    }
 
-        inner class NotificationReceiver : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                val showImage = intent?.getBooleanExtra("show_image", true) ?: false
-                if (showImage) {
-                    toggleImageVisibility()
-                } else {
-                    notifications.stopPrayer()
-                    _binding?.imageViewPause?.gone()
-                }
-
+    inner class NotificationReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val showImage = intent?.getBooleanExtra("show_image", true) ?: false
+            if (showImage) {
+                toggleImageVisibility()
+            } else {
+                notifications.stopPrayer()
+                _binding?.imageViewPause?.gone()
             }
-        }
 
-        fun isTodayFriday(): Boolean {
-            val calendar = Calendar.getInstance()
-            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-            return dayOfWeek == Calendar.FRIDAY
         }
     }
 
-    class DateTimeUtils {
-        fun calculateHoursAndMinutesBetween(startDate: Date, endDate: Date): Pair<Long, Long> {
-            val totaltimeDifference = Math.abs(endDate.time - startDate.time)
-            val currentTime = Calendar.getInstance().time
-            val totaltimeDifferenceFromCurrentToEndTime = Math.abs(endDate.time - currentTime.time)
+    fun isTodayFriday(): Boolean {
+        val calendar = Calendar.getInstance()
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        return dayOfWeek == Calendar.FRIDAY
+    }
 
-            return Pair(totaltimeDifference, totaltimeDifferenceFromCurrentToEndTime)
+    private fun showExitMessageBox() {
+        // Build and show the alert dialog
+        dialog = AlertDialog.Builder(requireContext()).create()
+        dialogExitBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(requireContext()),
+            R.layout.dialog_exit,
+            null,
+            false
+        )
+        dialog?.let { dialog ->
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.setView(dialogExitBinding!!.root)
+            dialog.setCancelable(false)
+
+
+            dialogExitBinding!!.buttonCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialogExitBinding!!.imageViewCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialogExitBinding!!.buttonExit.setOnClickListener {
+                dialog.dismiss()
+                requireActivity().finish()
+            }
+
+            dialog.show()
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+        dialog = null
+        dialogExitBinding = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        dialog?.dismiss()
+    }
+}
+
+
+class DateTimeUtils {
+    fun calculateHoursAndMinutesBetween(startDate: Date, endDate: Date): Pair<Long, Long> {
+        val totaltimeDifference = Math.abs(endDate.time - startDate.time)
+        val currentTime = Calendar.getInstance().time
+        val totaltimeDifferenceFromCurrentToEndTime = Math.abs(endDate.time - currentTime.time)
+
+        return Pair(totaltimeDifference, totaltimeDifferenceFromCurrentToEndTime)
+    }
+}
