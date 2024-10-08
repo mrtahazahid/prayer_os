@@ -49,7 +49,7 @@ class FifthOnboarding : BaseFragment(R.layout.fragment_fifth_onboarding) {
 //                ).putExtra("skip", "userSkipped")
 //            )
 //            requireActivity().finish()
-            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
         }
 
         binding.skip.setOnClickListener {
@@ -60,7 +60,7 @@ class FifthOnboarding : BaseFragment(R.layout.fragment_fifth_onboarding) {
 //                ).putExtra("skip", "userSkipped")
 //            )
 //            requireActivity().finish()
-            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -83,7 +83,7 @@ data class NotificationData(
     var duaReminderMinutes: String = "off",
     var duaType: String = DuaTypeEnum.OFF.getValue(),
     var duaTime: String = "",
-    var createdDate: String = "",
+    var createdDate: String = ""
 )
 
 data class TimeData(
@@ -113,13 +113,16 @@ data class CurrentNamazNotificationData(
     val currentNamazName: String,
     var soundName: String = "Adhan",
     var soundToneName: String = "Tones",
-    var position: Int,
+    var selectedSoundPosition: Int? = null,
+    var selectedSoundTonePosition: Int? = null,
+    var selectedSoundItemPosition: Int? = null,
     var isSoundSelected: Boolean,
     var isForAdhan: Boolean,
     var isVibrate: Boolean,
     var isSilent: Boolean,
     var isOff: Boolean,
-    var sound: Int? = null,
+    var soundAdhan: Int? = null,
+    var soundTone: Int? = null,
 
     )
 
@@ -143,6 +146,7 @@ data class PrayerSoundData(
     val title: String,
     val icon: Int,
     val type: String,
+    val position: Int = 0,
     val isImageForwardShow: Boolean,
     var isItemSelected: Boolean,
     var selectedItemAdhanTitle: String = "",

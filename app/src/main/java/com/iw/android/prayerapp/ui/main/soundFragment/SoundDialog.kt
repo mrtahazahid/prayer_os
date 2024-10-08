@@ -2,7 +2,6 @@ package com.iw.android.prayerapp.ui.main.soundFragment
 
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +25,8 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
     var subTitle = ""
     var selectedItem = ""
     var selectedItemPosition = 0
+    var selectedSoundPosition = 0
+    var selectedSoundTonePosition = 0
     var selectedSound = 0
     var listener: OnDataSelected? = null
     var sound: Int? = null
@@ -71,8 +72,7 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
     private fun initialize() {
         setOnBackPressedListener()
         binding.textViewTitle.text = title
-        binding.textViewNamazName.text = subTitle
-        Log.d("listener", selectedItem)
+        binding.textViewNamazName.text = subTitle.split(":")[0].trim()
         setRecyclerView()
 
     }
@@ -91,9 +91,25 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
 
     private fun setObserver() {
         viewTypeArray.clear()
-        notificationList = if (selectedItemPosition == 0) GetAdhanSound.adhanSound else GetAdhanSound.notificationSound
+        notificationList.clear()
+        notificationList = if (selectedItemPosition == 0) {
+            GetAdhanSound().adhanSound
+        } else {
+            GetAdhanSound().notificationSound
+        }
         for (data in notificationList) {
             data.isSoundSelected = false
+        }
+
+        if (selectedItemPosition == 0) {
+            previousPosition = selectedSoundPosition
+            notificationList[selectedSoundPosition].isSoundSelected = true
+        } else {
+            previousPosition = selectedSoundTonePosition
+            notificationList[selectedSoundTonePosition].isSoundSelected = true
+        }
+
+        for (data in notificationList) {
             viewTypeArray.add(
                 RowItemSound(data, this, selectedSound)
             )
@@ -110,7 +126,13 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.backView.id, binding.imageViewBack.id -> {
-                listener?.onDataPassed(selectedItem, selectedItemPosition, sound, isForNotification)
+                val position = if (selectedItemPosition == 0) selectedSoundPosition else selectedSoundTonePosition
+                listener?.onDataPassed(
+                    selectedItem,
+                    position ,
+                    sound,
+                    isForNotification
+                )
 
                 dismiss()
             }
@@ -135,6 +157,11 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
 
 
     override fun onClick(position: Int, data: SoundData) {
+        if (selectedItemPosition == 0) {
+            selectedSoundPosition = position
+        } else {
+            selectedSoundTonePosition = position
+        }
         previousPosition?.let {
             notificationList[it].isSoundSelected = false
             adapter.notifyItemChanged(it)
@@ -149,7 +176,6 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
         mediaPlayer = MediaPlayer.create(requireContext(), data.soundFile)
         // Create a new MediaPlayer instance
         selectedItem = data.title
-        selectedItemPosition = position
         sound = data.soundFile
         // Start playing the selected sound
         mediaPlayer?.start()
@@ -159,6 +185,11 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
         mediaPlayer?.setOnCompletionListener {
             stopMediaPlayer()
         }
+    }
+
+    override fun onItemSelected(data: SoundData) {
+        selectedItem = data.title
+        sound = data.soundFile
     }
 
     private fun setOnBackPressedListener() {

@@ -52,7 +52,7 @@ class AssetDialog : DialogFragment(), OnItemClick {
 
     private fun initialize() {
         binding.recyclerView.adapter = adapter
-        arraList = GetAdhanSound.assetList
+        arraList = GetAdhanSound().assetList
     }
 
     private fun setObserver() {

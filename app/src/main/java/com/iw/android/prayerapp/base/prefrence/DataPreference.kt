@@ -12,7 +12,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.APPLICATION_ID
 import com.iw.android.prayerapp.base.response.LocationResponse
-import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.IqamaData
 import com.iw.android.prayerapp.data.response.IqamaNotificationData
 import com.iw.android.prayerapp.data.response.JummuahData
@@ -35,15 +34,6 @@ class DataPreference @Inject constructor(
 
     private val appContext = context.applicationContext
 
-    val accessToken: Flow<String>
-        get() = appContext.dataStore.data.map { preferences ->
-            preferences[ACCESS_TOKEN] ?: ""
-        }
-
-    val refreshToken: Flow<String>
-        get() = appContext.dataStore.data.map { preferences ->
-            preferences[REFRESH_TOKEN] ?: ""
-        }
 
     val loginUserId: Flow<String>
         get() = appContext.dataStore.data.map { preferences ->
@@ -80,6 +70,11 @@ class DataPreference @Inject constructor(
     val boolean: Flow<Boolean>
         get() = appContext.dataStore.data.map { preferences ->
             preferences[BOOLEAN] ?: false
+        }
+
+    val isFirstTime: Flow<Boolean>
+        get() = appContext.dataStore.data.map { preferences ->
+            preferences[IS_FIRST_TIME] ?: true
         }
 
 
@@ -150,107 +145,61 @@ class DataPreference @Inject constructor(
         )
 
     }
-
-    suspend fun saveFajrCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
-        setStringData(
-            CURRENT_NAMAZ_Fajr_NOTIFICATION_DATA,
-            Gson().toJson(currentNamazNotificationData)
+    suspend fun getFajrDetail(): NotificationData? {
+        return Gson().fromJson(
+            getStringData(DataPreference.CURRENT_NAMAZ_Fajr_NOTIFICATION_DATA),
+            NotificationData::class.java
         )
-
     }
 
-    suspend fun getFajrCurrentNamazNotificationData(): CurrentNamazNotificationData? =
-        Gson().fromJson(
-            getStringData(CURRENT_NAMAZ_Fajr_NOTIFICATION_DATA),
-            CurrentNamazNotificationData::class.java
+    suspend fun getSunriseDetail(): NotificationData? {
+        return Gson().fromJson(
+            getStringData(DataPreference.SUNRISE_INFO),
+            NotificationData::class.java
         )
-
-    suspend fun saveDhuhrCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
-        setStringData(
-            CURRENT_NAMAZ_DHUHR_NOTIFICATION_DATA,
-            Gson().toJson(currentNamazNotificationData)
-        )
-
     }
 
-    suspend fun getDhuhrCurrentNamazNotificationData(): CurrentNamazNotificationData? =
-        Gson().fromJson(
-            getStringData(CURRENT_NAMAZ_DHUHR_NOTIFICATION_DATA),
-            CurrentNamazNotificationData::class.java
+    suspend fun getDuhrDetail(): NotificationData? {
+        return Gson().fromJson(
+            getStringData(DataPreference.CURRENT_NAMAZ_DHUHR_NOTIFICATION_DATA),
+            NotificationData::class.java
         )
-
-    suspend fun saveAsrCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
-        setStringData(
-            CURRENT_NAMAZ_ASR_NOTIFICATION_DATA,
-            Gson().toJson(currentNamazNotificationData)
-        )
-
     }
 
-    suspend fun getAsrCurrentNamazNotificationData(): CurrentNamazNotificationData? =
-        Gson().fromJson(
-            getStringData(CURRENT_NAMAZ_ASR_NOTIFICATION_DATA),
-            CurrentNamazNotificationData::class.java
+    suspend fun getAsrDetail(): NotificationData? {
+        return Gson().fromJson(
+            getStringData(DataPreference.CURRENT_NAMAZ_ASR_NOTIFICATION_DATA),
+            NotificationData::class.java
         )
-
-
-    suspend fun saveMaghribCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
-        setStringData(
-            CURRENT_NAMAZ_MAGHRIB_NOTIFICATION_DATA,
-            Gson().toJson(currentNamazNotificationData)
-        )
-
     }
 
-    suspend fun getMaghribCurrentNamazNotificationData(): CurrentNamazNotificationData? =
-        Gson().fromJson(
-            getStringData(CURRENT_NAMAZ_MAGHRIB_NOTIFICATION_DATA),
-            CurrentNamazNotificationData::class.java
+    suspend fun getMagribDetail(): NotificationData? {
+        return Gson().fromJson(
+            getStringData(DataPreference.CURRENT_NAMAZ_MAGHRIB_NOTIFICATION_DATA),
+            NotificationData::class.java
         )
-
-
-    suspend fun saveIshaCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
-        setStringData(
-            CURRENT_NAMAZ_ISHA_NOTIFICATION_DATA,
-            Gson().toJson(currentNamazNotificationData)
-        )
-
     }
 
-    suspend fun getIshaCurrentNamazNotificationData(): CurrentNamazNotificationData? =
-        Gson().fromJson(
-            getStringData(CURRENT_NAMAZ_ISHA_NOTIFICATION_DATA),
-            CurrentNamazNotificationData::class.java
+    suspend fun getIshaDetail(): NotificationData? {
+        return Gson().fromJson(
+            getStringData(DataPreference.CURRENT_NAMAZ_ISHA_NOTIFICATION_DATA),
+            NotificationData::class.java
         )
-
-    suspend fun saveMidnightCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
-        setStringData(
-            MIDNIGHT_INFO,
-            Gson().toJson(currentNamazNotificationData)
-        )
-
     }
 
-    suspend fun getMidnightCurrentNamazNotificationData(): CurrentNamazNotificationData? =
-        Gson().fromJson(
-            getStringData(MIDNIGHT_INFO),
-            CurrentNamazNotificationData::class.java
+    suspend fun getMidnightDetail(): NotificationData? {
+        return Gson().fromJson(
+            getStringData(DataPreference.MIDNIGHT_INFO),
+            NotificationData::class.java
         )
-
-    suspend fun saveLastNightCurrentNamazNotificationData(currentNamazNotificationData: CurrentNamazNotificationData) {
-        setStringData(
-            LASTTHIRD_INFO,
-            Gson().toJson(currentNamazNotificationData)
-        )
-
     }
 
-    suspend fun getLastNightCurrentNamazNotificationData(): CurrentNamazNotificationData? =
-        Gson().fromJson(
-            getStringData(LASTTHIRD_INFO),
-            CurrentNamazNotificationData::class.java
+    suspend fun getLastThirdDetail(): NotificationData? {
+        return Gson().fromJson(
+            getStringData(DataPreference.LASTTHIRD_INFO),
+            NotificationData::class.java
         )
-
+    }
 
 
     suspend fun getIqamaNotificationSetting(): IqamaNotificationData? {
@@ -327,13 +276,22 @@ class DataPreference @Inject constructor(
 
         val list: MutableList<NotificationData> = Json.decodeFromString(jsonString)
 
-        // Check if NotificationData with the same createdDate already exists
-        val existingItem =
-            list.find { it.createdDate == newItem.createdDate && it.namazName == newItem.namazName }
-        if (existingItem == null) {
+        if (list.isNullOrEmpty()) {
             list.add(newItem)
-            // Update other fields as needed
+        } else {
+            val existingItem =
+                list.indexOfFirst {it.namazName == newItem.namazName }
+            if (existingItem == -1) {
+                list.add(newItem)
+                // Update other fields as needed
+            } else {
+                list.removeAt(existingItem)
+
+                list.add(existingItem, newItem)
+            }
+
         }
+
 
         val updatedJsonString = Json.encodeToString(list)
 
@@ -367,26 +325,6 @@ class DataPreference @Inject constructor(
         return mapJsonToList2(jsonString)
     }
 
-    suspend fun updateNotificationData(newItem: NotificationData) {
-        val jsonString = appContext.dataStore.data
-            .first()[NOTIFICATION_DATA]
-            ?: "[]" // Default to an empty array if the key is not present
-
-        val list: MutableList<NotificationData> = Json.decodeFromString(jsonString)
-
-        // Check if NotificationData with the same createdDate already exists
-        val existingItem =
-            list.find { it.createdDate == newItem.createdDate && it.namazName == newItem.namazName }
-        if (existingItem != null) {
-            list.remove(existingItem)
-        }
-
-        val updatedJsonString = Json.encodeToString(list)
-
-        appContext.dataStore.edit { preferences ->
-            preferences[NOTIFICATION_DATA] = updatedJsonString
-        }
-    }
 
     suspend fun getNotificationData(): List<NotificationData> {
         val jsonString = appContext.dataStore.data.first()[NOTIFICATION_DATA] ?: return emptyList()
@@ -439,6 +377,7 @@ class DataPreference @Inject constructor(
         private val ACCESS_TOKEN = stringPreferencesKey("key_access_token")
         private val REFRESH_TOKEN = stringPreferencesKey("key_refresh_token")
         val IS_ONBOARDING = booleanPreferencesKey("key_is_onboarding")
+        val IS_FIRST_TIME = booleanPreferencesKey("key_is_first_time")
         val BOOLEAN = booleanPreferencesKey("key_boolean")
         val USER_ID = stringPreferencesKey("key_user_id")
         val FLOAT = floatPreferencesKey("key_float")
@@ -449,7 +388,6 @@ class DataPreference @Inject constructor(
         val PRAYER_JURISPRUDENCE = stringPreferencesKey("key_jurisprudence")
         val PRAYER_ELEVATION_RULE = stringPreferencesKey("key_user_elevation")
         val USER_INFO = stringPreferencesKey("key_user_info")
-        val FAJR_INFO = stringPreferencesKey("key_fajr_info")
         val SUNRISE_INFO = stringPreferencesKey("key_sunrise_info")
         val NOTIFICATION_DATA = stringPreferencesKey("key_notification_data")
         val RECENT_LOCATION_ITEM_DATA = stringPreferencesKey("key_recent_data")
@@ -464,10 +402,6 @@ class DataPreference @Inject constructor(
             stringPreferencesKey("key_current_namaz_maghrib_notification_data")
         val CURRENT_NAMAZ_ISHA_NOTIFICATION_DATA =
             stringPreferencesKey("key_current_namaz_isha_notification_data")
-        val DHUHR_INFO = stringPreferencesKey("key_dhuhr_info")
-        val ASR_INFO = stringPreferencesKey("key_asr_info")
-        val MAGRIB_INFO = stringPreferencesKey("key_magrib_info")
-        val ISHA_INFO = stringPreferencesKey("key_isha_info")
         val MIDNIGHT_INFO = stringPreferencesKey("key_midnight_info")
         val LASTTHIRD_INFO = stringPreferencesKey("key_lastnight_info")
         val IQAMA_FAJR = stringPreferencesKey("key_iqama_fajr")

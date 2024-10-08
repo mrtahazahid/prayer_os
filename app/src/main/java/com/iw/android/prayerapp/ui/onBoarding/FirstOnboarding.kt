@@ -48,7 +48,7 @@ class FirstOnboarding : BaseFragment(R.layout.fragment_first_onboarding) {
         }
 
         binding.skip.setOnClickListener {
-            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
 //            requireActivity().startActivity(
 //                Intent(
 //                    requireContext(),

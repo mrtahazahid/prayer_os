@@ -24,9 +24,11 @@ class CopyBottomSheet :
     private var bottomSheetBehavior: BottomSheetBehavior<*>? = null
 
     var soundName: String = "Adhan"
-    var sound: Int = R.raw.adhan_abdul_basit
+    var soundAdhan: Int = R.raw.adhan_abdul_basit
+    var soundTones: Int = R.raw.adhan_abdul_basit
     var selectedPosition: Int = 0
     var isForAdhan: Boolean = false
+    var isForNotification: Boolean = false
     var isSoundSelected: Boolean = false
     var isSilent: Boolean = false
     var isVibrate: Boolean = false
@@ -105,469 +107,496 @@ class CopyBottomSheet :
     private fun copy() = lifecycleScope.launch {
         if (viewModel.getFajrDetail() != null) {
             val fajrData = viewModel.getFajrDetail()
-            fajrData!!.notificationSound?.sound = sound
-            fajrData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            fajrData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
-            fajrData.notificationSound?.position = selectedPosition
-            fajrData.notificationSound?.isSoundSelected = isSoundSelected
-            fajrData.notificationSound?.isSilent = isSilent
-            fajrData.notificationSound?.isForAdhan = isForAdhan
-            fajrData.notificationSound?.isVibrate = isVibrate
-            fajrData.notificationSound?.isOff = isOff
+            if (isForNotification) {
+                fajrData!!.notificationSound?.soundAdhan = soundAdhan
+                fajrData!!.notificationSound?.soundTone = soundTones
+                fajrData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                fajrData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                fajrData.notificationSound?.isSilent = isSilent
+                fajrData.notificationSound?.isForAdhan = isForAdhan
+                fajrData.notificationSound?.isVibrate = isVibrate
+                fajrData.notificationSound?.isOff = isOff
+            } else {
+                fajrData!!.reminderSound?.soundAdhan = soundAdhan
+                fajrData!!.reminderSound?.soundTone = soundTones
+                fajrData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                fajrData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                fajrData.reminderSound?.isSilent = isSilent
+                fajrData.reminderSound?.isForAdhan = isForAdhan
+                fajrData.reminderSound?.isVibrate = isVibrate
+                fajrData.reminderSound?.isOff = isOff
+            }
+
+
             viewModel.saveFajrDetail(fajrData)
         } else {
-            val fajrData = NotificationData(
-                notificationSound = CurrentNamazNotificationData(
-                    currentNamazName = "Fajr",
-                    soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (!isForAdhan) soundName else "Tone",
-                    position = selectedPosition,
-                    isSoundSelected = isSoundSelected,
-                    isForAdhan = isForAdhan,
-                    isVibrate = isVibrate,
-                    isSilent = isSilent,
-                    isOff = isOff,
-                    sound = sound
-                ),
-            )
+            val fajrData = if (isForNotification) {
+                NotificationData(
+                    notificationSound = CurrentNamazNotificationData(
+                        currentNamazName = "Fajr",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            } else {
+                NotificationData(
+                    reminderSound = CurrentNamazNotificationData(
+                        currentNamazName = "Fajr",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            }
+
+
             viewModel.saveFajrDetail(fajrData)
         }
 //
         if (viewModel.getSunriseDetail() != null) {
             val sunRiseData = viewModel.getSunriseDetail()
-            sunRiseData!!.notificationSound?.sound = sound
-            sunRiseData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            sunRiseData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
-            sunRiseData.notificationSound?.position = selectedPosition
-            sunRiseData.notificationSound?.isSoundSelected = isSoundSelected
-            sunRiseData.notificationSound?.isSilent = isSilent
-            sunRiseData.notificationSound?.isForAdhan = isForAdhan
-            sunRiseData.notificationSound?.isVibrate = isVibrate
-            sunRiseData.notificationSound?.isOff = isOff
+            if (isForNotification) {
+                sunRiseData!!.notificationSound?.soundAdhan = soundAdhan
+                sunRiseData!!.notificationSound?.soundTone = soundTones
+                sunRiseData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                sunRiseData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                sunRiseData.notificationSound?.isSilent = isSilent
+                sunRiseData.notificationSound?.isForAdhan = isForAdhan
+                sunRiseData.notificationSound?.isVibrate = isVibrate
+                sunRiseData.notificationSound?.isOff = isOff
+            } else {
+                sunRiseData!!.reminderSound?.soundAdhan = soundAdhan
+                sunRiseData!!.reminderSound?.soundTone = soundTones
+                sunRiseData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                sunRiseData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                sunRiseData.reminderSound?.isSilent = isSilent
+                sunRiseData.reminderSound?.isForAdhan = isForAdhan
+                sunRiseData.reminderSound?.isVibrate = isVibrate
+                sunRiseData.reminderSound?.isOff = isOff
+            }
+
+
             viewModel.saveSunriseDetail(sunRiseData)
         } else {
-            val sunriseData = NotificationData(
-                notificationSound = CurrentNamazNotificationData(
-                    currentNamazName = "Sunrise",
-                    soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (!isForAdhan) soundName else "Tone",
-                    position = selectedPosition,
-                    isSoundSelected = isSoundSelected,
-                    isForAdhan = isForAdhan,
-                    isVibrate = isVibrate,
-                    isSilent = isSilent,
-                    isOff = isOff,
-                    sound = sound
-                ),
-            )
+            val sunriseData = if (isForNotification) {
+                NotificationData(
+                    notificationSound = CurrentNamazNotificationData(
+                        currentNamazName = "Sunrise",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            } else {
+                NotificationData(
+                    reminderSound = CurrentNamazNotificationData(
+                        currentNamazName = "Sunrise",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            }
             viewModel.saveSunriseDetail(sunriseData)
         }
 //
         if (viewModel.getDuhrDetail() != null) {
             val duhrData = viewModel.getDuhrDetail()
-            duhrData!!.notificationSound?.sound = sound
-            duhrData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            duhrData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
-            duhrData.notificationSound?.position = selectedPosition
-            duhrData.notificationSound?.isSoundSelected = isSoundSelected
-            duhrData.notificationSound?.isSilent = isSilent
-            duhrData.notificationSound?.isForAdhan = isForAdhan
-            duhrData.notificationSound?.isVibrate = isVibrate
-            duhrData.notificationSound?.isOff = isOff
+            if (isForNotification) {
+                duhrData!!.notificationSound?.soundAdhan = soundAdhan
+                duhrData!!.notificationSound?.soundTone = soundTones
+                duhrData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                duhrData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                duhrData.notificationSound?.isSilent = isSilent
+                duhrData.notificationSound?.isForAdhan = isForAdhan
+                duhrData.notificationSound?.isVibrate = isVibrate
+                duhrData.notificationSound?.isOff = isOff
+            } else {
+                duhrData!!.reminderSound?.soundAdhan = soundAdhan
+                duhrData!!.reminderSound?.soundTone = soundTones
+                duhrData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                duhrData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                duhrData.reminderSound?.isSilent = isSilent
+                duhrData.reminderSound?.isForAdhan = isForAdhan
+                duhrData.reminderSound?.isVibrate = isVibrate
+                duhrData.reminderSound?.isOff = isOff
+            }
+
             viewModel.saveDuhrDetail(duhrData)
         } else {
-            val duhrData = NotificationData(
-                notificationSound = CurrentNamazNotificationData(
-                    currentNamazName = "Dhuhr",
-                    soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (!isForAdhan) soundName else "Tone",
-                    position = selectedPosition,
-                    isSoundSelected = isSoundSelected,
-                    isForAdhan = isForAdhan,
-                    isVibrate = isVibrate,
-                    isSilent = isSilent,
-                    isOff = isOff,
-                    sound = sound
-                ),
-            )
+            val duhrData = if (isForNotification) {
+                NotificationData(
+                    notificationSound = CurrentNamazNotificationData(
+                        currentNamazName = "Dhuhr",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            } else {
+                NotificationData(
+                    reminderSound = CurrentNamazNotificationData(
+                        currentNamazName = "Dhuhr",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            }
             viewModel.saveDuhrDetail(duhrData)
         }
 //
         if (viewModel.getAsrDetail() != null) {
             val asrData = viewModel.getAsrDetail()
-            asrData!!.notificationSound?.sound = sound
-            asrData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            asrData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
-            asrData.notificationSound?.position = selectedPosition
-            asrData.notificationSound?.isSoundSelected = isSoundSelected
-            asrData.notificationSound?.isSilent = isSilent
-            asrData.notificationSound?.isForAdhan = isForAdhan
-            asrData.notificationSound?.isVibrate = isVibrate
-            asrData.notificationSound?.isOff = isOff
+            if (isForNotification) {
+                asrData!!.notificationSound?.soundAdhan = soundAdhan
+                asrData!!.notificationSound?.soundTone = soundTones
+                asrData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                asrData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                asrData.notificationSound?.isSilent = isSilent
+                asrData.notificationSound?.isForAdhan = isForAdhan
+                asrData.notificationSound?.isVibrate = isVibrate
+                asrData.notificationSound?.isOff = isOff
+            } else {
+                asrData!!.reminderSound?.soundAdhan = soundAdhan
+                asrData!!.reminderSound?.soundTone = soundTones
+                asrData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                asrData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                asrData.reminderSound?.isSilent = isSilent
+                asrData.reminderSound?.isForAdhan = isForAdhan
+                asrData.reminderSound?.isVibrate = isVibrate
+                asrData.reminderSound?.isOff = isOff
+            }
+
+
             viewModel.saveAsrDetail(asrData)
         } else {
-            val asrData = NotificationData(
-                notificationSound = CurrentNamazNotificationData(
-                    currentNamazName = "Asr",
-                    soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (!isForAdhan) soundName else "Tone",
-                    position = selectedPosition,
-                    isSoundSelected = isSoundSelected,
-                    isForAdhan = isForAdhan,
-                    isVibrate = isVibrate,
-                    isSilent = isSilent,
-                    isOff = isOff,
-                    sound = sound
-                ),
-            )
+            val asrData = if (isForNotification) {
+                NotificationData(
+                    notificationSound = CurrentNamazNotificationData(
+                        currentNamazName = "Asr",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            } else {
+                NotificationData(
+                    reminderSound = CurrentNamazNotificationData(
+                        currentNamazName = "Asr",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            }
+
             viewModel.saveAsrDetail(asrData)
         }
 //
         if (viewModel.getMagribDetail() != null) {
             val maghribData = viewModel.getMagribDetail()
-            maghribData!!.notificationSound?.sound = sound
-            maghribData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            maghribData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
-            maghribData.notificationSound?.position = selectedPosition
-            maghribData.notificationSound?.isSoundSelected = isSoundSelected
-            maghribData.notificationSound?.isSilent = isSilent
-            maghribData.notificationSound?.isForAdhan = isForAdhan
-            maghribData.notificationSound?.isVibrate = isVibrate
-            maghribData.notificationSound?.isOff = isOff
+            if (isForNotification) {
+                maghribData!!.notificationSound?.soundAdhan = soundAdhan
+                maghribData!!.notificationSound?.soundTone = soundTones
+                maghribData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                maghribData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                maghribData.notificationSound?.isSilent = isSilent
+                maghribData.notificationSound?.isForAdhan = isForAdhan
+                maghribData.notificationSound?.isVibrate = isVibrate
+                maghribData.notificationSound?.isOff = isOff
+            } else {
+                maghribData!!.reminderSound?.soundAdhan = soundAdhan
+                maghribData!!.reminderSound?.soundTone = soundTones
+                maghribData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                maghribData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                maghribData.reminderSound?.isSilent = isSilent
+                maghribData.reminderSound?.isForAdhan = isForAdhan
+                maghribData.reminderSound?.isVibrate = isVibrate
+                maghribData.reminderSound?.isOff = isOff
+            }
+
             viewModel.saveMagribDetail(maghribData)
         } else {
-            val maghribData = NotificationData(
-                notificationSound = CurrentNamazNotificationData(
-                    currentNamazName = "Maghrib",
-                    soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (!isForAdhan) soundName else "Tone",
-                    position = selectedPosition,
-                    isSoundSelected = isSoundSelected,
-                    isForAdhan = isForAdhan,
-                    isVibrate = isVibrate,
-                    isSilent = isSilent,
-                    isOff = isOff,
-                    sound = sound
-                ),
-            )
+            val maghribData = if (isForNotification) {
+                NotificationData(
+                    notificationSound = CurrentNamazNotificationData(
+                        currentNamazName = "Maghrib",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+
+            } else {
+                NotificationData(
+                    reminderSound = CurrentNamazNotificationData(
+                        currentNamazName = "Maghrib",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+
+            }
+
             viewModel.saveMagribDetail(maghribData)
         }
 //
         if (viewModel.getIshaDetail() != null) {
             val ishaData = viewModel.getIshaDetail()
-            ishaData!!.notificationSound?.sound = sound
-            ishaData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            ishaData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
-            ishaData.notificationSound?.position = selectedPosition
-            ishaData.notificationSound?.isSoundSelected = isSoundSelected
-            ishaData.notificationSound?.isSilent = isSilent
-            ishaData.notificationSound?.isForAdhan = isForAdhan
-            ishaData.notificationSound?.isVibrate = isVibrate
-            ishaData.notificationSound?.isOff = isOff
+           if(isForNotification){
+               ishaData!!.notificationSound?.soundAdhan = soundAdhan
+               ishaData!!.notificationSound?.soundTone = soundTones
+               ishaData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
+               ishaData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+               ishaData.notificationSound?.isSilent = isSilent
+               ishaData.notificationSound?.isForAdhan = isForAdhan
+               ishaData.notificationSound?.isVibrate = isVibrate
+               ishaData.notificationSound?.isOff = isOff
+           }else{
+               ishaData!!.reminderSound?.soundAdhan = soundAdhan
+               ishaData!!.reminderSound?.soundTone = soundTones
+               ishaData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
+               ishaData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+               ishaData.reminderSound?.isSilent = isSilent
+               ishaData.reminderSound?.isForAdhan = isForAdhan
+               ishaData.reminderSound?.isVibrate = isVibrate
+               ishaData.reminderSound?.isOff = isOff
+           }
+
             viewModel.saveIshaDetail(ishaData)
         } else {
-            val ishaData = NotificationData(
-                notificationSound = CurrentNamazNotificationData(
-                    currentNamazName = "Isha",
-                    soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (!isForAdhan) soundName else "Tone",
-                    position = selectedPosition,
-                    isSoundSelected = isSoundSelected,
-                    isForAdhan = isForAdhan,
-                    isVibrate = isVibrate,
-                    isSilent = isSilent,
-                    isOff = isOff,
-                    sound = sound
-                ),
-            )
+            val ishaData =  if(isForNotification){
+                NotificationData(
+                    notificationSound = CurrentNamazNotificationData(
+                        currentNamazName = "Isha",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            }else{
+                NotificationData(
+                    reminderSound = CurrentNamazNotificationData(
+                        currentNamazName = "Isha",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            }
+
             viewModel.saveIshaDetail(ishaData)
         }
 //
         if (viewModel.getMidNightDetail() != null) {
             val midnightData = viewModel.getMidNightDetail()
-            midnightData!!.notificationSound?.sound = sound
-            midnightData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            midnightData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
-            midnightData.notificationSound?.position = selectedPosition
-            midnightData.notificationSound?.isSoundSelected = isSoundSelected
-            midnightData.notificationSound?.isSilent = isSilent
-            midnightData.notificationSound?.isForAdhan = isForAdhan
-            midnightData.notificationSound?.isVibrate = isVibrate
-            midnightData.notificationSound?.isOff = isOff
+            if(isForNotification){
+                midnightData!!.notificationSound?.soundAdhan = soundAdhan
+                midnightData!!.notificationSound?.soundTone = soundTones
+                midnightData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                midnightData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                midnightData.notificationSound?.isSilent = isSilent
+                midnightData.notificationSound?.isForAdhan = isForAdhan
+                midnightData.notificationSound?.isVibrate = isVibrate
+                midnightData.notificationSound?.isOff = isOff
+            }else{
+                midnightData!!.reminderSound?.soundAdhan = soundAdhan
+                midnightData!!.reminderSound?.soundTone = soundTones
+                midnightData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                midnightData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                midnightData.reminderSound?.isSilent = isSilent
+                midnightData.reminderSound?.isForAdhan = isForAdhan
+                midnightData.reminderSound?.isVibrate = isVibrate
+                midnightData.reminderSound?.isOff = isOff
+            }
+
+
             viewModel.saveMidNightDetail(midnightData)
         } else {
-            val midnightData = NotificationData(
-                notificationSound = CurrentNamazNotificationData(
-                    currentNamazName = "Mid night",
-                    soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (!isForAdhan) soundName else "Tone",
-                    position = selectedPosition,
-                    isSoundSelected = isSoundSelected,
-                    isForAdhan = isForAdhan,
-                    isVibrate = isVibrate,
-                    isSilent = isSilent,
-                    isOff = isOff,
-                    sound = sound
-                ),
-            )
+            val midnightData = if(isForNotification){
+                NotificationData(
+                    notificationSound = CurrentNamazNotificationData(
+                        currentNamazName = "Mid night",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            }else{
+                NotificationData(
+                    reminderSound = CurrentNamazNotificationData(
+                        currentNamazName = "Mid night",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tone",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            }
+
             viewModel.saveMidNightDetail(midnightData)
         }
 
         if (viewModel.getLastNightDetail() != null) {
             val lastThirdData = viewModel.getLastNightDetail()
-            lastThirdData!!.notificationSound?.sound = sound
-            lastThirdData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
-            lastThirdData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
-            lastThirdData.notificationSound?.position = selectedPosition
-            lastThirdData.notificationSound?.isSoundSelected = isSoundSelected
-            lastThirdData.notificationSound?.isSilent = isSilent
-            lastThirdData.notificationSound?.isForAdhan = isForAdhan
-            lastThirdData.notificationSound?.isVibrate = isVibrate
-            lastThirdData.notificationSound?.isOff = isOff
+            if (isForNotification){
+                lastThirdData!!.notificationSound?.soundAdhan = soundAdhan
+                lastThirdData!!.notificationSound?.soundTone = soundTones
+                lastThirdData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                lastThirdData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                lastThirdData.notificationSound?.isSilent = isSilent
+                lastThirdData.notificationSound?.isForAdhan = isForAdhan
+                lastThirdData.notificationSound?.isVibrate = isVibrate
+                lastThirdData.notificationSound?.isOff = isOff
+            }else{
+                lastThirdData!!.reminderSound?.soundAdhan = soundAdhan
+                lastThirdData!!.reminderSound?.soundTone = soundTones
+                lastThirdData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
+                lastThirdData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
+                lastThirdData.reminderSound?.isSilent = isSilent
+                lastThirdData.reminderSound?.isForAdhan = isForAdhan
+                lastThirdData.reminderSound?.isVibrate = isVibrate
+                lastThirdData.reminderSound?.isOff = isOff
+            }
+
+
             viewModel.saveLastNightDetail(lastThirdData)
         } else {
-            val lastThirdData = NotificationData(
-                notificationSound = CurrentNamazNotificationData(
-                    currentNamazName = "Last Night",
-                    soundName = if (isForAdhan) soundName else "Adhan",
-                    soundToneName = if (!isForAdhan) soundName else "Tones",
-                    position = selectedPosition,
-                    isSoundSelected = isSoundSelected,
-                    isForAdhan = isForAdhan,
-                    isVibrate = isVibrate,
-                    isSilent = isSilent,
-                    isOff = isOff,
-                    sound = sound
-                ),
-            )
+
+            val lastThirdData = if (isForNotification){
+                NotificationData(
+                    notificationSound = CurrentNamazNotificationData(
+                        currentNamazName = "Last Night",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tones",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            }else{
+                NotificationData(
+                    reminderSound = CurrentNamazNotificationData(
+                        currentNamazName = "Last Night",
+                        soundName = if (isForAdhan) soundName else "Adhan",
+                        soundToneName = if (!isForAdhan) soundName else "Tones",
+
+                        isSoundSelected = isSoundSelected,
+                        isForAdhan = isForAdhan,
+                        isVibrate = isVibrate,
+                        isSilent = isSilent,
+                        isOff = isOff,
+                        soundAdhan = soundAdhan,
+                        soundTone = soundTones
+                    ),
+                )
+            }
+
             viewModel.saveLastNightDetail(lastThirdData)
-        }
-
-        if (viewModel.getFajrCurrentNamazNotificationData() != null) {
-            val fajrData = viewModel.getFajrCurrentNamazNotificationData()
-            fajrData?.sound = sound
-            if (isForAdhan) {
-                fajrData?.soundName = soundName
-                fajrData?.soundToneName = "Tones"
-            } else {
-                fajrData?.soundName = "Adhan"
-                fajrData?.soundToneName = soundName
-            }
-            fajrData?.position = selectedPosition
-            fajrData?.isSilent = isSilent
-            fajrData?.isVibrate = isVibrate
-            fajrData?.isOff = isOff
-            fajrData?.isSoundSelected = isSoundSelected
-            viewModel.saveFajrCurrentNamazNotificationData(fajrData!!)
-        } else {
-            val fajrData = CurrentNamazNotificationData(
-                sound = sound,
-                soundName = if (isForAdhan) soundName else "Adhan",
-                soundToneName = if (!isForAdhan) soundName else "Tones",
-                isSilent = isSilent,
-                isVibrate = isVibrate,
-                isOff = isOff,
-                currentNamazName = "Fajr",
-                position = selectedPosition,
-                isSoundSelected = isSoundSelected,
-                isForAdhan = isForAdhan
-            )
-            viewModel.saveFajrCurrentNamazNotificationData(fajrData)
-        }
-
-        if (viewModel.getDhuhrCurrentNamazNotificationData() != null) {
-            val dhuhrData = viewModel.getDhuhrCurrentNamazNotificationData()
-            dhuhrData?.sound = sound
-            if (isForAdhan) {
-                dhuhrData?.soundName = soundName
-                dhuhrData?.soundToneName = "Tones"
-            } else {
-                dhuhrData?.soundName = "Adhan"
-                dhuhrData?.soundToneName = soundName
-            }
-            dhuhrData?.position = selectedPosition
-            dhuhrData?.isSilent = isSilent
-            dhuhrData?.isVibrate = isVibrate
-            dhuhrData?.isOff = isOff
-            dhuhrData?.isSoundSelected = isSoundSelected
-            viewModel.saveDhuhrCurrentNamazNotificationData(dhuhrData!!)
-        } else {
-            val dhuhrData = CurrentNamazNotificationData(
-                sound = sound,
-                soundName = if (isForAdhan) soundName else "Adhan",
-                soundToneName = if (!isForAdhan) soundName else "Tones",
-                isSilent = isSilent,
-                isVibrate = isVibrate,
-                isOff = isOff,
-                currentNamazName = "Dhuhr",
-                position = selectedPosition,
-                isSoundSelected = isSoundSelected,
-                isForAdhan = isForAdhan
-            )
-            viewModel.saveDhuhrCurrentNamazNotificationData(dhuhrData)
-        }
-
-
-        if (viewModel.getAsrCurrentNamazNotificationData() != null) {
-            val asrData = viewModel.getAsrCurrentNamazNotificationData()
-            asrData?.sound = sound
-            if (isForAdhan) {
-                asrData?.soundName = soundName
-                asrData?.soundToneName = "Tones"
-            } else {
-                asrData?.soundName = "Adhan"
-                asrData?.soundToneName = soundName
-            }
-            asrData?.position = selectedPosition
-            asrData?.isSilent = isSilent
-            asrData?.isVibrate = isVibrate
-            asrData?.isOff = isOff
-            asrData?.isSoundSelected = isSoundSelected
-            viewModel.saveAsrCurrentNamazNotificationData(asrData!!)
-        } else {
-            val asrData = CurrentNamazNotificationData(
-                sound = sound,
-                soundName = if (isForAdhan) soundName else "Adhan",
-                soundToneName = if (!isForAdhan) soundName else "Tones",
-                isSilent = isSilent,
-                isVibrate = isVibrate,
-                isOff = isOff,
-                currentNamazName = "Asr",
-                position = selectedPosition,
-                isSoundSelected = isSoundSelected,
-                isForAdhan = isForAdhan
-            )
-            viewModel.saveAsrCurrentNamazNotificationData(asrData)
-        }
-
-
-        if (viewModel.getMaghribCurrentNamazNotificationData() != null) {
-            val maghribData = viewModel.getMaghribCurrentNamazNotificationData()
-            maghribData?.sound = sound
-            if (isForAdhan) {
-                maghribData?.soundName = soundName
-                maghribData?.soundToneName = "Tones"
-            } else {
-                maghribData?.soundName = "Adhan"
-                maghribData?.soundToneName = soundName
-            }
-            maghribData?.position = selectedPosition
-            maghribData?.isSilent = isSilent
-            maghribData?.isVibrate = isVibrate
-            maghribData?.isOff = isOff
-            maghribData?.isSoundSelected = isSoundSelected
-            viewModel.saveMaghribCurrentNamazNotificationData(maghribData!!)
-        } else {
-            val maghribData = CurrentNamazNotificationData(
-                sound = sound,
-                soundName = if (isForAdhan) soundName else "Adhan",
-                soundToneName = if (!isForAdhan) soundName else "Tones",
-                isSilent = isSilent,
-                isVibrate = isVibrate,
-                isOff = isOff,
-                currentNamazName = "Maghrib",
-                position = selectedPosition,
-                isSoundSelected = isSoundSelected,
-                isForAdhan = isForAdhan
-            )
-            viewModel.saveMaghribCurrentNamazNotificationData(maghribData)
-        }
-
-
-        if (viewModel.getIshaCurrentNamazNotificationData() != null) {
-            val ishaData = viewModel.getIshaCurrentNamazNotificationData()
-            ishaData?.sound = sound
-            if (isForAdhan) {
-                ishaData?.soundName = soundName
-                ishaData?.soundToneName = "Tones"
-            } else {
-                ishaData?.soundName = "Adhan"
-                ishaData?.soundToneName = soundName
-            }
-            ishaData?.position = selectedPosition
-            ishaData?.isSilent = isSilent
-            ishaData?.isVibrate = isVibrate
-            ishaData?.isOff = isOff
-            ishaData?.isSoundSelected = isSoundSelected
-            viewModel.saveIshaCurrentNamazNotificationData(ishaData!!)
-        } else {
-            val ishaData = CurrentNamazNotificationData(
-                sound = sound,
-                soundName = if (isForAdhan) soundName else "Adhan",
-                soundToneName = if (!isForAdhan) soundName else "Tones",
-                isSilent = isSilent,
-                isVibrate = isVibrate,
-                isOff = isOff,
-                currentNamazName = "Isha",
-                position = selectedPosition,
-                isSoundSelected = isSoundSelected,
-                isForAdhan = isForAdhan
-            )
-            viewModel.saveIshaCurrentNamazNotificationData(ishaData)
-        }
-
-        if (viewModel.getMidNightCurrentNamazNotificationData() != null) {
-            val ishaData = viewModel.getMidNightCurrentNamazNotificationData()
-            ishaData?.sound = sound
-            if (isForAdhan) {
-                ishaData?.soundName = soundName
-                ishaData?.soundToneName = "Tones"
-            } else {
-                ishaData?.soundName = "Adhan"
-                ishaData?.soundToneName = soundName
-            }
-            ishaData?.position = selectedPosition
-            ishaData?.isSilent = isSilent
-            ishaData?.isVibrate = isVibrate
-            ishaData?.isOff = isOff
-            ishaData?.isSoundSelected = isSoundSelected
-            viewModel.saveMidNightCurrentNamazNotificationData(ishaData!!)
-        } else {
-            val ishaData = CurrentNamazNotificationData(
-                sound = sound,
-                soundName = if (isForAdhan) soundName else "Adhan",
-                soundToneName = if (!isForAdhan) soundName else "Tones",
-                isSilent = isSilent,
-                isVibrate = isVibrate,
-                isOff = isOff,
-                currentNamazName = "Isha",
-                position = selectedPosition,
-                isSoundSelected = isSoundSelected,
-                isForAdhan = isForAdhan
-            )
-            viewModel.saveMidNightCurrentNamazNotificationData(ishaData)
-        }
-
-        if (viewModel.getLastThirdCurrentNamazNotificationData() != null) {
-            val ishaData = viewModel.getLastThirdCurrentNamazNotificationData()
-            ishaData?.sound = sound
-            if (isForAdhan) {
-                ishaData?.soundName = soundName
-                ishaData?.soundToneName = "Tones"
-            } else {
-                ishaData?.soundName = "Adhan"
-                ishaData?.soundToneName = soundName
-            }
-            ishaData?.position = selectedPosition
-            ishaData?.isSilent = isSilent
-            ishaData?.isVibrate = isVibrate
-            ishaData?.isOff = isOff
-            ishaData?.isSoundSelected = isSoundSelected
-            viewModel.saveLastThirdCurrentNamazNotificationData(ishaData!!)
-        } else {
-            val ishaData = CurrentNamazNotificationData(
-                sound = sound,
-                soundName = if (isForAdhan) soundName else "Adhan",
-                soundToneName = if (!isForAdhan) soundName else "Tones",
-                isSilent = isSilent,
-                isVibrate = isVibrate,
-                isOff = isOff,
-                currentNamazName = "Isha",
-                position = selectedPosition,
-                isSoundSelected = isSoundSelected,
-                isForAdhan = isForAdhan
-            )
-            viewModel.saveLastThirdCurrentNamazNotificationData(ishaData)
         }
 
         delay(5000)

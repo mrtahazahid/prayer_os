@@ -143,6 +143,8 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
 
     override fun setOnClickListener() {
+        binding.cityView.isClickable = !binding.switchAutomatic.isChecked
+        binding.cityView.isEnabled = !binding.switchAutomatic.isChecked
         binding.imageViewCalculationArrow.setOnClickListener(this)
         binding.calculationView.setOnClickListener(this)
         binding.imageViewLocationArrowButton.setOnClickListener(this)
@@ -178,6 +180,10 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.assetView.setOnClickListener(this)
         binding.cityView.setOnClickListener(this)
         binding.viewAsset.setOnClickListener(this)
+        binding.appView.setOnClickListener(this)
+        binding.systemView.setOnClickListener(this)
+
+
         if (!viewModel.getAutomaticLocation) {
             binding.group.gone()
         } else {
@@ -186,6 +192,8 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         binding.switchAutomatic.setOnClickListener {
             binding.cityView.isClickable = !binding.switchAutomatic.isChecked
             if (binding.switchAutomatic.isChecked) {
+                binding.cityView.isClickable = false
+                binding.cityView.isEnabled = false
                 binding.group.show()
                 requireActivity().startService(
                     Intent(
@@ -197,6 +205,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             } else {
                 binding.group.gone()
                 binding.cityView.isClickable = true
+                binding.cityView.isEnabled = true
                 requireActivity().stopService(
                     Intent(
                         requireActivity(),
@@ -214,6 +223,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 requireContext(), viewModel.getUserLatLong?.latitude ?: 0.0,
                 viewModel.getUserLatLong?.longitude ?: 0.0
             )
+            Log.d("latLong","${viewModel.getUserLatLong?.latitude}, ${viewModel.getUserLatLong?.longitude}")
             binding.textViewCityName.text = location?.city
             binding.textViewCityTimeZoneName.text = location?.timeZone
             viewModel.setLocationAutomaticValue(binding.switchAutomatic.isChecked)
@@ -429,7 +439,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 }
             }
 
-            binding.imageViewSystem.id -> {
+            binding.imageViewSystem.id ,binding.systemView.id -> {
                 if (!isSystemShow) {
                     binding.imageViewSystem.setImageResource(R.drawable.ic_down)
                     binding.systemDetailViews.visibility = View.VISIBLE
@@ -441,7 +451,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 }
             }
 
-            binding.imageViewApp.id -> {
+            binding.imageViewApp.id ,binding.appView.id-> {
                 if (!isAppShow) {
                     binding.imageViewApp.setImageResource(R.drawable.ic_down)
                     binding.appDetailViews.visibility = View.VISIBLE
@@ -708,7 +718,6 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         locationDialog.listener = this
         lifecycleScope.launch {
             locationDialog.recentLocationList = viewModel.getRecentLocationData()
-            Log.d("lsit", viewModel.getRecentLocationData().toString())
         }
         locationDialog.show(requireActivity().supportFragmentManager, "SoundDialogFragment")
     }
@@ -724,6 +733,8 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         )
         lifecycleScope.launch {
             viewModel.saveRecentLocationData(data)
+            Log.d("Lt",data.lat.toString())
+            Log.d("Ln",data.long.toString())
             viewModel.saveUserLatLong(UserLatLong(data.lat, data.long))
             delay(1500)
 

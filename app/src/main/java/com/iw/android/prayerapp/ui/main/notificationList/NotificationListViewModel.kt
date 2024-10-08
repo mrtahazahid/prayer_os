@@ -43,6 +43,14 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
             }
 
             val currentNamaz = getTimeDifferenceToNextPrayer()
+            for (data in getAllNotificationData()) {
+                if (data != null) {
+                    if (data.createdDate != "" || data.namazName != "") {
+                        notificationList.add(data)
+                    }
+
+                }
+            }
             when (currentNamaz.currentNamazName) {
                 "Fajr" -> {
                     notificationList.add(
@@ -368,14 +376,6 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
             )
 
 
-            for (data in getAllNotificationData()) {
-                if (data != null) {
-                    if (data.createdDate != "" || data.namazName != "") {
-                        notificationList.add(data)
-                    }
-
-                }
-            }
         }
     }
 

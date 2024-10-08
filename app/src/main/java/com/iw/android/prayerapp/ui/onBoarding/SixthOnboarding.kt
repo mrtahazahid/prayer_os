@@ -60,7 +60,7 @@ class SixthOnboarding : BaseFragment(R.layout.fragment_sixth_onboarding) {
 //                ).putExtra("skip", "userSkipped")
 //            )
 //            requireActivity().finish()
-            Toast.makeText(requireContext(), "Work in process", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
         }
 
     }

@@ -1,7 +1,7 @@
 package com.iw.android.prayerapp.ui.main.timeFragment
 
 enum class DuaTypeEnum(private val type: String) {
-    OFF("Off"),
+    OFF("off"),
     TIME("Time"),
     MINUTES("Minutes");
 

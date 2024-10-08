@@ -22,6 +22,9 @@ class PrayerViewModel @Inject constructor(  repository: MainRepository) :
             getSavedPrayerJurisprudence = getPrayerJurisprudence()
             getMethods = getPrayerMethod()
         }
+
     }
+
+
 
 }

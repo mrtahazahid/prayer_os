@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.batoulapps.adhan2.CalculationMethod
@@ -23,6 +24,9 @@ import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
+import com.iw.android.prayerapp.base.prefrence.DataPreference
+import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.IS_FIRST_TIME
+import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.PrayerTime
 import com.iw.android.prayerapp.databinding.DialogExitBinding
@@ -32,9 +36,12 @@ import com.iw.android.prayerapp.extension.formatRemainingTime
 import com.iw.android.prayerapp.extension.getIslamicDateByOffSet
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
+import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -55,6 +62,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
 
     val viewModel: PrayerViewModel by viewModels()
+    val viewModelTime: TimeViewModel by viewModels()
     private var currentNamazName = ""
 
     private lateinit var namazTimesList: ArrayList<String>
@@ -143,6 +151,145 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 getIslamicDateByOffSet(0)
             }
         upComingNamazTime()
+        saveDefaultNamaz()
+    }
+
+    private fun saveDefaultNamaz() = lifecycleScope.launch {
+        val preference = DataPreference(requireContext())
+        val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
+        if (viewModel.repository.preferences.isFirstTime.first()) {
+            val savingFajrNotificationData = CurrentNamazNotificationData(
+                "Fajr",
+                "Adhan", "Tones",
+                null,
+                null,
+                null,
+                false,
+                true,
+                false,
+                false, false, R.raw.adhan_abdul_basit, null
+            )
+            val saveFajrData = NotificationData(
+                namazName = "Fajr",
+                namazTime =     convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds()),
+                notificationSound = savingFajrNotificationData,
+                reminderSound = null,
+                reminderTimeMinutes = "off",
+                reminderTime = "12:00 AM",
+                secondReminderTimeMinutes = "off",
+                secondReminderTime = "12:00 AM",
+                duaReminderMinutes = "off",
+                duaTime = "12:00 AM",
+                duaType = "off",
+            )
+
+            val savingDhuhrNotificationData = CurrentNamazNotificationData(
+                "Dhuhr",
+                "Adhan", "Tones",
+                null,
+                null,
+                null,
+                false,
+                true,
+                false,
+                false, false, R.raw.adhan_abdul_basit, null
+            )
+            val saveDhuhrData = NotificationData(
+                namazName = "Dhuhr",
+                namazTime = convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds()),
+                notificationSound = savingDhuhrNotificationData,
+                reminderSound = null,
+                reminderTimeMinutes = "off",
+                reminderTime = "12:00 AM",
+                secondReminderTimeMinutes = "off",
+                secondReminderTime = "12:00 AM",
+                duaReminderMinutes = "off",
+                duaTime = "12:00 AM",
+                duaType = "off",
+            )
+
+            val savingAsrNotificationData = CurrentNamazNotificationData(
+                "Asr",
+                "Adhan", "Tones",
+                null,
+                null,
+                null,
+                false,
+                true,
+                false,
+                false, false, R.raw.adhan_abdul_basit, null
+            )
+            val saveAsrData = NotificationData(
+                namazName = "Asr",
+                namazTime = convertToFunTime(getPrayerTime.asr.toEpochMilliseconds()),
+                notificationSound = savingAsrNotificationData,
+                reminderSound = null,
+                reminderTimeMinutes = "off",
+                reminderTime = "12:00 AM",
+                secondReminderTimeMinutes = "off",
+                secondReminderTime = "12:00 AM",
+                duaReminderMinutes = "off",
+                duaTime = "12:00 AM",
+                duaType = "off",
+            )
+
+            val savingMaghribNotificationData = CurrentNamazNotificationData(
+                "Maghrib",
+                "Adhan", "Tones",
+                null,
+                null,
+                null,
+                false,
+                true,
+                false,
+                false, false, R.raw.adhan_abdul_basit, null
+            )
+            val saveMaghribData = NotificationData(
+                namazName = "Maghrib",
+                namazTime = convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds()),
+                notificationSound = savingMaghribNotificationData,
+                reminderSound = null,
+                reminderTimeMinutes = "off",
+                reminderTime = "12:00 AM",
+                secondReminderTimeMinutes = "off",
+                secondReminderTime = "12:00 AM",
+                duaReminderMinutes = "off",
+                duaTime = "12:00 AM",
+                duaType = "off",
+            )
+
+            val savingIshaNotificationData = CurrentNamazNotificationData(
+                "Isha",
+                "Adhan", "Tones",
+                null,
+                null,
+                null,
+                false,
+                true,
+                false,
+                false, false, R.raw.adhan_abdul_basit, null
+            )
+            val saveIshaData = NotificationData(
+                namazName = "Isha",
+                namazTime = convertToFunTime(getPrayerTime.isha.toEpochMilliseconds()),
+                notificationSound = savingIshaNotificationData,
+                reminderSound = null,
+                reminderTimeMinutes = "off",
+                reminderTime = "12:00 AM",
+                secondReminderTimeMinutes = "off",
+                secondReminderTime = "12:00 AM",
+                duaReminderMinutes = "off",
+                duaTime = "12:00 AM",
+                duaType = "off",
+            )
+            viewModel.saveFajrDetail(saveFajrData)
+            viewModel.saveDuhrDetail(saveDhuhrData)
+            viewModel.saveAsrDetail(saveAsrData)
+            viewModel.saveMagribDetail(saveMaghribData)
+            viewModel.saveIshaDetail(saveIshaData)
+
+            preference.setBooleanData(IS_FIRST_TIME, false)
+        }
     }
 
     override fun setObserver() {
@@ -275,6 +422,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     private fun upComingNamazTime() {
         val getPrayerTime =
             getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
+
         val currentNamaz = getTimeDifferenceToNextPrayer()
 
         if (isTodayFriday()) {

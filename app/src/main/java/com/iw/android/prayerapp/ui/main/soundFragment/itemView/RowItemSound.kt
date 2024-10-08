@@ -24,17 +24,15 @@ class RowItemSound(private val data: SoundData, private val listener: OnItemClic
         (bi as RowItemSoundBinding).also { binding ->
 
             binding.textViewTitle.text = data.title
-            binding.imageViewCheck.visibility = if(data.isSoundSelected || data.soundFile == selectedSound){
-                data.isSoundSelected = true
+            binding.imageViewCheck.visibility = if(data.isSoundSelected){
+                listener.onItemSelected(data)
                  View.VISIBLE
 
             }else{
-                data.isSoundSelected = false
                 View.GONE
             }
 
             binding.mainView.setOnClickListener {
-                data.isSoundSelected = true
                 binding.imageViewCheck.visibility =  View.VISIBLE
                 listener.onClick(position, data)
 
@@ -44,6 +42,7 @@ class RowItemSound(private val data: SoundData, private val listener: OnItemClic
 
 }
 
-fun interface OnItemClick {
+ interface OnItemClick {
     fun onClick(position: Int, data: SoundData)
+    fun onItemSelected(data: SoundData)
 }

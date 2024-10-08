@@ -85,7 +85,7 @@ class RowItemMore(
                     "Rate this app" -> {
                         Toast.makeText(
                             binding.imageView.context,
-                            "Work in process",
+                            "Coming Soon",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -93,7 +93,7 @@ class RowItemMore(
                     "Share this app" -> {
                         Toast.makeText(
                             binding.imageView.context,
-                            "Work in process",
+                            "Coming Soon",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -152,7 +152,7 @@ class RowItemMore(
         try {
             try {
                 val intent = Intent(Intent.ACTION_SEND)
-                val recipients = arrayOf("prayerApp@gmail.com")
+                val recipients = arrayOf("help@praywatch.app")
                 intent.putExtra(Intent.EXTRA_EMAIL, recipients)
                 intent.putExtra(
                     Intent.EXTRA_SUBJECT,

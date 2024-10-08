@@ -10,6 +10,7 @@ import android.widget.TimePicker
 import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
@@ -23,6 +24,7 @@ import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
 import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
 import com.iw.android.prayerapp.utils.SoundDataPass
 import com.iw.android.prayerapp.utils.SoundSelectionDialog
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -54,10 +56,56 @@ class RowItemTime(
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemPrayTimeBinding).also { binding ->
             _binding = binding
+            _binding.imageView.setImageResource(data.image)
+            setIconByDataType()
+
             prayerDetailData = data.namazDetail
             initialize()
             setOnClickListener()
 
+        }
+    }
+
+    private fun setIconByDataType() {
+        if (data.title == "Midnight" || data.title == "Last Third") {
+            if (data.namazDetail.notificationSound != null) {
+                if (data.namazDetail.notificationSound?.selectedSoundItemPosition == 1 || data.namazDetail.notificationSound?.selectedSoundItemPosition == 0) {
+                    _binding.imageView.setImageResource(R.drawable.ic_mike)
+                }
+
+                if (data.namazDetail.notificationSound!!.isSilent) {
+                    _binding.imageView.setImageResource(R.drawable.ic_mute_mike)
+                }
+
+                if (data.namazDetail.notificationSound!!.isOff) {
+                    _binding.imageView.setImageResource(R.drawable.ic_off)
+                }
+
+                if (data.namazDetail.notificationSound!!.isVibrate) {
+                    _binding.imageView.setImageResource(R.drawable.ic_vibrate)
+                }
+
+
+            } else if (data.namazDetail.reminderSound != null) {
+                if (data.namazDetail.reminderSound?.selectedSoundItemPosition == 1 || data.namazDetail.reminderSound?.selectedSoundItemPosition == 0) {
+                    _binding.imageView.setImageResource(R.drawable.ic_mike)
+                }
+
+                if (data.namazDetail.reminderSound!!.isSilent) {
+                    _binding.imageView.setImageResource(R.drawable.ic_mute_mike)
+                }
+
+                if (data.namazDetail.reminderSound!!.isOff) {
+                    _binding.imageView.setImageResource(R.drawable.ic_off)
+                }
+
+                if (data.namazDetail.reminderSound!!.isVibrate) {
+                    _binding.imageView.setImageResource(R.drawable.ic_vibrate)
+                }
+
+            } else {
+                _binding.imageView.setImageResource(R.drawable.ic_notification_mute)
+            }
         }
     }
 
@@ -106,7 +154,12 @@ class RowItemTime(
 
             _binding.mainView.id -> {
                 if (!isViewShow) {
-                    _binding.imageViewDropDownMenu.setImageDrawable(ContextCompat.getDrawable(_binding.textViewTime.context,R.drawable.ic_down))
+                    _binding.imageViewDropDownMenu.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            _binding.textViewTime.context,
+                            R.drawable.ic_down
+                        )
+                    )
                     _binding.detailViews.visibility = View.VISIBLE
                     recyclerView.smoothScrollToPosition(0)
                     _binding.textViewTime.setTextColor(
@@ -118,7 +171,12 @@ class RowItemTime(
                     isViewShow = true
                 } else {
                     _binding.detailViews.visibility = View.GONE
-                    _binding.imageViewDropDownMenu.setImageDrawable(ContextCompat.getDrawable(_binding.textViewTime.context,R.drawable.ic_forward))
+                    _binding.imageViewDropDownMenu.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            _binding.textViewTime.context,
+                            R.drawable.ic_forward
+                        )
+                    )
                     _binding.textViewTime.setTextColor(
                         ContextCompat.getColorStateList(
                             _binding.textViewTime.context,
@@ -131,7 +189,12 @@ class RowItemTime(
 
             _binding.imageViewDropDownMenu.id -> {
                 if (!isViewShow) {
-                    _binding.imageViewDropDownMenu.setImageDrawable(ContextCompat.getDrawable(_binding.textViewTime.context,R.drawable.ic_down))
+                    _binding.imageViewDropDownMenu.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            _binding.textViewTime.context,
+                            R.drawable.ic_down
+                        )
+                    )
                     _binding.detailViews.visibility = View.VISIBLE
                     recyclerView.smoothScrollToPosition(0)
                     _binding.textViewTime.setTextColor(
@@ -143,7 +206,12 @@ class RowItemTime(
                     isViewShow = true
                 } else {
                     _binding.detailViews.visibility = View.GONE
-                    _binding.imageViewDropDownMenu.setImageDrawable(ContextCompat.getDrawable(_binding.textViewTime.context,R.drawable.ic_forward))
+                    _binding.imageViewDropDownMenu.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            _binding.textViewTime.context,
+                            R.drawable.ic_forward
+                        )
+                    )
                     _binding.textViewTime.setTextColor(
                         ContextCompat.getColorStateList(
                             _binding.textViewTime.context,
@@ -161,6 +229,7 @@ class RowItemTime(
                     prayerDetailData?.reminderTime =
                         subtractMinutesFromTime(data.time, reminderTimeMinutes)
                 }
+                setIconByDataType()
                 savePrayerDetailData()
             }
 
@@ -171,11 +240,13 @@ class RowItemTime(
                     prayerDetailData?.reminderTime =
                         subtractMinutesFromTime(data.time, reminderTimeMinutes)
                 }
+                setIconByDataType()
                 savePrayerDetailData()
             }
 
             _binding.imageViewSecondReminderAdd.id -> {
-                _binding.textViewSecondReminderSetTime.text = incrementSecondReminderTimeMinutes()
+                _binding.textViewSecondReminderSetTime.text =
+                    incrementSecondReminderTimeMinutes()
                 prayerDetailData?.secondReminderTimeMinutes =
                     _binding.textViewSecondReminderSetTime.text.toString()
                 if (_binding.textViewSecondReminderSetTime.text.toString() != "off" && _binding.textViewSecondReminderSetTime.text.toString() != "0 min") {
@@ -186,7 +257,8 @@ class RowItemTime(
             }
 
             _binding.imageViewSecondReminderRemove.id -> {
-                _binding.textViewSecondReminderSetTime.text = decrementSecondReminderTimeMinutes()
+                _binding.textViewSecondReminderSetTime.text =
+                    decrementSecondReminderTimeMinutes()
                 prayerDetailData?.secondReminderTimeMinutes =
                     _binding.textViewSecondReminderSetTime.text.toString()
                 if (_binding.textViewSecondReminderSetTime.text.toString() != "off" && _binding.textViewSecondReminderSetTime.text.toString() != "0 min") {
@@ -198,7 +270,8 @@ class RowItemTime(
 
             _binding.imageViewDuaMinus.id -> {
                 _binding.textViewDuaSetTime.text = decrementDuaReminderMinutes()
-                prayerDetailData?.duaReminderMinutes = _binding.textViewDuaSetTime.text.toString()
+                prayerDetailData?.duaReminderMinutes =
+                    _binding.textViewDuaSetTime.text.toString()
                 if (_binding.textViewSetTime.text.toString() != "off" && _binding.textViewSetTime.text.toString() != "0 min") {
                     prayerDetailData?.duaTime =
                         addMinutesToTime(data.time, duaReminderTimeMinutes)
@@ -210,7 +283,8 @@ class RowItemTime(
 
             _binding.imageViewDuaAdd.id -> {
                 _binding.textViewDuaSetTime.text = incrementDuaReminderMinutes()
-                prayerDetailData?.duaReminderMinutes = _binding.textViewDuaSetTime.text.toString()
+                prayerDetailData?.duaReminderMinutes =
+                    _binding.textViewDuaSetTime.text.toString()
                 if (_binding.textViewSetTime.text.toString() != "off" && _binding.textViewSetTime.text.toString() != "0 min") {
                     prayerDetailData?.duaTime =
                         addMinutesToTime(data.time, duaReminderTimeMinutes)
@@ -234,11 +308,11 @@ class RowItemTime(
                 }
             }
 
-            _binding.textViewNotificationSound.id -> {
+            _binding.notificationSelectionView.id -> {
                 openSoundDialogFragment(data.title, true)
             }
 
-            _binding.textViewReminderSound.id -> {
+            _binding.reminderSelectionView.id -> {
                 openSoundDialogFragment(data.title, false)
             }
         }
@@ -275,7 +349,7 @@ class RowItemTime(
 
         _binding.textViewTime.setTextColor(color)
 
-        _binding.imageView.setImageResource(data.image)
+
         _binding.textViewTitle.text = data.title
         _binding.textViewTime.text = data.time
         //  _binding.textViewNotificationSound.text = data.namazDetail.notificationSound?.soundName
@@ -285,10 +359,10 @@ class RowItemTime(
         _binding.textViewNotificationSound.text =
             if (data.namazDetail.notificationSound?.isForAdhan == true) data.namazDetail.notificationSound?.soundName
                 ?: "Adhan" else data.namazDetail.notificationSound?.soundToneName ?: "Adhan"
-        if (data.namazDetail.notificationSound?.isSoundSelected == false) {
+        if (data.namazDetail.notificationSound?.isSoundSelected == true) {
             _binding.textViewNotificationSound.text =
                 if (data.namazDetail.notificationSound?.isForAdhan == true) data.namazDetail.notificationSound?.soundName
-                    ?: "Adhan" else data.namazDetail.notificationSound?.soundToneName ?: "Adhan"
+                    ?: "Adhan" else data.namazDetail.notificationSound?.soundToneName ?: "Tone"
         } else {
             if (data.namazDetail.notificationSound?.isSilent == true) {
                 _binding.textViewNotificationSound.text = "Silent"
@@ -296,6 +370,7 @@ class RowItemTime(
             if (data.namazDetail.notificationSound?.isVibrate == true) {
                 _binding.textViewNotificationSound.text = "Vibrate"
             }
+
             if (data.namazDetail.notificationSound?.isOff == true) {
                 _binding.textViewNotificationSound.text = "Off"
             }
@@ -303,10 +378,10 @@ class RowItemTime(
         _binding.textViewReminderSound.text =
             if (data.namazDetail.reminderSound?.isForAdhan == true) data.namazDetail.reminderSound?.soundName
                 ?: "Tone" else data.namazDetail.reminderSound?.soundToneName ?: "Tone"
-        if (data.namazDetail.reminderSound?.isSoundSelected == false) {
+        if (data.namazDetail.reminderSound?.isSoundSelected == true) {
             _binding.textViewReminderSound.text =
                 if (data.namazDetail.reminderSound?.isForAdhan == true) data.namazDetail.reminderSound?.soundName
-                    ?: "Tone" else data.namazDetail.reminderSound?.soundToneName ?: "Tone"
+                    ?: "Adhan" else data.namazDetail.reminderSound?.soundToneName ?: "Tone"
         } else {
 
             if (data.namazDetail.reminderSound?.isSilent == true) {
@@ -319,8 +394,6 @@ class RowItemTime(
                 _binding.textViewReminderSound.text = "Off"
             }
         }
-
-
         _binding.textViewDuaSetTime.text = data.namazDetail.duaReminderMinutes
         spinnerDua()
     }
@@ -340,8 +413,8 @@ class RowItemTime(
         _binding.imageViewDuaAdd.setOnClickListener(this)
         _binding.imageViewSecondReminderTimeHelp.setOnClickListener(this)
         _binding.cardViewDuaTime.setOnClickListener(this)
-        _binding.textViewNotificationSound.setOnClickListener(this)
-        _binding.textViewReminderSound.setOnClickListener(this)
+        _binding.notificationSelectionView.setOnClickListener(this)
+        _binding.reminderSelectionView.setOnClickListener(this)
 
     }
 
@@ -350,7 +423,21 @@ class RowItemTime(
         val saveData = NotificationData(
             namazName = data.title,
             namazTime = data.time,
-            notificationSound = prayerDetailData?.notificationSound,
+            notificationSound = CurrentNamazNotificationData(
+                prayerDetailData?.notificationSound?.currentNamazName ?: "",
+                prayerDetailData?.notificationSound?.soundName ?: "",
+                prayerDetailData?.notificationSound?.soundToneName ?: "",
+                prayerDetailData?.notificationSound?.selectedSoundPosition,
+                prayerDetailData?.notificationSound?.selectedSoundTonePosition,
+                prayerDetailData?.notificationSound?.selectedSoundItemPosition,
+                prayerDetailData?.notificationSound?.isSoundSelected ?: false,
+                prayerDetailData?.notificationSound?.isForAdhan ?: false,
+                prayerDetailData?.notificationSound?.isVibrate ?: false,
+                prayerDetailData?.notificationSound?.isSilent ?: false,
+                prayerDetailData?.notificationSound?.isOff ?: false,
+                prayerDetailData?.notificationSound?.soundAdhan,
+                prayerDetailData?.notificationSound?.soundTone
+            ),
             reminderSound = prayerDetailData?.reminderSound,
             reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
             reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM",
@@ -361,7 +448,7 @@ class RowItemTime(
             duaType = prayerDetailData?.duaType ?: "off",
             createdDate = getCurrentDate(),
         )
-        
+
         when (data.title) {
             "Fajr" -> viewModel.saveFajrDetail(saveData)
 
@@ -379,6 +466,9 @@ class RowItemTime(
 
             "Last Third" -> viewModel.saveLastNightDetail(saveData)
         }
+        activity.lifecycleScope.launch {
+        }
+
     }
 
 
@@ -426,39 +516,51 @@ class RowItemTime(
         soundDialog.listener = this
         soundDialog.namazName = namazName
         if (isForNotification) {
-            soundDialog.selectedSound =
-                data.namazDetail.notificationSound?.sound ?: R.raw.adhan_abdul_basit
             soundDialog.selectedSoundAdhanName =
                 data.namazDetail.notificationSound?.soundName ?: "Adhan"
             soundDialog.selectedSoundToneName =
                 data.namazDetail.notificationSound?.soundToneName ?: "Tone"
-            soundDialog.selectedPosition = data.namazDetail.notificationSound?.sound ?: 0
             soundDialog.isForAdhan = data.namazDetail.notificationSound?.isForAdhan ?: false
-            soundDialog.isVibrateSelected = data.namazDetail.notificationSound?.isVibrate ?: false
+            soundDialog.isVibrateSelected =
+                data.namazDetail.notificationSound?.isVibrate ?: false
             soundDialog.isOffSelected = data.namazDetail.notificationSound?.isOff ?: false
+            soundDialog.selectedItemPosition =
+                data.namazDetail.notificationSound?.selectedSoundItemPosition ?: 0
+            soundDialog.selectedSoundPosition =
+                data.namazDetail.notificationSound?.selectedSoundPosition ?: 0
+            soundDialog.selectedSoundTonePosition =
+                data.namazDetail.notificationSound?.selectedSoundTonePosition ?: 0
             soundDialog.isSoundSelected =
                 data.namazDetail.notificationSound?.isSoundSelected ?: false
             soundDialog.isSilentSelected = data.namazDetail.notificationSound?.isSilent ?: false
+            if (data.namazDetail.notificationSound?.selectedSoundItemPosition == 0) {
+                soundDialog.selectedSound = data.namazDetail.notificationSound?.soundAdhan ?: 0
+            } else {
+                soundDialog.selectedSound = data.namazDetail.notificationSound?.soundTone ?: 0
+            }
         } else {
-            soundDialog.selectedSound =
-                data.namazDetail.reminderSound?.sound ?: R.raw.adhan_abdul_basit
             soundDialog.selectedSoundAdhanName =
                 data.namazDetail.reminderSound?.soundName ?: "Adhan"
             soundDialog.selectedSoundToneName =
                 data.namazDetail.reminderSound?.soundToneName ?: "Tone"
-            soundDialog.selectedPosition = data.namazDetail.reminderSound?.sound ?: 0
             soundDialog.isForAdhan = data.namazDetail.reminderSound?.isForAdhan ?: false
+            soundDialog.selectedItemPosition =
+                data.namazDetail.reminderSound?.selectedSoundItemPosition ?: 0
             soundDialog.isVibrateSelected = data.namazDetail.reminderSound?.isVibrate ?: false
+            soundDialog.selectedSoundPosition =
+                data.namazDetail.reminderSound?.selectedSoundPosition ?: 0
+            soundDialog.selectedSoundTonePosition =
+                data.namazDetail.reminderSound?.selectedSoundTonePosition ?: 0
             soundDialog.isOffSelected = data.namazDetail.reminderSound?.isOff ?: false
-            soundDialog.isSoundSelected = data.namazDetail.reminderSound?.isSoundSelected ?: false
+            soundDialog.isSoundSelected =
+                data.namazDetail.reminderSound?.isSoundSelected ?: false
             soundDialog.isSilentSelected = data.namazDetail.reminderSound?.isSilent ?: false
-        }
+            if (data.namazDetail.notificationSound?.selectedSoundItemPosition == 0) {
+                soundDialog.selectedSound = data.namazDetail.reminderSound?.soundAdhan ?: 0
+            } else {
+                soundDialog.selectedSound = data.namazDetail.reminderSound?.soundTone ?: 0
+            }
 
-
-        if (isForNotification) {
-            soundDialog.selectedSound = data.namazDetail.notificationSound?.position ?: 0
-        } else {
-            soundDialog.selectedSound = data.namazDetail.reminderSound?.position ?: 0
         }
         soundDialog.isForNotification = isForNotification
         soundDialog.show(activity.supportFragmentManager, "SoundDialogFragment")
@@ -487,7 +589,8 @@ class RowItemTime(
                 _binding.cardViewDuaAdjustmentTime.visibility = View.GONE
                 _binding.cardViewDuaTime.visibility = View.VISIBLE
                 _binding.textViewDuaSetTime.visibility = View.GONE
-                _binding.textViewDuaSetTime.text = "${prayerDetailData?.duaReminderMinutes} mins"
+                _binding.textViewDuaSetTime.text =
+                    "${prayerDetailData?.duaReminderMinutes} mins"
                 _binding.spinnerDuaReminderSwitch.setSelection(2)
 
             }
@@ -542,7 +645,8 @@ class RowItemTime(
 
     fun getCurrentDate(): String {
         val currentDate = LocalDate.now()
-        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy") // Customize the format as needed
+        val formatter =
+            DateTimeFormatter.ofPattern("dd MMM yyyy") // Customize the format as needed
         return currentDate.format(formatter)
     }
 
@@ -588,7 +692,7 @@ class RowItemTime(
             reminderTimeMinutes--
             "$reminderTimeMinutes min"
         } else {
-            reminderTimeMinutes =0
+            reminderTimeMinutes = 0
             "off"
         }
     }
@@ -604,7 +708,7 @@ class RowItemTime(
             secondReminderTimeMinutes--
             "$secondReminderTimeMinutes min"
         } else {
-            secondReminderTimeMinutes =0
+            secondReminderTimeMinutes = 0
             "off"
         }
     }
@@ -619,7 +723,7 @@ class RowItemTime(
             duaReminderTimeMinutes--
             "$duaReminderTimeMinutes min"
         } else {
-            duaReminderTimeMinutes =0
+            duaReminderTimeMinutes = 0
             "off"
         }
     }
@@ -663,6 +767,7 @@ class RowItemTime(
                 }
             }
         }
+        setIconByDataType()
         savePrayerDetailData()
     }
 

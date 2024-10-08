@@ -19,7 +19,7 @@ import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.prefrence.DataPreference
-import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
+import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.NotificationPrayerTime
 import com.iw.android.prayerapp.extension.convertToFunTime
 import com.iw.android.prayerapp.notificationService.Notification
@@ -117,7 +117,6 @@ class NotificationService : Service() {
 
             while (true) {
                 checkAndTriggerNotification()
-                checkDailyNamazTime()
                 checkIqamaTime()
                 jummahTimeCheck()
                 val intent = Intent(applicationContext, NotificationListenerService::class.java)
@@ -142,62 +141,100 @@ class NotificationService : Service() {
         }
     }
 
-    private suspend fun checkAndTriggerNotification() {
-        val specifiedTimes = prefrence.getNotificationData()
-        if (specifiedTimes.isNotEmpty()) {
-            for ((index, specifiedTime) in specifiedTimes.withIndex()) {
-                if (specifiedTime.namazTime != "") {
-                    if (specifiedTime.duaTime != "off") {
-                        if (isTimeMatch(specifiedTime.duaTime)) {
-                            notifications.notify(
-                                specifiedTime.namazName, "${specifiedTime.namazName} Dhua Time",
-                                specifiedTime.notificationSound?.sound ?: R.raw.adhan_abdul_basit,
-                                specifiedTime.reminderSound?.isVibrate ?: false,
-                                specifiedTime.reminderSound?.isSilent ?: false
-                            )
-                            sendNotification(applicationContext)
-                            prefrence.removeNotificationData(index)
-                            delay(1500)
-                            break
-                        }
-                    }
+    private suspend fun checkAndTriggerNotification()  {
+        Log.d("prefrence.getFajrDetail()",prefrence.getFajrDetail().toString())
+        prefrence.getFajrDetail()?.let { checkNamazNotification(it) }
+        prefrence.getSunriseDetail()?.let { checkNamazNotification(it) }
+        prefrence.getDuhrDetail()?.let { checkNamazNotification(it) }
+        prefrence.getAsrDetail()?.let { checkNamazNotification(it) }
+        prefrence.getMagribDetail()?.let { checkNamazNotification(it) }
+        prefrence.getIshaDetail()?.let { checkNamazNotification(it) }
+        prefrence.getMidnightDetail()?.let { checkNamazNotification(it) }
+        prefrence.getLastThirdDetail()?.let { checkNamazNotification(it) }
 
-                    if (isTimeMatch(specifiedTime.reminderTime)) {
-                        if (specifiedTime.reminderSound?.isOff != true) {
-                            notifications.notify(
-                                specifiedTime.namazName,
-                                "${specifiedTime.namazName} at ${specifiedTime.namazTime}",
-                                specifiedTime.reminderSound?.sound ?: R.raw.adhan_abdul_basit,
-                                specifiedTime.reminderSound?.isVibrate ?: false,
-                                specifiedTime.reminderSound?.isSilent ?: false
-                            )
-                            sendNotification(applicationContext)
-                            prefrence.removeNotificationData(index)
-                            delay(1500)
-                            break
-                        }
-                    }
-                    if (specifiedTime.secondReminderTimeMinutes != "off") {
-                        if (isTimeMatch(specifiedTime.secondReminderTime)) {
-                            notifications.notify(
-                                specifiedTime.namazName, "Second fajr namaz reminder",
-                                specifiedTime.reminderSound?.sound ?: R.raw.adhan_abdul_basit,
-                                specifiedTime.reminderSound?.isVibrate ?: false,
-                                specifiedTime.reminderSound?.isSilent ?: false
-                            )
-                            sendNotification(applicationContext)
-                            prefrence.removeNotificationData(index)
-                            delay(1500)
-                            break
-                        }
-                    }
+    }
 
-                } else {
-                    continue
+    private fun checkNamazNotification(specifiedTime: NotificationData) {
+        Log.d("specifiedTime",specifiedTime.toString())
+        if (specifiedTime.namazTime != "") {
+            if (isTimeMatch(specifiedTime.namazTime)) {
+                val sound =
+                    if (specifiedTime.notificationSound?.isForAdhan == true) specifiedTime.notificationSound?.soundAdhan
+                        ?: R.raw.adhan_abdul_basit else specifiedTime.notificationSound?.soundTone
+                        ?: R.raw.adhan_abdul_basit
+
+                if(specifiedTime.notificationSound?.isOff != true){
+                    notifications.notify(
+                        specifiedTime.namazName,
+                        "${specifiedTime.namazName} Prayer Time",
+                        sound,
+                        specifiedTime.notificationSound?.isVibrate ?: false,
+                        specifiedTime.notificationSound?.isSilent ?: false,
+                        specifiedTime.notificationSound?.isOff ?: false
+                    )
+                    sendNotification(applicationContext)
+                }
+
+
+
+            }
+
+
+            if (specifiedTime.duaTime != "off") {
+                if (isTimeMatch(specifiedTime.duaTime)) {
+                    val sound =
+                        if (specifiedTime.notificationSound?.isForAdhan == true) specifiedTime.notificationSound?.soundAdhan
+                            ?: R.raw.adhan_abdul_basit else specifiedTime.notificationSound?.soundTone
+                            ?: R.raw.adhan_abdul_basit
+                    notifications.notify(
+                        specifiedTime.namazName,
+                        "${specifiedTime.namazName} Dhua Time",
+                        sound,
+                        specifiedTime.reminderSound?.isVibrate ?: false,
+                        specifiedTime.reminderSound?.isSilent ?: false,
+                        specifiedTime.reminderSound?.isOff ?: false
+                    )
+                    sendNotification(applicationContext)
+
+                }
+            }
+
+            if (isTimeMatch(specifiedTime.reminderTime)) {
+                if (specifiedTime.reminderSound?.isOff != true) {
+                    val sound =
+                        if (specifiedTime.reminderSound?.isForAdhan == true) specifiedTime.reminderSound?.soundAdhan
+                            ?: R.raw.adhan_abdul_basit else specifiedTime.reminderSound?.soundTone
+                            ?: R.raw.adhan_abdul_basit
+                    notifications.notify(
+                        specifiedTime.namazName,
+                        "${specifiedTime.namazName} at ${specifiedTime.namazTime}",
+                        sound,
+                        specifiedTime.reminderSound?.isVibrate ?: false,
+                        specifiedTime.reminderSound?.isSilent ?: false,
+                        specifiedTime.reminderSound?.isOff ?: false
+                    )
+                    sendNotification(applicationContext)
+
+                }
+            }
+            if (specifiedTime.secondReminderTimeMinutes != "off") {
+                if (isTimeMatch(specifiedTime.secondReminderTime)) {
+                    val sound =
+                        if (specifiedTime.reminderSound?.isForAdhan == true) specifiedTime.reminderSound?.soundAdhan
+                            ?: R.raw.adhan_abdul_basit else specifiedTime.reminderSound?.soundTone
+                            ?: R.raw.adhan_abdul_basit
+                    notifications.notify(
+                        specifiedTime.namazName,
+                        "Second fajr namaz reminder",
+                        sound,
+                        specifiedTime.reminderSound?.isVibrate ?: false,
+                        specifiedTime.reminderSound?.isSilent ?: false,
+                        specifiedTime.reminderSound?.isOff ?: false
+                    )
+                    sendNotification(applicationContext)
                 }
             }
         }
-
     }
 
 
@@ -261,209 +298,6 @@ class NotificationService : Service() {
         )
         val manager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(serviceChannel)
-    }
-
-    private suspend fun checkDailyNamazTime() {
-
-        val currentTime = millisToTimeFormat(System.currentTimeMillis())
-
-        for (time in prayerList) {
-            val notificationDetail: CurrentNamazNotificationData? = when (time.currentNamazName) {
-                "Fajr" -> {
-                    if (prefrence.getFajrCurrentNamazNotificationData() != null) {
-                        prefrence.getFajrCurrentNamazNotificationData()!!
-                    } else {
-                        CurrentNamazNotificationData(
-                            "Fajr",
-                            "Adhan",
-                            "Tones",
-                            0,
-                            isSoundSelected = false,
-                            isForAdhan = true,
-                            isVibrate = false,
-                            isSilent = false,
-                            isOff = false,
-                            sound = R.raw.adhan_abdul_basit
-                        )
-                    }
-                }
-
-                "Dhuhr" -> {
-                    if (prefrence.getDhuhrCurrentNamazNotificationData() != null) {
-                        prefrence.getDhuhrCurrentNamazNotificationData()!!
-                    } else {
-                        CurrentNamazNotificationData(
-                            "Dhuhr",
-                            "Adhan",
-                            "Tones",
-                            0,
-                            isSoundSelected = false,
-                            isForAdhan = true,
-                            isVibrate = false,
-                            isSilent = false,
-                            isOff = false,
-                            sound = R.raw.adhan_abdul_basit
-                        )
-                    }
-                }
-
-                "Asr" -> {
-                    if (prefrence.getAsrCurrentNamazNotificationData() != null) {
-                        prefrence.getAsrCurrentNamazNotificationData()!!
-                    } else {
-                        CurrentNamazNotificationData(
-                            "Asr",
-                            "Adhan",
-                            "Tones",
-                            0,
-                            isSoundSelected = false,
-                            isForAdhan = true,
-                            isVibrate = false,
-                            isSilent = false,
-                            isOff = false,
-                            sound = R.raw.adhan_abdul_basit
-                        )
-                    }
-                }
-
-                "Maghrib" -> {
-                    if (prefrence.getMaghribCurrentNamazNotificationData() != null) {
-                        prefrence.getMaghribCurrentNamazNotificationData()!!
-                    } else {
-                        CurrentNamazNotificationData(
-                            "Maghrib",
-                            "Adhan",
-                            "Tones",
-                            0,
-                            isSoundSelected = false,
-                            isForAdhan = true,
-                            isVibrate = false,
-                            isSilent = false,
-                            isOff = false,
-                            sound = R.raw.adhan_abdul_basit
-                        )
-                    }
-                }
-
-                "Isha" -> {
-                    if (prefrence.getIshaCurrentNamazNotificationData() != null) {
-                        prefrence.getIshaCurrentNamazNotificationData()!!
-
-                    } else {
-                        CurrentNamazNotificationData(
-                            "Isha",
-                            "Adhan",
-                            "Tones",
-                            0,
-                            isSoundSelected = false,
-                            isForAdhan = true,
-                            isVibrate = false,
-                            isSilent = false,
-                            isOff = false,
-                            sound = R.raw.adhan_abdul_basit
-                        )
-                    }
-                }
-
-                "Mid night" -> {
-                    if (prefrence.getMidnightCurrentNamazNotificationData() != null) {
-                        prefrence.getMidnightCurrentNamazNotificationData()!!
-
-                    } else {
-                        CurrentNamazNotificationData(
-                            "Mid night",
-                            "Adhan",
-                            "Tones",
-                            0,
-                            isSoundSelected = false,
-                            isForAdhan = true,
-                            isVibrate = false,
-                            isSilent = false,
-                            isOff = false,
-                            sound = R.raw.adhan_abdul_basit
-                        )
-                    }
-                }
-
-                "Last third" -> {
-                    if (prefrence.getLastNightCurrentNamazNotificationData() != null) {
-                        prefrence.getLastNightCurrentNamazNotificationData()!!
-
-                    } else {
-                        CurrentNamazNotificationData(
-                            "Last third",
-                            "Adhan",
-                            "Tones",
-                            0,
-                            isSoundSelected = false,
-                            isForAdhan = true,
-                            isVibrate = false,
-                            isSilent = false,
-                            isOff = false,
-                            sound = R.raw.adhan_abdul_basit
-                        )
-                    }
-                }
-
-                else -> {
-                    CurrentNamazNotificationData(
-                        "",
-                        "Adhan",
-                        "Tones",
-                        0,
-                        isSoundSelected = false,
-                        isForAdhan = true,
-                        isVibrate = false,
-                        isSilent = false,
-                        isOff = false,
-                        sound = R.raw.adhan_abdul_basit
-                    )
-                }
-            }
-            val specifiedTimes = prefrence.getNotificationData()
-            Log.d("notificationDetail",notificationDetail.toString())
-            if (specifiedTimes.isNotEmpty()) {
-                for ((index, specifiedTime) in specifiedTimes.withIndex()) {
-Log.d("s",(currentTime == time.currentNamazTime).toString())
-                        if (currentTime == time.currentNamazTime) {
-                            if (notificationDetail?.isOff !=true) {
-                                notifications.notify(
-                                    time.currentNamazName, "Namaz Time",
-                                    notificationDetail?.sound ?: R.raw.adhan_abdul_basit,
-                                    notificationDetail?.isVibrate?:false,
-                                    notificationDetail?.isSilent?:false
-                                )
-                                sendNotification(applicationContext)
-                                prefrence.removeNotificationData(index)
-                                delay(1500)
-                                break
-
-                            } else if (specifiedTime.namazTime != "") {
-                                if (isTimeMatch(specifiedTime.namazTime)) {
-                                    if (specifiedTime.notificationSound?.isOff != true) {
-                                        notifications.notify(
-                                            specifiedTime.namazName, "Namaz Time",
-                                            specifiedTime.notificationSound?.sound
-                                                ?: R.raw.adhan_abdul_basit,
-                                            specifiedTime.notificationSound?.isVibrate ?: false,
-                                            specifiedTime.notificationSound?.isSilent
-                                                ?: false
-                                        )
-                                        sendNotification(applicationContext)
-                                        prefrence.removeNotificationData(index)
-                                        delay(1500)
-                                        break
-                                    }
-                                }
-                            }
-                        } else {
-                            continue
-                        }
-
-                }
-            }
-
-        }
     }
 
 
@@ -565,7 +399,8 @@ Log.d("s",(currentTime == time.currentNamazTime).toString())
                 namazName, "Iqama time",
                 prefrence.getIqamaNotificationSetting()?.reminderSound ?: 0,
                 isForVibrate = false,
-                isForSilent = false
+                isForSilent = false,
+                isOff = false
             )
             sendNotification(applicationContext)
         } else {
@@ -583,7 +418,8 @@ Log.d("s",(currentTime == time.currentNamazTime).toString())
                         "Jummah", "Khutba reminder",
                         prefrence.getIqamaNotificationSetting()?.reminderSound ?: 0,
                         isForVibrate = false,
-                        isForSilent = false
+                        isForSilent = false,
+                        isOff = false
                     )
                     sendNotification(applicationContext)
                 }

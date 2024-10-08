@@ -35,9 +35,9 @@ class SoundFragment : BaseFragment(R.layout.fragment_sound), View.OnClickListene
 
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
-    val soundList = GetAdhanSound.adhanSound
-    val notificationList = GetAdhanSound.notificationSound
-    val duaList = GetAdhanSound.duaSound
+    val soundList = GetAdhanSound().adhanSound
+    val notificationList = GetAdhanSound().notificationSound
+    val duaList = GetAdhanSound().duaSound
     var selectedList = arrayListOf<SoundData>()
     private var selectedItem = ""
     private var selectedItemPosition = 0
@@ -93,7 +93,7 @@ class SoundFragment : BaseFragment(R.layout.fragment_sound), View.OnClickListene
 
         for (data in selectedList) {
             viewTypeArray.add(
-                RowItemSound(data, this,selectedItemPosition)
+                RowItemSound(data, this, selectedItemPosition)
             )
         }
         adapter.items = viewTypeArray
@@ -112,7 +112,14 @@ class SoundFragment : BaseFragment(R.layout.fragment_sound), View.OnClickListene
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.imageViewBack.id -> {
-                setFragmentResult("selected_sound", bundleOf("sound" to selectedItem,"soundPosition" to selectedItemPosition,"isSoundSelectNotification" to args.dataFromTimeFragment.toBoolean()))
+                setFragmentResult(
+                    "selected_sound",
+                    bundleOf(
+                        "sound" to selectedItem,
+                        "soundPosition" to selectedItemPosition,
+                        "isSoundSelectNotification" to args.dataFromTimeFragment.toBoolean()
+                    )
+                )
                 findNavController().popBackStack()
             }
         }
@@ -152,6 +159,10 @@ class SoundFragment : BaseFragment(R.layout.fragment_sound), View.OnClickListene
         mediaPlayer?.setOnCompletionListener {
             stopMediaPlayer()
         }
+    }
+
+    override fun onItemSelected(data: SoundData) {
+        selectedItem = data.title
     }
 }
 

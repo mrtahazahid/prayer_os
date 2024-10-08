@@ -1,7 +1,7 @@
 package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView
 
+import android.util.Log
 import android.view.View
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.iw.android.prayerapp.R
@@ -14,6 +14,9 @@ import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
 
 class RowItemPrayerSound(
+    val selectedItemPosition:Int,
+    val selectedSoundTonePosition:Int,
+    val selectedSoundPosition:Int,
     private val data: PrayerSoundData,
     private val currentNamazName: String,
     private val fragment: Fragment,
@@ -23,6 +26,7 @@ class RowItemPrayerSound(
     val listener: OnClick,
 ) : ViewType<PrayerSoundData>, OnDataSelected {
     private var position = 0
+    private var isForAdhan = false
     private lateinit var _binding: RowItemPraySoundBinding
 
     override fun layoutId(): Int {
@@ -37,12 +41,15 @@ class RowItemPrayerSound(
         (bi as RowItemPraySoundBinding).also { binding ->
             _binding = binding
             this.position = position
+            if(data.title == "Tones"){
+                Log.d("Tones","Called")
+                binding.imageView.setPadding(4,4,4,4)
+            }
             binding.view4.visibility = if (data.title == "Off") View.GONE else View.VISIBLE
             when (data.type) {
                 PrayerEnumType.ADHAN.getValue(), PrayerEnumType.TONES.getValue() -> {
                     binding.textViewSelectSoundTitle.visibility = View.VISIBLE
                 }
-
                 else -> {
                     binding.textViewSelectSoundTitle.visibility = View.GONE
                 }
@@ -65,12 +72,15 @@ class RowItemPrayerSound(
                 listener.onItemClick(position)
                 when (data.type) {
                     PrayerEnumType.ADHAN.getValue() -> {
-                        openSoundDialogFragment(position,"Adhan Sound", currentNamazName, true)
+                        openSoundDialogFragment(position, "Adhan Sound", currentNamazName, true)
                     }
 
                     PrayerEnumType.TONES.getValue() -> {
-                        openSoundDialogFragment(position,"Tones Sound", currentNamazName, true)
+                        openSoundDialogFragment(position, "Tones Sound", currentNamazName, true)
                     }
+
+
+
                 }
             }
 
@@ -83,7 +93,24 @@ class RowItemPrayerSound(
         sound: Int?,
         isSoundForNotification: Boolean
     ) {
-        listener.onSoundSelected(soundName, soundPosition, sound, position, isSoundForNotification,_binding.textViewSelectSoundTitle)
+        Log.d("soundPosition",soundPosition.toString())
+        if (isForAdhan) {
+            listener.onSoundSelected(
+                soundName,
+                soundPosition,
+                sound,
+                position,
+                isSoundForNotification,
+            )
+        } else {
+            listener.onSoundSelected(
+                soundName,
+                soundPosition,
+                sound,
+                position,
+                isSoundForNotification,
+            )
+        }
     }
 
     private fun openSoundDialogFragment(
@@ -95,9 +122,12 @@ class RowItemPrayerSound(
         val soundDialog = SoundDialog()
         soundDialog.listener = this
         soundDialog.title = title
-        soundDialog.selectedItem = if(position == 0) data.selectedItemAdhanTitle else data.selectedItemTonesTitle
+        soundDialog.selectedItem =
+            if (position == 0) data.selectedItemAdhanTitle else data.selectedItemTonesTitle
         soundDialog.subTitle = subTitle
         soundDialog.selectedItemPosition = position
+        soundDialog.selectedSoundPosition = selectedSoundPosition
+        soundDialog.selectedSoundTonePosition = selectedSoundTonePosition
         soundDialog.selectedSound = soundSelected
         soundDialog.isForNotification = isForNotification
         soundDialog.show(fragment.childFragmentManager, "SoundDialogFragment")
@@ -112,6 +142,6 @@ interface OnClick {
         soundPosition: Int,
         sound: Int?,
         position: Int,
-        isForNotification: Boolean,textView: AppCompatTextView
+        isForNotification: Boolean
     )
 }

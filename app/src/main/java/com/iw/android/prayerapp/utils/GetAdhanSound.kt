@@ -1,16 +1,14 @@
 package com.iw.android.prayerapp.utils
 
 import com.iw.android.prayerapp.R
-import com.iw.android.prayerapp.data.response.PrayerSoundData
 import com.iw.android.prayerapp.data.response.SoundData
-import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerEnumType
 
-object GetAdhanSound {
+class GetAdhanSound {
     val adhanSound = arrayListOf<SoundData>()
     val notificationSound = arrayListOf<SoundData>()
     val duaSound = arrayListOf<SoundData>()
     val assetList = arrayListOf<SoundData>()
-    var prayerSoundList = arrayListOf<PrayerSoundData>()
+
 
 
     init {
@@ -206,42 +204,6 @@ object GetAdhanSound {
             assetList.add(sound)
         }
 
-        prayerSoundList.add(
-            PrayerSoundData(
-                "Adhan", R.drawable.ic_mike, PrayerEnumType.ADHAN.getValue(),
-                isImageForwardShow = true,
-                isItemSelected = true,
-                selectedItemAdhanTitle = "adhan",
-                selectedItemTonesTitle = "Tones",
-            )
-        )
-        prayerSoundList.add(
-            PrayerSoundData(
-                "Tones", R.drawable.ic_mike, PrayerEnumType.TONES.getValue(),
-                isImageForwardShow = true,
-                isItemSelected = false
-            )
-        )
-        prayerSoundList.add(
-            PrayerSoundData(
-                "Vibrate", R.drawable.ic_mike, PrayerEnumType.VIBRATE.getValue(),
-                isImageForwardShow = false,
-                isItemSelected = false
-            )
-        )
-        prayerSoundList.add(
-            PrayerSoundData(
-                "Silent", R.drawable.ic_mike, PrayerEnumType.SILENT.getValue(),
-                isImageForwardShow = false,
-                isItemSelected = false
-            )
-        )
-        prayerSoundList.add(
-            PrayerSoundData(
-                "Off", R.drawable.ic_mike, PrayerEnumType.OFF.getValue(),
-                isImageForwardShow = false,
-                isItemSelected = false
-            )
-        )
+
     }
 }

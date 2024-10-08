@@ -1,6 +1,7 @@
 package com.iw.android.prayerapp.ui.main.timeFragment
 
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.batoulapps.adhan2.CalculationMethod
 import com.batoulapps.adhan2.CalculationParameters
@@ -44,11 +45,27 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         }
     }
 
-   suspend fun getPrayList(lat:Double,long:Double)  = viewModelScope.launch {
+    fun getPrayerTime(lat: Double, long: Double): ArrayList<String> {
+        Log.d("latlong,", "lat${userLatLong?.latitude} long${userLatLong?.longitude}")
+        return GetAdhanDetails.getPrayTime(
+            lat,
+            long,
+            method ?: CalculationMethod.NORTH_AMERICA.parameters.copy(
+                madhab = madhab ?: Madhab.HANAFI
+            ),
+            selectedPrayerDate
+        )
+
+    }
+
+
+    suspend fun getPrayList(lat: Double, long: Double) = viewModelScope.launch {
         val getPrayerTime = GetAdhanDetails.getPrayTime(
             lat,
             long,
-            method?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.HANAFI),
+            method ?: CalculationMethod.NORTH_AMERICA.parameters.copy(
+                madhab = madhab ?: Madhab.HANAFI
+            ),
             selectedPrayerDate
         )
 
@@ -129,9 +146,8 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         )
 
 
-
         // Get the upcoming namaz using getTimeDifferenceToNextPrayer function
-        val upcomingNamaz = getTimeDifferenceToNextPrayer(lat,long)
+        val upcomingNamaz = getTimeDifferenceToNextPrayer(lat, long)
 
         // Iterate through the prayTimeArray and set isCurrentNamaz accordingly
         for (prayTime in prayTimeArray) {
@@ -156,16 +172,16 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         return dateFormat.format(calendar.time)
     }
 
-    private fun getTimeDifferenceToNextPrayer(lat:Double,long:Double): PrayerTime {
+    private fun getTimeDifferenceToNextPrayer(lat: Double, long: Double): PrayerTime {
 
-        madhab = if(!getSavedPrayerJurisprudence.isNullOrEmpty()){
+        madhab = if (!getSavedPrayerJurisprudence.isNullOrEmpty()) {
             if (getSavedPrayerJurisprudence.toInt() == 1) {
                 Madhab.HANAFI
             } else {
                 Madhab.SHAFI
             }
 
-        }else{
+        } else {
             Madhab.HANAFI
         }
 
@@ -173,7 +189,9 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
             lat,
             long,
-            method?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
+            method ?: CalculationMethod.NORTH_AMERICA.parameters.copy(
+                madhab = madhab ?: Madhab.HANAFI
+            )
         )
 
         val prayerTimeList = listOf(
@@ -287,14 +305,14 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
     }
 
 
-    private fun getMethod()  {
+    private fun getMethod() {
         madhab = if (!getSavedPrayerJurisprudence.isNullOrEmpty()) {
             if (getSavedPrayerJurisprudence.toInt() == 1) {
                 Madhab.HANAFI
             } else {
                 Madhab.SHAFI
             }
-        }else{
+        } else {
             Madhab.HANAFI
         }
 
@@ -307,7 +325,9 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
                 }
 
                 1 -> {
-                    CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
+                    CalculationMethod.NORTH_AMERICA.parameters.copy(
+                        madhab = madhab ?: Madhab.HANAFI
+                    )
                 }
 
                 2 -> {
@@ -361,7 +381,9 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
                 }
 
                 else -> {
-                    CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
+                    CalculationMethod.NORTH_AMERICA.parameters.copy(
+                        madhab = madhab ?: Madhab.HANAFI
+                    )
                 }
             }
         }

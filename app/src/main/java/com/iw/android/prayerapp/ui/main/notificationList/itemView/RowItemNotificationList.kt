@@ -1,6 +1,5 @@
 package com.iw.android.prayerapp.ui.main.notificationList.itemView
 
-import android.util.Log
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import com.iw.android.prayerapp.R
@@ -55,15 +54,14 @@ class RowItemNotificationList(private val data: NotificationData) : ViewType<Not
     }
 
     fun formatDate(inputDate: String,position: Int): String {
-        if(inputDate == ""){
-            Log.d("pos",position.toString())
-            return ""
+        return if(inputDate == ""){
+            ""
         }else{
             val inputFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
             val outputFormat = SimpleDateFormat("dd MMMM", Locale.getDefault())
 
             val date = inputFormat.parse(inputDate)
-            return outputFormat.format(date)
+            outputFormat.format(date)
         }
 
     }

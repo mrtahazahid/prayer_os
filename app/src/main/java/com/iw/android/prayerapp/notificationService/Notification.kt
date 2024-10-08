@@ -50,9 +50,9 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         description: String,
         sound: Int,
         isForVibrate: Boolean,
-        isForSilent: Boolean
+        isForSilent: Boolean, isOff: Boolean
     ) {
-        Log.d("Notify","called")
+        Log.d("Notify", "called")
         val intent = Intent(context, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
@@ -66,12 +66,13 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, pendingFlag)
 
         val notificationBuilder = if (isForVibrate) {
+            Log.d("isForVibrate","$isForVibrate")
             NotificationCompat.Builder(context, channelId).apply {
                 setSmallIcon(R.mipmap.app_icon)
                 setContentTitle(currentNamazTitle)
                 setContentText(description)
                 setAutoCancel(true)
-                setVibrate(longArrayOf(0, 100, 200, 300,400,500))
+                setVibrate(longArrayOf(0, 100, 200, 300, 400, 500))
                 priority = NotificationCompat.PRIORITY_HIGH
                 setContentIntent(pendingIntent)
             }
@@ -81,24 +82,23 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                 setContentTitle(currentNamazTitle)
                 setContentText(description)
                 setAutoCancel(true)
-                setSilent(true)
                 priority = NotificationCompat.PRIORITY_HIGH
-
                 setContentIntent(pendingIntent)
             }
-        } else {
+        } else if (!isOff) {
+            Log.d("isOff","$isOff")
             NotificationCompat.Builder(context, channelId).apply {
                 setSmallIcon(R.mipmap.app_icon)
                 setContentTitle(currentNamazTitle)
                 setContentText(description)
                 setAutoCancel(true)
                 priority = NotificationCompat.PRIORITY_HIGH
-                setSilent(false)
                 setContentIntent(pendingIntent)
 
                 try {
                     applicationScope.launch {
-                        val uri =  Uri.parse("android.resource://" + context.packageName + "/" + sound)
+                        val uri =
+                            Uri.parse("android.resource://" + context.packageName + "/" + sound)
                         player = MediaPlayer.create(context, uri)
                         player?.isLooping = false // This will play sound in repeatable mode.
                         player?.start()
@@ -109,19 +109,23 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                     e.printStackTrace()
                 }
             }
+        } else {
+            null
         }
 
 
 
+        if (notificationBuilder != null) {
+
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
 
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-
-        val notificationId = System.currentTimeMillis().toInt() * Random.nextInt(
-            NOTIFICATION_ID_MULTIPLIER
-        )
-        notificationManager.notify(notificationId, notificationBuilder.build())
+            val notificationId = System.currentTimeMillis().toInt() * Random.nextInt(
+                NOTIFICATION_ID_MULTIPLIER
+            )
+            notificationManager.notify(notificationId, notificationBuilder.build())
+        }
     }
 
     private fun createNotificationChannel() {
@@ -136,15 +140,15 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                 vibrationPattern = longArrayOf(0, 100, 200, 300, 400, 500)
             }
 
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
 
-    fun stopPrayer(){
+    fun stopPrayer() {
         player?.release()
     }
-
 
 
 }
