@@ -155,7 +155,7 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
     implementation 'com.akexorcist:round-corner-progress-bar:2.2.1'
-    implementation 'com.tomergoldst.android:tooltips:1.0.10'
+    implementation 'com.tomergoldst.android:tooltips:1.1.1'
     implementation("org.greenrobot:eventbus:3.3.1")
     implementation("com.google.android.gms:play-services-location:21.0.0")
     implementation("com.google.android.libraries.places:places:3.3.0")
