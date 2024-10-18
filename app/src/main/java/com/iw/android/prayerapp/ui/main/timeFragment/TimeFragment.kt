@@ -184,12 +184,12 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener,
             }
 
             binding.monthlyClickView.id -> {
-                Toast.makeText(
-                    binding.monthlyClickView.context,
-                    "Coming Soon",
-                    Toast.LENGTH_SHORT
-                ).show()
-//                findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToFragmentMonthlyCalender())
+//                Toast.makeText(
+//                    binding.monthlyClickView.context,
+//                    "Coming Soon",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+                findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToFragmentMonthlyCalender())
             }
 
         }

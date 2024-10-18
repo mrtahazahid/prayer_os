@@ -63,8 +63,14 @@ fun convertToFunTime(timestamp: Long): String {
     val formatter = SimpleDateFormat("h:mm a")
     formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
     return formatter.format(Date(timestamp))
+}
 
-
+@SuppressLint("SimpleDateFormat")
+fun converterForMonthly(timestamp: Long): String {
+    val timeZoneID = TimeZone.getDefault().id
+    val formatter = SimpleDateFormat("h:mm")
+    formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
+    return formatter.format(Date(timestamp))
 }
 
 @SuppressLint("SimpleDateFormat")

@@ -202,6 +202,30 @@ object GetAdhanDetails : AppCompatActivity() {
         return PrayerTimes(coordinates, date, params)
     }
 
+    @SuppressLint("SimpleDateFormat")
+    fun getPrayTimeInLong(
+        latitude: Double,
+        longitude: Double,
+        params: CalculationParameters,
+        date: Date
+    ): PrayerTimes {
+        val coordinates = Coordinates(latitude, longitude);
+
+        val sdf = SimpleDateFormat("yyyy/M/dd")
+        val currentDate = sdf.format(date)
+
+        var splitDate = currentDate.split("/")
+        var year = splitDate[0]
+        var month = splitDate[1]
+        var day = splitDate[2]
+
+        val date = DateComponents(year.toInt(), month.toInt(), day.toInt());
+
+
+
+        return PrayerTimes(coordinates, date, params)
+    }
+
     fun getQiblaDirection(latitude: Double, longitude: Double): Qibla {
         val coordinates = Coordinates(latitude, longitude)
         return Qibla(coordinates)
