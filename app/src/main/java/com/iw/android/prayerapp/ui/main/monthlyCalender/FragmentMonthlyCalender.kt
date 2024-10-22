@@ -21,10 +21,16 @@ import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
 import com.iw.android.prayerapp.ui.main.monthlyCalender.itemView.RowItemMonthlyCalender
 import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
 import com.iw.android.prayerapp.utils.GetAdhanDetails
-import com.iw.android.prayerapp.utils.Helper
 import com.iw.android.prayerapp.utils.Helper.generateDatesAsDateObjects
 import com.iw.android.prayerapp.utils.Helper.generateDayAndWeekInfo
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Year
+import java.time.chrono.HijrahDate
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
+import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class FragmentMonthlyCalender : BaseFragment(R.layout.fragment_monthly_calendar),
@@ -91,12 +97,43 @@ class FragmentMonthlyCalender : BaseFragment(R.layout.fragment_monthly_calendar)
             wholeYearMonthArray.add(it.previousMonth.getDisplayName(TextStyle.SHORT, Locale.ENGLISH))
             wholeYearDateArray.add(it.dayOfMonth.toString())
             wholeYearDayArray.add(it.dayOfWeek)
-            wholeYearHijriNameArray.add(it.hijriMonth)
-            wholeYearHijriArray.add(it.hijriDayOfMonth.toString())
         }
+        wholeYearHijriNameArray.clear()
+        wholeYearHijriArray.clear()
+        getIslamicDatesForYear().forEach{
+            wholeYearHijriNameArray.add(it.name)
+            wholeYearHijriArray.add(it.date.toString())
+        }
+        binding.textViewTitle.text = "Monthly / ${getCurrentYear()} / ${getIslamicDateByOffSet(1)}"
         return binding.root
     }
 
+    fun getCurrentYear(): String {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        return currentYear.toString()
+    }
+
+    fun getIslamicDateByOffSet(offset: Int): String {
+        val sdf = SimpleDateFormat("yyyy/M/dd")
+        val currentDate = sdf.format(Date())
+
+        val splitDate = currentDate.split("/")
+        val year = splitDate[0].toInt()
+        val month = splitDate[1].toInt()
+        val day = splitDate[2].toInt()
+
+        val gregorianDate: LocalDate = LocalDate.of(year, month, day)
+
+        // Add offset days to the current date
+        val offsetGregorianDate = gregorianDate.plusDays(offset.toLong())
+
+        val hijrahDate = HijrahDate.from(offsetGregorianDate)
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy", Locale.ENGLISH)
+        val formattedHijrahDate = hijrahDate.format(formatter)
+
+        return formattedHijrahDate.replace(" ", " ") // Customize space as needed
+    }
     private fun getWholeYearFajarTime(){
         for (i in generateDatesAsDateObjects()){
             getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
@@ -227,4 +264,42 @@ class FragmentMonthlyCalender : BaseFragment(R.layout.fragment_monthly_calendar)
         binding.recyclerView.adapter = monthlyAdapter
     }
 
+
+    fun getIslamicDatesForYear(): List<IslamicDate> {
+        // Get the current year in the Gregorian calendar
+        val currentYear = Year.now()
+
+        // Define the formatter for the Hijri date output, with "MMM" for the abbreviated month name
+        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH)
+
+        // List to store IslamicDate objects for the whole year
+        val islamicDatesList = mutableListOf<IslamicDate>()
+
+        // Loop through each day of the current year
+        for (dayOfYear in 1..currentYear.length()) {
+            // Create a Gregorian date for the given day
+            val gregorianDate = LocalDate.ofYearDay(currentYear.value, dayOfYear)
+
+            // Convert to Hijri date
+            val hijriDate = HijrahDate.from(gregorianDate)
+            val formattedHijriDate = hijriDate.format(formatter)
+
+            // Split the formatted date to get day and the abbreviated month
+            val splitDate = formattedHijriDate.split(" ")
+
+            // Extract the abbreviated month and the day
+            val shortMonth = splitDate[1]  // e.g., "Jum"
+            val day = splitDate[0].toInt() // e.g., "19"
+
+            // Create an IslamicDate object and add it to the list
+            islamicDatesList.add(IslamicDate(name = shortMonth, date = day))
+        }
+
+        return islamicDatesList
+    }
+
 }
+data class IslamicDate(
+    val name: String, // Holds the abbreviated month name
+    val date: Int    // Holds the date
+)

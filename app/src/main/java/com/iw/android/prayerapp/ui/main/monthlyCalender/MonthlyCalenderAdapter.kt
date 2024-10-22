@@ -60,7 +60,6 @@ class MonthlyCalenderAdapter(
         var ishaData = wholeYearIshaTimeArray[position]
         var hijri = wholeYearHijriArray[position]
         var hijriName = wholeYearHijriNameArray[position]
-
         holder.fajar.text = fajarData
         holder.zohar.text = zoharData
         holder.asar.text = asarData
@@ -70,10 +69,14 @@ class MonthlyCalenderAdapter(
         holder.day.text = dayData
         holder.month.text = monthData
         holder.sunrise.text = sunriseData
-        holder.hijri.text = hijri
+        holder.hijri.text =  if(hijri=="0") subtractOneFromString(wholeYearHijriArray[position+1]) else hijri
         holder.hijriName.text = hijriName
     }
 
+    fun subtractOneFromString(numberString: String): String {
+        // Convert the string to an integer, subtract 1, then convert back to a string
+        return (numberString.toInt() - 1).toString()
+    }
     override fun getItemCount(): Int {
        return wholeYearFajarTimeArray.size
     }
