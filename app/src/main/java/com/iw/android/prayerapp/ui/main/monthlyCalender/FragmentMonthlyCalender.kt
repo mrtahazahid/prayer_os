@@ -1,7 +1,6 @@
 package com.iw.android.prayerapp.ui.main.monthlyCalender
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -104,7 +103,7 @@ class FragmentMonthlyCalender : BaseFragment(R.layout.fragment_monthly_calendar)
             wholeYearHijriNameArray.add(it.name)
             wholeYearHijriArray.add(it.date.toString())
         }
-        binding.textViewTitle.text = "Monthly / ${getCurrentYear()} / ${getIslamicDateByOffSet(1)}"
+        binding.textViewTitle.text = "Yearly Calendar \n ${getCurrentYear()} / ${getIslamicDateByOffSet(1)}"
         return binding.root
     }
 

@@ -51,15 +51,15 @@
                 android:id="@+id/textViewTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/sf_bold"
-                android:gravity="start"
-                android:layout_marginHorizontal="16dp"
-                android:text="Monthly/ 2024/ 1446"
+                android:gravity="center"
+                android:text="Monthly\n/ 2024/ 1446"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textViewDateTitle"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
