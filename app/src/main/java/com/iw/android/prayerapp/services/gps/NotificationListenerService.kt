@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.iw.android.prayerapp.notificationService.Notification
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,13 +24,13 @@ class NotificationListenerService() : NotificationListenerService() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("createdService", "Called")
+
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
-        Log.d("aaaaa", sbn.toString())
     }
+
 
 
     override fun onNotificationRemoved(

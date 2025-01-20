@@ -146,7 +146,6 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                             selectedSoundPosition,
                             selectedSoundTonePosition,
                             selectedItemPosition,
-
                             isSoundSelected,
                             isForAdhan,
                             isVibrateSelected,
@@ -165,11 +164,11 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                                         notificationSound = savingData,
                                         reminderSound = null,
                                         reminderTimeMinutes = "off",
-                                        reminderTime = "12:00 AM",
+                                        reminderTime = "",
                                         secondReminderTimeMinutes = "off",
-                                        secondReminderTime = "12:00 AM",
+                                        secondReminderTime = "",
                                         duaReminderMinutes = "off",
-                                        duaTime = "12:00 AM",
+                                        duaTime = "",
                                         duaType = "off",
                                     )
                                     viewModel.saveFajrDetail(saveData)
@@ -191,11 +190,11 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                                         notificationSound = savingData,
                                         reminderSound = null,
                                         reminderTimeMinutes = "off",
-                                        reminderTime = "12:00 AM",
+                                        reminderTime = "",
                                         secondReminderTimeMinutes = "off",
-                                        secondReminderTime = "12:00 AM",
+                                        secondReminderTime = "",
                                         duaReminderMinutes = "off",
-                                        duaTime = "12:00 AM",
+                                        duaTime = "",
                                         duaType = "off",
                                     )
                                     viewModel.saveDuhrDetail(saveData)
@@ -217,11 +216,11 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                                         notificationSound = savingData,
                                         reminderSound = null,
                                         reminderTimeMinutes = "off",
-                                        reminderTime = "12:00 AM",
+                                        reminderTime = "",
                                         secondReminderTimeMinutes = "off",
-                                        secondReminderTime = "12:00 AM",
+                                        secondReminderTime = "",
                                         duaReminderMinutes = "off",
-                                        duaTime = "12:00 AM",
+                                        duaTime = "",
                                         duaType = "off",
                                     )
                                     viewModel.saveAsrDetail(saveData)
@@ -241,11 +240,11 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                                         notificationSound = savingData,
                                         reminderSound = null,
                                         reminderTimeMinutes = "off",
-                                        reminderTime = "12:00 AM",
+                                        reminderTime = "",
                                         secondReminderTimeMinutes = "off",
-                                        secondReminderTime = "12:00 AM",
+                                        secondReminderTime = "",
                                         duaReminderMinutes = "off",
-                                        duaTime = "12:00 AM",
+                                        duaTime = "",
                                         duaType = "off",
                                     )
                                     viewModel.saveMagribDetail(saveData)
@@ -268,11 +267,11 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                                         notificationSound = savingData,
                                         reminderSound = null,
                                         reminderTimeMinutes = "off",
-                                        reminderTime = "12:00 AM",
+                                        reminderTime = "",
                                         secondReminderTimeMinutes = "off",
-                                        secondReminderTime = "12:00 AM",
+                                        secondReminderTime = "",
                                         duaReminderMinutes = "off",
-                                        duaTime = "12:00 AM",
+                                        duaTime = "",
                                         duaType = "off",
                                     )
                                     viewModel.saveIshaDetail(saveData)

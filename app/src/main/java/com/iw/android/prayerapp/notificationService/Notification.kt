@@ -66,7 +66,6 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, pendingFlag)
 
         val notificationBuilder = if (isForVibrate) {
-            Log.d("isForVibrate","$isForVibrate")
             NotificationCompat.Builder(context, channelId).apply {
                 setSmallIcon(R.mipmap.app_icon)
                 setContentTitle(currentNamazTitle)

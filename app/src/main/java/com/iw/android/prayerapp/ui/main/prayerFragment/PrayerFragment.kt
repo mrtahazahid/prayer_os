@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +56,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     private var _binding: FragmentPrayerBinding? = null
     private val binding get() = _binding!!
     private lateinit var notificationReceiver: BroadcastReceiver
-
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
     private var countDownTimer: CountDownTimer? = null
@@ -90,7 +90,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             notificationReceiver,
             IntentFilter("com.iw.android.prayerapp.NOTIFICATION")
         )
-
 
         namazTimesList = ArrayList()
         return binding.root
@@ -171,15 +170,15 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             )
             val saveFajrData = NotificationData(
                 namazName = "Fajr",
-                namazTime =     convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds()),
+                namazTime = convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds()),
                 notificationSound = savingFajrNotificationData,
                 reminderSound = null,
                 reminderTimeMinutes = "off",
-                reminderTime = "12:00 AM",
+                reminderTime = "",
                 secondReminderTimeMinutes = "off",
-                secondReminderTime = "12:00 AM",
+                secondReminderTime = "",
                 duaReminderMinutes = "off",
-                duaTime = "12:00 AM",
+                duaTime = "",
                 duaType = "off",
             )
 
@@ -200,11 +199,11 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 notificationSound = savingDhuhrNotificationData,
                 reminderSound = null,
                 reminderTimeMinutes = "off",
-                reminderTime = "12:00 AM",
+                reminderTime = "",
                 secondReminderTimeMinutes = "off",
-                secondReminderTime = "12:00 AM",
+                secondReminderTime = "",
                 duaReminderMinutes = "off",
-                duaTime = "12:00 AM",
+                duaTime = "",
                 duaType = "off",
             )
 
@@ -225,11 +224,11 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 notificationSound = savingAsrNotificationData,
                 reminderSound = null,
                 reminderTimeMinutes = "off",
-                reminderTime = "12:00 AM",
+                reminderTime = "",
                 secondReminderTimeMinutes = "off",
-                secondReminderTime = "12:00 AM",
+                secondReminderTime = "",
                 duaReminderMinutes = "off",
-                duaTime = "12:00 AM",
+                duaTime = "",
                 duaType = "off",
             )
 
@@ -250,11 +249,11 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 notificationSound = savingMaghribNotificationData,
                 reminderSound = null,
                 reminderTimeMinutes = "off",
-                reminderTime = "12:00 AM",
+                reminderTime = "",
                 secondReminderTimeMinutes = "off",
-                secondReminderTime = "12:00 AM",
+                secondReminderTime = "",
                 duaReminderMinutes = "off",
-                duaTime = "12:00 AM",
+                duaTime = "",
                 duaType = "off",
             )
 
@@ -275,11 +274,11 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 notificationSound = savingIshaNotificationData,
                 reminderSound = null,
                 reminderTimeMinutes = "off",
-                reminderTime = "12:00 AM",
+                reminderTime = "",
                 secondReminderTimeMinutes = "off",
-                secondReminderTime = "12:00 AM",
+                secondReminderTime = "",
                 duaReminderMinutes = "off",
-                duaTime = "12:00 AM",
+                duaTime = "",
                 duaType = "off",
             )
             viewModel.saveFajrDetail(saveFajrData)
@@ -309,9 +308,9 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         binding.incrementMinusOneTextView.setOnClickListener(this)
         binding.incrementMinusTwoTextView.setOnClickListener(this)
         binding.mainView.setOnClickListener(this)
-        binding.imageViewPause.setOnClickListener {
+        binding.imageViewStopAdhan.setOnClickListener {
             notifications.stopPrayer()
-            binding.imageViewPause.gone()
+            binding.cardViewStopAdhan.gone()
         }
     }
 
@@ -908,17 +907,21 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     }
 
     fun toggleImageVisibility() {
-        _binding?.imageViewPause?.show()
+        _binding?.cardViewStopAdhan?.show()
     }
 
     inner class NotificationReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == Intent.ACTION_TIME_TICK) {
+                // Perform your action here
+                Log.d("TimeTickReceiver", "Minute changed: ${System.currentTimeMillis()}")
+            }
             val showImage = intent?.getBooleanExtra("show_image", true) ?: false
             if (showImage) {
                 toggleImageVisibility()
             } else {
                 notifications.stopPrayer()
-                _binding?.imageViewPause?.gone()
+                _binding?.cardViewStopAdhan?.gone()
             }
 
         }

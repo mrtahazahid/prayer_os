@@ -10,7 +10,6 @@ import android.widget.TimePicker
 import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
@@ -24,7 +23,6 @@ import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
 import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
 import com.iw.android.prayerapp.utils.SoundDataPass
 import com.iw.android.prayerapp.utils.SoundSelectionDialog
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -420,6 +418,64 @@ class RowItemTime(
 
 
     private fun savePrayerDetailData() {
+        val fajrData = NotificationData(
+            namazName = data.title,
+            namazTime = data.time,
+            notificationSound = CurrentNamazNotificationData(
+                prayerDetailData?.notificationSound?.currentNamazName ?: "",
+                prayerDetailData?.notificationSound?.soundName ?: "",
+                prayerDetailData?.notificationSound?.soundToneName ?: "",
+                prayerDetailData?.notificationSound?.selectedSoundPosition,
+                prayerDetailData?.notificationSound?.selectedSoundTonePosition,
+                prayerDetailData?.notificationSound?.selectedSoundItemPosition,
+                prayerDetailData?.notificationSound?.isSoundSelected ?: false,
+                prayerDetailData?.notificationSound?.isForAdhan ?: false,
+                prayerDetailData?.notificationSound?.isVibrate ?: false,
+                prayerDetailData?.notificationSound?.isSilent ?: false,
+                prayerDetailData?.notificationSound?.isOff ?: false,
+                prayerDetailData?.notificationSound?.soundAdhan,
+                prayerDetailData?.notificationSound?.soundTone
+            ),
+            reminderSound = prayerDetailData?.reminderSound,
+            reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
+            reminderTime = prayerDetailData?.reminderTime ?: "",
+            secondReminderTimeMinutes = prayerDetailData?.secondReminderTimeMinutes ?: "off",
+            secondReminderTime = prayerDetailData?.secondReminderTime ?: "",
+            duaReminderMinutes = "off",
+            duaTime = "",
+            duaType =  "off",
+            createdDate = getCurrentDate(),
+        )
+
+        val sunriseData = NotificationData(
+            namazName = data.title,
+            namazTime = data.time,
+            notificationSound = CurrentNamazNotificationData(
+                prayerDetailData?.notificationSound?.currentNamazName ?: "",
+                prayerDetailData?.notificationSound?.soundName ?: "",
+                prayerDetailData?.notificationSound?.soundToneName ?: "",
+                prayerDetailData?.notificationSound?.selectedSoundPosition,
+                prayerDetailData?.notificationSound?.selectedSoundTonePosition,
+                prayerDetailData?.notificationSound?.selectedSoundItemPosition,
+                prayerDetailData?.notificationSound?.isSoundSelected ?: false,
+                prayerDetailData?.notificationSound?.isForAdhan ?: false,
+                prayerDetailData?.notificationSound?.isVibrate ?: false,
+                prayerDetailData?.notificationSound?.isSilent ?: false,
+                prayerDetailData?.notificationSound?.isOff ?: false,
+                prayerDetailData?.notificationSound?.soundAdhan,
+                prayerDetailData?.notificationSound?.soundTone
+            ),
+            reminderSound = prayerDetailData?.reminderSound,
+            reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
+            reminderTime = prayerDetailData?.reminderTime ?: "",
+            secondReminderTimeMinutes = "off",
+            secondReminderTime =  "off",
+            duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
+            duaTime = prayerDetailData?.duaTime ?: "",
+            duaType = prayerDetailData?.duaType ?: "off",
+            createdDate = getCurrentDate(),
+        )
+
         val saveData = NotificationData(
             namazName = data.title,
             namazTime = data.time,
@@ -440,19 +496,19 @@ class RowItemTime(
             ),
             reminderSound = prayerDetailData?.reminderSound,
             reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
-            reminderTime = prayerDetailData?.reminderTime ?: "12:00 AM",
-            secondReminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
-            secondReminderTime = prayerDetailData?.reminderTime ?: "12:00 AM",
-            duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
-            duaTime = prayerDetailData?.duaTime ?: "12:00 AM",
-            duaType = prayerDetailData?.duaType ?: "off",
+            reminderTime = prayerDetailData?.reminderTime ?: "",
+            secondReminderTimeMinutes = "off",
+            secondReminderTime =  "",
+            duaReminderMinutes = "off",
+            duaTime =  "",
+            duaType = "off",
             createdDate = getCurrentDate(),
         )
 
         when (data.title) {
-            "Fajr" -> viewModel.saveFajrDetail(saveData)
+            "Fajr" -> viewModel.saveFajrDetail(fajrData)
 
-            "Sunrise" -> viewModel.saveSunriseDetail(saveData)
+            "Sunrise" -> viewModel.saveSunriseDetail(sunriseData)
 
             "Dhuhr" -> viewModel.saveDuhrDetail(saveData)
 
@@ -465,8 +521,6 @@ class RowItemTime(
             "Midnight" -> viewModel.saveMidNightDetail(saveData)
 
             "Last Third" -> viewModel.saveLastNightDetail(saveData)
-        }
-        activity.lifecycleScope.launch {
         }
 
     }

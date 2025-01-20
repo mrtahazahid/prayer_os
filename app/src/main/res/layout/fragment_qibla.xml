@@ -68,7 +68,7 @@
         android:layout_height="300dp"
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/app_green"
-        android:src="@drawable/ic_dir_circle"
+        android:src="@drawable/ic_direction_with_n"
         android:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

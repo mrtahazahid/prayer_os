@@ -195,7 +195,7 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla) {
             animation.repeatCount = 0
             animation.fillAfter = true
             binding.imageViewQiblaDirection.startAnimation(animation)
-            val formattedNumber = DecimalFormat("#.#").format(currentAzimuth)
+            val formattedNumber = DecimalFormat("#").format(currentAzimuth)
             binding.textViewCurrentDirection.text = formattedNumber
         }
 

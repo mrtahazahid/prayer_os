@@ -15,12 +15,60 @@
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.308">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewStopAdhan"
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="#1c1c1e"
+                app:strokeWidth="0dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_marginHorizontal="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/progressbar"
+                app:layout_constraintStart_toStartOf="@+id/progressbar"
+                app:layout_constraintTop_toBottomOf="@+id/progressbar">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textViewStopAdhan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:fontFamily="@font/sf_regular"
+                        android:gravity="start"
+                        android:paddingVertical="5dp"
+                        android:text="Stop Adhan"
+                        android:textColor="#7b7b80"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/imageViewStopAdhan"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:elevation="20dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_pause"
+
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewOffSet"
@@ -305,14 +353,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15ssp" />
 
-                <ImageView
-                    android:id="@+id/imageViewPause"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="20dp"
-                    android:elevation="20dp"
-                    android:src="@drawable/ic_pause"
-                    android:visibility="gone" />
+
 
             </LinearLayout>
 
