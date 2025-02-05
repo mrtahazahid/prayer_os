@@ -4,10 +4,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.os.IBinder
 import android.service.notification.NotificationListenerService
@@ -28,6 +26,7 @@ import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -47,52 +46,47 @@ class NotificationService : Service() {
     private var prayerList = arrayListOf<NotificationPrayerTime>()
     private var method: CalculationParameters? = null
     private var madhab: Madhab? = null
-    private lateinit var timeTickReceiver: BroadcastReceiver
-
 
     private val applicationScope = ProcessLifecycleOwner.get().lifecycleScope
 
     override fun onCreate() {
         super.onCreate()
         prefrence = DataPreference(this)
+        applicationScope.launch {
         startPeriodicTask()
-        timeTickReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                if (intent?.action == Intent.ACTION_TIME_TICK) {
-                    applicationScope.launch {
-                        checkAndTriggerNotification()
-                        checkIqamaTime()
-                        jummahTimeCheck()
-                        val intentService =
-                            Intent(applicationContext, NotificationListenerService::class.java)
-                        startService(intentService)
-                        if (prefrence.automaticLocation.first()) {
-                            startService(
-                                Intent(
-                                    applicationContext,
-                                    LocationService::class.java
-                                )
-                            )
-                        } else {
-                            stopService(
-                                Intent(
-                                    applicationContext,
-                                    LocationService::class.java
-                                )
-                            )
-                        }
-                    }
+
+            while (true) {
+
+                checkAndTriggerNotification()
+                checkIqamaTime()
+                jummahTimeCheck()
+                val intentService =
+                    Intent(applicationContext, NotificationListenerService::class.java)
+                startService(intentService)
+                if (prefrence.automaticLocation.first()) {
+                    startService(
+                        Intent(
+                            applicationContext,
+                            LocationService::class.java
+                        )
+                    )
+                } else {
+                    stopService(
+                        Intent(
+                            applicationContext,
+                            LocationService::class.java
+                        )
+                    )
                 }
+                delay(60000)
             }
+
         }
-        val filter = IntentFilter(Intent.ACTION_TIME_TICK)
-        registerReceiver(timeTickReceiver, filter)
 
 
     }
 
-    private fun startPeriodicTask() {
-        applicationScope.launch {
+    private suspend fun startPeriodicTask() {
             getMethod()
             if (!prefrence.prayerJurisprudence.first().isNullOrEmpty()) {
                 madhab = if (prefrence.prayerJurisprudence.first().toInt() == 1) {
@@ -148,7 +142,6 @@ class NotificationService : Service() {
                 NotificationPrayerTime("Last third", getPrayerTime1[7])
             )
         }
-    }
 
     private suspend fun checkAndTriggerNotification() {
         prefrence.getFajrDetail()?.let { checkNamazNotification(it) }

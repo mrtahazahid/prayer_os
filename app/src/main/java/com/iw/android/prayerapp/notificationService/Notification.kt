@@ -94,12 +94,14 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                 setContentTitle(currentNamazTitle)
                 setContentText(description)
                 setAutoCancel(true)
+               // setDefaults(0)
                 priority = NotificationCompat.PRIORITY_HIGH
                 setContentIntent(pendingIntent)
 
 
                 try {
                     applicationScope.launch {
+                        Log.d("notification","called")
                         val uri =
                             Uri.parse("android.resource://" + context.packageName + "/" + sound)
                         player = MediaPlayer.create(context, uri)
