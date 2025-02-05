@@ -11,7 +11,6 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.IBinder
 import android.service.notification.NotificationListenerService
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -49,9 +48,9 @@ class NotificationService : Service() {
     private var method: CalculationParameters? = null
     private var madhab: Madhab? = null
     private lateinit var timeTickReceiver: BroadcastReceiver
-    // ProcessLifecycleOwner provides lifecycle for the whole application process.
-    private val applicationScope = ProcessLifecycleOwner.get().lifecycleScope
 
+
+    private val applicationScope = ProcessLifecycleOwner.get().lifecycleScope
 
     override fun onCreate() {
         super.onCreate()
@@ -60,12 +59,12 @@ class NotificationService : Service() {
         timeTickReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 if (intent?.action == Intent.ACTION_TIME_TICK) {
-                    Log.d("TimeTickService", "Minute changed: ${System.currentTimeMillis()}")
                     applicationScope.launch {
                         checkAndTriggerNotification()
                         checkIqamaTime()
                         jummahTimeCheck()
-                        val intentService = Intent(applicationContext, NotificationListenerService::class.java)
+                        val intentService =
+                            Intent(applicationContext, NotificationListenerService::class.java)
                         startService(intentService)
                         if (prefrence.automaticLocation.first()) {
                             startService(
@@ -88,6 +87,7 @@ class NotificationService : Service() {
         }
         val filter = IntentFilter(Intent.ACTION_TIME_TICK)
         registerReceiver(timeTickReceiver, filter)
+
 
     }
 
@@ -150,7 +150,7 @@ class NotificationService : Service() {
         }
     }
 
-    private suspend fun checkAndTriggerNotification()  {
+    private suspend fun checkAndTriggerNotification() {
         prefrence.getFajrDetail()?.let { checkNamazNotification(it) }
         prefrence.getSunriseDetail()?.let { checkNamazNotification(it) }
         prefrence.getDuhrDetail()?.let { checkNamazNotification(it) }
@@ -165,15 +165,13 @@ class NotificationService : Service() {
     private fun checkNamazNotification(specifiedTime: NotificationData) {
 
         if (specifiedTime.namazTime != "") {
-
             if (isTimeMatch(specifiedTime.namazTime)) {
-                Log.d("Namaz Time","called ")
                 val sound =
                     if (specifiedTime.notificationSound?.isForAdhan == true) specifiedTime.notificationSound?.soundAdhan
                         ?: R.raw.adhan_abdul_basit else specifiedTime.notificationSound?.soundTone
                         ?: R.raw.adhan_abdul_basit
 
-                if(specifiedTime.notificationSound?.isOff != true){
+                if (specifiedTime.notificationSound?.isOff != true) {
                     notifications.notify(
                         specifiedTime.namazName,
                         "${specifiedTime.namazName} Prayer Time",
@@ -184,11 +182,7 @@ class NotificationService : Service() {
                     )
                     sendNotification(applicationContext)
                 }
-
-
-
             }
-
 
             if (specifiedTime.duaType != "off") {
                 if (isTimeMatch(specifiedTime.duaTime)) {
@@ -209,9 +203,8 @@ class NotificationService : Service() {
                 }
             }
 
-            if(specifiedTime.reminderTime!=""){
+            if (specifiedTime.reminderTime != "") {
                 if (isTimeMatch(specifiedTime.reminderTime)) {
-                    Log.d("reminderTime Time","called ")
                     if (specifiedTime.reminderSound?.isOff != true) {
                         val sound =
                             if (specifiedTime.reminderSound?.isForAdhan == true) specifiedTime.reminderSound?.soundAdhan
@@ -402,7 +395,6 @@ class NotificationService : Service() {
     }
 
     private suspend fun checkIqamaTimeByTime(time: String, namazName: String) =
-
         if (isTimeMatch(time)) {
             notifications.notify(
                 namazName, "Iqama time",

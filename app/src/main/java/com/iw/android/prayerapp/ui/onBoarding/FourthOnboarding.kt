@@ -2,6 +2,7 @@ package com.iw.android.prayerapp.ui.onBoarding
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,11 +62,12 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
         val args = arguments
         lat = args?.getDouble("lat") ?: 0.0
         long = args?.getDouble("long") ?: 0.0
-        setPrayerTime()
+
         setOnBackPressedListener()
         spinnerMethod()
         spinnerJurisprudence()
         spinnerElevation()
+        setPrayerTime()
     }
 
     override fun setObserver() {}
@@ -275,6 +277,9 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     }
 
     private fun setPrayerTime() {
+        Log.d("lat","$lat")
+        Log.d("long","$long")
+        Log.d("viewModel.method","${viewModel.method}")
         val getPrayerTime = GetAdhanDetails.getPrayTime(
             lat,
             long,

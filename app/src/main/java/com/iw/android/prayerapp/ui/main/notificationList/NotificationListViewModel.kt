@@ -391,13 +391,13 @@ class NotificationListViewModel @Inject constructor(repository: MainRepository) 
 
         if (!getPrayerMethod().isNullOrEmpty()) {
             method = when (getPrayerMethod().toInt()) {
-                0 -> {
+                1 -> {
                     CalculationMethod.MUSLIM_WORLD_LEAGUE.parameters.copy(
                         madhab = madhab ?: Madhab.SHAFI
                     )
                 }
 
-                1 -> {
+                0 -> {
                     CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
                 }
 

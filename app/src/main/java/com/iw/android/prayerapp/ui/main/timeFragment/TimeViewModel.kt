@@ -318,13 +318,13 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
 
         if (!getMethod.isNullOrEmpty()) {
             method = when (getMethod.toInt()) {
-                0 -> {
+                1 -> {
                     CalculationMethod.MUSLIM_WORLD_LEAGUE.parameters.copy(
                         madhab = madhab ?: Madhab.HANAFI
                     )
                 }
 
-                1 -> {
+                0 -> {
                     CalculationMethod.NORTH_AMERICA.parameters.copy(
                         madhab = madhab ?: Madhab.HANAFI
                     )

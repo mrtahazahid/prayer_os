@@ -45,13 +45,14 @@ class OnBoardingViewModel @Inject constructor( repository: MainRepository) :
         if (!getMethod.isNullOrEmpty()) {
             method = when (getMethod.toInt()) {
                 0 -> {
-                    CalculationMethod.MUSLIM_WORLD_LEAGUE.parameters.copy(
-                        madhab = madhab ?: Madhab.SHAFI
-                    )
+                    CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
                 }
 
                 1 -> {
-                    CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
+                    CalculationMethod.MUSLIM_WORLD_LEAGUE.parameters.copy(
+                        madhab = madhab ?: Madhab.SHAFI
+                    )
+
                 }
 
                 2 -> {

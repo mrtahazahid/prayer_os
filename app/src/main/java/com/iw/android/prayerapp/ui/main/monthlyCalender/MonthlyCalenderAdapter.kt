@@ -49,17 +49,17 @@ class MonthlyCalenderAdapter(
         position: Int
     ) {
 
-        var monthData = wholeYearMonthArray[position]
-        var dayData = wholeYearDayArray[position]
-        var dateData = wholeYearDateArray[position]
-        var sunriseData = wholeYearSunriseTimeArray[position]
-        var fajarData = wholeYearFajarTimeArray[position]
-        var zoharData = wholeYearZoharTimeArray[position]
-        var asarData = wholeYearAsarTimeArray[position]
-        var maghribData = wholeYearMaghribTimeArray[position]
-        var ishaData = wholeYearIshaTimeArray[position]
-        var hijri = wholeYearHijriArray[position]
-        var hijriName = wholeYearHijriNameArray[position]
+        val monthData = wholeYearMonthArray[position]
+        val dayData = wholeYearDayArray[position]
+        val dateData = wholeYearDateArray[position]
+        val sunriseData = wholeYearSunriseTimeArray[position]
+        val fajarData = wholeYearFajarTimeArray[position]
+        val zoharData = wholeYearZoharTimeArray[position]
+        val asarData = wholeYearAsarTimeArray[position]
+        val maghribData = wholeYearMaghribTimeArray[position]
+        val ishaData = wholeYearIshaTimeArray[position]
+        val hijri = wholeYearHijriArray[position]
+        val hijriName = wholeYearHijriNameArray[position]
         holder.fajar.text = fajarData
         holder.zohar.text = zoharData
         holder.asar.text = asarData

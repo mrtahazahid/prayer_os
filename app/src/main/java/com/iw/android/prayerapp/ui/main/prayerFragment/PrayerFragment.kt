@@ -421,6 +421,9 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     private fun upComingNamazTime() {
         val getPrayerTime =
             getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
+        Log.d("currentLatitude","$currentLatitude")
+        Log.d("currentLongitude","$currentLongitude")
+        Log.d("method","${method}")
 
         val currentNamaz = getTimeDifferenceToNextPrayer()
 
@@ -812,13 +815,13 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
         if (!viewModel.getMethods.isNullOrEmpty()) {
             method = when (viewModel.getMethods.toInt()) {
-                0 -> {
+                1 -> {
                     CalculationMethod.MUSLIM_WORLD_LEAGUE.parameters.copy(
                         madhab = madhab ?: Madhab.SHAFI
                     )
                 }
 
-                1 -> {
+                0 -> {
                     CalculationMethod.NORTH_AMERICA.parameters.copy(
                         madhab = madhab ?: Madhab.SHAFI
                     )

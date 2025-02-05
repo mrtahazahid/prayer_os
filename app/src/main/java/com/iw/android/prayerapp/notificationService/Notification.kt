@@ -4,8 +4,10 @@ package com.iw.android.prayerapp.notificationService
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
@@ -20,19 +22,20 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.random.Random
-
 
 @Singleton
 class Notification @Inject constructor(@ApplicationContext private val context: Context) {
 
     var player: MediaPlayer? = null
+    private var screenOffReceiver: BroadcastReceiver? = null
+    private var isReceiverRegistered = false
 
     private val applicationScope = ProcessLifecycleOwner.get().lifecycleScope
 
     init {
         createNotificationChannel()
     }
+        private  val NOTIFICATION_ID = 12165  // Fixed notification ID
 
 
     companion object {
@@ -85,7 +88,7 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                 setContentIntent(pendingIntent)
             }
         } else if (!isOff) {
-            Log.d("isOff","$isOff")
+            Log.d("isOff", "$isOff")
             NotificationCompat.Builder(context, channelId).apply {
                 setSmallIcon(R.mipmap.app_icon)
                 setContentTitle(currentNamazTitle)
@@ -94,6 +97,7 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                 priority = NotificationCompat.PRIORITY_HIGH
                 setContentIntent(pendingIntent)
 
+
                 try {
                     applicationScope.launch {
                         val uri =
@@ -101,29 +105,34 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                         player = MediaPlayer.create(context, uri)
                         player?.isLooping = false // This will play sound in repeatable mode.
                         player?.start()
-//                        delay(10000)
-//                        player?.release()
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                }
+                if (!isReceiverRegistered) {
+                    screenOffReceiver = object : BroadcastReceiver() {
+                        override fun onReceive(context: Context?, intent: Intent?) {
+                            Log.d("ACTION_SCREEN_OFF", "called")
+                            if (player?.isPlaying == true) {
+                                stopPrayer()
+                                removeNotification()
+                            }
+                        }
+                    }
+                    val screenOffFilter = IntentFilter(Intent.ACTION_SCREEN_OFF)
+                    context.registerReceiver(screenOffReceiver, screenOffFilter)
+                    isReceiverRegistered = true
                 }
             }
         } else {
             null
         }
 
-
-
         if (notificationBuilder != null) {
 
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-
-            val notificationId = System.currentTimeMillis().toInt() * Random.nextInt(
-                NOTIFICATION_ID_MULTIPLIER
-            )
-            notificationManager.notify(notificationId, notificationBuilder.build())
+            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
         }
     }
 
@@ -147,7 +156,24 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
 
     fun stopPrayer() {
         player?.release()
+        if (isReceiverRegistered && screenOffReceiver != null) {
+            try {
+                context.unregisterReceiver(screenOffReceiver)
+                isReceiverRegistered = false
+            } catch (e: IllegalArgumentException) {
+                Log.e("Notification", "Receiver not registered: ${e.message}")
+            }
+        }
+        screenOffReceiver = null
+        player = null
     }
+
+    fun removeNotification(){
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(NOTIFICATION_ID)
+    }
+
 
 
 }

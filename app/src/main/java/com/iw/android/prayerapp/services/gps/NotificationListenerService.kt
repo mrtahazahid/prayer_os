@@ -18,7 +18,6 @@ class NotificationListenerService() : NotificationListenerService() {
     lateinit var notifications: Notification
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Return STICKY to prevent the automatic service termination
         return START_STICKY
     }
 
@@ -32,13 +31,13 @@ class NotificationListenerService() : NotificationListenerService() {
     }
 
 
-
     override fun onNotificationRemoved(
         sbn: StatusBarNotification?,
         rankingMap: RankingMap?,
         reason: Int
     ) {
-      notifications. stopPrayer()
+
+        notifications.stopPrayer()
         sendNotification(applicationContext)
     }
 
