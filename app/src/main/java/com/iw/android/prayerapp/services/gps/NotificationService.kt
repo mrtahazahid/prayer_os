@@ -56,7 +56,6 @@ class NotificationService : Service() {
         startPeriodicTask()
 
             while (true) {
-
                 checkAndTriggerNotification()
                 checkIqamaTime()
                 jummahTimeCheck()

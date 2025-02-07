@@ -81,8 +81,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         setStatusBarWithBlackIcon(R.color.bg_color)
         (requireActivity() as MainActivity).showBottomSheet()
         binding.progressbar.visibility = View.VISIBLE
-
-
         notificationReceiver = NotificationReceiver()
 
         // Register the receiver for local broadcasts
@@ -191,7 +189,10 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 false,
                 true,
                 false,
-                false, false, R.raw.adhan_abdul_basit, null
+                false,
+                false,
+                R.raw.adhan_abdul_basit,
+                null
             )
             val saveDhuhrData = NotificationData(
                 namazName = "Dhuhr",
@@ -915,10 +916,11 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     inner class NotificationReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == Intent.ACTION_TIME_TICK) {
+            if (intent?.action == Intent.ACTION_SCREEN_OFF) {
                 // Perform your action here
-                Log.d("TimeTickReceiver", "Minute changed: ${System.currentTimeMillis()}")
+                _binding?.cardViewStopAdhan?.gone()
             }
+
             val showImage = intent?.getBooleanExtra("show_image", true) ?: false
             if (showImage) {
                 toggleImageVisibility()
