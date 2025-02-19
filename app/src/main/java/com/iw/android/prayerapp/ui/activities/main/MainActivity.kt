@@ -286,7 +286,7 @@ class MainActivity : BaseActivity() {
 
     fun startForegroundService() {
         val notificationIntent = Intent(this, NotificationService::class.java)
-        startForegroundService(notificationIntent)
+        ContextCompat.startForegroundService(this,notificationIntent)
     }
 
     private fun showPermissionAlertDialog() {
