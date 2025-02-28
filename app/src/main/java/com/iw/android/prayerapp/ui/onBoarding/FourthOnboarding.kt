@@ -2,7 +2,6 @@ package com.iw.android.prayerapp.ui.onBoarding
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -234,18 +233,23 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
 
     private fun spinnerMethod() {
         lifecycleScope.launch {
-            viewModel.savePrayerMethod(
-                0.toString()
-            )
+            viewModel.savePrayerMethod("0")
         }
-        val adapter = ArrayAdapter.createFromResource(
+
+        // Get the array from resources
+        val methodsArray = resources.getStringArray(R.array.methods)
+
+        // Filter out the empty item while keeping positions intact
+        val filteredMethods = methodsArray.filter { it.isNotBlank() }
+
+        val adapter = ArrayAdapter(
             requireContext(),
-            R.array.methods,
-            R.layout.custom_spinner
+            R.layout.custom_spinner,
+            filteredMethods // Use the filtered list
         )
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerMethod.adapter = adapter
-
 
         binding.spinnerMethod.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
@@ -256,30 +260,25 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
                 id: Long
             ) {
                 isMethodSelected = true
+
+                // Adjust position to match the original array index
+                val originalPosition = methodsArray.indexOf(filteredMethods[position])
                 lifecycleScope.launch {
-                    viewModel.savePrayerMethod(
-                        position.toString()
-                    )
+                    viewModel.savePrayerMethod(originalPosition.toString())
                 }
-
-
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // write code to perform some action\
+                // No action needed
             }
         }
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     private fun setPrayerTime() {
-        Log.d("lat","$lat")
-        Log.d("long","$long")
-        Log.d("viewModel.method","${viewModel.method}")
         val getPrayerTime = GetAdhanDetails.getPrayTime(
             lat,
             long,
@@ -296,7 +295,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
         binding.textViewIshaTime.text = formatTime(getPrayerTime[5])
     }
 
-    fun formatTime(time: String): String {
+    private  fun formatTime(time: String): String {
         val inputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
         val outputFormat = SimpleDateFormat("h:mm", Locale.getDefault())
         val date: Date = inputFormat.parse(time) ?: return time

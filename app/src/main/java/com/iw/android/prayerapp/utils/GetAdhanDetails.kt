@@ -11,9 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Coordinates
 import com.batoulapps.adhan2.PrayerTimes
-import com.batoulapps.adhan2.Qibla
 import com.batoulapps.adhan2.SunnahTimes
 import com.batoulapps.adhan2.data.DateComponents
+import com.batoulapps.adhan2.internal.toDegrees
+import com.batoulapps.adhan2.internal.toRadians
 import com.iw.android.prayerapp.data.response.LocationData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -27,7 +28,10 @@ import java.util.Locale
 import java.util.TimeZone
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.tan
 
 object GetAdhanDetails : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat")
@@ -148,10 +152,10 @@ object GetAdhanDetails : AppCompatActivity() {
         val sdf = SimpleDateFormat("yyyy/M/dd")
         val currentDate = sdf.format(date)
 
-        var splitDate = currentDate.split("/")
-        var year = splitDate[0]
-        var month = splitDate[1]
-        var day = splitDate[2]
+        val splitDate = currentDate.split("/")
+        val year = splitDate[0]
+        val month = splitDate[1]
+        val day = splitDate[2]
 
         val dateComponents = DateComponents(year.toInt(), month.toInt(), day.toInt())
 
@@ -190,15 +194,12 @@ object GetAdhanDetails : AppCompatActivity() {
         val sdf = SimpleDateFormat("yyyy/M/dd")
         val currentDate = sdf.format(Date())
 
-        var splitDate = currentDate.split("/")
-        var year = splitDate[0]
-        var month = splitDate[1]
-        var day = splitDate[2]
+        val splitDate = currentDate.split("/")
+        val year = splitDate[0]
+        val month = splitDate[1]
+        val day = splitDate[2]
 
         val date = DateComponents(year.toInt(), month.toInt(), day.toInt());
-
-
-
         return PrayerTimes(coordinates, date, params)
     }
 
@@ -214,25 +215,45 @@ object GetAdhanDetails : AppCompatActivity() {
         val sdf = SimpleDateFormat("yyyy/M/dd")
         val currentDate = sdf.format(date)
 
-        var splitDate = currentDate.split("/")
-        var year = splitDate[0]
-        var month = splitDate[1]
-        var day = splitDate[2]
+        val splitDate = currentDate.split("/")
+        val year = splitDate[0]
+        val month = splitDate[1]
+        val day = splitDate[2]
 
-        val date = DateComponents(year.toInt(), month.toInt(), day.toInt());
+        val getDate = DateComponents(year.toInt(), month.toInt(), day.toInt());
 
 
 
-        return PrayerTimes(coordinates, date, params)
+        return PrayerTimes(coordinates, getDate, params)
     }
 
-    fun getQiblaDirection(latitude: Double, longitude: Double): Qibla {
+    fun getQiblaDirection(latitude: Double, longitude: Double): Double {
         val coordinates = Coordinates(latitude, longitude)
-        return Qibla(coordinates)
+        return calculateQiblaDirection(coordinates)
+    }
+    private val MAKKAH = Coordinates(21.4225241, 39.8261818)
+    fun calculateQiblaDirection(coordinates: Coordinates): Double {
+        val longitudeDelta = (MAKKAH.longitude - coordinates.longitude).toRadians()
+        val latitudeRadians = coordinates.latitude.toRadians()
+        val makkahLatRadians = MAKKAH.latitude.toRadians()
+
+        val y = sin(longitudeDelta)
+        val x = (cos(latitudeRadians) * tan(makkahLatRadians)) - (sin(latitudeRadians) * cos(
+            longitudeDelta
+        ))
+
+        var angle = atan2(y, x).toDegrees()
+
+        // Ensure angle is within 0-360 degrees
+        if (angle < 0) {
+            angle += 360
+        }
+        Log.d("QiblaDebug", "Lat: ${coordinates.latitude}, Lon: ${coordinates.longitude}, Angle: $angle")
+        return angle
+
     }
 
-
-    fun getTimeZoneAndCity(context: Context, latitude: Double, longitude: Double): LocationData? {
+        fun getTimeZoneAndCity(context: Context, latitude: Double, longitude: Double): LocationData? {
         val geocoder = Geocoder(context, Locale.getDefault())
 
         try {

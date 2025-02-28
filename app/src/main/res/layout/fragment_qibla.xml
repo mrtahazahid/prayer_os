@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="-15dp"
         android:fontFamily="@font/sf_regular"
-        android:text="City"
+        tools:text="City"
         android:textColor="@color/yellow_text"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,18 +62,20 @@
         app:layout_constraintTop_toBottomOf="@id/linearLayout" />
 
 
-    <androidx.appcompat.widget.AppCompatImageView
+
+
+    <com.iw.android.prayerapp.utils.QiblaCompassViewV2
         android:id="@+id/imageViewQiblaDirection"
-        android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/app_green"
-        android:src="@drawable/ic_direction_with_n"
-        android:tint="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dialDrawable="@drawable/qibla_direction"
+        app:hideStatusText="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewMakkah"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"/>
+
+
 
     <TextView
         android:id="@+id/textViewCurrentDirection"
@@ -89,17 +91,6 @@
         tools:text="256.72" />
 
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageViewMakkah"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="25dp"
-        android:src="@drawable/ic_makkah"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
-        tools:ignore="ContentDescription" />
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewAccuracy"
         android:layout_width="wrap_content"
@@ -109,9 +100,9 @@
         android:drawablePadding="10dp"
         android:fontFamily="@font/sf_bold"
         android:text="Accuracy 88%"
-        android:visibility="gone"
         android:textColor="@color/text_color_gray"
         android:textSize="12sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

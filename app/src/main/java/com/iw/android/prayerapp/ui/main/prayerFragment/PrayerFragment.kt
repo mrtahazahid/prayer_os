@@ -102,10 +102,9 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     }
 
 
-    @SuppressLint("SimpleDateFormat")
     override fun initialize() {
         getMethod()
-
+Log.d("Methods",method.toString())
         binding.progressbar.apply {
             // or with gradient
             progressBarColorStart = resources.getColor(R.color.app_green)
@@ -813,7 +812,7 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
                 Madhab.SHAFI
             }
         }
-
+Log.d("viewModel.getMethods",viewModel.getMethods)
         if (!viewModel.getMethods.isNullOrEmpty()) {
             method = when (viewModel.getMethods.toInt()) {
                 1 -> {

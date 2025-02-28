@@ -589,13 +589,24 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         }
     }
 
-    private fun spinnerMethod() {
 
-        val adapter = ArrayAdapter.createFromResource(
+    private fun spinnerMethod() {
+        lifecycleScope.launch {
+            viewModel.savePrayerMethod("0")
+        }
+
+        // Get the array from resources
+        val methodsArray = resources.getStringArray(R.array.methods)
+
+        // Filter out the empty item while keeping positions intact
+        val filteredMethods = methodsArray.filter { it.isNotBlank() }
+
+        val adapter = ArrayAdapter(
             requireContext(),
-            R.array.methods,
-            R.layout.custom_spinner
+            R.layout.custom_spinner,
+            filteredMethods // Use the filtered list
         )
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerMethod.adapter = adapter
         binding.spinnerMethod.setSelection(viewModel.getSavedPrayerMethod.toInt())
@@ -608,10 +619,16 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 position: Int,
                 id: Long
             ) {
-                lifecycleScope.launch { viewModel.savePrayerMethod(position.toString()) }
+                // Adjust position to match the original array index
+                val originalPosition = methodsArray.indexOf(filteredMethods[position])
+                lifecycleScope.launch {
+                    viewModel.savePrayerMethod(originalPosition.toString())
+                }
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {}
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // No action needed
+            }
         }
     }
 
