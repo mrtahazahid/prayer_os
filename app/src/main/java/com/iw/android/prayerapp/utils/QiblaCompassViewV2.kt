@@ -78,7 +78,7 @@ class QiblaCompassViewV2 : FrameLayout, QiblaSensorEventListener {
             needleDrawable?.callback = this
         }
         else {
-            needleDrawable = ContextCompat.getDrawable(context,R.drawable.ic_direction_with_n)
+            needleDrawable = ContextCompat.getDrawable(context,R.drawable.qibla_direction)
         }
 
         typedArray.recycle()
@@ -127,14 +127,7 @@ class QiblaCompassViewV2 : FrameLayout, QiblaSensorEventListener {
 
     }
 
-    override fun onDeviceAngle(angle: Int) {
-
-//        if (angle <= -35 || angle >= 35) {
-//            line.visibility = View.VISIBLE
-//        } else {
-//            line.visibility = View.VISIBLE
-//        }
-    }
+    override fun onDeviceAngle(angle: Int) {}
 
     override fun setDirectionRotation(angle: Float) {
         this.imageNeedle.rotation = angle
