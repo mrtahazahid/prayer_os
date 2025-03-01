@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -37,7 +38,6 @@ import com.iw.android.prayerapp.extension.formatRemainingTime
 import com.iw.android.prayerapp.extension.getIslamicDateByOffSet
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
-import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
@@ -49,20 +49,19 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import kotlin.math.abs
 
 class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListener {
 
 
     private var _binding: FragmentPrayerBinding? = null
     private val binding get() = _binding!!
-    private lateinit var notificationReceiver: BroadcastReceiver
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
     private var countDownTimer: CountDownTimer? = null
 
 
     val viewModel: PrayerViewModel by viewModels()
-    val viewModelTime: TimeViewModel by viewModels()
     private var currentNamazName = ""
 
     private lateinit var namazTimesList: ArrayList<String>
@@ -73,6 +72,21 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     private var dialogExitBinding: DialogExitBinding? = null
     private var dialog: AlertDialog? = null
 
+    private val notificationReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == Intent.ACTION_SCREEN_OFF) {
+                _binding?.cardViewStopAdhan?.visibility = View.GONE
+            }
+            val showImage = intent?.getBooleanExtra("show_image", true) ?: false
+            if (showImage) {
+                toggleImageVisibility()
+            } else {
+                notifications.stopPrayer()
+                _binding?.cardViewStopAdhan?.visibility = View.GONE
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -81,11 +95,10 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
         setStatusBarWithBlackIcon(R.color.bg_color)
         (requireActivity() as MainActivity).showBottomSheet()
         binding.progressbar.visibility = View.VISIBLE
-        notificationReceiver = NotificationReceiver()
 
         // Register the receiver for local broadcasts
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
-            notificationReceiver,
+            notificationReceiver!!,
             IntentFilter("com.iw.android.prayerapp.NOTIFICATION")
         )
 
@@ -96,24 +109,31 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
+
         setObserver()
         setOnClickListener()
         setOnBackPressedListener()
     }
+    override fun onResume() {
+        super.onResume()
 
+        // Register BroadcastReceiver dynamically
+        requireContext().registerReceiver(notificationReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
+    }
 
     override fun initialize() {
+
         getMethod()
-Log.d("Methods",method.toString())
+
         binding.progressbar.apply {
             // or with gradient
-            progressBarColorStart = resources.getColor(R.color.app_green)
+            progressBarColorStart = ContextCompat.getColor(requireContext(),R.color.app_green)
 
-            progressBarColorEnd = resources.getColor(R.color.small_icon3)
+            progressBarColorEnd = ContextCompat.getColor(requireContext(),R.color.small_icon3)
             progressBarColorDirection = CircularProgressBar.GradientDirection.RIGHT_TO_LEFT
 
             // Set background ProgressBar Color
-            backgroundProgressBarColor = resources.getColor(R.color.progress_bg)
+            backgroundProgressBarColor = ContextCompat.getColor(requireContext(),R.color.progress_bg)
 
             // Set Width
             progressBarWidth = 21f // in DP
@@ -160,10 +180,10 @@ Log.d("Methods",method.toString())
                 null,
                 null,
                 null,
-                false,
-                true,
-                false,
-                false, false, R.raw.adhan_abdul_basit, null
+                isSoundSelected = false,
+                isForAdhan = true,
+                isVibrate = false,
+                isSilent = false, isOff = false, soundAdhan = R.raw.adhan_abdul_basit, soundTone = null
             )
             val saveFajrData = NotificationData(
                 namazName = "Fajr",
@@ -185,13 +205,13 @@ Log.d("Methods",method.toString())
                 null,
                 null,
                 null,
-                false,
-                true,
-                false,
-                false,
-                false,
-                R.raw.adhan_abdul_basit,
-                null
+                isSoundSelected = false,
+                isForAdhan = true,
+                isVibrate = false,
+                isSilent = false,
+                isOff = false,
+                soundAdhan = R.raw.adhan_abdul_basit,
+                soundTone = null
             )
             val saveDhuhrData = NotificationData(
                 namazName = "Dhuhr",
@@ -213,10 +233,10 @@ Log.d("Methods",method.toString())
                 null,
                 null,
                 null,
-                false,
-                true,
-                false,
-                false, false, R.raw.adhan_abdul_basit, null
+                isSoundSelected = false,
+                isForAdhan = true,
+                isVibrate = false,
+                isSilent = false, isOff = false, soundAdhan = R.raw.adhan_abdul_basit, soundTone = null
             )
             val saveAsrData = NotificationData(
                 namazName = "Asr",
@@ -239,9 +259,9 @@ Log.d("Methods",method.toString())
                 null,
                 null,
                 false,
-                true,
-                false,
-                false, false, R.raw.adhan_abdul_basit, null
+                isForAdhan = true,
+                isVibrate = false,
+                isSilent = false, isOff = false, soundAdhan = R.raw.adhan_abdul_basit, soundTone = null
             )
             val saveMaghribData = NotificationData(
                 namazName = "Maghrib",
@@ -263,10 +283,10 @@ Log.d("Methods",method.toString())
                 null,
                 null,
                 null,
-                false,
-                true,
-                false,
-                false, false, R.raw.adhan_abdul_basit, null
+                isSoundSelected = false,
+                isForAdhan = true,
+                isVibrate = false,
+                isSilent = false, isOff = false, soundAdhan = R.raw.adhan_abdul_basit, soundTone = null
             )
             val saveIshaData = NotificationData(
                 namazName = "Isha",
@@ -423,7 +443,7 @@ Log.d("Methods",method.toString())
             getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
         Log.d("currentLatitude","$currentLatitude")
         Log.d("currentLongitude","$currentLongitude")
-        Log.d("method","${method}")
+        Log.d("method","$method")
 
         val currentNamaz = getTimeDifferenceToNextPrayer()
 
@@ -657,7 +677,7 @@ Log.d("Methods",method.toString())
         countDownTimer?.start()
     }
 
-    fun getCurrentDate(): String {
+   private fun getCurrentDate(): String {
         val currentDate = LocalDate.now()
         val formatter =
             DateTimeFormatter.ofPattern("dd MMM yyyy") // Customize the format as needed
@@ -699,15 +719,19 @@ Log.d("Methods",method.toString())
         var previousPrayerTimeIndex = 0
         for ((index, _) in prayerTimeList.withIndex()) {
             if (prayerTimeList[index].currentNamazTime > currentTimeMillis) {
-                if (prayerTimeList[index].currentNamazName == "Fajr") {
-                    previousPrayerTimeIndex = 4
-                    currentPrayerTimeIndex = index
-                } else if (prayerTimeList[index].currentNamazName == "Isha") {
-                    previousPrayerTimeIndex = index - 1
-                    currentPrayerTimeIndex = index
-                } else {
-                    previousPrayerTimeIndex = index - 1
-                    currentPrayerTimeIndex = index
+                when (prayerTimeList[index].currentNamazName) {
+                    "Fajr" -> {
+                        previousPrayerTimeIndex = 4
+                        currentPrayerTimeIndex = index
+                    }
+                    "Isha" -> {
+                        previousPrayerTimeIndex = index - 1
+                        currentPrayerTimeIndex = index
+                    }
+                    else -> {
+                        previousPrayerTimeIndex = index - 1
+                        currentPrayerTimeIndex = index
+                    }
                 }
                 break
             } else {
@@ -740,12 +764,12 @@ Log.d("Methods",method.toString())
                 val startDate = dateFormat.parse(startDateString)
                 val endDate = dateFormat.parse(endDateString)
 
-                val (totaltime, curentTimeDifference) = obj.calculateHoursAndMinutesBetween(
+                val (totalTime, currentTimeDifference) = obj.calculateHoursAndMinutesBetween(
                     startDate,
                     endDate
                 )
-                totalTime1 = totaltime
-                totalTimeFromCurrent = curentTimeDifference
+                totalTime1 = totalTime
+                totalTimeFromCurrent = currentTimeDifference
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -779,7 +803,7 @@ Log.d("Methods",method.toString())
     }
 
 
-    fun convertTimeToMillis(timeString: String): Long {
+   private fun convertTimeToMillis(timeString: String): Long {
 
         // Set the date to a fixed value (e.g., today's date) to avoid unexpected behavior
         val currentDate = Date()
@@ -812,7 +836,6 @@ Log.d("Methods",method.toString())
                 Madhab.SHAFI
             }
         }
-Log.d("viewModel.getMethods",viewModel.getMethods)
         if (!viewModel.getMethods.isNullOrEmpty()) {
             method = when (viewModel.getMethods.toInt()) {
                 1 -> {
@@ -913,25 +936,9 @@ Log.d("viewModel.getMethods",viewModel.getMethods)
         _binding?.cardViewStopAdhan?.show()
     }
 
-    inner class NotificationReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == Intent.ACTION_SCREEN_OFF) {
-                // Perform your action here
-                _binding?.cardViewStopAdhan?.gone()
-            }
 
-            val showImage = intent?.getBooleanExtra("show_image", true) ?: false
-            if (showImage) {
-                toggleImageVisibility()
-            } else {
-                notifications.stopPrayer()
-                _binding?.cardViewStopAdhan?.gone()
-            }
 
-        }
-    }
-
-    fun isTodayFriday(): Boolean {
+   private fun isTodayFriday(): Boolean {
         val calendar = Calendar.getInstance()
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         return dayOfWeek == Calendar.FRIDAY
@@ -979,16 +986,17 @@ Log.d("viewModel.getMethods",viewModel.getMethods)
     override fun onPause() {
         super.onPause()
         dialog?.dismiss()
+        requireContext().unregisterReceiver(notificationReceiver)
     }
 }
 
 
 class DateTimeUtils {
     fun calculateHoursAndMinutesBetween(startDate: Date, endDate: Date): Pair<Long, Long> {
-        val totaltimeDifference = Math.abs(endDate.time - startDate.time)
+        val totalTimeDifference = abs(endDate.time - startDate.time)
         val currentTime = Calendar.getInstance().time
-        val totaltimeDifferenceFromCurrentToEndTime = Math.abs(endDate.time - currentTime.time)
+        val totalTimeDifferenceFromCurrentToEndTime = abs(endDate.time - currentTime.time)
 
-        return Pair(totaltimeDifference, totaltimeDifferenceFromCurrentToEndTime)
+        return Pair(totalTimeDifference, totalTimeDifferenceFromCurrentToEndTime)
     }
 }

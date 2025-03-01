@@ -240,7 +240,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
         val methodsArray = resources.getStringArray(R.array.methods)
 
         // Filter out the empty item while keeping positions intact
-        val filteredMethods = methodsArray.filter { it.isNotBlank() }
+        val filteredMethods = methodsArray.filter { it != "other" }
 
         val adapter = ArrayAdapter(
             requireContext(),

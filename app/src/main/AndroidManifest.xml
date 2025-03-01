@@ -17,6 +17,7 @@
     <uses-feature android:name="android.hardware.sensor.compass" android:required="false"/>
     <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="false"/>
 
+    <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="34" />
 
     <application
         android:name=".App"
