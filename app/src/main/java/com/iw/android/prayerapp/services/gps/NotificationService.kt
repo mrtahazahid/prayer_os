@@ -273,7 +273,7 @@ class NotificationService : Service() {
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, pendingFlag)
         val notification: android.app.Notification = NotificationCompat.Builder(this, "113")
-            .setContentTitle("Prayer App is Running in background")
+            .setContentTitle("Pray Watch is Running in background")
             .setContentText("Click to open")
             .setSmallIcon(R.mipmap.app_icon)
             .setContentIntent(pendingIntent)

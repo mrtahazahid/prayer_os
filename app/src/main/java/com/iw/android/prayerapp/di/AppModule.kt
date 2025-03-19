@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder
 import com.iw.android.prayerapp.App
 import com.iw.android.prayerapp.base.network.BaseApi
 import com.iw.android.prayerapp.notificationService.Notification
+import com.iw.android.prayerapp.utils.TinyDB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -69,6 +70,13 @@ object AppModule {
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
+    }
+
+
+    @Provides
+    fun provideTinyDB(context: Context?): TinyDB {
+        return TinyDB(context)
+
     }
 
     @DelicateCoroutinesApi

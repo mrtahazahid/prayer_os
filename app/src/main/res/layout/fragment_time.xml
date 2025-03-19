@@ -181,7 +181,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"
                             android:fontFamily="@font/sf_bold"
-                            android:text="Month Calender"
+                            android:text="Monthly Calender"
                             android:textColor="@color/white"
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="@+id/imageView"

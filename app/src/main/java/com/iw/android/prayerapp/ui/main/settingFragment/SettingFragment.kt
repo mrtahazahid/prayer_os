@@ -599,7 +599,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         val methodsArray = resources.getStringArray(R.array.methods)
 
         // Filter out the empty item while keeping positions intact
-        val filteredMethods = methodsArray.filter { it != "other" }
+        val filteredMethods = methodsArray.filter { it.isNotBlank() }
 
         val adapter = ArrayAdapter(
             requireContext(),
