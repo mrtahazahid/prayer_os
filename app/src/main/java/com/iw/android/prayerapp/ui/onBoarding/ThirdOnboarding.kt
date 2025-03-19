@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,49 +37,24 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
     val viewModel: OnBoardingViewModel by viewModels()
 
     private var isButtonForNext = false
-    private var isLatLongFetched = false
     private var lat = 0.0
     private var long = 0.0
 
     private var gpsStatusListener: GpsStatusListener? = null
-
     private var turnOnGps: TurnOnGps? = null
-
     private var service: Intent? = null
 
-    private val backgroundLocation =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (it) {
+    private val locationPermissions =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            if (permissions[android.Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                permissions[android.Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            ) {
                 isButtonForNext = true
                 binding.btnEnableNotification.text = "Next"
+                requireActivity().startService(service)
+                enableGPSLocation()
             } else {
-                showToast("Permission denied")
-            }
-        }
-
-    private val locationPermissions =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            when {
-                it.getOrDefault(android.Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        if (ActivityCompat.checkSelfPermission(
-                                requireActivity(),
-                                android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            backgroundLocation.launch(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                        }
-                    } else {
-                        isButtonForNext = true
-                        binding.btnEnableNotification.text = "Next"
-                    }
-                }
-
-                it.getOrDefault(android.Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-                    isButtonForNext = true
-                    binding.btnEnableNotification.text = "Next"
-                }
+                showToast("Location permission denied")
             }
         }
 
@@ -115,36 +89,31 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
 
     }
 
-    override fun setObserver() {
-    }
+    override fun setObserver() {}
 
     override fun setOnClickListener() {
         binding.btnEnableNotification.setOnClickListener {
-            if(isButtonForNext){
-                    lifecycleScope.launch {
-                        val args = Bundle()
-                        if(viewModel.getUserLatLong()?.latitude != null && viewModel.getUserLatLong()?.longitude != null){
-                            args.putDouble("lat", viewModel.getUserLatLong()?.latitude?:0.0)
-                            args.putDouble("long", viewModel.getUserLatLong()?.longitude?:0.0)
-                            requireActivity().runOnUiThread {
-                                findNavController().navigate(
-                                    R.id.action_thirdOnboarding_to_fourthOnboarding,
-                                    args
-                                )
-                            }
-                        }else{
-                            binding.btnEnableNotification.text = "Fetching Location"
-                            binding.progress.show()
-                            requireActivity().startService(service)
-                            enableGPSLocation()
-                        }
+            if (isButtonForNext) {
+                lifecycleScope.launch {
+                    val args = Bundle()
+                    val userLatLong = viewModel.getUserLatLong()
+                    if (userLatLong?.latitude != null && userLatLong.longitude != null) {
+                        args.putDouble("lat", userLatLong.latitude)
+                        args.putDouble("long", userLatLong.longitude)
+                        findNavController().navigate(
+                            R.id.action_thirdOnboarding_to_fourthOnboarding,
+                            args
+                        )
+                    } else {
+                        binding.btnEnableNotification.text = "Fetching Location"
+                        binding.progress.show()
+                        requireActivity().startService(service)
+                        enableGPSLocation()
                     }
-            }else{
-
+                }
+            } else {
                 checkPermissions()
             }
-
-
         }
 
         binding.notNow.setOnClickListener {
@@ -152,17 +121,10 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
         }
 
         binding.skip.setOnClickListener {
-            requireActivity().startActivity(
-                Intent(
-                    requireContext(),
-                    MainActivity::class.java
-                )
-            )
+            requireActivity().startActivity(Intent(requireContext(), MainActivity::class.java))
             requireActivity().finish()
         }
-
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -171,7 +133,6 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
         if (EventBus.getDefault().isRegistered(this@ThirdOnboarding)) {
             EventBus.getDefault().unregister(this@ThirdOnboarding)
         }
-
     }
 
     private fun checkPermissions() {
@@ -179,7 +140,8 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
             if (ActivityCompat.checkSelfPermission(
                     requireActivity(),
                     android.Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                ) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(
                     requireActivity(),
                     android.Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
@@ -190,7 +152,6 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
                         android.Manifest.permission.ACCESS_COARSE_LOCATION
                     )
                 )
-                enableGPSLocation()
             } else {
                 isButtonForNext = true
                 binding.btnEnableNotification.text = "Next"
@@ -201,33 +162,21 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
     }
 
     private fun enableGPSLocation() {
-
         var isGpsStatusChanged: Boolean? = null
         gpsStatusListener?.observe(requireActivity()) { isGpsOn ->
-            if (isGpsStatusChanged == null) {
+            if (isGpsStatusChanged == null || isGpsStatusChanged != isGpsOn) {
                 if (!isGpsOn) {
-                    //Turn on GPS
                     turnOnGps?.startGPS(resultLauncher)
                 }
                 isGpsStatusChanged = isGpsOn
-            } else {
-                if (isGpsStatusChanged != isGpsOn) {
-                    if (!isGpsOn) {
-                        //Turn on GPS
-                        turnOnGps?.startGPS(resultLauncher)
-                    }
-                    isGpsStatusChanged = isGpsOn
-                }
             }
         }
     }
 
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { activityResult ->
-            if (activityResult.resultCode == AppCompatActivity.RESULT_OK) {
-
-            } else if (activityResult.resultCode == AppCompatActivity.RESULT_CANCELED) {
-
+            if (activityResult.resultCode == AppCompatActivity.RESULT_CANCELED) {
+                showToast("GPS is required for location services")
             }
         }
 
@@ -244,20 +193,18 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
         binding.progress.hide()
         lat = locationEvent.latitude ?: 0.0
         long = locationEvent.longitude ?: 0.0
-        Log.d("latlong","${locationEvent.longitude ?: 0.0}  ${locationEvent.longitude ?: 0.0}")
     }
-
 
     private fun setOnBackPressedListener() {
         requireActivity().onBackPressedDispatcher.addCallback(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (!(requireActivity() as OnBoardingActivity).data.isNullOrEmpty() && (requireActivity() as OnBoardingActivity).data != "null") {
+                    if (!(requireActivity() as OnBoardingActivity).data.isNullOrEmpty() &&
+                        (requireActivity() as OnBoardingActivity).data != "null"
+                    ) {
                         requireActivity().finish()
                     }
                 }
             })
     }
-
 }
-

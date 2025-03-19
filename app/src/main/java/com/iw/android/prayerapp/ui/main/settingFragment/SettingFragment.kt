@@ -101,9 +101,9 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             countUpTime = viewModel.getTimeData()?.countUpCount ?: 0
             adjustHijriDate = viewModel.getTimeData()?.hijriDaysCount ?: 0
             isAutoHijri = viewModel.getTimeData()?.isAutomaticIncrementHijri ?: false
-            snoozeTime = viewModel.getSettingNotificationData()?.snoozeCount?:0
-            Log.d("snooze",viewModel.getSettingNotificationData()?.snoozeCount.toString())
-                is24HourEnable = viewModel.getTimeData()?.is24HourFormat ?: false
+            snoozeTime = viewModel.getSettingNotificationData()?.snoozeCount ?: 0
+            Log.d("snooze", viewModel.getSettingNotificationData()?.snoozeCount.toString())
+            is24HourEnable = viewModel.getTimeData()?.is24HourFormat ?: false
             isPrayAbb = viewModel.getTimeData()?.isPrayerAbbreviationEnabled ?: false
             countUp = viewModel.getTimeData()?.countUpTime ?: "off"
             hijri = viewModel.getTimeData()?.hijriDays ?: "off"
@@ -223,7 +223,10 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 requireContext(), viewModel.getUserLatLong?.latitude ?: 0.0,
                 viewModel.getUserLatLong?.longitude ?: 0.0
             )
-            Log.d("latLong","${viewModel.getUserLatLong?.latitude}, ${viewModel.getUserLatLong?.longitude}")
+            Log.d(
+                "latLong",
+                "${viewModel.getUserLatLong?.latitude}, ${viewModel.getUserLatLong?.longitude}"
+            )
             binding.textViewCityName.text = location?.city
             binding.textViewCityTimeZoneName.text = location?.timeZone
             viewModel.setLocationAutomaticValue(binding.switchAutomatic.isChecked)
@@ -270,8 +273,8 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                     isPrayOnTap = isPlayOnTap
                 )
             )
-                // Code to execute when the switch is unchecked (OFF)
-                // For example, you can reverse the action or update the variable back
+            // Code to execute when the switch is unchecked (OFF)
+            // For example, you can reverse the action or update the variable back
 
         }
     }
@@ -439,7 +442,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 }
             }
 
-            binding.imageViewSystem.id ,binding.systemView.id -> {
+            binding.imageViewSystem.id, binding.systemView.id -> {
                 if (!isSystemShow) {
                     binding.imageViewSystem.setImageResource(R.drawable.ic_down)
                     binding.systemDetailViews.visibility = View.VISIBLE
@@ -451,7 +454,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 }
             }
 
-            binding.imageViewApp.id ,binding.appView.id-> {
+            binding.imageViewApp.id, binding.appView.id -> {
                 if (!isAppShow) {
                     binding.imageViewApp.setImageResource(R.drawable.ic_down)
                     binding.appDetailViews.visibility = View.VISIBLE
@@ -591,10 +594,6 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
 
     private fun spinnerMethod() {
-        lifecycleScope.launch {
-            viewModel.savePrayerMethod("0")
-        }
-
         // Get the array from resources
         val methodsArray = resources.getStringArray(R.array.methods)
 
@@ -606,10 +605,10 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             R.layout.custom_spinner,
             filteredMethods // Use the filtered list
         )
-
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerMethod.adapter = adapter
-        binding.spinnerMethod.setSelection(viewModel.getSavedPrayerMethod.toInt())
+        val position = if(viewModel.getSavedPrayerMethod.toInt() == 14) 13 else viewModel.getSavedPrayerMethod.toInt()
+        binding.spinnerMethod.setSelection(position)
 
         binding.spinnerMethod.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
@@ -620,7 +619,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 id: Long
             ) {
                 // Adjust position to match the original array index
-                val originalPosition = methodsArray.indexOf(filteredMethods[position])
+                val originalPosition = methodsArray.indexOf(methodsArray[position])
                 lifecycleScope.launch {
                     viewModel.savePrayerMethod(originalPosition.toString())
                 }
@@ -672,7 +671,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             snoozeTime--
             "$snoozeTime min"
         } else {
-            snoozeTime =0
+            snoozeTime = 0
             "off"
         }
     }
@@ -750,8 +749,8 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         )
         lifecycleScope.launch {
             viewModel.saveRecentLocationData(data)
-            Log.d("Lt",data.lat.toString())
-            Log.d("Ln",data.long.toString())
+            Log.d("Lt", data.lat.toString())
+            Log.d("Ln", data.long.toString())
             viewModel.saveUserLatLong(UserLatLong(data.lat, data.long))
             delay(1500)
 

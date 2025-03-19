@@ -159,7 +159,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     private fun spinnerElevation() {
         lifecycleScope.launch {
             viewModel.savePrayerElevation(
-                0.toString()
+                "0"
             )
         }
         val adapter = ArrayAdapter.createFromResource(
@@ -196,7 +196,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     private fun spinnerJurisprudence() {
         lifecycleScope.launch {
             viewModel.savePrayerJurisprudence(
-                0.toString()
+                "0"
             )
         }
         val adapter = ArrayAdapter.createFromResource(
@@ -261,8 +261,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
             ) {
                 isMethodSelected = true
 
-                // Adjust position to match the original array index
-                val originalPosition = methodsArray.indexOf(filteredMethods[position])
+                val originalPosition = methodsArray.indexOf(methodsArray[position])
                 lifecycleScope.launch {
                     viewModel.savePrayerMethod(originalPosition.toString())
                 }
