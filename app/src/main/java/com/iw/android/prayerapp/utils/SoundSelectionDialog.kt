@@ -204,8 +204,8 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                 val bottomSheet = CopyBottomSheet()
                 bottomSheet.soundName = selectedSoundAdhanName
                 bottomSheet.isForNotification = isForNotification
-                bottomSheet.soundAdhan = soundAdhan ?: R.raw.adhan_abdul_basit
-                bottomSheet.soundTones = soundTone ?: R.raw.adhan_abdul_basit
+                bottomSheet.soundAdhan = soundAdhan ?: R.raw.adhan_abdul_basit_short
+                bottomSheet.soundTones = soundTone ?: R.raw.adhan_abdul_basit_short
 //todo word for position item sound
                 bottomSheet.isSilent = isSilentSelected
                 bottomSheet.isForAdhan = isForAdhan
@@ -356,7 +356,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                                 isVibrate = false,
                                 isSilent = false,
                                 isOff = false,
-                                soundTone = R.raw.adhan_abdul_basit, soundAdhan = R.raw.adhan_abdul_basit
+                                soundTone = R.raw.adhan_abdul_basit_short, soundAdhan = R.raw.adhan_abdul_basit_short
                             )
                         }
                     }
@@ -394,7 +394,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                                 isVibrate = false,
                                 isSilent = false,
                                 isOff = false,
-                                soundTone = R.raw.adhan_abdul_basit, soundAdhan = R.raw.adhan_abdul_basit
+                                soundTone = R.raw.adhan_abdul_basit_short, soundAdhan = R.raw.adhan_abdul_basit_short
                             )
                         }
                     }
@@ -432,7 +432,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                                 isVibrate = false,
                                 isSilent = false,
                                 isOff = false,
-                                soundTone = R.raw.adhan_abdul_basit, soundAdhan = R.raw.adhan_abdul_basit
+                                soundTone = R.raw.adhan_abdul_basit_short, soundAdhan = R.raw.adhan_abdul_basit_short
                             )
                         }
                     }
@@ -470,7 +470,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                                 isVibrate = false,
                                 isSilent = false,
                                 isOff = false,
-                                soundTone = R.raw.adhan_abdul_basit, soundAdhan = R.raw.adhan_abdul_basit
+                                soundTone = R.raw.adhan_abdul_basit_short, soundAdhan = R.raw.adhan_abdul_basit_short
                             )
                         }
                     }
@@ -508,7 +508,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                                 isVibrate = false,
                                 isSilent = false,
                                 isOff = false,
-                                soundTone = R.raw.adhan_abdul_basit, soundAdhan = R.raw.adhan_abdul_basit
+                                soundTone = R.raw.adhan_abdul_basit_short, soundAdhan = R.raw.adhan_abdul_basit_short
                             )
                         }
                     }
@@ -526,7 +526,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                             isVibrate = false,
                             isSilent = false,
                             isOff = false,
-                            soundTone = R.raw.adhan_abdul_basit, soundAdhan = R.raw.adhan_abdul_basit
+                            soundTone = R.raw.adhan_abdul_basit_short, soundAdhan = R.raw.adhan_abdul_basit_short
                         )
                     }
                 }
@@ -563,7 +563,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                                 isVibrate = false,
                                 isSilent = false,
                                 isOff = false,
-                                soundTone = R.raw.adhan_abdul_basit, soundAdhan = R.raw.adhan_abdul_basit
+                                soundTone = R.raw.adhan_abdul_basit_short, soundAdhan = R.raw.adhan_abdul_basit_short
                             )
                         }
                     }
@@ -599,7 +599,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                                 isVibrate = false,
                                 isSilent = false,
                                 isOff = false,
-                                soundTone = R.raw.adhan_abdul_basit, soundAdhan = R.raw.adhan_abdul_basit
+                                soundTone = R.raw.adhan_abdul_basit_short, soundAdhan = R.raw.adhan_abdul_basit_short
                             )
                         }
                     }
@@ -635,7 +635,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                                 isVibrate = false,
                                 isSilent = false,
                                 isOff = false,
-                                soundTone = R.raw.adhan_abdul_basit, soundAdhan = R.raw.adhan_abdul_basit
+                                soundTone = R.raw.adhan_abdul_basit_short, soundAdhan = R.raw.adhan_abdul_basit_short
                             )
                         }
                     }
@@ -672,7 +672,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                                 isVibrate = false,
                                 isSilent = false,
                                 isOff = false,
-                                soundTone = R.raw.adhan_abdul_basit, soundAdhan = R.raw.adhan_abdul_basit
+                                soundTone = R.raw.adhan_abdul_basit_short, soundAdhan = R.raw.adhan_abdul_basit_short
                             )
                         }
                     }
@@ -708,7 +708,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                                 isVibrate = false,
                                 isSilent = false,
                                 isOff = false,
-                                soundTone = R.raw.adhan_abdul_basit, soundAdhan = R.raw.adhan_abdul_basit
+                                soundTone = R.raw.adhan_abdul_basit_short, soundAdhan = R.raw.adhan_abdul_basit_short
                             )
                         }
                     }
@@ -726,7 +726,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                             isVibrate = false,
                             isSilent = false,
                             isOff = false,
-                            soundTone = R.raw.adhan_abdul_basit, soundAdhan = R.raw.adhan_abdul_basit
+                            soundTone = R.raw.adhan_abdul_basit_short, soundAdhan = R.raw.adhan_abdul_basit_short
                         )
                     }
                 }

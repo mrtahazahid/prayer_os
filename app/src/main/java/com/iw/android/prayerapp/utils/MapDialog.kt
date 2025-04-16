@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.model.LatLng
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
@@ -17,6 +18,10 @@ import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.response.LocationResponse
 import com.iw.android.prayerapp.databinding.LocationDialogBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.IOException
 import java.util.Locale
 
 class MapDialog : DialogFragment(),
@@ -145,21 +150,31 @@ class MapDialog : DialogFragment(),
 
 
     private fun updateLocationResponse(latLng: LatLng) {
-        // Fetch location name using reverse geocoding
-        val geocoder = Geocoder(requireContext(), Locale.getDefault())
-        val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+        lifecycleScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                    val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
 
-        if (addresses?.isNotEmpty() == true) {
-
-            val address = addresses[0]
-            Log.d("address", address.toString())
-            binding.searchTextView.text = address.locality + "," + address.countryName
-            latitude = address.latitude
-            longitude = address.longitude
-            city = address.locality + "," + address.countryName
+                    if (!addresses.isNullOrEmpty()) {
+                        val address = addresses[0]
+                        withContext(Dispatchers.Main) {
+                            Log.d("address", address.toString())
+                            binding.searchTextView.text = "${address.locality}, ${address.countryName}"
+                            latitude = address.latitude
+                            longitude = address.longitude
+                            city = "${address.locality}, ${address.countryName}"
+                        }
+                    }
+                }
+            } catch (e: IOException) {
+                Log.e("GeocoderError", "Failed to get location: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Unable to fetch location info", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
-
 
     private fun sendDataBack(data: LocationResponse) {
         listener?.onDataPassed(data)

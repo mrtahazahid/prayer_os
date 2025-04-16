@@ -1,57 +1,41 @@
 package com.iw.android.prayerapp.services.gps
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.location.Location
 import android.os.IBinder
 import android.util.Log
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.lifecycleScope
+import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.*
+import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.prefrence.DataPreference
-import com.iw.android.prayerapp.notificationService.Notification
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LocationService : Service() {
 
-    @Inject
-    lateinit var notifications: Notification
-    lateinit var prefrence: DataPreference
 
-    // ProcessLifecycleOwner provides lifecycle for the whole application process.
-    private val applicationScope = ProcessLifecycleOwner.get().lifecycleScope
+   private lateinit var prefrence: DataPreference
+
+
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
     private var locationCallback: LocationCallback? = null
     private var locationRequest: LocationRequest? = null
 
-//    private var notificationManager: NotificationManager? = null
 
     private var location:Location?=null
 
     override fun onCreate() {
         super.onCreate()
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 60000).setIntervalMillis(60000).build()
-        locationCallback = object : LocationCallback() {
-            override fun onLocationAvailability(p0: LocationAvailability) {
-                super.onLocationAvailability(p0)
-            }
-
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                onNewLocation(locationResult)
-            }
-        }
         prefrence = DataPreference(this)
     }
 
     @Suppress("MissingPermission")
-    fun createLocationRequest(){
+  private  fun createLocationRequest(){
         try {
             fusedLocationProviderClient?.requestLocationUpdates(
                 locationRequest!!,locationCallback!!,null
@@ -61,8 +45,6 @@ class LocationService : Service() {
         }
 
     }
-
-
 
     private fun removeLocationUpdates(){
         locationCallback?.let {
@@ -82,10 +64,44 @@ class LocationService : Service() {
         ))
     }
 
+
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
+
+        createNotificationChannel()
+        val notification: android.app.Notification = NotificationCompat.Builder(this, "114")
+            .setContentTitle("Pray Watch is running for location")
+            .setSmallIcon(R.mipmap.app_icon)
+            .build()
+        startForeground(2, notification)
+
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 60000).setIntervalMillis(60000).build()
+        locationCallback = object : LocationCallback() {
+            override fun onLocationAvailability(p0: LocationAvailability) {
+                super.onLocationAvailability(p0)
+            }
+
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                onNewLocation(locationResult)
+            }
+        }
         createLocationRequest()
         return START_STICKY
+    }
+
+
+    private fun createNotificationChannel() {
+        val serviceChannel = NotificationChannel(
+            "114",
+            "Prayer Location Service",
+            NotificationManager.IMPORTANCE_LOW
+        )
+        val manager = getSystemService(NotificationManager::class.java)
+        manager.createNotificationChannel(serviceChannel)
     }
 
     override fun onBind(intent: Intent): IBinder? = null
@@ -93,5 +109,8 @@ class LocationService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         removeLocationUpdates()
+        stopSelf()
     }
+
+
 }

@@ -141,7 +141,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
                 soundName = it?.soundName ?: "Tone"
                 binding.textViewNotificationSetTime.text = it?.reminderTime ?: "off"
                 if (reminderTime != "off" && !reminderTime.isNullOrBlank()) {
-                    reminderTimeCount = extractMinutes(it!!.reminderTime)
+                    reminderTimeCount = extractMinutes(it?.reminderTime?:"0")
                 }
             }
 

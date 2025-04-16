@@ -12,8 +12,8 @@ class GetAdhanSound {
 
 
     init {
-        adhanSound.add(SoundData("Abdul Basit", R.raw.adhan_abdul_basit,false))
         adhanSound.add(SoundData("Abdul Basit Short", R.raw.adhan_abdul_basit_short,false))
+        adhanSound.add(SoundData("Abdul Basit", R.raw.adhan_abdul_basit,false))
         adhanSound.add(SoundData("Abdul Ghaffar", R.raw.adhan_abdul_ghaffar,false))
         adhanSound.add(SoundData("Abdul Ghaffar Short", R.raw.adhan_abdul_ghaffar_short,false))
         adhanSound.add(SoundData("Abdul Hakam", R.raw.adhan_abdul_hakam,false))

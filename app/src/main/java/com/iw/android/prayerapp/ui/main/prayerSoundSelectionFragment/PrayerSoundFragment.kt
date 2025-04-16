@@ -298,8 +298,8 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
             binding.imageViewCopy.id -> {
                 val bottomSheet = CopyBottomSheet()
                 bottomSheet.soundName = selectedSoundAdhanName
-                bottomSheet.soundAdhan = soundAdhan ?: R.raw.adhan_abdul_basit
-                bottomSheet.soundTones = soundTones ?: R.raw.adhan_abdul_basit
+                bottomSheet.soundAdhan = soundAdhan ?: R.raw.adhan_abdul_basit_short
+                bottomSheet.soundTones = soundTones ?: R.raw.adhan_abdul_basit_short
 
                 bottomSheet.isSilent = isSilentSelected
                 bottomSheet.isForAdhan = isForAdhan
@@ -420,7 +420,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                     val fajr = viewModel.getFajrDetail()?.notificationSound
                     if (fajr != null) {
                         selectedSound = if (fajr.selectedSoundItemPosition == 0) fajr.soundAdhan
-                            ?: R.raw.adhan_abdul_basit else soundTones ?: R.raw.adhan_abdul_basit
+                            ?: R.raw.adhan_abdul_basit_short else soundTones ?: R.raw.adhan_abdul_basit_short
                         selectedSoundPosition = fajr.selectedSoundPosition ?: 0
                         Log.d("selectedSoundPosition", "setData:${fajr.selectedSoundPosition} ")
                         selectedSoundTonePosition = fajr.selectedSoundTonePosition ?: 0
@@ -442,7 +442,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                             false,
                             false,
                             false,
-                            R.raw.adhan_abdul_basit
+                            R.raw.adhan_abdul_basit_short
                         )
                     }
                 }
@@ -451,7 +451,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                     val dhuhr = viewModel.getDuhrDetail()?.notificationSound
                     if (dhuhr != null) {
                         selectedSound = if (dhuhr.selectedSoundItemPosition == 0) dhuhr.soundAdhan
-                            ?: R.raw.adhan_abdul_basit else soundTones ?: R.raw.adhan_abdul_basit
+                            ?: R.raw.adhan_abdul_basit_short else soundTones ?: R.raw.adhan_abdul_basit_short
                         selectedSoundPosition = dhuhr.selectedSoundPosition ?: 0
                         selectedSoundTonePosition = dhuhr.selectedSoundTonePosition ?: 0
                         selectedItemPosition = dhuhr.selectedSoundItemPosition ?: 0
@@ -470,7 +470,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                             false,
                             false,
                             false,
-                            R.raw.adhan_abdul_basit
+                            R.raw.adhan_abdul_basit_short
                         )
                     }
                 }
@@ -479,7 +479,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                     val asr = viewModel.getAsrDetail()?.notificationSound
                     if (asr != null) {
                         selectedSound = if (asr.selectedSoundItemPosition == 0) asr.soundAdhan
-                            ?: R.raw.adhan_abdul_basit else soundTones ?: R.raw.adhan_abdul_basit
+                            ?: R.raw.adhan_abdul_basit_short else soundTones ?: R.raw.adhan_abdul_basit_short
                         selectedSoundPosition = asr.selectedSoundPosition ?: 0
                         selectedSoundTonePosition = asr.selectedSoundTonePosition ?: 0
                         selectedItemPosition = asr.selectedSoundItemPosition ?: 0
@@ -499,7 +499,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                             false,
                             false,
                             false,
-                            R.raw.adhan_abdul_basit
+                            R.raw.adhan_abdul_basit_short
                         )
                     }
                 }
@@ -509,8 +509,8 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                     if (maghrib != null) {
                         selectedSound =
                             if (maghrib.selectedSoundItemPosition == 0) maghrib.soundAdhan
-                                ?: R.raw.adhan_abdul_basit else soundTones
-                                ?: R.raw.adhan_abdul_basit
+                                ?: R.raw.adhan_abdul_basit_short else soundTones
+                                ?: R.raw.adhan_abdul_basit_short
                         selectedSoundPosition = maghrib.selectedSoundPosition ?: 0
                         selectedSoundTonePosition = maghrib.selectedSoundTonePosition ?: 0
                         selectedItemPosition = maghrib.selectedSoundItemPosition ?: 0
@@ -530,7 +530,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                             false,
                             false,
                             false,
-                            R.raw.adhan_abdul_basit
+                            R.raw.adhan_abdul_basit_short
                         )
                     }
                 }
@@ -540,7 +540,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                     if (isha != null) {
 
                         selectedSound = if (isha.selectedSoundItemPosition == 0) isha.soundAdhan
-                            ?: R.raw.adhan_abdul_basit else soundTones ?: R.raw.adhan_abdul_basit
+                            ?: R.raw.adhan_abdul_basit_short else soundTones ?: R.raw.adhan_abdul_basit_short
                         selectedSoundPosition = isha.selectedSoundPosition ?: 0
                         selectedSoundTonePosition = isha.selectedSoundTonePosition ?: 0
                         selectedItemPosition = isha.selectedSoundItemPosition ?: 0
@@ -559,7 +559,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                             false,
                             false,
                             false,
-                            R.raw.adhan_abdul_basit
+                            R.raw.adhan_abdul_basit_short
                         )
                     }
                 }
@@ -577,7 +577,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                         false,
                         false,
                         false,
-                        R.raw.adhan_abdul_basit
+                        R.raw.adhan_abdul_basit_short
                     )
                 }
             }
