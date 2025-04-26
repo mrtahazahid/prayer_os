@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -195,7 +196,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 binding.cityView.isClickable = false
                 binding.cityView.isEnabled = false
                 binding.group.show()
-                requireActivity().startService(
+                ContextCompat.startForegroundService(requireContext(),
                     Intent(
                         requireActivity(),
                         LocationService::class.java
@@ -607,6 +608,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerMethod.adapter = adapter
+
         val position = if(viewModel.getSavedPrayerMethod.toInt() == 14) 13 else viewModel.getSavedPrayerMethod.toInt()
         binding.spinnerMethod.setSelection(position)
 

@@ -3,6 +3,7 @@ package com.iw.android.prayerapp.ui.main.timeFragment.itemView
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -27,6 +28,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.util.Calendar
 import java.util.Locale
 
@@ -712,28 +714,29 @@ class RowItemTime(
         return formattedCurrentDate == dateString
     }
 
-    fun subtractMinutesFromTime(currentTime: String, minutesToSubtract: Int): String {
-        // Parse the current time string
-        val formatter = DateTimeFormatter.ofPattern("h:mm a")
-        val parsedTime = LocalTime.parse(currentTime, formatter)
-
-        // Subtract minutes from the parsed time
-        val resultTime = parsedTime.minusMinutes(minutesToSubtract.toLong())
-
-        // Format the result time back to "hh:mm a" format
-        return resultTime.format(formatter)
+    private fun subtractMinutesFromTime(currentTime: String, minutesToSubtract: Int): String {
+        return try {
+            val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
+            val parsedTime = LocalTime.parse(currentTime, formatter)
+            val resultTime = parsedTime.minusMinutes(minutesToSubtract.toLong())
+            resultTime.format(formatter)
+        } catch (e: DateTimeParseException) {
+            Log.d("DateTimeParseException",e.message.toString())
+            currentTime
+        }
     }
 
-    fun addMinutesToTime(currentTime: String, minutesToAdd: Int): String {
-        // Parse the current time string
-        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
-        val parsedTime = LocalTime.parse(currentTime, formatter)
 
-        // Add minutes to the parsed time
-        val resultTime = parsedTime.plusMinutes(minutesToAdd.toLong())
-
-        // Format the result time back to "hh:mm a" format
-        return resultTime.format(formatter)
+    private fun addMinutesToTime(currentTime: String, minutesToAdd: Int): String {
+        return try {
+            val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
+            val parsedTime = LocalTime.parse(currentTime, formatter)
+            val resultTime = parsedTime.plusMinutes(minutesToAdd.toLong())
+            resultTime.format(formatter)
+        } catch (e: DateTimeParseException) {
+            Log.d("DateTimeParseException",e.message.toString())
+            currentTime
+        }
     }
 
     private fun incrementReminderTimeMinutes(): String {

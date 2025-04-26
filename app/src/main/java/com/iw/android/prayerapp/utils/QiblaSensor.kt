@@ -23,10 +23,17 @@ class QiblaSensor(private val context: Context): SensorEventListener {
         SensorManager.getOrientation(rotationVector, this.values)
         val floatArray = values
 
-        val intVal = (floatArray[1] * 57.29578f).toInt()
+
+
+
+        val intVal = floatArray[1] * 57.29578f
         var directionAngle = Math.toDegrees(floatArray[0].toDouble()).toFloat()
         var directionAngle2 = Math.toDegrees(floatArray[0].toDouble()).toFloat()
-        qiblaSensorEventListener?.onDeviceAngle(intVal)
+
+        // Check for NaN before proceeding
+        if (intVal.isNaN() || directionAngle.isNaN()) return
+
+        qiblaSensorEventListener?.onDeviceAngle(intVal.toInt())
         if (0.0f.roundToInt() == directionAngle.roundToInt())  {
             return
         }
@@ -81,9 +88,6 @@ private fun sen(event: SensorEvent){
                 val str = stringBuilder.toString()
                 val currentDegree = angle.toFloat() + str.toFloat()
                 qiblaSensorEventListener?.setDirectionRotation(currentDegree)
-            }
-            else {
-
             }
         }
         catch (exception: java.lang.Exception) {

@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Locale
 
 class RowItemIqama(
     private val data: IqamaData,
@@ -104,16 +105,16 @@ class RowItemIqama(
         }
     }
 
-    fun addMinutesToTime(currentTime: String, minutesToAdd: Int): String {
-        // Parse the current time string with optional leading zero for the hour
-        val formatter = DateTimeFormatter.ofPattern("[h:mm a][hh:mm a]")
-        val parsedTime = LocalTime.parse(currentTime, formatter)
-
-        // Add minutes to the parsed time
-        val resultTime = parsedTime.plusMinutes(minutesToAdd.toLong())
-
-        // Format the result time back to "hh:mm a" format
-        return resultTime.format(DateTimeFormatter.ofPattern("h:mm a"))
+   private fun addMinutesToTime(currentTime: String, minutesToAdd: Int): String {
+        return try {
+            val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
+            val parsedTime = LocalTime.parse(currentTime, formatter)
+            val resultTime = parsedTime.plusMinutes(minutesToAdd.toLong())
+            resultTime.format(formatter)
+        } catch (e: Exception) {
+            // If the input is invalid (e.g., not in English or wrong format), return original
+            currentTime
+        }
     }
 
     private fun spinnerDua(binding: RowItemIqamaBinding) {

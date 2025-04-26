@@ -11,6 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -107,7 +108,11 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
                     } else {
                         binding.btnEnableNotification.text = "Fetching Location"
                         binding.progress.show()
-                        requireActivity().startService(service)
+                        service?.let { it1 ->
+                            ContextCompat.startForegroundService(requireContext(),
+                                it1
+                            )
+                        }
                         enableGPSLocation()
                     }
                 }
@@ -155,7 +160,11 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
             } else {
                 isButtonForNext = true
                 binding.btnEnableNotification.text = "Next"
-                requireActivity().startService(service)
+                service?.let { it1 ->
+                    ContextCompat.startForegroundService(requireContext(),
+                        it1
+                    )
+                }
                 enableGPSLocation()
             }
         }

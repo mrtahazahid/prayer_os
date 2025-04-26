@@ -12,7 +12,6 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -35,17 +34,13 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
     init {
         createNotificationChannel()
     }
-        private  val NOTIFICATION_ID = 12165  // Fixed notification ID
+
 
 
     companion object {
         private const val channelId = "110"
-        private const val NOTIFICATION_ID_MULTIPLIER = 1000
         const val NOTIFICATION_FLAGS = PendingIntent.FLAG_UPDATE_CURRENT
-        private const val NOTIFICATION_CHANNEL_NAME = "Channel Name"
-
-        @RequiresApi(Build.VERSION_CODES.N)
-        private const val NOTIFICATION_IMPORTANCE = NotificationManager.IMPORTANCE_HIGH
+        const  val NOTIFICATION_ID = 12165
     }
 
     fun notify(
@@ -55,10 +50,7 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         isForVibrate: Boolean,
         isForSilent: Boolean, isOff: Boolean
     ) {
-        Log.d("Notify", "called")
-        val intent = Intent(context, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        }
+        val intent = Intent(context, MainActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
 
         val pendingFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_IMMUTABLE or NOTIFICATION_FLAGS
@@ -88,7 +80,6 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                 setContentIntent(pendingIntent)
             }
         } else if (!isOff) {
-            Log.d("isOff", "$isOff")
             NotificationCompat.Builder(context, channelId).apply {
                 setSmallIcon(R.mipmap.app_icon)
                 setContentTitle(currentNamazTitle)
@@ -101,7 +92,6 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
 
                 try {
                     applicationScope.launch {
-                        Log.d("notification","called")
                         val uri =
                             Uri.parse("android.resource://" + context.packageName + "/" + sound)
                         player = MediaPlayer.create(context, uri)
@@ -114,7 +104,6 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                 if (!isReceiverRegistered) {
                     screenOffReceiver = object : BroadcastReceiver() {
                         override fun onReceive(context: Context?, intent: Intent?) {
-                            Log.d("ACTION_SCREEN_OFF", "called")
                             if (player?.isPlaying == true) {
                                 stopPrayer()
                                 removeNotification()
@@ -126,9 +115,8 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                     isReceiverRegistered = true
                 }
             }
-        } else {
-            null
-        }
+        } else null
+
 
         if (notificationBuilder != null) {
 
@@ -139,21 +127,19 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channelName = "Channel Name"
-            val channelDescription = "Channel Description"
-            val importance = NotificationManager.IMPORTANCE_HIGH
+        val channelName = "Channel Name"
+        val channelDescription = "Channel Description"
+        val importance = NotificationManager.IMPORTANCE_HIGH
 
-            val channel = NotificationChannel(channelId, channelName, importance).apply {
-                description = channelDescription
-                enableVibration(true)
-                vibrationPattern = longArrayOf(0, 100, 200, 300, 400, 500)
-            }
-
-            val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        val channel = NotificationChannel(channelId, channelName, importance).apply {
+            description = channelDescription
+            enableVibration(true)
+            vibrationPattern = longArrayOf(0, 100, 200, 300, 400, 500)
         }
+
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     fun stopPrayer() {
@@ -175,9 +161,6 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(NOTIFICATION_ID)
     }
-
-
-
 }
 
 

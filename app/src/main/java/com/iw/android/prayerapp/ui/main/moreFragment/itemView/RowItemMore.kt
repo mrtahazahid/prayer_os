@@ -7,7 +7,6 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.view.View
-import android.widget.Toast
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.ViewDataBinding
 import com.batoulapps.adhan2.CalculationParameters
@@ -83,19 +82,25 @@ class RowItemMore(
                     }
 
                     "Rate this app" -> {
-                        Toast.makeText(
-                            binding.imageView.context,
-                            "Coming Soon",
-                            Toast.LENGTH_SHORT
-                        ).show()
+
+                        try {
+                            // Try to open in Play Store app
+                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${context.packageName}")))
+                        } catch (e: ActivityNotFoundException) {
+                            // Fallback: open in browser
+                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=${context.packageName}")))
+                        }
+
+//                        Toast.makeText(
+//                            binding.imageView.context,
+//                            "Coming Soon",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                     }
 
                     "Share this app" -> {
-                        Toast.makeText(
-                            binding.imageView.context,
-                            "Coming Soon",
-                            Toast.LENGTH_SHORT
-                        ).show()
+
+                        shareApp(context)
                     }
 
                     "Play adhan" -> {
@@ -113,6 +118,19 @@ class RowItemMore(
                 }
             }
         }
+    }
+
+    fun shareApp(context: Context) {
+        val packageName = context.packageName
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, "Check out this app")
+            putExtra(
+                Intent.EXTRA_TEXT,
+                "Hey! Check out this Islamic app:\nhttps://play.google.com/store/apps/details?id=$packageName"
+            )
+        }
+        context.startActivity(Intent.createChooser(shareIntent, "Share app via"))
     }
 
     fun openCustomTab(context: Context, url: String?) {

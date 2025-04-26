@@ -9,34 +9,24 @@ import com.iw.android.prayerapp.notificationService.Notification
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
-class NotificationListenerService() : NotificationListenerService() {
-
+class NotificationListenerService : NotificationListenerService() {
 
     @Inject
     lateinit var notifications: Notification
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return START_STICKY
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
     }
 
-
     override fun onNotificationRemoved(
         sbn: StatusBarNotification?,
         rankingMap: RankingMap?,
         reason: Int
     ) {
-
         notifications.stopPrayer()
         sendNotification(applicationContext)
     }

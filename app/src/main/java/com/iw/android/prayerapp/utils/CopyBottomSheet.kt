@@ -24,9 +24,8 @@ class CopyBottomSheet :
     private var bottomSheetBehavior: BottomSheetBehavior<*>? = null
 
     var soundName: String = "Adhan"
-    var soundAdhan: Int = R.raw.adhan_abdul_basit
-    var soundTones: Int = R.raw.adhan_abdul_basit
-    var selectedPosition: Int = 0
+    var soundAdhan: Int = R.raw.adhan_abdul_basit_short
+    var soundTones: Int = R.raw.adhan_abdul_basit_short
     var isForAdhan: Boolean = false
     var isForNotification: Boolean = false
     var isSoundSelected: Boolean = false
@@ -48,25 +47,17 @@ class CopyBottomSheet :
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val bottomSheet = super.onCreateDialog(savedInstanceState)
-
-        //inflating layout
         val view = View.inflate(requireContext(), R.layout.copy_dialog, null)
-        //binding views to data binding.
         binding = DataBindingUtil
             .bind<CopyDialogBinding>(view) as CopyDialogBinding
-        //setting layout with bottom sheet
         bottomSheet.setContentView(view)
-
-
-        //  (view.parent as View).setBackgroundResource(R.drawable.top_round_corner_bg)
 
         val fragment =
             parentFragmentManager.fragments[0].childFragmentManager.fragments[0]
+
         viewModel = ViewModelProvider(fragment)[TimeViewModel::class.java]
         bottomSheetBehavior = BottomSheetBehavior.from(view.parent as View)
-        //setting Peek at the 16:9 ratio key line of its parent.
         bottomSheetBehavior?.peekHeight = BottomSheetBehavior.PEEK_HEIGHT_AUTO
-
         bottomSheetBehavior?.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(view: View, i: Int) {
@@ -84,8 +75,6 @@ class CopyBottomSheet :
     private fun setOnClickListener() {
         binding.btnCancelDialog.setOnClickListener(this)
         binding.textViewConfirm.setOnClickListener(this)
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -109,7 +98,7 @@ class CopyBottomSheet :
             val fajrData = viewModel.getFajrDetail()
             if (isForNotification) {
                 fajrData!!.notificationSound?.soundAdhan = soundAdhan
-                fajrData!!.notificationSound?.soundTone = soundTones
+                fajrData.notificationSound?.soundTone = soundTones
                 fajrData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 fajrData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 fajrData.notificationSound?.isSilent = isSilent
@@ -118,7 +107,7 @@ class CopyBottomSheet :
                 fajrData.notificationSound?.isOff = isOff
             } else {
                 fajrData!!.reminderSound?.soundAdhan = soundAdhan
-                fajrData!!.reminderSound?.soundTone = soundTones
+                fajrData.reminderSound?.soundTone = soundTones
                 fajrData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 fajrData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 fajrData.reminderSound?.isSilent = isSilent
@@ -172,7 +161,7 @@ class CopyBottomSheet :
             val sunRiseData = viewModel.getSunriseDetail()
             if (isForNotification) {
                 sunRiseData!!.notificationSound?.soundAdhan = soundAdhan
-                sunRiseData!!.notificationSound?.soundTone = soundTones
+                sunRiseData.notificationSound?.soundTone = soundTones
                 sunRiseData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 sunRiseData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 sunRiseData.notificationSound?.isSilent = isSilent
@@ -181,7 +170,7 @@ class CopyBottomSheet :
                 sunRiseData.notificationSound?.isOff = isOff
             } else {
                 sunRiseData!!.reminderSound?.soundAdhan = soundAdhan
-                sunRiseData!!.reminderSound?.soundTone = soundTones
+                sunRiseData.reminderSound?.soundTone = soundTones
                 sunRiseData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 sunRiseData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 sunRiseData.reminderSound?.isSilent = isSilent
@@ -233,7 +222,7 @@ class CopyBottomSheet :
             val duhrData = viewModel.getDuhrDetail()
             if (isForNotification) {
                 duhrData!!.notificationSound?.soundAdhan = soundAdhan
-                duhrData!!.notificationSound?.soundTone = soundTones
+                duhrData.notificationSound?.soundTone = soundTones
                 duhrData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 duhrData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 duhrData.notificationSound?.isSilent = isSilent
@@ -242,7 +231,7 @@ class CopyBottomSheet :
                 duhrData.notificationSound?.isOff = isOff
             } else {
                 duhrData!!.reminderSound?.soundAdhan = soundAdhan
-                duhrData!!.reminderSound?.soundTone = soundTones
+                duhrData.reminderSound?.soundTone = soundTones
                 duhrData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 duhrData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 duhrData.reminderSound?.isSilent = isSilent
@@ -292,7 +281,7 @@ class CopyBottomSheet :
             val asrData = viewModel.getAsrDetail()
             if (isForNotification) {
                 asrData!!.notificationSound?.soundAdhan = soundAdhan
-                asrData!!.notificationSound?.soundTone = soundTones
+                asrData.notificationSound?.soundTone = soundTones
                 asrData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 asrData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 asrData.notificationSound?.isSilent = isSilent
@@ -301,7 +290,7 @@ class CopyBottomSheet :
                 asrData.notificationSound?.isOff = isOff
             } else {
                 asrData!!.reminderSound?.soundAdhan = soundAdhan
-                asrData!!.reminderSound?.soundTone = soundTones
+                asrData.reminderSound?.soundTone = soundTones
                 asrData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 asrData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 asrData.reminderSound?.isSilent = isSilent
@@ -354,7 +343,7 @@ class CopyBottomSheet :
             val maghribData = viewModel.getMagribDetail()
             if (isForNotification) {
                 maghribData!!.notificationSound?.soundAdhan = soundAdhan
-                maghribData!!.notificationSound?.soundTone = soundTones
+                maghribData.notificationSound?.soundTone = soundTones
                 maghribData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 maghribData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 maghribData.notificationSound?.isSilent = isSilent
@@ -363,7 +352,7 @@ class CopyBottomSheet :
                 maghribData.notificationSound?.isOff = isOff
             } else {
                 maghribData!!.reminderSound?.soundAdhan = soundAdhan
-                maghribData!!.reminderSound?.soundTone = soundTones
+                maghribData.reminderSound?.soundTone = soundTones
                 maghribData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 maghribData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 maghribData.reminderSound?.isSilent = isSilent
@@ -417,7 +406,7 @@ class CopyBottomSheet :
             val ishaData = viewModel.getIshaDetail()
            if(isForNotification){
                ishaData!!.notificationSound?.soundAdhan = soundAdhan
-               ishaData!!.notificationSound?.soundTone = soundTones
+               ishaData.notificationSound?.soundTone = soundTones
                ishaData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
                ishaData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                ishaData.notificationSound?.isSilent = isSilent
@@ -426,7 +415,7 @@ class CopyBottomSheet :
                ishaData.notificationSound?.isOff = isOff
            }else{
                ishaData!!.reminderSound?.soundAdhan = soundAdhan
-               ishaData!!.reminderSound?.soundTone = soundTones
+               ishaData.reminderSound?.soundTone = soundTones
                ishaData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
                ishaData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                ishaData.reminderSound?.isSilent = isSilent
@@ -478,7 +467,7 @@ class CopyBottomSheet :
             val midnightData = viewModel.getMidNightDetail()
             if(isForNotification){
                 midnightData!!.notificationSound?.soundAdhan = soundAdhan
-                midnightData!!.notificationSound?.soundTone = soundTones
+                midnightData.notificationSound?.soundTone = soundTones
                 midnightData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 midnightData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 midnightData.notificationSound?.isSilent = isSilent
@@ -487,7 +476,7 @@ class CopyBottomSheet :
                 midnightData.notificationSound?.isOff = isOff
             }else{
                 midnightData!!.reminderSound?.soundAdhan = soundAdhan
-                midnightData!!.reminderSound?.soundTone = soundTones
+                midnightData.reminderSound?.soundTone = soundTones
                 midnightData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 midnightData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 midnightData.reminderSound?.isSilent = isSilent
@@ -540,7 +529,7 @@ class CopyBottomSheet :
             val lastThirdData = viewModel.getLastNightDetail()
             if (isForNotification){
                 lastThirdData!!.notificationSound?.soundAdhan = soundAdhan
-                lastThirdData!!.notificationSound?.soundTone = soundTones
+                lastThirdData.notificationSound?.soundTone = soundTones
                 lastThirdData.notificationSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 lastThirdData.notificationSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 lastThirdData.notificationSound?.isSilent = isSilent
@@ -549,7 +538,7 @@ class CopyBottomSheet :
                 lastThirdData.notificationSound?.isOff = isOff
             }else{
                 lastThirdData!!.reminderSound?.soundAdhan = soundAdhan
-                lastThirdData!!.reminderSound?.soundTone = soundTones
+                lastThirdData.reminderSound?.soundTone = soundTones
                 lastThirdData.reminderSound?.soundName = if (isForAdhan) soundName else "Adhan"
                 lastThirdData.reminderSound?.soundToneName = if (!isForAdhan) soundName else "Tone"
                 lastThirdData.reminderSound?.isSilent = isSilent
@@ -595,7 +584,6 @@ class CopyBottomSheet :
                     ),
                 )
             }
-
             viewModel.saveLastNightDetail(lastThirdData)
         }
 

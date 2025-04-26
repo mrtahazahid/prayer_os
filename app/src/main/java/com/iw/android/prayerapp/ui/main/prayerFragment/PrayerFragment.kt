@@ -163,7 +163,7 @@ Log.d("Methods",method.toString())
                 false,
                 true,
                 false,
-                false, false, R.raw.adhan_abdul_basit, null
+                false, false, R.raw.adhan_abdul_basit_short, null
             )
             val saveFajrData = NotificationData(
                 namazName = "Fajr",
@@ -186,11 +186,11 @@ Log.d("Methods",method.toString())
                 null,
                 null,
                 false,
+                false,
+                false,
                 true,
                 false,
-                false,
-                false,
-                R.raw.adhan_abdul_basit,
+              null,
                 null
             )
             val saveDhuhrData = NotificationData(
@@ -214,9 +214,9 @@ Log.d("Methods",method.toString())
                 null,
                 null,
                 false,
-                true,
                 false,
-                false, false, R.raw.adhan_abdul_basit, null
+                false,
+                true, false, null, null
             )
             val saveAsrData = NotificationData(
                 namazName = "Asr",
@@ -241,7 +241,7 @@ Log.d("Methods",method.toString())
                 false,
                 true,
                 false,
-                false, false, R.raw.adhan_abdul_basit, null
+                false, false, R.raw.adhan_abdul_basit_short, null
             )
             val saveMaghribData = NotificationData(
                 namazName = "Maghrib",
@@ -266,7 +266,7 @@ Log.d("Methods",method.toString())
                 false,
                 true,
                 false,
-                false, false, R.raw.adhan_abdul_basit, null
+                false, false, R.raw.adhan_abdul_basit_short, null
             )
             val saveIshaData = NotificationData(
                 namazName = "Isha",

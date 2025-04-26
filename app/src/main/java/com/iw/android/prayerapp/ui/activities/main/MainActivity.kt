@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -41,7 +42,7 @@ import org.greenrobot.eventbus.Subscribe
 class MainActivity : BaseActivity() {
 
     private var _binding: ActivityMainBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding
 
 
     private lateinit var navController: NavController
@@ -53,7 +54,6 @@ class MainActivity : BaseActivity() {
     val viewModel: OnBoardingViewModel by viewModels()
     private var turnOnGps: TurnOnGps? = null
 
-    private var service: Intent? = null
 
     private val backgroundLocation =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -101,7 +101,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(binding?.root)
         setStatusBarWithBlackIcon(R.color.bg_color)
         initialize()
         setOnClickListener()
@@ -120,23 +120,17 @@ class MainActivity : BaseActivity() {
         navController = navHostFragment.navController
         navController.addOnDestinationChangedListener(destinationChangedListener)
 
-        service = Intent(this, LocationService::class.java)
         startNotificationListenerService()
         gpsStatusListener = GpsStatusListener(this)
         turnOnGps = TurnOnGps(this)
         startForegroundService()
         if (!checkPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-                showPermissionAlertDialog()
-            } else {
-                pushNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
+            showPermissionAlertDialog()
         }
-
     }
 
     override fun setOnClickListener() {
-        binding.bottomNavigationView.setOnItemSelectedListener {
+        binding?.bottomNavigationView?.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.prayer_screen -> navController.navigate(R.id.prayerFragment)
                 R.id.time_screen -> navController.navigate(R.id.timeFragment)
@@ -155,39 +149,36 @@ class MainActivity : BaseActivity() {
     }
 
     private fun checkPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                    this,
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            locationPermissions.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                locationPermissions.launch(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
                 )
-                enableGPSLocation()
-            } else {
-                lifecycleScope.launch {
-                    if (viewModel.repository.preferences.automaticLocation.first()) {
-                        startService(
-                            service
-                        )
-                    } else {
-                        stopService(service)
+            )
+            enableGPSLocation()
+        } else {
+            lifecycleScope.launch {
+                if (viewModel.repository.preferences.automaticLocation.first()) {
+                    ContextCompat.startForegroundService(this@MainActivity, Intent(this@MainActivity, LocationService::class.java))
+                } else {
+                    stopService(Intent(this@MainActivity, LocationService::class.java))
 
-                    }
                 }
-
-                enableGPSLocation()
             }
+
+            enableGPSLocation()
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun checkPermission(): Boolean {
         val permission = ContextCompat.checkSelfPermission(
             this,
@@ -241,18 +232,18 @@ class MainActivity : BaseActivity() {
     }
 
     fun hideBottomSheet() {
-        binding.bottomNavigationView.visibility = View.GONE
+        binding?.bottomNavigationView?.visibility = View.GONE
     }
 
     fun showBottomSheet() {
-        binding.bottomNavigationView.visibility = View.VISIBLE
+        binding?.bottomNavigationView?.visibility = View.VISIBLE
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        stopService(service)
+        stopService(Intent(this, LocationService::class.java))
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this)
         }
@@ -263,13 +254,13 @@ class MainActivity : BaseActivity() {
         NavController.OnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.prayerFragment, R.id.qiblaFragment, R.id.timeFragment, R.id.moreFragment, R.id.settingFragment -> {
-                    binding.bottomNavigationView.show()
+                    binding?.bottomNavigationView?.show()
                 }
                 R.id.iqamaFragment->{
-                    binding.bottomNavigationView.gone()
+                    binding?.bottomNavigationView?.gone()
                 }
                 else -> {
-                    binding.bottomNavigationView.gone()
+                    binding?.bottomNavigationView?.gone()
                 }
 
             }
@@ -277,14 +268,14 @@ class MainActivity : BaseActivity() {
 
 
     // Request notification permission
-    fun requestNotificationPermission(context: Context) {
+    private fun requestNotificationPermission(context: Context) {
         val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
         context.startActivity(intent)
     }
 
 
-    fun startForegroundService() {
+    private fun startForegroundService() {
         val notificationIntent = Intent(this, NotificationService::class.java)
         ContextCompat.startForegroundService(this,notificationIntent)
     }

@@ -8,7 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.service.notification.NotificationListenerService
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -29,6 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -52,37 +53,6 @@ class NotificationService : Service() {
     override fun onCreate() {
         super.onCreate()
         prefrence = DataPreference(this)
-        applicationScope.launch {
-        startPeriodicTask()
-
-            while (true) {
-                checkAndTriggerNotification()
-                checkIqamaTime()
-                jummahTimeCheck()
-                val intentService =
-                    Intent(applicationContext, NotificationListenerService::class.java)
-                startService(intentService)
-                if (prefrence.automaticLocation.first()) {
-                    startService(
-                        Intent(
-                            applicationContext,
-                            LocationService::class.java
-                        )
-                    )
-                } else {
-                    stopService(
-                        Intent(
-                            applicationContext,
-                            LocationService::class.java
-                        )
-                    )
-                }
-                delay(60000)
-            }
-
-        }
-
-
     }
 
     private suspend fun startPeriodicTask() {
@@ -160,8 +130,8 @@ class NotificationService : Service() {
             if (isTimeMatch(specifiedTime.namazTime)) {
                 val sound =
                     if (specifiedTime.notificationSound?.isForAdhan == true) specifiedTime.notificationSound?.soundAdhan
-                        ?: R.raw.adhan_abdul_basit else specifiedTime.notificationSound?.soundTone
-                        ?: R.raw.adhan_abdul_basit
+                        ?: R.raw.adhan_abdul_basit_short else specifiedTime.notificationSound?.soundTone
+                        ?: R.raw.adhan_abdul_basit_short
 
                 if (specifiedTime.notificationSound?.isOff != true) {
                     notifications.notify(
@@ -180,8 +150,8 @@ class NotificationService : Service() {
                 if (isTimeMatch(specifiedTime.duaTime)) {
                     val sound =
                         if (specifiedTime.notificationSound?.isForAdhan == true) specifiedTime.notificationSound?.soundAdhan
-                            ?: R.raw.adhan_abdul_basit else specifiedTime.notificationSound?.soundTone
-                            ?: R.raw.adhan_abdul_basit
+                            ?: R.raw.adhan_abdul_basit_short else specifiedTime.notificationSound?.soundTone
+                            ?: R.raw.adhan_abdul_basit_short
                     notifications.notify(
                         specifiedTime.namazName,
                         "${specifiedTime.namazName} Dhua Time",
@@ -200,8 +170,8 @@ class NotificationService : Service() {
                     if (specifiedTime.reminderSound?.isOff != true) {
                         val sound =
                             if (specifiedTime.reminderSound?.isForAdhan == true) specifiedTime.reminderSound?.soundAdhan
-                                ?: R.raw.adhan_abdul_basit else specifiedTime.reminderSound?.soundTone
-                                ?: R.raw.adhan_abdul_basit
+                                ?: R.raw.adhan_abdul_basit_short else specifiedTime.reminderSound?.soundTone
+                                ?: R.raw.adhan_abdul_basit_short
                         notifications.notify(
                             specifiedTime.namazName,
                             "${specifiedTime.namazName} at ${specifiedTime.namazTime}",
@@ -220,8 +190,8 @@ class NotificationService : Service() {
                 if (isTimeMatch(specifiedTime.secondReminderTime)) {
                     val sound =
                         if (specifiedTime.reminderSound?.isForAdhan == true) specifiedTime.reminderSound?.soundAdhan
-                            ?: R.raw.adhan_abdul_basit else specifiedTime.reminderSound?.soundTone
-                            ?: R.raw.adhan_abdul_basit
+                            ?: R.raw.adhan_abdul_basit_short else specifiedTime.reminderSound?.soundTone
+                            ?: R.raw.adhan_abdul_basit_short
                     notifications.notify(
                         specifiedTime.namazName,
                         "Second ${specifiedTime.namazName} namaz reminder",
@@ -238,9 +208,15 @@ class NotificationService : Service() {
 
 
     private fun convertTimeToMillis(timeString: String): Long {
-        val dateFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
-        val date = dateFormat.parse(timeString)
-        return date?.time ?: 0
+        return try {
+            val dateFormat = SimpleDateFormat("h:mm a", Locale.ENGLISH)
+            val date = dateFormat.parse(timeString)
+            date?.time ?: 0
+        } catch (e: ParseException) {
+            Log.d("ParseException",e.message.toString())
+            // Invalid format, return 0 to avoid crash
+            0
+        }
     }
 
 
@@ -263,23 +239,38 @@ class NotificationService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        createNotificationChannel()
-        val pendingFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.FLAG_IMMUTABLE or Notification.NOTIFICATION_FLAGS
-        } else {
-            Notification.NOTIFICATION_FLAGS
+
+        applicationScope.launch {
+            startPeriodicTask()
+
+            while (true) {
+                checkAndTriggerNotification()
+                checkIqamaTime()
+                jummahTimeCheck()
+                delay(1000)
+            }
         }
 
+        createNotificationChannel()
+
         val notificationIntent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, pendingFlag)
-        val notification: android.app.Notification = NotificationCompat.Builder(this, "113")
-            .setContentTitle("Pray Watch is Running in background")
+
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, notificationIntent,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                PendingIntent.FLAG_IMMUTABLE else 0
+        )
+
+        val notification = NotificationCompat.Builder(this, "113")
+            .setContentTitle("Pray Watch is Running")
             .setContentText("Click to open")
             .setSmallIcon(R.mipmap.app_icon)
             .setContentIntent(pendingIntent)
+            .setOngoing(true)
             .build()
 
         startForeground(1, notification)
+
         return START_STICKY
     }
 
@@ -293,7 +284,6 @@ class NotificationService : Service() {
         val manager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(serviceChannel)
     }
-
 
     private suspend fun checkIqamaTime() {
         when (prefrence.getIqamaFajrDetail()?.iqamaType) {
@@ -399,7 +389,6 @@ class NotificationService : Service() {
         } else {
             null
         }
-
 
     private suspend fun jummahTimeCheck() {
         val calendar = Calendar.getInstance()
