@@ -56,61 +56,61 @@ class NotificationService : Service() {
     }
 
     private suspend fun startPeriodicTask() {
-            getMethod()
-            if (!prefrence.prayerJurisprudence.first().isNullOrEmpty()) {
-                madhab = if (prefrence.prayerJurisprudence.first().toInt() == 1) {
-                    Madhab.HANAFI
-                } else {
-                    Madhab.SHAFI
-                }
+        getMethod()
+        if (!prefrence.prayerJurisprudence.first().isNullOrEmpty()) {
+            madhab = if (prefrence.prayerJurisprudence.first().toInt() == 1) {
+                Madhab.HANAFI
+            } else {
+                Madhab.SHAFI
             }
-
-            val userLatLong = prefrence.getUserLatLong()
-            val selectedPrayerDate = Date()
-            val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
-                userLatLong?.latitude ?: 0.0,
-                userLatLong?.longitude ?: 0.0, method!!
-            )
-
-            val getPrayerTime1 = GetAdhanDetails.getPrayTime(
-                userLatLong?.latitude ?: 0.0,
-                userLatLong?.longitude ?: 0.0,
-                method ?: CalculationMethod.NORTH_AMERICA.parameters.copy(
-                    madhab = madhab ?: Madhab.HANAFI
-                ),
-                selectedPrayerDate
-            )
-
-
-            prayerList = arrayListOf(
-                NotificationPrayerTime(
-                    "Fajr",
-                    convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds())
-                ),
-                NotificationPrayerTime(
-                    "Sunrise",
-                    convertToFunTime(getPrayerTime.sunrise.toEpochMilliseconds())
-                ),
-                NotificationPrayerTime(
-                    "Dhuhr",
-                    convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds())
-                ),
-                NotificationPrayerTime(
-                    "Asr",
-                    convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())
-                ),
-                NotificationPrayerTime(
-                    "Maghrib",
-                    convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())
-                ),
-                NotificationPrayerTime(
-                    "Isha",
-                    convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())
-                ),
-                NotificationPrayerTime("Mid night", getPrayerTime1[6]),
-                NotificationPrayerTime("Last third", getPrayerTime1[7])
-            )
         }
+
+        val userLatLong = prefrence.getUserLatLong()
+        val selectedPrayerDate = Date()
+        val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
+            userLatLong?.latitude ?: 0.0,
+            userLatLong?.longitude ?: 0.0, method!!
+        )
+
+        val getPrayerTime1 = GetAdhanDetails.getPrayTime(
+            userLatLong?.latitude ?: 0.0,
+            userLatLong?.longitude ?: 0.0,
+            method ?: CalculationMethod.NORTH_AMERICA.parameters.copy(
+                madhab = madhab ?: Madhab.HANAFI
+            ),
+            selectedPrayerDate
+        )
+
+
+        prayerList = arrayListOf(
+            NotificationPrayerTime(
+                "Fajr",
+                convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds())
+            ),
+            NotificationPrayerTime(
+                "Sunrise",
+                convertToFunTime(getPrayerTime.sunrise.toEpochMilliseconds())
+            ),
+            NotificationPrayerTime(
+                "Dhuhr",
+                convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds())
+            ),
+            NotificationPrayerTime(
+                "Asr",
+                convertToFunTime(getPrayerTime.asr.toEpochMilliseconds())
+            ),
+            NotificationPrayerTime(
+                "Maghrib",
+                convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds())
+            ),
+            NotificationPrayerTime(
+                "Isha",
+                convertToFunTime(getPrayerTime.isha.toEpochMilliseconds())
+            ),
+            NotificationPrayerTime("Mid night", getPrayerTime1[6]),
+            NotificationPrayerTime("Last third", getPrayerTime1[7])
+        )
+    }
 
     private suspend fun checkAndTriggerNotification() {
         prefrence.getFajrDetail()?.let { checkNamazNotification(it) }

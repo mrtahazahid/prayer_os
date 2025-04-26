@@ -18,7 +18,7 @@ import org.greenrobot.eventbus.EventBus
 class LocationService : Service() {
 
 
-   private lateinit var prefrence: DataPreference
+    private lateinit var prefrence: DataPreference
 
 
 
@@ -35,7 +35,7 @@ class LocationService : Service() {
     }
 
     @Suppress("MissingPermission")
-  private  fun createLocationRequest(){
+    private  fun createLocationRequest(){
         try {
             fusedLocationProviderClient?.requestLocationUpdates(
                 locationRequest!!,locationCallback!!,null
