@@ -97,7 +97,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
 
                 }
                 requireActivity().runOnUiThread {
-                    findNavController().navigate(R.id.action_fourthOnboarding_to_seventhOnboarding)
+                    findNavController().navigate(R.id.action_fourthOnboarding_to_fifthOnboarding)
                 }
 
             }

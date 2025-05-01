@@ -38,15 +38,15 @@
         tools:layout="@layout/fragment_fourth_onboarding">
 
         <action
-            android:id="@+id/action_fourthOnboarding_to_seventhOnboarding"
-            app:destination="@id/seventhOnboarding" />
+            android:id="@+id/action_fourthOnboarding_to_fifthOnboarding"
+            app:destination="@id/fifthOnboarding" />
     </fragment>
 
     <fragment
-        android:id="@+id/seventhOnboarding"
-        android:name="com.iw.android.prayerapp.ui.onBoarding.SeventhOnboarding"
-        android:label="fragment_seventh_onboarding"
-        tools:layout="@layout/fragment_seventh_onboarding" />
+        android:id="@+id/fifthOnboarding"
+        android:name="com.iw.android.prayerapp.ui.onBoarding.FifthOnboarding"
+        android:label="fragment_fifth_onboarding"
+        tools:layout="@layout/fragment_fifth_onboarding" />
     <fragment
         android:id="@+id/islamicHolidayFragment"
         android:name="com.iw.android.prayerapp.ui.main.timeFragment.IslamicHolidayFragment"

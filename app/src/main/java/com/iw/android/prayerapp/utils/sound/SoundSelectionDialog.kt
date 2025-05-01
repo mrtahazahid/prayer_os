@@ -1,7 +1,6 @@
-package com.iw.android.prayerapp.utils
+package com.iw.android.prayerapp.utils.sound
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +18,7 @@ import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerEnumT
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.SoundViewModel
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.OnClick
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.RowItemPrayerSound
+import com.iw.android.prayerapp.utils.copy.CopyBottomSheet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -93,22 +93,25 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
     }
 
     private fun initialize() {
-        binding.textViewTitle.text = "${namazName} Sound"
+        binding.textViewTitle.text = if (isForNotification) "$namazName Sound" else "$namazName Reminder"
         setData()
         addPrayerSoundList()
         setRecyclerView()
     }
 
     private fun addPrayerSoundList() {
-        prayerSoundList.add(
-            PrayerSoundData(
-                "Adhan", R.drawable.ic_mike, PrayerEnumType.ADHAN.getValue(),
-                isImageForwardShow = true,
-                isItemSelected = false,
-                selectedItemAdhanTitle = "adhan",
-                selectedItemTonesTitle = "Tones",
+        if(isForNotification){
+            prayerSoundList.add(
+                PrayerSoundData(
+                    "Adhan", R.drawable.ic_mike, PrayerEnumType.ADHAN.getValue(),
+                    isImageForwardShow = true,
+                    isItemSelected = false,
+                    selectedItemAdhanTitle = "adhan",
+                    selectedItemTonesTitle = "Tones",
+                )
             )
-        )
+        }
+
         prayerSoundList.add(
             PrayerSoundData(
                 "Tones", R.drawable.ic_tone, PrayerEnumType.TONES.getValue(),
@@ -145,7 +148,8 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
         for (data in prayerSoundList) {
             viewTypeArray.add(
                 RowItemPrayerSound(
-                    selectedItemPosition,
+                    isForNotification,
+                    namazName,
                     selectedSoundTonePosition,
                     selectedSoundPosition,
 
@@ -172,9 +176,6 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
         when (v?.id) {
             binding.backView.id, binding.imageViewBack.id -> {
                 if (isDataForSave) {
-                    Log.d("backView",selectedSoundPosition.toString())
-                    Log.d("backView",selectedItemPosition.toString())
-                    Log.d("backView",selectedSoundTonePosition.toString())
                     listener?.onDataPass(
                         isForNotification = isForNotification, data = CurrentNamazNotificationData(
                             currentNamazName = namazName,

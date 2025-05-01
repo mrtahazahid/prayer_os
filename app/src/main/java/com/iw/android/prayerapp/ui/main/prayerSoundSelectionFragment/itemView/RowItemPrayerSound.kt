@@ -1,6 +1,5 @@
 package com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView
 
-import android.util.Log
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -14,7 +13,8 @@ import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
 
 class RowItemPrayerSound(
-    val selectedItemPosition:Int,
+    val isForNotification:Boolean = false,
+    val namazName:String = "",
     val selectedSoundTonePosition:Int,
     val selectedSoundPosition:Int,
     private val data: PrayerSoundData,
@@ -42,7 +42,6 @@ class RowItemPrayerSound(
             _binding = binding
             this.position = position
             if(data.title == "Tones"){
-                Log.d("Tones","Called")
                 binding.imageView.setPadding(4,4,4,4)
             }
             binding.view4.visibility = if (data.title == "Off") View.GONE else View.VISIBLE
@@ -76,7 +75,7 @@ class RowItemPrayerSound(
                     }
 
                     PrayerEnumType.TONES.getValue() -> {
-                        openSoundDialogFragment(position, "Tones Sound", currentNamazName, true)
+                        openSoundDialogFragment(if(isForNotification)position else 1, if(isForNotification)"$namazName Tones" else "$namazName Reminder", currentNamazName, true)
                     }
 
 
@@ -93,7 +92,6 @@ class RowItemPrayerSound(
         sound: Int?,
         isSoundForNotification: Boolean
     ) {
-        Log.d("soundPosition",soundPosition.toString())
         if (isForAdhan) {
             listener.onSoundSelected(
                 soundName,

@@ -22,8 +22,8 @@ import com.iw.android.prayerapp.databinding.RowItemPrayTimeBinding
 import com.iw.android.prayerapp.extension.CustomDialog
 import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
 import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
-import com.iw.android.prayerapp.utils.SoundDataPass
-import com.iw.android.prayerapp.utils.SoundSelectionDialog
+import com.iw.android.prayerapp.utils.sound.SoundDataPass
+import com.iw.android.prayerapp.utils.sound.SoundSelectionDialog
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -58,7 +58,7 @@ class RowItemTime(
             _binding = binding
             _binding.imageView.setImageResource(data.image)
             setIconByDataType()
-
+            reminderTimeMinutes = extractNumberFromString(data.namazDetail.reminderTimeMinutes)
             prayerDetailData = data.namazDetail
             initialize()
             setOnClickListener()
@@ -418,6 +418,15 @@ class RowItemTime(
 
     }
 
+    fun extractNumberFromString(input: String): Int {
+        return if(input.isNullOrEmpty() || input =="off"){
+            0
+        }else{
+            val regex = "\\d+".toRegex()  // Find one or more digits
+           regex.find(input)?.value?.toInt()?:0
+        }
+
+    }
 
     private fun savePrayerDetailData() {
         val fajrData = NotificationData(
@@ -706,13 +715,6 @@ class RowItemTime(
         return currentDate.format(formatter)
     }
 
-    fun isDateToday(dateString: String): Boolean {
-        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-        val currentDate = Calendar.getInstance().time
-        val formattedCurrentDate = dateFormat.format(currentDate)
-
-        return formattedCurrentDate == dateString
-    }
 
     private fun subtractMinutesFromTime(currentTime: String, minutesToSubtract: Int): String {
         return try {

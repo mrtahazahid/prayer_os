@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -37,7 +38,6 @@ import com.iw.android.prayerapp.extension.formatRemainingTime
 import com.iw.android.prayerapp.extension.getIslamicDateByOffSet
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
-import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getPrayTimeInLong
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
@@ -45,7 +45,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -62,7 +64,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
 
     val viewModel: PrayerViewModel by viewModels()
-    val viewModelTime: TimeViewModel by viewModels()
     private var currentNamazName = ""
 
     private lateinit var namazTimesList: ArrayList<String>
@@ -88,7 +89,6 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
             notificationReceiver,
             IntentFilter("com.iw.android.prayerapp.NOTIFICATION")
         )
-
         namazTimesList = ArrayList()
         return binding.root
     }
@@ -104,16 +104,15 @@ class PrayerFragment : BaseFragment(R.layout.fragment_prayer), View.OnClickListe
 
     override fun initialize() {
         getMethod()
-Log.d("Methods",method.toString())
         binding.progressbar.apply {
             // or with gradient
-            progressBarColorStart = resources.getColor(R.color.app_green)
+            progressBarColorStart = ContextCompat.getColor(requireContext(),R.color.app_green)
 
-            progressBarColorEnd = resources.getColor(R.color.small_icon3)
+            progressBarColorEnd = ContextCompat.getColor(requireContext(),R.color.small_icon3)
             progressBarColorDirection = CircularProgressBar.GradientDirection.RIGHT_TO_LEFT
 
             // Set background ProgressBar Color
-            backgroundProgressBarColor = resources.getColor(R.color.progress_bg)
+            backgroundProgressBarColor = ContextCompat.getColor(requireContext(),R.color.progress_bg)
 
             // Set Width
             progressBarWidth = 21f // in DP
@@ -123,19 +122,17 @@ Log.d("Methods",method.toString())
             roundBorder = true
             startAngle = 180f
             progressDirection = CircularProgressBar.ProgressDirection.TO_RIGHT
-
         }
-
-
-        val location = GetAdhanDetails.getTimeZoneAndCity(
-            requireContext(), viewModel.userLatLong?.latitude ?: 0.0,
-            viewModel.userLatLong?.longitude ?: 0.0
-        )
-        binding.textViewCity.text = location?.city ?: "City"
 
         currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.userLatLong?.longitude ?: 0.0
 
+        lifecycleScope.launch {
+            val location = GetAdhanDetails.getTimeZoneAndCity(
+                requireContext(), currentLatitude, currentLongitude
+            )
+            binding.textViewCity.text = location?.city ?: "City"
+        }
 
         val getPrayerTime =
             getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
@@ -153,6 +150,7 @@ Log.d("Methods",method.toString())
     private fun saveDefaultNamaz() = lifecycleScope.launch {
         val preference = DataPreference(requireContext())
         val getPrayerTime = getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
+        Log.d("Time",convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds()))
         if (viewModel.repository.preferences.isFirstTime.first()) {
             val savingFajrNotificationData = CurrentNamazNotificationData(
                 "Fajr",
@@ -170,8 +168,8 @@ Log.d("Methods",method.toString())
                 namazTime = convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds()),
                 notificationSound = savingFajrNotificationData,
                 reminderSound = null,
-                reminderTimeMinutes = "off",
-                reminderTime = "",
+                reminderTimeMinutes = "20 min",
+                reminderTime = subtractMinutesFromTime(convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds()),20),
                 secondReminderTimeMinutes = "off",
                 secondReminderTime = "",
                 duaReminderMinutes = "off",
@@ -198,8 +196,8 @@ Log.d("Methods",method.toString())
                 namazTime = convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds()),
                 notificationSound = savingDhuhrNotificationData,
                 reminderSound = null,
-                reminderTimeMinutes = "off",
-                reminderTime = "",
+                reminderTimeMinutes = "20 min",
+                reminderTime = subtractMinutesFromTime(convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds()),20),
                 secondReminderTimeMinutes = "off",
                 secondReminderTime = "",
                 duaReminderMinutes = "off",
@@ -223,8 +221,8 @@ Log.d("Methods",method.toString())
                 namazTime = convertToFunTime(getPrayerTime.asr.toEpochMilliseconds()),
                 notificationSound = savingAsrNotificationData,
                 reminderSound = null,
-                reminderTimeMinutes = "off",
-                reminderTime = "",
+                reminderTimeMinutes = "20 min",
+                reminderTime = subtractMinutesFromTime(convertToFunTime(getPrayerTime.asr.toEpochMilliseconds()),20),
                 secondReminderTimeMinutes = "off",
                 secondReminderTime = "",
                 duaReminderMinutes = "off",
@@ -248,8 +246,8 @@ Log.d("Methods",method.toString())
                 namazTime = convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds()),
                 notificationSound = savingMaghribNotificationData,
                 reminderSound = null,
-                reminderTimeMinutes = "off",
-                reminderTime = "",
+                reminderTimeMinutes = "20 min",
+                reminderTime = subtractMinutesFromTime(convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds()),20),
                 secondReminderTimeMinutes = "off",
                 secondReminderTime = "",
                 duaReminderMinutes = "off",
@@ -273,8 +271,8 @@ Log.d("Methods",method.toString())
                 namazTime = convertToFunTime(getPrayerTime.isha.toEpochMilliseconds()),
                 notificationSound = savingIshaNotificationData,
                 reminderSound = null,
-                reminderTimeMinutes = "off",
-                reminderTime = "",
+                reminderTimeMinutes = "20 min",
+                reminderTime = subtractMinutesFromTime(convertToFunTime(getPrayerTime.isha.toEpochMilliseconds()),20),
                 secondReminderTimeMinutes = "off",
                 secondReminderTime = "",
                 duaReminderMinutes = "off",
@@ -288,6 +286,18 @@ Log.d("Methods",method.toString())
             viewModel.saveIshaDetail(saveIshaData)
 
             preference.setBooleanData(IS_FIRST_TIME, false)
+        }
+    }
+
+    private fun subtractMinutesFromTime(currentTime: String, minutesToSubtract: Int): String {
+        return try {
+            val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
+            val parsedTime = LocalTime.parse(currentTime, formatter)
+            val resultTime = parsedTime.minusMinutes(minutesToSubtract.toLong())
+            resultTime.format(formatter)
+        } catch (e: DateTimeParseException) {
+            Log.d("DateTimeParseException",e.message.toString())
+            currentTime
         }
     }
 
@@ -421,9 +431,6 @@ Log.d("Methods",method.toString())
     private fun upComingNamazTime() {
         val getPrayerTime =
             getPrayTimeInLong(currentLatitude, currentLongitude, method!!)
-        Log.d("currentLatitude","$currentLatitude")
-        Log.d("currentLongitude","$currentLongitude")
-        Log.d("method","${method}")
 
         val currentNamaz = getTimeDifferenceToNextPrayer()
 
@@ -699,15 +706,19 @@ Log.d("Methods",method.toString())
         var previousPrayerTimeIndex = 0
         for ((index, _) in prayerTimeList.withIndex()) {
             if (prayerTimeList[index].currentNamazTime > currentTimeMillis) {
-                if (prayerTimeList[index].currentNamazName == "Fajr") {
-                    previousPrayerTimeIndex = 4
-                    currentPrayerTimeIndex = index
-                } else if (prayerTimeList[index].currentNamazName == "Isha") {
-                    previousPrayerTimeIndex = index - 1
-                    currentPrayerTimeIndex = index
-                } else {
-                    previousPrayerTimeIndex = index - 1
-                    currentPrayerTimeIndex = index
+                when (prayerTimeList[index].currentNamazName) {
+                    "Fajr" -> {
+                        previousPrayerTimeIndex = 4
+                        currentPrayerTimeIndex = index
+                    }
+                    "Isha" -> {
+                        previousPrayerTimeIndex = index - 1
+                        currentPrayerTimeIndex = index
+                    }
+                    else -> {
+                        previousPrayerTimeIndex = index - 1
+                        currentPrayerTimeIndex = index
+                    }
                 }
                 break
             } else {
@@ -779,7 +790,7 @@ Log.d("Methods",method.toString())
     }
 
 
-    fun convertTimeToMillis(timeString: String): Long {
+   private fun convertTimeToMillis(timeString: String): Long {
 
         // Set the date to a fixed value (e.g., today's date) to avoid unexpected behavior
         val currentDate = Date()
@@ -812,7 +823,7 @@ Log.d("Methods",method.toString())
                 Madhab.SHAFI
             }
         }
-Log.d("viewModel.getMethods",viewModel.getMethods)
+
         if (!viewModel.getMethods.isNullOrEmpty()) {
             method = when (viewModel.getMethods.toInt()) {
                 1 -> {
@@ -985,10 +996,10 @@ Log.d("viewModel.getMethods",viewModel.getMethods)
 
 class DateTimeUtils {
     fun calculateHoursAndMinutesBetween(startDate: Date, endDate: Date): Pair<Long, Long> {
-        val totaltimeDifference = Math.abs(endDate.time - startDate.time)
+        val totalTimeDifference = Math.abs(endDate.time - startDate.time)
         val currentTime = Calendar.getInstance().time
-        val totaltimeDifferenceFromCurrentToEndTime = Math.abs(endDate.time - currentTime.time)
+        val totalTimeDifferenceFromCurrentToEndTime = Math.abs(endDate.time - currentTime.time)
 
-        return Pair(totaltimeDifference, totaltimeDifferenceFromCurrentToEndTime)
+        return Pair(totalTimeDifference, totalTimeDifferenceFromCurrentToEndTime)
     }
 }

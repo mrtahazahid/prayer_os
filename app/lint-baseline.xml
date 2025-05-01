@@ -1,15 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <issues format="6" by="lint 7.4.2" type="baseline" client="gradle" dependencies="false" name="AGP (7.4.2)" variant="fatal" version="7.4.2">
 
-    <issue
-        id="Instantiatable"
-        message="This inner class should be static (`com.iw.android.prayerapp.ui.main.prayerFragment.PrayerFragment$NotificationReceiver`)"
-        errorLine1="        &lt;receiver android:name=&quot;.ui.main.prayerFragment.PrayerFragment$NotificationReceiver&quot;"
-        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="89"
-            column="33"/>
-    </issue>
-
 </issues>

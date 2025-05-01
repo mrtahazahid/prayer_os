@@ -1,4 +1,4 @@
-package com.iw.android.prayerapp.utils
+package com.iw.android.prayerapp.utils.qibla
 
 import android.content.Context
 import android.hardware.Sensor

@@ -1,6 +1,7 @@
-package com.iw.android.prayerapp.utils
+package com.iw.android.prayerapp.utils.qibla
 
 
+import com.iw.android.prayerapp.utils.MatchUtils
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin

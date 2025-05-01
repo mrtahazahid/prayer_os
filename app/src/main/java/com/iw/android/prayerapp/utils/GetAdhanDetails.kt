@@ -6,7 +6,6 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Coordinates
@@ -47,25 +46,26 @@ object GetAdhanDetails : AppCompatActivity() {
         val sdf = SimpleDateFormat("yyyy/M/dd")
         val currentDate = sdf.format(date)
 
-        var splitDate = currentDate.split("/")
-        var year = splitDate[0]
-        var month = splitDate[1]
-        var day = splitDate[2]
+        val splitDate = currentDate.split("/")
+        val year = splitDate[0]
+        val month = splitDate[1]
+        val day = splitDate[2]
 
         val dateComponents = DateComponents(year.toInt(), month.toInt(), day.toInt())
 
-        Log.d("cordinate",coordinates.latitude.toString() + coordinates.longitude.toString()  )
+        Log.d("cordinate", coordinates.latitude.toString() + coordinates.longitude.toString())
 
         val prayerTimes = PrayerTimes(coordinates, dateComponents, param)
         val formatter = SimpleDateFormat("h:mm a")
         formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
 
 
-
-
         val sunnahTimes = SunnahTimes(prayerTimes)
 
-        Log.d(":check middleOfTheNight",convertToReadableForm(sunnahTimes.middleOfTheNight.toString()))
+        Log.d(
+            ":check middleOfTheNight",
+            convertToReadableForm(sunnahTimes.middleOfTheNight.toString())
+        )
 
         return arrayListOf(
             formatter.format(Date(prayerTimes.fajr.toEpochMilliseconds())),
@@ -79,7 +79,7 @@ object GetAdhanDetails : AppCompatActivity() {
         )
     }
 
-    fun convertToReadableForm(isoDateTime: String): String {
+  private fun convertToReadableForm(isoDateTime: String): String {
         // Parse the ISO 8601 timestamp
         val instant = Instant.parse(isoDateTime)
 
@@ -91,6 +91,7 @@ object GetAdhanDetails : AppCompatActivity() {
         val formatter = DateTimeFormatter.ofPattern("h:mm a")
         return zonedDateTime.format(formatter)
     }
+
     fun calculatePrayerTimesForYear(
         latitude: Double,
         longitude: Double,
@@ -114,7 +115,6 @@ object GetAdhanDetails : AppCompatActivity() {
         return prayerTimeDataList
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentPrayerTime(prayerTimes: List<Long>, currentTime: Long): Pair<String, Long>? {
         for (i in prayerTimes.indices) {
             val currentPrayerTime = prayerTimes[i]
@@ -231,8 +231,9 @@ object GetAdhanDetails : AppCompatActivity() {
         val coordinates = Coordinates(latitude, longitude)
         return calculateQiblaDirection(coordinates)
     }
+
     private val MAKKAH = Coordinates(21.4225241, 39.8261818)
-    fun calculateQiblaDirection(coordinates: Coordinates): Double {
+  private  fun calculateQiblaDirection(coordinates: Coordinates): Double {
         val longitudeDelta = (MAKKAH.longitude - coordinates.longitude).toRadians()
         val latitudeRadians = coordinates.latitude.toRadians()
         val makkahLatRadians = MAKKAH.latitude.toRadians()
@@ -248,12 +249,15 @@ object GetAdhanDetails : AppCompatActivity() {
         if (angle < 0) {
             angle += 360
         }
-        Log.d("QiblaDebug", "Lat: ${coordinates.latitude}, Lon: ${coordinates.longitude}, Angle: $angle")
+        Log.d(
+            "QiblaDebug",
+            "Lat: ${coordinates.latitude}, Lon: ${coordinates.longitude}, Angle: $angle"
+        )
         return angle
 
     }
 
-        fun getTimeZoneAndCity(context: Context, latitude: Double, longitude: Double): LocationData? {
+    fun getTimeZoneAndCity(context: Context, latitude: Double, longitude: Double): LocationData? {
         val geocoder = Geocoder(context, Locale.getDefault())
 
         try {

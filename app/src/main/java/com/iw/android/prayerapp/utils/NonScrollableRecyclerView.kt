@@ -1,5 +1,6 @@
 package com.iw.android.prayerapp.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -16,6 +17,7 @@ class NonScrollableRecyclerView @JvmOverloads constructor(
         return false
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(e: MotionEvent): Boolean {
         // Prevent touch event from being handled by RecyclerView
         return false

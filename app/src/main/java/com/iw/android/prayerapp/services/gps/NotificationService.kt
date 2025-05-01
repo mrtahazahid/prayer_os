@@ -167,22 +167,36 @@ class NotificationService : Service() {
 
             if (specifiedTime.reminderTime != "") {
                 if (isTimeMatch(specifiedTime.reminderTime)) {
-                    if (specifiedTime.reminderSound?.isOff != true) {
-                        val sound =
-                            if (specifiedTime.reminderSound?.isForAdhan == true) specifiedTime.reminderSound?.soundAdhan
-                                ?: R.raw.adhan_abdul_basit_short else specifiedTime.reminderSound?.soundTone
-                                ?: R.raw.adhan_abdul_basit_short
+                    Log.d("specifiedTime.reminderSound", specifiedTime.reminderSound.toString())
+                    if (specifiedTime.reminderSound == null) {
                         notifications.notify(
                             specifiedTime.namazName,
-                            "${specifiedTime.namazName} at ${specifiedTime.namazTime}",
-                            sound,
-                            specifiedTime.reminderSound?.isVibrate ?: false,
-                            specifiedTime.reminderSound?.isSilent ?: false,
-                            specifiedTime.reminderSound?.isOff ?: false
+                            "${specifiedTime.namazName} in ${specifiedTime.reminderTimeMinutes}",
+                            0,
+                            isForVibrate = true,
+                            isForSilent = false,
+                            isOff = false
                         )
                         sendNotification(applicationContext)
+                    } else {
+                        if (specifiedTime.reminderSound?.isOff != true) {
+                            val sound =
+                                if (specifiedTime.reminderSound?.isForAdhan == true) specifiedTime.reminderSound?.soundAdhan
+                                    ?: R.raw.adhan_abdul_basit_short else specifiedTime.reminderSound?.soundTone
+                                    ?: R.raw.adhan_abdul_basit_short
+                            notifications.notify(
+                                specifiedTime.namazName,
+                                "${specifiedTime.namazName} in ${specifiedTime.reminderTimeMinutes}",
+                                sound,
+                                specifiedTime.reminderSound?.isVibrate ?: false,
+                                specifiedTime.reminderSound?.isSilent ?: false,
+                                specifiedTime.reminderSound?.isOff ?: false
+                            )
+                            sendNotification(applicationContext)
 
+                        }
                     }
+
                 }
             }
 
@@ -213,7 +227,7 @@ class NotificationService : Service() {
             val date = dateFormat.parse(timeString)
             date?.time ?: 0
         } catch (e: ParseException) {
-            Log.d("ParseException",e.message.toString())
+            Log.d("ParseException", e.message.toString())
             // Invalid format, return 0 to avoid crash
             0
         }
@@ -240,36 +254,41 @@ class NotificationService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
-        applicationScope.launch {
-            startPeriodicTask()
+        if (intent?.action == "ACTION_STOP_ADHAN") {
+            notifications.stopPrayer()
+            notifications.removeNotification()
+        } else {
+            applicationScope.launch {
+                startPeriodicTask()
 
-            while (true) {
-                checkAndTriggerNotification()
-                checkIqamaTime()
-                jummahTimeCheck()
-                delay(1000)
+                while (true) {
+                    checkAndTriggerNotification()
+                    checkIqamaTime()
+                    jummahTimeCheck()
+                    delay(60000)
+                }
             }
+
+            createNotificationChannel()
+
+            val notificationIntent = Intent(this, MainActivity::class.java)
+
+            val pendingIntent = PendingIntent.getActivity(
+                this, 0, notificationIntent,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    PendingIntent.FLAG_IMMUTABLE else 0
+            )
+
+            val notification = NotificationCompat.Builder(this, "113")
+                .setContentTitle("Pray Watch is Running")
+                .setContentText("Click to open")
+                .setSmallIcon(R.mipmap.app_icon)
+                .setContentIntent(pendingIntent)
+                .setOngoing(true)
+                .build()
+
+            startForeground(1, notification)
         }
-
-        createNotificationChannel()
-
-        val notificationIntent = Intent(this, MainActivity::class.java)
-
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0, notificationIntent,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                PendingIntent.FLAG_IMMUTABLE else 0
-        )
-
-        val notification = NotificationCompat.Builder(this, "113")
-            .setContentTitle("Pray Watch is Running")
-            .setContentText("Click to open")
-            .setSmallIcon(R.mipmap.app_icon)
-            .setContentIntent(pendingIntent)
-            .setOngoing(true)
-            .build()
-
-        startForeground(1, notification)
 
         return START_STICKY
     }
@@ -378,6 +397,7 @@ class NotificationService : Service() {
 
     private suspend fun checkIqamaTimeByTime(time: String, namazName: String) =
         if (isTimeMatch(time)) {
+            Log.d("checkIqamaTimeByTime", "called")
             notifications.notify(
                 namazName, "Iqama time",
                 prefrence.getIqamaNotificationSetting()?.reminderSound ?: 0,

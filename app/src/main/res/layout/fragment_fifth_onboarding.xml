@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/black"
     tools:context=".ui.onBoarding.FifthOnboarding">
 
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_15sdp"
         android:fontFamily="@font/sf_regular"
-        android:text="Background App Refresh"
+        android:text="Alhamdulillah, all set!"
         android:textColor="@color/yellow_text"
         android:textSize="@dimen/_18ssp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,12 +42,15 @@
         android:layout_marginStart="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginEnd="@dimen/_20sdp"
+        android:background="@drawable/rounded_corners"
         android:fontFamily="@font/sf_regular"
         android:gravity="center"
         android:letterSpacing=".03"
-        android:text="@string/fourth_sc_sub_heading"
+        android:padding="@dimen/_15sdp"
+        android:text="@string/sub_heading"
         android:textColor="@color/white"
         android:textSize="@dimen/_12ssp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/assalam_o_alekum" />
@@ -58,7 +61,7 @@
         android:layout_height="@dimen/_180sdp"
         android:layout_marginTop="@dimen/_15sdp"
         android:contentDescription="@string/center_image"
-        android:src="@drawable/fourth_screen"
+        android:src="@drawable/seventh_screen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sub_heading" />
@@ -74,9 +77,8 @@
         android:gravity="center"
         android:letterSpacing=".03"
         android:padding="@dimen/_15sdp"
-        android:drawableStart="@drawable/ic_check"
-        android:text="@string/fourth_screen_bottom_text"
-        android:textColor="@color/btn_color"
+        android:text="@string/first_bottom_text"
+        android:textColor="@color/white"
         android:textSize="@dimen/_12ssp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/_20sdp"
         android:orientation="horizontal"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/btn_enable_notification"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -124,18 +126,6 @@
             android:layout_margin="@dimen/_3sdp"
             android:background="@drawable/dotted" />
 
-        <View
-            android:layout_width="@dimen/_7sdp"
-            android:layout_height="@dimen/_7sdp"
-            android:layout_margin="@dimen/_3sdp"
-            android:background="@drawable/dotted_empty" />
-
-        <View
-            android:layout_width="@dimen/_7sdp"
-            android:layout_height="@dimen/_7sdp"
-            android:layout_margin="@dimen/_3sdp"
-            android:background="@drawable/dotted_empty" />
-
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -147,7 +137,7 @@
         android:layout_marginBottom="@dimen/_5sdp"
         android:background="@drawable/button_rounded_corners"
         android:gravity="center"
-        android:text="@string/next"
+        android:text="@string/let_s_go"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@id/not_now"

@@ -1,4 +1,4 @@
-package com.iw.android.prayerapp.utils
+package com.iw.android.prayerapp.utils.map
 
 import android.view.View
 import androidx.databinding.ViewDataBinding

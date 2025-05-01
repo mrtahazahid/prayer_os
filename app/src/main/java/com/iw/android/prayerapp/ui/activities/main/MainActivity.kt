@@ -7,6 +7,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -21,22 +22,22 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.activity.BaseActivity
 import com.iw.android.prayerapp.data.response.UserLatLong
 import com.iw.android.prayerapp.databinding.ActivityMainBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.services.gps.GpsStatusListener
-import com.iw.android.prayerapp.services.gps.LocationEvent
-import com.iw.android.prayerapp.services.gps.LocationService
 import com.iw.android.prayerapp.services.gps.NotificationListenerService
 import com.iw.android.prayerapp.services.gps.NotificationService
 import com.iw.android.prayerapp.services.gps.TurnOnGps
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
-import kotlinx.coroutines.flow.first
+import com.iw.android.prayerapp.utils.LocationPermissionTextProvider
+import com.iw.android.prayerapp.utils.getCurrentLocationSuspend
+import com.iw.android.prayerapp.utils.showPermissionDialog
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
 
 
 class MainActivity : BaseActivity() {
@@ -47,66 +48,76 @@ class MainActivity : BaseActivity() {
 
     private lateinit var navController: NavController
     private lateinit var navGraph: NavGraph
-
+    private lateinit var fusedClient: FusedLocationProviderClient
 
     private var gpsStatusListener: GpsStatusListener? = null
+    private var isOpenSetting= false
 
     val viewModel: OnBoardingViewModel by viewModels()
     private var turnOnGps: TurnOnGps? = null
 
 
-    private val backgroundLocation =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-
-        }
-
-    private val pushNotificationPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        if (!granted) {
-            showPermissionAlertDialog()
-        } else {
-            startForegroundService()
-        }
-    }
     private val locationPermissions =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            when {
-                it.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        if (ActivityCompat.checkSelfPermission(
-                                this,
-                                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            backgroundLocation.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                        }
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            ) {
+                enableGPSLocation()
+                lifecycleScope.launch {
+                    val location = fusedClient.getCurrentLocationSuspend()
+                    location?.let {
+                        val lat = it.latitude
+                        val lng = it.longitude
+                        // Navigate with lat/lng
+                        viewModel.saveUserLatLong(
+                            UserLatLong(
+                                lat,
+                                lng
+                            )
+                        )
                     }
                 }
 
-                it.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {}
+            } else {
+                showPermissionDialog(
+                    permissionTextProvider = LocationPermissionTextProvider(),
+                    isPermanentlyDeclined = permissions.entries.any {
+                            (permission, _) ->
+                        (permission == Manifest.permission.ACCESS_FINE_LOCATION ||
+                                permission == Manifest.permission.ACCESS_COARSE_LOCATION) &&
+                                !shouldShowRequestPermissionRationale(permission)
+                    },
+                    onDismiss = {},
+                    onOkClick = {
+                        openAppSettings()
+                        isOpenSetting = true
+                    },
+                    onGoToAppSettingsClick = ::openAppSettings,
+                    context = this
+                )
             }
         }
 
-
-    override fun onStart() {
-        super.onStart()
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
-        setStatusBarWithBlackIcon(R.color.bg_color)
-        initialize()
-        setOnClickListener()
-    }
+        try {
+            _binding = ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding?.root)
 
+            if (binding != null) {
+                setStatusBarWithBlackIcon(R.color.bg_color)
+                initialize()
+                setOnClickListener()
+            } else {
+                // binding is null, maybe show a toast or log an error
+                showToast("Something went wrong while loading the screen.")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.d("UI ERROR MAIN ACTIVITY","Unexpected error: ${e.localizedMessage}")
+            finish() // Optional: close the activity to prevent half-loaded UI
+        }
+    }
 
     @SuppressLint("InlinedApi")
     override fun initialize() {
@@ -119,14 +130,15 @@ class MainActivity : BaseActivity() {
         navHostFragment.navController.graph = navGraph
         navController = navHostFragment.navController
         navController.addOnDestinationChangedListener(destinationChangedListener)
-
+        fusedClient = LocationServices.getFusedLocationProviderClient(this)
         startNotificationListenerService()
         gpsStatusListener = GpsStatusListener(this)
         turnOnGps = TurnOnGps(this)
         startForegroundService()
-        if (!checkPermission()) {
+        if (!checkNotificationPermission()) {
             showPermissionAlertDialog()
         }
+        checkPermissions()
     }
 
     override fun setOnClickListener() {
@@ -145,14 +157,17 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        checkPermissions()
-    }
+        if (isOpenSetting){
+            checkPermissions()
+        }
 
+    }
     private fun checkPermissions() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+            ) != PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
@@ -163,23 +178,28 @@ class MainActivity : BaseActivity() {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 )
             )
-            enableGPSLocation()
         } else {
+            enableGPSLocation()
             lifecycleScope.launch {
-                if (viewModel.repository.preferences.automaticLocation.first()) {
-                    ContextCompat.startForegroundService(this@MainActivity, Intent(this@MainActivity, LocationService::class.java))
-                } else {
-                    stopService(Intent(this@MainActivity, LocationService::class.java))
-
-                }
+                val location = fusedClient.getCurrentLocationSuspend()
+                location?.let {
+                    val lat = it.latitude
+                    val lng = it.longitude
+                    // Navigate with lat/lng
+                    viewModel.saveUserLatLong(
+                        UserLatLong(
+                            lat,
+                            lng
+                        )
+                    )
+                }  ?: showToast("Error while getting user location")
             }
 
-            enableGPSLocation()
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun checkPermission(): Boolean {
+    private fun checkNotificationPermission(): Boolean {
         val permission = ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.POST_NOTIFICATIONS
@@ -211,42 +231,28 @@ class MainActivity : BaseActivity() {
 
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { activityResult ->
-            if (activityResult.resultCode == RESULT_OK) {
-
-            } else if (activityResult.resultCode == RESULT_CANCELED) {
-
+            if (activityResult.resultCode == RESULT_CANCELED) {
+                showToast("GPS is required for location services")
             }
         }
 
-    @Subscribe
-    fun receiveLocationEvent(locationEvent: LocationEvent) = lifecycleScope.launch {
-        viewModel.saveUserLatLong(
-            UserLatLong(
-                locationEvent.latitude ?: 0.0,
-                locationEvent.longitude ?: 0.0
-            )
-        )
-
-        Log.d("CheckViewModel", "receiveLocationEvent: lat => ${locationEvent.latitude}")
-        Log.d("CheckViewModel", "receiveLocationEvent: lon => ${locationEvent.longitude}")
-    }
-
     fun hideBottomSheet() {
-        binding?.bottomNavigationView?.visibility = View.GONE
+        if(_binding != null){
+            _binding?.bottomNavigationView?.visibility = View.GONE
+        }
+
     }
 
     fun showBottomSheet() {
-        binding?.bottomNavigationView?.visibility = View.VISIBLE
+        if(_binding != null) {
+            _binding?.bottomNavigationView?.visibility = View.VISIBLE
+        }
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        stopService(Intent(this, LocationService::class.java))
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this)
-        }
         navController.removeOnDestinationChangedListener(destinationChangedListener)
     }
 
@@ -303,8 +309,6 @@ class MainActivity : BaseActivity() {
 
         if (!isNotificationServiceEnabled()) {
             startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
-        } else {
-            startService(intent)
         }
     }
 
@@ -316,5 +320,13 @@ class MainActivity : BaseActivity() {
         )
         return flat != null && flat.contains(cn.flattenToString())
     }
+
+   private fun openAppSettings() {
+        Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", this.packageName, null)
+        ).also(::startActivity)
+    }
+
 
 }

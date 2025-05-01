@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -23,7 +22,7 @@ import com.iw.android.prayerapp.databinding.FragmentTimeBinding
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.timeFragment.itemView.RowItemTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails
-import com.iw.android.prayerapp.utils.MapDialog
+import com.iw.android.prayerapp.utils.map.MapDialog
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar

@@ -22,7 +22,7 @@ import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.OnClick
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.RowItemPrayerSound
 import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
-import com.iw.android.prayerapp.utils.CopyBottomSheet
+import com.iw.android.prayerapp.utils.copy.CopyBottomSheet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -108,7 +108,8 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
         for (data in prayerSoundList) {
             viewTypeArray.add(
                 RowItemPrayerSound(
-                    selectedItemPosition,
+                    true,
+                    args.title,
                     selectedSoundTonePosition,
                     selectedSoundPosition,
 

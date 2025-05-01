@@ -1,8 +1,6 @@
 package com.iw.android.prayerapp.base.repo
 
 import com.google.gson.Gson
-import com.iw.android.prayerapp.base.network.BaseApi
-import com.iw.android.prayerapp.base.network.SafeApiCall
 import com.iw.android.prayerapp.base.prefrence.DataPreference
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.AUTOMATIC_LOCATION
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.BOOLEAN
@@ -14,7 +12,6 @@ import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_J
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_METHOD
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.USER_ID
 import com.iw.android.prayerapp.base.response.LocationResponse
-import com.iw.android.prayerapp.base.response.LoginUserResponse
 import com.iw.android.prayerapp.data.response.IqamaData
 import com.iw.android.prayerapp.data.response.IqamaDisplaySetting
 import com.iw.android.prayerapp.data.response.IqamaNotificationData
@@ -28,10 +25,8 @@ import javax.inject.Singleton
 
 @Singleton
 abstract class BaseRepository(
-    private val api: BaseApi,
     val preferences: DataPreference
-) : SafeApiCall {
-
+)  {
 
     suspend fun getLoginUserId(): String {
         return preferences.loginUserId.first()
@@ -60,12 +55,7 @@ abstract class BaseRepository(
         return preferences.prayerElevation.first()
     }
 
-    suspend fun getLoginUserData(): LoginUserResponse? {
-        return Gson().fromJson(
-            preferences.getStringData(DataPreference.USER_INFO),
-            LoginUserResponse::class.java
-        )
-    }
+
 
     suspend fun getUserLatLong(): UserLatLong? {
         return Gson().fromJson(

@@ -3,9 +3,12 @@ package com.iw.android.prayerapp.extension
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -39,6 +42,14 @@ fun AppCompatActivity.setStatusBarWithBlackIcon(@ColorRes color: Int) {
     this.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     this.window.statusBarColor = ContextCompat.getColor(this, color)
 }
+
+fun Fragment.openAppSettings() {
+    Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", requireActivity().packageName, null)
+    ).also(::startActivity)
+}
+
 
 fun Fragment.setStatusBarWithBlackIcon(@ColorRes color: Int) {
     requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)

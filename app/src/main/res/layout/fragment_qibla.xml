@@ -64,7 +64,7 @@
 
 
 
-    <com.iw.android.prayerapp.utils.QiblaCompassViewV2
+    <com.iw.android.prayerapp.utils.qibla.QiblaCompassViewV2
         android:id="@+id/imageViewQiblaDirection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

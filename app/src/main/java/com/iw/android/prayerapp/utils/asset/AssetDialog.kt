@@ -1,4 +1,4 @@
-package com.iw.android.prayerapp.utils
+package com.iw.android.prayerapp.utils.asset
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -13,6 +13,7 @@ import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.data.response.SoundData
 import com.iw.android.prayerapp.databinding.AssetDialogBinding
+import com.iw.android.prayerapp.utils.GetAdhanSound
 
 class AssetDialog : DialogFragment(), OnItemClick {
     private lateinit var binding: AssetDialogBinding

@@ -1,4 +1,4 @@
-package com.iw.android.prayerapp.utils
+package com.iw.android.prayerapp.utils.copy
 
 import android.app.Dialog
 import android.os.Build

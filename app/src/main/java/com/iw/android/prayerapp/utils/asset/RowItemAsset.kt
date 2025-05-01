@@ -1,4 +1,4 @@
-package com.iw.android.prayerapp.utils
+package com.iw.android.prayerapp.utils.asset
 
 import android.media.MediaPlayer
 import android.util.Log
@@ -10,7 +10,7 @@ import com.iw.android.prayerapp.data.response.SoundData
 import com.iw.android.prayerapp.databinding.RowItemAssetBinding
 import com.iw.android.prayerapp.extension.getRawFileSize
 
-class RowItemAsset(private val data: SoundData, private val listener: OnItemClick,var mediaPlayer: MediaPlayer? = null) :
+class RowItemAsset(private val data: SoundData, private val listener: OnItemClick, var mediaPlayer: MediaPlayer? = null) :
     ViewType<SoundData> {
 private var isSoundOn = false
 

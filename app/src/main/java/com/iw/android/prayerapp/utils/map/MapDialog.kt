@@ -1,4 +1,4 @@
-package com.iw.android.prayerapp.utils
+package com.iw.android.prayerapp.utils.map
 
 import android.app.Activity.RESULT_CANCELED
 import android.content.Intent
@@ -18,6 +18,8 @@ import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.response.LocationResponse
 import com.iw.android.prayerapp.databinding.LocationDialogBinding
+import com.iw.android.prayerapp.utils.GetAdhanDetails
+import com.iw.android.prayerapp.utils.GooglePlaceHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -103,8 +105,8 @@ class MapDialog : DialogFragment(),
 
             binding.textViewDone.id -> {
                 val location = GetAdhanDetails.getTimeZoneAndCity(
-                    requireContext(),latitude?:0.0,
-                    longitude?:0.0
+                    requireContext(), latitude ?: 0.0,
+                    longitude ?: 0.0
                 )
                 sendDataBack(
                     LocationResponse(

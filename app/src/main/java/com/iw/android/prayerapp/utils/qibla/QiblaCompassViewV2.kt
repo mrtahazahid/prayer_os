@@ -1,4 +1,4 @@
-package com.iw.android.prayerapp.utils
+package com.iw.android.prayerapp.utils.qibla
 
 import android.annotation.SuppressLint
 import android.content.Context

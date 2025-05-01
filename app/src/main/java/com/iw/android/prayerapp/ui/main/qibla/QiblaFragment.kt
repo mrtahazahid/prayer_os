@@ -16,7 +16,7 @@ import com.iw.android.prayerapp.databinding.FragmentQiblaBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.utils.GetAdhanDetails
-import com.iw.android.prayerapp.utils.QiblaDegreeListener
+import com.iw.android.prayerapp.utils.qibla.QiblaDegreeListener
 import kotlin.math.roundToInt
 
 class QiblaFragment : BaseFragment(R.layout.fragment_qibla) {

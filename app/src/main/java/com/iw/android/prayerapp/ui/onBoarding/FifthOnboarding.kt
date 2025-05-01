@@ -1,20 +1,27 @@
 package com.iw.android.prayerapp.ui.onBoarding
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFifthOnboardingBinding
+import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
+import kotlinx.coroutines.launch
 
 class FifthOnboarding : BaseFragment(R.layout.fragment_fifth_onboarding) {
 
     private var _binding: FragmentFifthOnboardingBinding? = null
     private val binding get() = _binding!!
+
+    val viewModel: OnBoardingViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -32,35 +39,31 @@ class FifthOnboarding : BaseFragment(R.layout.fragment_fifth_onboarding) {
         setOnClickListener()
     }
 
-    override fun initialize() {setOnBackPressedListener() }
 
-    override fun setObserver() {}
+    override fun initialize() {
+        setOnBackPressedListener()
+
+    }
+
+    override fun setObserver() {
+
+    }
 
     override fun setOnClickListener() {
         binding.btnEnableNotification.setOnClickListener {
-//            findNavController().navigate(R.id.action_fifthOnboarding_to_sixthOnboarding)
+          lifecycleScope.launch {   viewModel.saveIsOnBoarding()}
+            startActivity(Intent(requireActivity(), MainActivity::class.java))
+            requireActivity().finish()
         }
 
         binding.notNow.setOnClickListener {
-//            requireActivity().startActivity(
-//                Intent(
-//                    requireContext(),
-//                    MainActivity::class.java
-//                ).putExtra("skip", "userSkipped")
-//            )
-//            requireActivity().finish()
-            Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(requireActivity() , MainActivity::class.java))
+            requireActivity().finish()
         }
 
         binding.skip.setOnClickListener {
-//            requireActivity().startActivity(
-//                Intent(
-//                    requireContext(),
-//                    MainActivity::class.java
-//                ).putExtra("skip", "userSkipped")
-//            )
-//            requireActivity().finish()
-            Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(requireActivity(), MainActivity::class.java))
+            requireActivity().finish()
         }
     }
 
@@ -68,6 +71,7 @@ class FifthOnboarding : BaseFragment(R.layout.fragment_fifth_onboarding) {
         super.onDestroyView()
         _binding = null
     }
+
     private fun setOnBackPressedListener() {
         requireActivity().onBackPressedDispatcher.addCallback(
             object : OnBackPressedCallback(true) {

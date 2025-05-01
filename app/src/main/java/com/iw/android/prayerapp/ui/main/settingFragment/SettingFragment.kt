@@ -1,7 +1,9 @@
 package com.iw.android.prayerapp.ui.main.settingFragment
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +13,14 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.iw.android.prayerapp.BuildConfig
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
@@ -27,12 +33,16 @@ import com.iw.android.prayerapp.extension.CustomDialog
 import com.iw.android.prayerapp.extension.MethodDialog
 import com.iw.android.prayerapp.extension.convertToFunDateTime
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
-import com.iw.android.prayerapp.services.gps.LocationService
+import com.iw.android.prayerapp.services.gps.GpsStatusListener
+import com.iw.android.prayerapp.services.gps.TurnOnGps
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
-import com.iw.android.prayerapp.utils.AssetDialog
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getTimeZoneAndCity
-import com.iw.android.prayerapp.utils.MapDialog
+import com.iw.android.prayerapp.utils.LocationPermissionTextProvider
+import com.iw.android.prayerapp.utils.asset.AssetDialog
+import com.iw.android.prayerapp.utils.getCurrentLocationSuspend
+import com.iw.android.prayerapp.utils.map.MapDialog
+import com.iw.android.prayerapp.utils.showPermissionDialog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
@@ -65,7 +75,61 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     private var countUpTime = 0
     private var isAdhanTap = false
     private var isPlayOnTap = false
+    private var isOpenSetting = false
     private var snooze = ""
+    private var turnOnGps: TurnOnGps? = null
+
+    private lateinit var fusedClient: FusedLocationProviderClient
+    private var gpsStatusListener: GpsStatusListener? = null
+
+    private val locationPermissions =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            ) {
+                enableGPSLocation()
+                lifecycleScope.launch {
+                    val location = fusedClient.getCurrentLocationSuspend()
+                    location?.let {
+                        val lat = it.latitude
+                        val lng = it.longitude
+                        // Navigate with lat/lng
+                        viewModel.saveUserLatLong(
+                            UserLatLong(
+                                lat,
+                                lng
+                            )
+                        )
+                    }  ?: showToast("Error while getting user location")
+                }
+            } else {
+                showPermissionDialog(
+                    permissionTextProvider = LocationPermissionTextProvider(),
+                    isPermanentlyDeclined = permissions.entries.any {
+                            (permission, _) ->
+                        (permission == Manifest.permission.ACCESS_FINE_LOCATION ||
+                                permission == Manifest.permission.ACCESS_COARSE_LOCATION) &&
+                                !shouldShowRequestPermissionRationale(permission)
+                    },
+                    onDismiss = {},
+                    onOkClick = {
+                        openAppSettings()
+                        isOpenSetting = true
+                    },
+                    onGoToAppSettingsClick = ::openAppSettings,
+                    context = requireContext()
+                )
+            }
+        }
+
+    private val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { activityResult ->
+            if (activityResult.resultCode == AppCompatActivity.RESULT_CANCELED) {
+                showToast("GPS is required for location services")
+            }
+        }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,6 +149,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     }
 
     override fun initialize() {
+        fusedClient = LocationServices.getFusedLocationProviderClient(requireContext())
         setOnBackPressedListener()
         binding.textViewLocal1.text = Locale.getDefault().toString()
         lifecycleScope.launch {
@@ -103,7 +168,6 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             adjustHijriDate = viewModel.getTimeData()?.hijriDaysCount ?: 0
             isAutoHijri = viewModel.getTimeData()?.isAutomaticIncrementHijri ?: false
             snoozeTime = viewModel.getSettingNotificationData()?.snoozeCount ?: 0
-            Log.d("snooze", viewModel.getSettingNotificationData()?.snoozeCount.toString())
             is24HourEnable = viewModel.getTimeData()?.is24HourFormat ?: false
             isPrayAbb = viewModel.getTimeData()?.isPrayerAbbreviationEnabled ?: false
             countUp = viewModel.getTimeData()?.countUpTime ?: "off"
@@ -121,7 +185,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         )
         binding.textViewCityName.text = location?.city
         binding.textViewCityTimeZoneName.text = location?.timeZone
-        binding.textViewVersions.text = "${BuildConfig.VERSION_NAME}"
+        binding.textViewVersions.text = BuildConfig.VERSION_NAME
         binding.textViewCaches1.text =
             convertToFunDateTime(getCacheDirectoryLastModified(requireContext()))
         binding.switchAutomatic.isChecked = viewModel.getAutomaticLocation
@@ -196,23 +260,12 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 binding.cityView.isClickable = false
                 binding.cityView.isEnabled = false
                 binding.group.show()
-                ContextCompat.startForegroundService(requireContext(),
-                    Intent(
-                        requireActivity(),
-                        LocationService::class.java
-                    )
-                )
-
+                checkPermissions()
             } else {
                 binding.group.gone()
                 binding.cityView.isClickable = true
                 binding.cityView.isEnabled = true
-                requireActivity().stopService(
-                    Intent(
-                        requireActivity(),
-                        LocationService::class.java
-                    )
-                )
+
             }
             binding.textViewGeofenceRadius.text = "$geofence Kilometers"
 
@@ -638,7 +691,51 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         _binding = null
     }
 
-    fun getFormattedCoordinates(latitude: Double, longitude: Double): String {
+    override fun onResume() {
+        super.onResume()
+        if (isOpenSetting){
+            checkPermissions()
+        }
+
+    }
+    private fun checkPermissions() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            locationPermissions.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        } else {
+            enableGPSLocation()
+            lifecycleScope.launch {
+                val location = fusedClient.getCurrentLocationSuspend()
+                Log.d("location","$location")
+                location?.let {
+                    val lat = it.latitude
+                    val lng = it.longitude
+                    // Navigate with lat/lng
+                    viewModel.saveUserLatLong(
+                        UserLatLong(
+                            lat,
+                            lng
+                        )
+                    )
+                }  ?: showToast("Error while getting user location")
+            }
+
+        }
+    }
+
+    private fun getFormattedCoordinates(latitude: Double, longitude: Double): String {
         val decimalFormat = DecimalFormat("#.##")
         val formattedLatitude = decimalFormat.format(latitude)
         val formattedLongitude = decimalFormat.format(longitude)
@@ -726,7 +823,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         startActivity(intent)
     }
 
-    fun getCacheDirectoryLastModified(context: Context): Long {
+   private fun getCacheDirectoryLastModified(context: Context): Long {
         val cacheDir = context.cacheDir
         return cacheDir.lastModified()
     }
@@ -782,5 +879,18 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 }
             })
     }
+
+    private fun enableGPSLocation() {
+        var isGpsStatusChanged: Boolean? = null
+        gpsStatusListener?.observe(requireActivity()) { isGpsOn ->
+            if (isGpsStatusChanged == null || isGpsStatusChanged != isGpsOn) {
+                if (!isGpsOn) {
+                    turnOnGps?.startGPS(resultLauncher)
+                }
+                isGpsStatusChanged = isGpsOn
+            }
+        }
+    }
+
 
 }

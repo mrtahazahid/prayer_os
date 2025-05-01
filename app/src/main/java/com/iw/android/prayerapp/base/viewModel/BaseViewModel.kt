@@ -39,7 +39,7 @@ abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
 
     suspend fun getPrayerJurisprudence() = repository.getPrayerJurisprudence()
 
-    suspend fun getUserInfoData() = repository.getLoginUserData()
+
 
     suspend fun saveUserLatLong(userLatLong: UserLatLong) {
         repository.saveUserLatLong(userLatLong)

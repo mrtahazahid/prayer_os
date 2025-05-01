@@ -16,14 +16,16 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.iw.android.prayerapp.R
+import com.iw.android.prayerapp.services.gps.NotificationService
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
+
 @Singleton
-class Notification @Inject constructor(@ApplicationContext private val context: Context) {
+open class Notification @Inject constructor(@ApplicationContext private val context: Context) {
 
     var player: MediaPlayer? = null
     private var screenOffReceiver: BroadcastReceiver? = null
@@ -36,11 +38,10 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
     }
 
 
-
     companion object {
         private const val channelId = "110"
         const val NOTIFICATION_FLAGS = PendingIntent.FLAG_UPDATE_CURRENT
-        const  val NOTIFICATION_ID = 12165
+        const val NOTIFICATION_ID = 12165
     }
 
     fun notify(
@@ -50,22 +51,36 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         isForVibrate: Boolean,
         isForSilent: Boolean, isOff: Boolean
     ) {
-        val intent = Intent(context, MainActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
+        Log.d("notify", "called")
+        val intent = Intent(
+            context,
+            MainActivity::class.java
+        ).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
 
         val pendingFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_IMMUTABLE or NOTIFICATION_FLAGS
         } else {
             NOTIFICATION_FLAGS
         }
+        val stopIntent = Intent(context, NotificationService::class.java).apply {
+            action = "ACTION_STOP_ADHAN"
+        }
+        val stopPendingIntent = PendingIntent.getService(
+            context,
+            1,
+            stopIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, pendingFlag)
 
         val notificationBuilder = if (isForVibrate) {
             NotificationCompat.Builder(context, channelId).apply {
                 setSmallIcon(R.mipmap.app_icon)
-                setContentTitle(currentNamazTitle)
+                setContentTitle("Pray Watch")
                 setContentText(description)
                 setAutoCancel(true)
+
                 setVibrate(longArrayOf(0, 100, 200, 300, 400, 500))
                 priority = NotificationCompat.PRIORITY_HIGH
                 setContentIntent(pendingIntent)
@@ -84,8 +99,9 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
                 setSmallIcon(R.mipmap.app_icon)
                 setContentTitle(currentNamazTitle)
                 setContentText(description)
+                addAction(R.drawable.ic_pause, "Stop Adhan", stopPendingIntent)
                 setAutoCancel(true)
-               // setDefaults(0)
+                // setDefaults(0)
                 priority = NotificationCompat.PRIORITY_HIGH
                 setContentIntent(pendingIntent)
 
@@ -142,6 +158,10 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         notificationManager.createNotificationChannel(channel)
     }
 
+
+    // BroadcastReceiver to handle the "Stop Adhan" action
+
+
     fun stopPrayer() {
         player?.release()
         if (isReceiverRegistered && screenOffReceiver != null) {
@@ -156,7 +176,7 @@ class Notification @Inject constructor(@ApplicationContext private val context: 
         player = null
     }
 
-    fun removeNotification(){
+   open fun removeNotification() {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(NOTIFICATION_ID)
