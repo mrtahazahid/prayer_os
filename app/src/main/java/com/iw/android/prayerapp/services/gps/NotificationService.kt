@@ -26,6 +26,7 @@ import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -47,12 +48,19 @@ class NotificationService : Service() {
     private var prayerList = arrayListOf<NotificationPrayerTime>()
     private var method: CalculationParameters? = null
     private var madhab: Madhab? = null
-
+    private var loopStarted = false
     private val applicationScope = ProcessLifecycleOwner.get().lifecycleScope
 
     override fun onCreate() {
         super.onCreate()
+        loopStarted = false
         prefrence = DataPreference(this)
+    }
+
+
+    override fun onDestroy() {
+        loopStarted = false
+        super.onDestroy()
     }
 
     private suspend fun startPeriodicTask() {
@@ -113,14 +121,22 @@ class NotificationService : Service() {
     }
 
     private suspend fun checkAndTriggerNotification() {
-        prefrence.getFajrDetail()?.let { checkNamazNotification(it) }
-        prefrence.getSunriseDetail()?.let { checkNamazNotification(it) }
-        prefrence.getDuhrDetail()?.let { checkNamazNotification(it) }
-        prefrence.getAsrDetail()?.let { checkNamazNotification(it) }
-        prefrence.getMagribDetail()?.let { checkNamazNotification(it) }
-        prefrence.getIshaDetail()?.let { checkNamazNotification(it) }
-        prefrence.getMidnightDetail()?.let { checkNamazNotification(it) }
-        prefrence.getLastThirdDetail()?.let { checkNamazNotification(it) }
+        prefrence.getFajrDetail()?.let {
+            checkNamazNotification(it) }
+        prefrence.getSunriseDetail()?.let {
+            checkNamazNotification(it) }
+        prefrence.getDuhrDetail()?.let {
+            checkNamazNotification(it) }
+        prefrence.getAsrDetail()?.let {
+            checkNamazNotification(it) }
+        prefrence.getMagribDetail()?.let {
+            checkNamazNotification(it) }
+        prefrence.getIshaDetail()?.let {
+            checkNamazNotification(it) }
+        prefrence.getMidnightDetail()?.let {
+            checkNamazNotification(it) }
+        prefrence.getLastThirdDetail()?.let {
+            checkNamazNotification(it) }
 
     }
 
@@ -233,11 +249,11 @@ class NotificationService : Service() {
         }
     }
 
-
     private fun isTimeMatch(specifiedTime: String): Boolean {
         if (specifiedTime == "") {
             return false
         }
+
         return (convertTimeToMillis(getCurrentTimeIn12HourFormat()).compareTo(
             convertTimeToMillis(
                 specifiedTime
@@ -251,21 +267,26 @@ class NotificationService : Service() {
         return LocalTime.now().format(formatter)
     }
 
+    private var notificationJob: Job? = null
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-
         if (intent?.action == "ACTION_STOP_ADHAN") {
             notifications.stopPrayer()
             notifications.removeNotification()
         } else {
-            applicationScope.launch {
-                startPeriodicTask()
 
-                while (true) {
-                    checkAndTriggerNotification()
-                    checkIqamaTime()
-                    jummahTimeCheck()
-                    delay(60000)
+            if (notificationJob == null || notificationJob?.isActive == false) {
+                Log.d("notificationJob", "called $notificationJob")
+                notificationJob = applicationScope.launch {
+                    startPeriodicTask()
+                    while (true) {
+                        Log.d("while", "called")
+                        checkAndTriggerNotification()
+                        checkIqamaTime()
+                        jummahTimeCheck()
+                        delay(60000)
+                    }
                 }
             }
 
@@ -285,11 +306,12 @@ class NotificationService : Service() {
                 .setSmallIcon(R.mipmap.app_icon)
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
+                .setAutoCancel(false)
                 .build()
 
             startForeground(1, notification)
-        }
 
+        }
         return START_STICKY
     }
 

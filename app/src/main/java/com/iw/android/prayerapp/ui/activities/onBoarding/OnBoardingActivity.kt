@@ -38,10 +38,7 @@ class OnBoardingActivity : BaseActivity() {
                 override fun handleOnBackPressed() {
                     if(!intent.getStringExtra("data").isNullOrEmpty()){
                         finish()
-                    }else{
-
                     }
-
                 }
             })
     }
