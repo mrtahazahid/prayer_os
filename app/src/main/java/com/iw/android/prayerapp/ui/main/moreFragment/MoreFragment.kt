@@ -1,6 +1,7 @@
 package com.iw.android.prayerapp.ui.main.moreFragment
 
-import android.app.AlertDialog
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -8,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.viewModels
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
@@ -17,10 +17,11 @@ import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentMoreBinding
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
-import com.iw.android.prayerapp.ui.main.moreFragment.itemView.OnClickPlayAdhan
+import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
+import com.iw.android.prayerapp.ui.main.moreFragment.itemView.OnClickMoreItem
 import com.iw.android.prayerapp.ui.main.moreFragment.itemView.RowItemMore
 
-class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener, OnClickPlayAdhan {
+class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener, OnClickMoreItem {
 
     private var _binding: FragmentMoreBinding? = null
     val binding
@@ -29,11 +30,7 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener,
     private var mediaPlayer: MediaPlayer? = null
     private val viewModel: MoreViewModel by viewModels()
     private var viewTypeArray = ArrayList<ViewType<*>>()
-    private var isItemClick = true
-
-    //    private var dialogBinding: PostDialogBinding? = null
-//    private var dialogExitBinding: ExitDialogBinding? = null
-    private var dialog: AlertDialog? = null
+    private var isPlayAdhanChecked = false
 
     private val adapter by lazy {
         GenericListAdapter(object : OnItemClickListener<ViewType<*>> {
@@ -71,31 +68,11 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener,
         setOnBackPressedListener()
 
     }
-    private fun setOnBackPressedListener() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
 
-
-                }
-            })
-    }
     override fun setObserver() {
         viewTypeArray.clear()
         for (data in viewModel.moreList) {
-            viewTypeArray.add(
-                RowItemMore(
-                    data,
-                    requireActivity(),
-                    viewModel.userLatLong?.latitude ?: 0.0,
-                    viewModel.userLatLong?.latitude ?: 0.0,
-                    viewModel.method!!,
-                    viewModel.methodInt!!,
-                    viewModel.madhabInt!!,
-                    requireContext(),
-                    this
-                )
-            )
+            viewTypeArray.add(RowItemMore(data, this))
         }
         adapter.items = viewTypeArray
     }
@@ -108,40 +85,77 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener,
         binding.disclaimerClickView.setOnClickListener(this)
     }
 
-    private fun setRecyclerView() {
-        binding.recyclerView.adapter = adapter
-    }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.instagramViewClick.id -> {
-                openCustomTab("https://www.instagram.com/praywatchapp?igsh=MTBza2t0MHo2Yzdybw==")
+                openCustomTab(requireContext(),"https://www.instagram.com/praywatchapp?igsh=MTBza2t0MHo2Yzdybw==")
             }
 
             binding.twitteriewClick.id -> {
-                openCustomTab("https://twitter.com/praywatchapp")
+                openCustomTab(requireContext(),"https://twitter.com/praywatchapp")
             }
 
             binding.carViewProject.id -> {
-                openCustomTab("https://quranplus.app/apple/")
-//                showToast("Work in progress")
+                openCustomTab(requireContext(),"https://quranplus.app/apple/")
             }
 
             binding.policyViewClick.id -> {
-                openCustomTab("https://praywatch.app/privacy/")
+                openCustomTab(requireContext(),"https://praywatch.app/privacy/")
             }
 
             binding.disclaimerClickView.id -> {
-                openCustomTab("https://praywatch.app/disclaimer/")
+                openCustomTab(requireContext(),"https://praywatch.app/disclaimer/")
             }
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        // Release MediaPlayer resources when activity stops
+        stopSound()
+    }
 
-    fun openCustomTab(url: String?) {
-        val builder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
-        val customTabsIntent: CustomTabsIntent = builder.build()
-        customTabsIntent.launchUrl(requireContext(), Uri.parse(url))
+    override fun onMoreItemClick(title: String) {
+        when (title) {
+            "About  this app" -> openCustomTab(binding.imageView.context, "https://praywatch.app/")
+
+            "Subscribe for updates" -> openCustomTab(
+                binding.imageView.context,
+                "https://praywatch.app/subscribe/"
+            )
+
+            "Share this app" -> shareApp(requireContext())
+
+            "Read tutorial" -> readTutorial()
+
+            "Rate this app" -> rateThisApp()
+
+            "Request support" -> {
+                sendUserToGmail(
+                    context = requireContext(),
+                    lat = viewModel.userLatLong?.latitude ?: 0.0,
+                    lng = viewModel.userLatLong?.latitude ?: 0.0,
+                    method = viewModel.method!!,
+                    methodInt = viewModel.methodInt!!,
+                    madhab = viewModel.madhabInt!!
+                )
+            }
+
+            "Play adhan" -> {
+                if (!isPlayAdhanChecked) {
+                    isPlayAdhanChecked = true
+                    startSound()
+                } else {
+                    isPlayAdhanChecked = false
+                    stopSound()
+                }
+            }
+        }
+    }
+
+    private fun setRecyclerView() {
+        binding.recyclerView.adapter = adapter
     }
 
     private fun startSound() {
@@ -152,23 +166,46 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener,
         mediaPlayer?.start()
     }
 
-    override fun onStop() {
-        super.onStop()
-        // Release MediaPlayer resources when activity stops
-        stopSound()
-    }
 
     private fun stopSound() {
         mediaPlayer?.release()
         mediaPlayer = null
     }
 
-    override fun onClick(isChecked: Boolean) {
-        if (isChecked) {
-            startSound()
-        } else {
-            stopSound()
+    private fun readTutorial() {
+        val intent = Intent(
+            binding.imageView.context,
+            OnBoardingActivity::class.java
+        )
+        intent.putExtra("data", "value")
+        requireActivity().startActivity(intent)
+    }
+
+    private fun rateThisApp() {
+        try {
+            // Try to open in Play Store app
+            requireContext().startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=${requireContext().packageName}")
+                )
+            )
+        } catch (e: ActivityNotFoundException) {
+            // Fallback: open in browser
+            requireContext().startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=${requireContext().packageName}")
+                )
+            )
         }
     }
 
+
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {}
+            })
+    }
 }

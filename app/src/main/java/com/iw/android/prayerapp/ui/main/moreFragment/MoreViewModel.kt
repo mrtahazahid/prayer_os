@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.batoulapps.adhan2.CalculationMethod
 import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
-import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.viewModel.BaseViewModel
 import com.iw.android.prayerapp.data.repositories.MainRepository
 import com.iw.android.prayerapp.data.response.MoreData
@@ -24,6 +23,7 @@ class MoreViewModel @Inject constructor(repository: MainRepository) :
      var madhabInt: Int? = null
 
     init {
+        moreList.addAll(repository.getStaticMoreList())
         viewModelScope.launch {
             userLatLong = getUserLatLong()
             if (getPrayerJurisprudence().isNullOrEmpty()) {
@@ -119,55 +119,6 @@ class MoreViewModel @Inject constructor(repository: MainRepository) :
             } else {
                 method = CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.SHAFI)
             }
-
         }
-        moreList.add(
-            MoreData(
-                R.drawable.ic_home,
-                "About  this app"
-            )
-        )
-
-        moreList.add(
-            MoreData(
-                R.drawable.ic_rea,
-                "Read tutorial"
-            )
-        )
-        moreList.add(
-            MoreData(
-                R.drawable.ic_sent,
-                "Request support",
-            )
-        )
-        moreList.add(
-            MoreData(
-                R.drawable.ic_subscribe,
-                "Subscribe for updates",
-            )
-        )
-        moreList.add(
-            MoreData(
-                R.drawable.ic_star,
-                "Rate this app",
-            )
-        )
-        moreList.add(
-            MoreData(
-                R.drawable.ic_share,
-                "Share this app",
-            )
-        )
-
-        moreList.add(
-            MoreData(
-                R.drawable.ic_mike,
-                "Play adhan",
-
-                )
-        )
-
     }
-
-
 }
