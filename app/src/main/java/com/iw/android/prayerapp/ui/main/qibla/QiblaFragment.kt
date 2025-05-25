@@ -1,9 +1,11 @@
 package com.iw.android.prayerapp.ui.main.qibla
 
 import android.annotation.SuppressLint
+import android.content.Context.SENSOR_SERVICE
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,10 +63,16 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla) {
             currentLongitude
         )
         binding.textViewTitle.text = location?.city ?: "City"
-        Log.d("lat,long","$currentLatitude $currentLongitude")
         getQibla = GetAdhanDetails.getQiblaDirection(currentLatitude, currentLongitude)
-//        binding.imageViewQiblaDirection.degree = getQibla.toFloat()
-//        binding.imageViewQiblaDirection.location =  Location(location?.city)
+        binding.txtQiblaHeading.text =
+            "Qibla direction is ${"%.2f".format(getQibla)}\u00B0 from North"
+
+        if(!hasCompassSensor()){
+            binding.cardViewWarning.show()
+            binding.imageViewQiblaDirection.gone()
+            binding.textViewCurrentDirection.gone()
+            return
+        }
 
         // Pass Location to QiblaCompassViewV2
         val locations = Location("GPS")
@@ -75,9 +83,6 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla) {
         binding.imageViewQiblaDirection.degree = getQibla.toFloat()
 
 
-
-        binding.txtQiblaHeading.text =
-            "Qibla direction is ${"%.2f".format(getQibla)}\u00B0 from North"
 
     }
 
@@ -106,6 +111,13 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla) {
                 )
             }
         }
+    }
+
+    private fun hasCompassSensor(): Boolean {
+        val sensorManager = requireContext().getSystemService(SENSOR_SERVICE) as SensorManager
+        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        return accelerometer != null && magnetometer != null
     }
 
 

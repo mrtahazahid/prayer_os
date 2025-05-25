@@ -25,6 +25,8 @@
     <string name="confirm_calculation">Confirm Calculation</string>
     <string name="enable_location">Enable Location</string>
     <string name="prayer_time">Prayer time!</string>
+    <string name="warning_string"><b>Your device does not support compass functionality.</b>\n This means the Qibla direction cannot be determined using your device’s internal sensors. You can still use other features of the app, but to view the Qibla direction accurately, a device with a magnetic compass sensor is required.</string>
+    <string name="warning">Warning!</string>
 
     <string-array name="elevation">
         <item>Automatic</item>

@@ -11,7 +11,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,7 @@
                 android:fontFamily="@font/sf_regular"
                 android:gravity="center"
                 android:textColor="@color/yellow_text"
-                android:textSize="@dimen/_18ssp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -41,10 +41,10 @@
             android:id="@+id/txt_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/sf_regular"
             android:textColor="@color/yellow_text"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -54,15 +54,79 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="-15dp"
         android:fontFamily="@font/sf_regular"
-        tools:text="City"
         android:textColor="@color/yellow_text"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"
+        tools:text="City" />
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewWarning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:cardBackgroundColor="#1c1c1e"
+            app:cardElevation="10dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:strokeWidth="1dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="30dp">
 
+                <LinearLayout
+                    android:id="@+id/warningHeader"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_margin="16dp">
 
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/imageViewWarning"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_warning"
+                        />
+
+                    <TextView
+                        android:id="@+id/textViewWarning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sf_medium"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:layout_marginHorizontal="10dp"
+                        android:text="@string/warning" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textViewWarningDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_regular"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:lineHeight="20sp"
+                    android:layout_margin="16dp"
+                    android:gravity="center"
+                    android:layout_marginHorizontal="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/warningHeader"
+                    android:text="@string/warning_string" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
     <com.iw.android.prayerapp.utils.qibla.QiblaCompassViewV2
         android:id="@+id/imageViewQiblaDirection"
@@ -73,8 +137,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"/>
-
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
 
     <TextView
@@ -83,28 +146,12 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/sf_regular"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/_28ssp"
+        android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewQiblaDirection"
         app:layout_constraintEnd_toEndOf="@+id/imageViewQiblaDirection"
         app:layout_constraintStart_toStartOf="@+id/imageViewQiblaDirection"
         app:layout_constraintTop_toTopOf="@+id/imageViewQiblaDirection"
         tools:text="256.72" />
 
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textViewAccuracy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:drawableEnd="@drawable/ic_check"
-        android:drawablePadding="10dp"
-        android:fontFamily="@font/sf_bold"
-        android:text="Accuracy 88%"
-        android:textColor="@color/text_color_gray"
-        android:textSize="12sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
