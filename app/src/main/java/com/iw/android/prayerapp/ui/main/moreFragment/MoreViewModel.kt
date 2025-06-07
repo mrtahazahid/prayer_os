@@ -5,17 +5,15 @@ import com.batoulapps.adhan2.CalculationMethod
 import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.base.viewModel.BaseViewModel
-import com.iw.android.prayerapp.data.repositories.MainRepository
-import com.iw.android.prayerapp.data.response.MoreData
+import com.iw.android.prayerapp.data.repositories.MoreRepository
 import com.iw.android.prayerapp.data.response.UserLatLong
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MoreViewModel @Inject constructor(repository: MainRepository) :
-    BaseViewModel(repository) {
-    var moreList = arrayListOf<MoreData>()
+class MoreViewModel @Inject constructor(val repo: MoreRepository) :
+    BaseViewModel(repo) {
     var userLatLong: UserLatLong? = null
      var method: CalculationParameters? = null
      var methodInt: Int? = null
@@ -23,7 +21,7 @@ class MoreViewModel @Inject constructor(repository: MainRepository) :
      var madhabInt: Int? = null
 
     init {
-        moreList.addAll(repository.getStaticMoreList())
+
         viewModelScope.launch {
             userLatLong = getUserLatLong()
             if (getPrayerJurisprudence().isNullOrEmpty()) {
@@ -121,4 +119,6 @@ class MoreViewModel @Inject constructor(repository: MainRepository) :
             }
         }
     }
+
+    fun getMoreList() = repo.getStaticMoreList()
 }

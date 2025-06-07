@@ -3,14 +3,11 @@ package com.iw.android.prayerapp.base.repo
 import com.google.gson.Gson
 import com.iw.android.prayerapp.base.prefrence.DataPreference
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.AUTOMATIC_LOCATION
-import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.BOOLEAN
-import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.FLOAT
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.GEOFENCE_RADIUS
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.IS_ONBOARDING
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_ELEVATION_RULE
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_JURISPRUDENCE
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.PRAYER_METHOD
-import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.USER_ID
 import com.iw.android.prayerapp.base.response.LocationResponse
 import com.iw.android.prayerapp.data.response.IqamaData
 import com.iw.android.prayerapp.data.response.IqamaDisplaySetting
@@ -28,21 +25,6 @@ abstract class BaseRepository(
     val preferences: DataPreference
 )  {
 
-    suspend fun getLoginUserId(): String {
-        return preferences.loginUserId.first()
-    }
-
-    suspend fun saveFloat(value: Float) {
-        preferences.setFloatData(FLOAT, value)
-    }
-
-    suspend fun getFloat(): Float = preferences.float.first()
-
-    suspend fun saveBoolean(value: Boolean) {
-        preferences.setBooleanData(BOOLEAN, value)
-    }
-
-    suspend fun getBoolean(): Boolean = preferences.boolean.first()
     suspend fun getPrayerMethod(): String {
         return preferences.prayerMethod.first()
     }
@@ -177,10 +159,6 @@ abstract class BaseRepository(
             preferences.getStringData(DataPreference.TIME_DATA_SETTING),
             TimeData::class.java
         )
-    }
-
-    suspend fun saveLoginUserId(userId: String) {
-        preferences.setStringData(USER_ID, userId)
     }
 
     suspend fun savePrayerMethod(prayerMethod: String) {

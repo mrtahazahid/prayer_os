@@ -1,9 +1,7 @@
 package com.iw.android.prayerapp.ui.main.timeFragment
 
-
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.batoulapps.adhan2.CalculationMethod
 import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
@@ -15,59 +13,54 @@ import com.iw.android.prayerapp.data.response.PrayerTime
 import com.iw.android.prayerapp.data.response.UserLatLong
 import com.iw.android.prayerapp.extension.convertToFunTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails
+import com.iw.android.prayerapp.utils.dateFormat.convertAndGetCurrentTimeMillis
+import com.iw.android.prayerapp.utils.dateFormat.convertTimeToMillis
+import com.iw.android.prayerapp.utils.dateFormat.formatDateWithCurrentTime
+import com.iw.android.prayerapp.utils.method.getMadhab
+import com.iw.android.prayerapp.utils.method.getMethod
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class TimeViewModel @Inject constructor(repository: MainRepository) :
     BaseViewModel(repository) {
     var userLatLong: UserLatLong? = null
-    var getSavedPrayerJurisprudence = ""
-    var getMethod = ""
     var selectedPrayerDate = Date()
+    var selectedJurisprudenceFromDB =""
     var prayTimeArray = arrayListOf<PrayTime>()
-    private var method: CalculationParameters? = null
-    private var madhab: Madhab? = null
+    private lateinit var method: CalculationParameters
+    private lateinit  var madhab: Madhab
 
     init {
         viewModelScope.launch {
             userLatLong = getUserLatLong()
-            getSavedPrayerJurisprudence = getPrayerJurisprudence()
-            getMethod = getPrayerMethod()
-            getMethod()
+            val selectedMethodFromDB = getPrayerMethod()
+            selectedJurisprudenceFromDB = getPrayerJurisprudence()
+            madhab = getMadhab(selectedJurisprudenceFromDB)
+            method = getMethod(
+                selectedMethod = selectedMethodFromDB,
+                selectedJurisprudence = selectedJurisprudenceFromDB
+            )
+            getPrayList(userLatLong?.latitude?:0.0,userLatLong?.longitude?:0.0)
         }
+
     }
 
     fun getPrayerTime(lat: Double, long: Double): ArrayList<String> {
-        Log.d("latlong,", "lat${userLatLong?.latitude} long${userLatLong?.longitude}")
         return GetAdhanDetails.getPrayTime(
             lat,
             long,
-            method ?: CalculationMethod.NORTH_AMERICA.parameters.copy(
-                madhab = madhab ?: Madhab.HANAFI
-            ),
+            method,
             selectedPrayerDate
         )
 
     }
 
 
-    suspend fun getPrayList(lat: Double, long: Double) = viewModelScope.launch {
-        val getPrayerTime = GetAdhanDetails.getPrayTime(
-            lat,
-            long,
-            method ?: CalculationMethod.NORTH_AMERICA.parameters.copy(
-                madhab = madhab ?: Madhab.HANAFI
-            ),
-            selectedPrayerDate
-        )
+   suspend fun getPrayList(lat: Double, long: Double) {
+        val getPrayerTime =getPrayerTime(lat,long)
 
         prayTimeArray.add(
             PrayTime(
@@ -155,44 +148,19 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         }
     }
 
-    private fun formatDateWithCurrentTime(date: Date): String {
-        val calendar = Calendar.getInstance()
-        calendar.time = date
-
-        // Get the current time components
-        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
-        val currentMinute = calendar.get(Calendar.MINUTE)
-
-        // Set the current time to the date
-        calendar.set(Calendar.HOUR_OF_DAY, currentHour)
-        calendar.set(Calendar.MINUTE, currentMinute)
-
-        // Format the date with time
-        val dateFormat = SimpleDateFormat("dd MMM yyyy hh:mm a", Locale.getDefault())
-        return dateFormat.format(calendar.time)
-    }
 
     private fun getTimeDifferenceToNextPrayer(lat: Double, long: Double): PrayerTime {
-
-        madhab = if (!getSavedPrayerJurisprudence.isNullOrEmpty()) {
-            if (getSavedPrayerJurisprudence.toInt() == 1) {
-                Madhab.HANAFI
-            } else {
-                Madhab.SHAFI
-            }
-
-        } else {
-            Madhab.HANAFI
-        }
-
 
         val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
             lat,
             long,
-            method ?: CalculationMethod.NORTH_AMERICA.parameters.copy(
-                madhab = madhab ?: Madhab.HANAFI
-            )
+            method
         )
+
+        val getPrayerTime1 = getPrayerTime(lat,long)
+
+        Log.d("time midnight", getPrayerTime1[6])
+        Log.d("time midnight static", "1712083320000")
 
         val prayerTimeList = listOf(
             PrayerTime(
@@ -235,18 +203,22 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
         var previousPrayerTimeIndex = 0
         for (i in prayerTimeList.indices) {
             if (prayerTimeList[i].currentNamazTime > currentTimeMillis) {
-                if (prayerTimeList[i].currentNamazName == "Fajr") {
-                    previousPrayerTimeIndex = prayerTimeList.size - 1
-                    currentPrayerTimeIndex = i
-                    nextPrayerTimeIndex = i + 1
-                } else if (prayerTimeList[i].currentNamazName == "Isha") {
-                    previousPrayerTimeIndex = i - 1
-                    currentPrayerTimeIndex = i
-                    nextPrayerTimeIndex = 0
-                } else {
-                    previousPrayerTimeIndex = i - 1
-                    currentPrayerTimeIndex = i
-                    nextPrayerTimeIndex = i + 1
+                when (prayerTimeList[i].currentNamazName) {
+                    "Fajr" -> {
+                        previousPrayerTimeIndex = prayerTimeList.size - 1
+                        currentPrayerTimeIndex = i
+                        nextPrayerTimeIndex = i + 1
+                    }
+                    "Isha" -> {
+                        previousPrayerTimeIndex = i - 1
+                        currentPrayerTimeIndex = i
+                        nextPrayerTimeIndex = 0
+                    }
+                    else -> {
+                        previousPrayerTimeIndex = i - 1
+                        currentPrayerTimeIndex = i
+                        nextPrayerTimeIndex = i + 1
+                    }
                 }
                 break
             } else {
@@ -273,119 +245,5 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
             timeDifferenceMillis,
             totalDifferenceMillis
         )
-    }
-
-    private fun convertTimeToMillis(timeString: String): Long {
-        val currentDate = Date()
-        try {
-            // Parse the time string by combining it with the current date
-            val combinedDateTime = SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.getDefault())
-                .parse(
-                    "${
-                        SimpleDateFormat(
-                            "yyyy-MM-dd",
-                            Locale.getDefault()
-                        ).format(currentDate)
-                    } $timeString"
-                )
-
-            return combinedDateTime?.time ?: 0
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return 0
-    }
-
-    private fun convertAndGetCurrentTimeMillis(): Long {
-        return LocalDateTime.now()
-            .atZone(ZoneId.systemDefault())
-            .toInstant()
-            .toEpochMilli()
-    }
-
-
-    private fun getMethod() {
-        madhab = if (!getSavedPrayerJurisprudence.isNullOrEmpty()) {
-            if (getSavedPrayerJurisprudence.toInt() == 1) {
-                Madhab.HANAFI
-            } else {
-                Madhab.SHAFI
-            }
-        } else {
-            Madhab.HANAFI
-        }
-
-        if (!getMethod.isNullOrEmpty()) {
-            method = when (getMethod.toInt()) {
-                1 -> {
-                    CalculationMethod.MUSLIM_WORLD_LEAGUE.parameters.copy(
-                        madhab = madhab ?: Madhab.HANAFI
-                    )
-                }
-
-                0 -> {
-                    CalculationMethod.NORTH_AMERICA.parameters.copy(
-                        madhab = madhab ?: Madhab.HANAFI
-                    )
-                }
-
-                2 -> {
-                    CalculationMethod.MOON_SIGHTING_COMMITTEE.parameters.copy(
-                        madhab = madhab ?: Madhab.HANAFI
-                    )
-                }
-
-                3 -> {
-                    CalculationMethod.EGYPTIAN.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
-                }
-
-                4 -> {
-                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
-                }
-
-                5 -> {
-                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
-                }
-
-                6 -> {
-                    CalculationMethod.UMM_AL_QURA.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
-                }
-
-                8 -> {
-                    CalculationMethod.UMM_AL_QURA.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
-                }
-
-                9 -> {
-                    CalculationMethod.DUBAI.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
-                }
-
-                10 -> {
-                    CalculationMethod.KUWAIT.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
-                }
-
-                11 -> {
-                    CalculationMethod.SINGAPORE.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
-                }
-
-                12 -> {
-                    CalculationMethod.OTHER.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
-                }
-
-                13 -> {
-                    CalculationMethod.QATAR.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
-                }
-
-                14 -> {
-                    CalculationMethod.KARACHI.parameters.copy(madhab = madhab ?: Madhab.HANAFI)
-                }
-
-                else -> {
-                    CalculationMethod.NORTH_AMERICA.parameters.copy(
-                        madhab = madhab ?: Madhab.HANAFI
-                    )
-                }
-            }
-        }
     }
 }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +21,7 @@ import com.iw.android.prayerapp.databinding.FragmentTimeBinding
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.timeFragment.itemView.RowItemTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails
+import com.iw.android.prayerapp.utils.dateFormat.formattedDateForTimeScreen
 import com.iw.android.prayerapp.utils.map.MapDialog
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -52,7 +52,6 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener,
         })
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -79,13 +78,6 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener,
     override fun initialize() {
         setRecyclerView()
         setOnBackPressedListener()
-        lifecycleScope.launch {
-            viewModel.getPrayList(
-                viewModel.userLatLong?.latitude ?: 0.0,
-                viewModel.userLatLong?.longitude ?: 0.0
-            )
-        }
-
         currentLatitude = viewModel.userLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.userLatLong?.longitude ?: 0.0
 
@@ -95,19 +87,11 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener,
         )
         binding.textViewTitle.text = location?.city ?: "City"
 
-        binding.textViewDateTitle.text = getFormattedDate(dateOffset)
+        binding.textViewDateTitle.text = formattedDateForTimeScreen(dateOffset)
 
 
     }
-    private fun setOnBackPressedListener() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
 
-
-                }
-            })
-    }
     override fun setObserver() {
         viewTypeArray.clear()
         for (data in viewModel.prayTimeArray) {
@@ -183,11 +167,6 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener,
             }
 
             binding.monthlyClickView.id -> {
-//                Toast.makeText(
-//                    binding.monthlyClickView.context,
-//                    "Coming Soon",
-//                    Toast.LENGTH_SHORT
-//                ).show()
                 findNavController().navigate(TimeFragmentDirections.actionTimeFragmentToFragmentMonthlyCalender())
             }
 
@@ -207,33 +186,11 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener,
         }
     }
 
-
-    fun getFormattedDate(offset: Int): String {
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.DAY_OF_YEAR, offset)
-        val targetDate: Date = calendar.time
-        viewModel.selectedPrayerDate = targetDate
-        viewModel.prayTimeArray.clear()
-        lifecycleScope.launch {
-            viewModel.getPrayList(
-                viewModel.userLatLong?.latitude ?: 0.0,
-                viewModel.userLatLong?.longitude ?: 0.0
-            )
-        }
-
-
-        setObserver()
-
-        val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
-        return dateFormat.format(targetDate)
-    }
-
     private fun openLocationDialog() {
         val locationDialog = MapDialog()
         locationDialog.listener = this
         lifecycleScope.launch {
             locationDialog.recentLocationList = viewModel.getRecentLocationData()
-            Log.d("lsit", viewModel.getRecentLocationData().toString())
         }
         locationDialog.show(requireActivity().supportFragmentManager, "SoundDialogFragment")
     }
@@ -251,14 +208,37 @@ class TimeFragment : BaseFragment(R.layout.fragment_time), View.OnClickListener,
             data.long
         )
         binding.textViewTitle.text = location?.city ?: "City"
-
         binding.imageViewTitle.show()
         val duaArray: Array<String> = resources.getStringArray(R.array.methods)
-        binding.textViewTitleJuri.text =
-            duaArray[viewModel.getSavedPrayerJurisprudence.toInt()]
+        val position = if(viewModel.selectedJurisprudenceFromDB.isNullOrEmpty()) 0 else viewModel.selectedJurisprudenceFromDB.toInt()
+        binding.textViewTitleJuri.text = duaArray[position]
         binding.textViewTitleJuri.show()
-
         setObserver()
+    }
+
+    private fun getFormattedDate(offset: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, offset)
+        val targetDate: Date = calendar.time
+        viewModel.selectedPrayerDate = targetDate
+        viewModel.prayTimeArray.clear()
+        lifecycleScope.launch {
+            viewModel.getPrayList(
+                viewModel.userLatLong?.latitude ?: 0.0,
+                viewModel.userLatLong?.longitude ?: 0.0
+            )
+        }
+        setObserver()
+        val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
+        return dateFormat.format(targetDate)
+    }
+
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                }
+            })
     }
 
 }

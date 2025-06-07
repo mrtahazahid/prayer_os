@@ -71,7 +71,7 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener,
 
     override fun setObserver() {
         viewTypeArray.clear()
-        for (data in viewModel.moreList) {
+        for (data in viewModel.getMoreList()) {
             viewTypeArray.add(RowItemMore(data, this))
         }
         adapter.items = viewTypeArray

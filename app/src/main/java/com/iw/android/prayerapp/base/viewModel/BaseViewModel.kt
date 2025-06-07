@@ -15,21 +15,13 @@ import com.iw.android.prayerapp.data.response.UserLatLong
 import kotlinx.coroutines.launch
 
 
-abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
+abstract class BaseViewModel( val repository: BaseRepository) : ViewModel() {
 
 
-    suspend fun saveLoginUserId(userLoginId: String) = repository.saveLoginUserId(userLoginId)
-    suspend fun getLoginUserId() = repository.getLoginUserId()
+
 
     suspend fun savePrayerMethod(prayerMethod: String) = repository.savePrayerMethod(prayerMethod)
     suspend fun getPrayerMethod() = repository.getPrayerMethod()
-
-
-    suspend fun saveFloat(value: Float) = repository.saveFloat(value)
-    suspend fun getFloat() = repository.getFloat()
-
-    suspend fun setBoolean(value: Boolean) = repository.saveBoolean(value)
-    suspend fun getBoolean() = repository.getBoolean()
     suspend fun savePrayerElevation(prayerElevation: String) =
         repository.savePrayerElevationRule(prayerElevation)
 
@@ -38,8 +30,6 @@ abstract class BaseViewModel(val repository: BaseRepository) : ViewModel() {
         repository.savePrayerJurisprudence(prayerJurisprudence)
 
     suspend fun getPrayerJurisprudence() = repository.getPrayerJurisprudence()
-
-
 
     suspend fun saveUserLatLong(userLatLong: UserLatLong) {
         repository.saveUserLatLong(userLatLong)

@@ -1,10 +1,15 @@
 package com.iw.android.prayerapp.ui.main.timeFragment.itemView
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ValueAnimator
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TimePicker
@@ -153,72 +158,28 @@ class RowItemTime(
             }
 
             _binding.mainView.id -> {
-                if (!isViewShow) {
-                    _binding.imageViewDropDownMenu.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            _binding.textViewTime.context,
-                            R.drawable.ic_down
-                        )
-                    )
-                    _binding.detailViews.visibility = View.VISIBLE
+                isViewShow = if (!isViewShow) {
+                    _binding.imageViewDropDownMenu.animate().rotation(90f).setDuration(300).start()
+                    toggleDropDown(_binding.detailViews, true)
                     recyclerView.smoothScrollToPosition(0)
-                    _binding.textViewTime.setTextColor(
-                        ContextCompat.getColorStateList(
-                            _binding.textViewTime.context,
-                            R.color.yellow_text
-                        )
-                    )
-                    isViewShow = true
+                    true
                 } else {
-                    _binding.detailViews.visibility = View.GONE
-                    _binding.imageViewDropDownMenu.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            _binding.textViewTime.context,
-                            R.drawable.ic_forward
-                        )
-                    )
-                    _binding.textViewTime.setTextColor(
-                        ContextCompat.getColorStateList(
-                            _binding.textViewTime.context,
-                            R.color.white
-                        )
-                    )
-                    isViewShow = false
+                    toggleDropDown(_binding.detailViews, false)
+                    _binding.imageViewDropDownMenu.animate().rotation(0f).setDuration(300).start()
+                    false
                 }
             }
 
             _binding.imageViewDropDownMenu.id -> {
-                if (!isViewShow) {
-                    _binding.imageViewDropDownMenu.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            _binding.textViewTime.context,
-                            R.drawable.ic_down
-                        )
-                    )
-                    _binding.detailViews.visibility = View.VISIBLE
+                isViewShow = if (!isViewShow) {
+                    _binding.imageViewDropDownMenu.animate().rotation(90f).setDuration(300).start()
+                    toggleDropDown(_binding.detailViews, true)
                     recyclerView.smoothScrollToPosition(0)
-                    _binding.textViewTime.setTextColor(
-                        ContextCompat.getColorStateList(
-                            _binding.textViewTime.context,
-                            R.color.yellow_text
-                        )
-                    )
-                    isViewShow = true
+                    true
                 } else {
-                    _binding.detailViews.visibility = View.GONE
-                    _binding.imageViewDropDownMenu.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            _binding.textViewTime.context,
-                            R.drawable.ic_forward
-                        )
-                    )
-                    _binding.textViewTime.setTextColor(
-                        ContextCompat.getColorStateList(
-                            _binding.textViewTime.context,
-                            R.color.white
-                        )
-                    )
-                    isViewShow = false
+                    toggleDropDown(_binding.detailViews, false)
+                    _binding.imageViewDropDownMenu.animate().rotation(0f).setDuration(300).start()
+                    false
                 }
             }
 
@@ -316,6 +277,45 @@ class RowItemTime(
                 openSoundDialogFragment(data.title, false)
             }
         }
+    }
+
+   private fun toggleDropDown(
+        view: View,
+        expand: Boolean,
+        duration: Long = 300L
+    ) {
+        val initialHeight = if (expand) 0 else view.measuredHeight
+
+        if (expand) {
+            view.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        }
+
+        val targetHeight = if (expand) view.measuredHeight else 0
+
+        if (expand) {
+            view.layoutParams.height = 0
+            view.visibility = View.VISIBLE
+        }
+
+        val animator = ValueAnimator.ofInt(initialHeight, targetHeight)
+        animator.addUpdateListener {
+            val value = it.animatedValue as Int
+            view.layoutParams.height = value
+            view.requestLayout()
+        }
+
+        animator.duration = duration
+        animator.interpolator = AccelerateDecelerateInterpolator()  // SAME interpolator for open & close
+
+        if (!expand) {
+            animator.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.visibility = View.GONE
+                }
+            })
+        }
+
+        animator.start()
     }
 
     private fun initialize() {
@@ -419,11 +419,11 @@ class RowItemTime(
     }
 
     fun extractNumberFromString(input: String): Int {
-        return if(input.isNullOrEmpty() || input =="off"){
+        return if (input.isNullOrEmpty() || input == "off") {
             0
-        }else{
+        } else {
             val regex = "\\d+".toRegex()  // Find one or more digits
-           regex.find(input)?.value?.toInt()?:0
+            regex.find(input)?.value?.toInt() ?: 0
         }
 
     }
@@ -454,7 +454,7 @@ class RowItemTime(
             secondReminderTime = prayerDetailData?.secondReminderTime ?: "",
             duaReminderMinutes = "off",
             duaTime = "",
-            duaType =  "off",
+            duaType = "off",
             createdDate = getCurrentDate(),
         )
 
@@ -480,7 +480,7 @@ class RowItemTime(
             reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
             reminderTime = prayerDetailData?.reminderTime ?: "",
             secondReminderTimeMinutes = "off",
-            secondReminderTime =  "off",
+            secondReminderTime = "off",
             duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
             duaTime = prayerDetailData?.duaTime ?: "",
             duaType = prayerDetailData?.duaType ?: "off",
@@ -509,9 +509,9 @@ class RowItemTime(
             reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
             reminderTime = prayerDetailData?.reminderTime ?: "",
             secondReminderTimeMinutes = "off",
-            secondReminderTime =  "",
+            secondReminderTime = "",
             duaReminderMinutes = "off",
-            duaTime =  "",
+            duaTime = "",
             duaType = "off",
             createdDate = getCurrentDate(),
         )
@@ -723,7 +723,7 @@ class RowItemTime(
             val resultTime = parsedTime.minusMinutes(minutesToSubtract.toLong())
             resultTime.format(formatter)
         } catch (e: DateTimeParseException) {
-            Log.d("DateTimeParseException",e.message.toString())
+            Log.d("DateTimeParseException", e.message.toString())
             currentTime
         }
     }
@@ -736,7 +736,7 @@ class RowItemTime(
             val resultTime = parsedTime.plusMinutes(minutesToAdd.toLong())
             resultTime.format(formatter)
         } catch (e: DateTimeParseException) {
-            Log.d("DateTimeParseException",e.message.toString())
+            Log.d("DateTimeParseException", e.message.toString())
             currentTime
         }
     }
