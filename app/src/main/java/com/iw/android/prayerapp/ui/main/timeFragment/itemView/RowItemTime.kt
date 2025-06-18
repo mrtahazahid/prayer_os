@@ -1,15 +1,10 @@
 package com.iw.android.prayerapp.ui.main.timeFragment.itemView
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ValueAnimator
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TimePicker
@@ -27,6 +22,8 @@ import com.iw.android.prayerapp.databinding.RowItemPrayTimeBinding
 import com.iw.android.prayerapp.extension.CustomDialog
 import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
 import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
+import com.iw.android.prayerapp.utils.anim.hideDetailView
+import com.iw.android.prayerapp.utils.anim.showDetailView
 import com.iw.android.prayerapp.utils.sound.SoundDataPass
 import com.iw.android.prayerapp.utils.sound.SoundSelectionDialog
 import java.text.SimpleDateFormat
@@ -159,26 +156,23 @@ class RowItemTime(
 
             _binding.mainView.id -> {
                 isViewShow = if (!isViewShow) {
-                    _binding.imageViewDropDownMenu.animate().rotation(90f).setDuration(300).start()
-                    toggleDropDown(_binding.detailViews, true)
+                    showDetailView(_binding.detailViews,_binding.imageViewDropDownMenu)
+                    //toggleDropDown(_binding.detailViews, true)
                     recyclerView.smoothScrollToPosition(0)
                     true
                 } else {
-                    toggleDropDown(_binding.detailViews, false)
-                    _binding.imageViewDropDownMenu.animate().rotation(0f).setDuration(300).start()
+                    hideDetailView(_binding.detailViews,_binding.imageViewDropDownMenu)
                     false
                 }
             }
 
             _binding.imageViewDropDownMenu.id -> {
                 isViewShow = if (!isViewShow) {
-                    _binding.imageViewDropDownMenu.animate().rotation(90f).setDuration(300).start()
-                    toggleDropDown(_binding.detailViews, true)
+                    showDetailView(_binding.detailViews,_binding.imageViewDropDownMenu)
                     recyclerView.smoothScrollToPosition(0)
                     true
                 } else {
-                    toggleDropDown(_binding.detailViews, false)
-                    _binding.imageViewDropDownMenu.animate().rotation(0f).setDuration(300).start()
+                    hideDetailView(_binding.detailViews,_binding.imageViewDropDownMenu)
                     false
                 }
             }
@@ -277,45 +271,6 @@ class RowItemTime(
                 openSoundDialogFragment(data.title, false)
             }
         }
-    }
-
-   private fun toggleDropDown(
-        view: View,
-        expand: Boolean,
-        duration: Long = 300L
-    ) {
-        val initialHeight = if (expand) 0 else view.measuredHeight
-
-        if (expand) {
-            view.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        }
-
-        val targetHeight = if (expand) view.measuredHeight else 0
-
-        if (expand) {
-            view.layoutParams.height = 0
-            view.visibility = View.VISIBLE
-        }
-
-        val animator = ValueAnimator.ofInt(initialHeight, targetHeight)
-        animator.addUpdateListener {
-            val value = it.animatedValue as Int
-            view.layoutParams.height = value
-            view.requestLayout()
-        }
-
-        animator.duration = duration
-        animator.interpolator = AccelerateDecelerateInterpolator()  // SAME interpolator for open & close
-
-        if (!expand) {
-            animator.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    view.visibility = View.GONE
-                }
-            })
-        }
-
-        animator.start()
     }
 
     private fun initialize() {

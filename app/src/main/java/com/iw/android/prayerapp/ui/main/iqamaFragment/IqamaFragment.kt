@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TimePicker
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -31,17 +32,23 @@ import com.iw.android.prayerapp.ui.main.iqamaFragment.itemView.RowItemIqama
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.ui.main.soundFragment.SoundDialog
 import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
+import com.iw.android.prayerapp.utils.anim.hideDetailView
+import com.iw.android.prayerapp.utils.anim.showDetailView
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.util.Calendar
+import java.util.Locale
 
 class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListener, OnDataSelected {
 
     private var _binding: FragmentIqamaBinding? = null
     val binding
         get() = _binding!!
+
+    private var soundDialog: SoundDialog?=null
 
     private val viewModel: IqamaViewModel by viewModels()
     private var viewTypeArray = ArrayList<ViewType<*>>()
@@ -84,6 +91,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        soundDialog = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -94,6 +102,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
     }
 
     override fun initialize() {
+        setOnBackPressedListener()
         setRecyclerView()
         spinnerUpdateInterval()
         if (binding.switchEnabled.isChecked) {
@@ -112,7 +121,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
                 khutbaTime = it?.khutbaTime ?: "12:00 AM"
                 reminderTime = it?.reminderTime ?: "off"
                 isEnabled = it?.isEnabled ?: false
-
+                isJummuahDetailShow = true
                 if (it?.isEnabled == true) {
                     binding.jummahDetail.show()
                     binding.textViewNone.gone()
@@ -121,16 +130,16 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
                     binding.textViewSetTime.text = it.reminderTime
                     binding.switchEnabled.isChecked = it.isEnabled
                     binding.textViewType.gone()
-                    binding.imageViewJumuah.setImageResource(R.drawable.ic_drop_down)
+                    binding.imageViewJumuah.animate().rotation(90f).setDuration(300).start()
                     if (reminderTime != "off" && !reminderTime.isNullOrBlank()) {
                         khutbaReminderTime = extractMinutes(it.reminderTime)
 
                     }
                 } else {
-
+                    isJummuahDetailShow = false
                     binding.jummahDetail.gone()
                     binding.textViewType.show()
-                    binding.imageViewJumuah.setImageResource(R.drawable.ic_forward)
+                    binding.imageViewJumuah.animate().rotation(0f).setDuration(300).start()
                 }
             }
 
@@ -178,6 +187,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
         binding.imageViewDisplay.setOnClickListener(this)
         binding.imageViewAdd.setOnClickListener(this)
         binding.imageViewRemove.setOnClickListener(this)
+        binding.imageViewReminderDropDownMenu.setOnClickListener(this)
         binding.imageViewNotificationAdd.setOnClickListener(this)
         binding.imageViewNotificationRemove.setOnClickListener(this)
         binding.imageViewNotification.setOnClickListener(this)
@@ -272,7 +282,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
                 ).show()
             }
 
-            binding.textViewNotificationReminderSound.id -> {
+            binding.imageViewReminderDropDownMenu.id, binding.textViewNotificationReminderSound.id -> {
                 openSoundDialogFragment()
             }
 
@@ -354,15 +364,13 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
 
             binding.jummahView.id, binding.imageViewJumuah.id -> {
                 if (!isJummuahDetailShow) {
-                    binding.jummahDetail.show()
+                    showDetailView(binding.jummahDetail,binding.imageViewJumuah)
                     binding.textViewType.gone()
                     isJummuahDetailShow = true
-                    binding.imageViewJumuah.setImageResource(R.drawable.ic_drop_down)
                 } else {
-                    binding.jummahDetail.gone()
+                    hideDetailView(binding.jummahDetail,binding.imageViewJumuah)
                     binding.textViewType.show()
                     isJummuahDetailShow = false
-                    binding.imageViewJumuah.setImageResource(R.drawable.ic_forward)
                 }
                 if (binding.switchEnabled.isChecked) {
                     binding.textViewType.gone()
@@ -378,25 +386,22 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
 
             binding.displayView.id, binding.imageViewDisplay.id -> {
                 if (!isDisplayDetailShow) {
-                    binding.displayDetailView.show()
+                    showDetailView(binding.displayDetailView,binding.imageViewDisplay)
                     isDisplayDetailShow = true
-                    binding.imageViewDisplay.setImageResource(R.drawable.ic_drop_down)
                 } else {
-                    binding.displayDetailView.gone()
+                    hideDetailView(binding.displayDetailView,binding.imageViewDisplay)
                     isDisplayDetailShow = false
-                    binding.imageViewDisplay.setImageResource(R.drawable.ic_forward)
                 }
             }
 
             binding.notificationView.id, binding.imageViewNotification.id -> {
                 if (!isNotificationDetailShow) {
                     binding.detailViews.show()
+                    showDetailView(binding.detailViews,binding.imageViewNotification)
                     isNotificationDetailShow = true
-                    binding.imageViewNotification.setImageResource(R.drawable.ic_drop_down)
                 } else {
-                    binding.detailViews.gone()
+                    hideDetailView(binding.detailViews,binding.imageViewNotification)
                     isNotificationDetailShow = false
-                    binding.imageViewNotification.setImageResource(R.drawable.ic_forward)
                 }
             }
 
@@ -604,12 +609,12 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
     }
 
     private fun openSoundDialogFragment() {
-        val soundDialog = SoundDialog()
-        soundDialog.listener = this
-        soundDialog.title = "Reminder Sound"
-        soundDialog.subTitle = "Setting"
-        soundDialog.isForNotification = false
-        soundDialog.show(childFragmentManager, "SoundDialogFragment")
+         soundDialog = SoundDialog()
+        soundDialog?.listener = this
+        soundDialog?.title = "Reminder Sound"
+        soundDialog?.subTitle = "Setting"
+        soundDialog?.isForNotification = false
+        soundDialog?.show(childFragmentManager, "SoundDialogFragment")
     }
 
     override fun onDataPassed(
@@ -621,18 +626,53 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
         binding.textViewNotificationReminderSound.text = soundName
         this.soundName = soundName
         notificationReminderSound = sound ?: 0
+        soundDialog = null
         saveNotificationSetting()
     }
 
-    private fun subtractMinutesFromTime(currentTime: String, minutesToSubtract: Int): String {
-        // Parse the current time string
-        val formatter = DateTimeFormatter.ofPattern("h:mm a")
-        val parsedTime = LocalTime.parse(currentTime, formatter)
 
-        // Subtract minutes from the parsed time
-        val resultTime = parsedTime.minusMinutes(minutesToSubtract.toLong())
+    override fun onPause() {
+        super.onPause()
+        soundDialog?.dismiss()
+    }
 
-        // Format the result time back to "h:mm a" format
-        return resultTime.format(formatter)
+//    private fun subtractMinutesFromTime(currentTime: String, minutesToSubtract: Int): String {
+//        if (currentTime.isNullOrEmpty()) return ""
+//        // Parse the current time string
+//        val formatter = DateTimeFormatter.ofPattern("h:mm a")
+//        val parsedTime = LocalTime.parse(currentTime, formatter)
+//
+//        // Subtract minutes from the parsed time
+//        val resultTime = parsedTime.minusMinutes(minutesToSubtract.toLong())
+//
+//        // Format the result time back to "h:mm a" format
+//        return resultTime.format(formatter)
+//    }
+
+    private fun subtractMinutesFromTime(currentTime: String?, minutesToSubtract: Int): String {
+        if (currentTime.isNullOrBlank()) return ""
+
+        return try {
+            val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
+            val parsedTime = LocalTime.parse(currentTime.trim(), formatter) // trim extra spaces
+            val resultTime = parsedTime.minusMinutes(minutesToSubtract.toLong())
+            resultTime.format(formatter)
+        } catch (e: DateTimeParseException) {
+            "" // return blank if input is invalid
+        }
+    }
+
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (soundDialog !=null){
+                        soundDialog?.dismiss()
+                    }else{
+                        findNavController().popBackStack()
+                    }
+
+                }
+            })
     }
 }

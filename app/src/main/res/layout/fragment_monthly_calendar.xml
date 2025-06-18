@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="20dp"
-                android:paddingStart="20dp"
+                android:paddingStart="15dp"
                 android:src="@drawable/ic_back"
 
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +42,7 @@
                 android:gravity="start"
                 android:text="Times"
                 android:textColor="@color/app_green"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toEndOf="@+id/imageViewBack"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -55,7 +55,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/sf_bold"
                 android:gravity="center"
-                android:text="Monthly\n/ 2024/ 1446"
+                android:text="Monthly"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"

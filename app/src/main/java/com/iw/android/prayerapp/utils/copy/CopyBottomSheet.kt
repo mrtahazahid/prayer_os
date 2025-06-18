@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -24,6 +26,7 @@ class CopyBottomSheet :
     private var bottomSheetBehavior: BottomSheetBehavior<*>? = null
 
     var soundName: String = "Adhan"
+    var lifecycleOwner:LifecycleOwner?=null
     var soundAdhan: Int = R.raw.adhan_abdul_basit_short
     var soundTones: Int = R.raw.adhan_abdul_basit_short
     var isForAdhan: Boolean = false
@@ -93,7 +96,7 @@ class CopyBottomSheet :
 
     }
 
-    private fun copy() = lifecycleScope.launch {
+    private fun copy() = lifecycleOwner?.lifecycleScope?.launch {
         if (viewModel.getFajrDetail() != null) {
             val fajrData = viewModel.getFajrDetail()
             if (isForNotification) {
@@ -588,7 +591,11 @@ class CopyBottomSheet :
         }
 
         delay(5000)
-        dismiss()
+        if (isAdded && !requireActivity().isFinishing && lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+            dismiss()
+        } else {
+            dismissAllowingStateLoss()
+        }
     }
 
 }

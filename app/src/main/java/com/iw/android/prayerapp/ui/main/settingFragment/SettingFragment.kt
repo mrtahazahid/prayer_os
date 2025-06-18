@@ -39,6 +39,8 @@ import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
 import com.iw.android.prayerapp.utils.GetAdhanDetails.getTimeZoneAndCity
 import com.iw.android.prayerapp.utils.LocationPermissionTextProvider
+import com.iw.android.prayerapp.utils.anim.hideDetailView
+import com.iw.android.prayerapp.utils.anim.showDetailView
 import com.iw.android.prayerapp.utils.asset.AssetDialog
 import com.iw.android.prayerapp.utils.getCurrentLocationSuspend
 import com.iw.android.prayerapp.utils.map.MapDialog
@@ -497,26 +499,22 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             }
 
             binding.imageViewSystem.id, binding.systemView.id -> {
-                if (!isSystemShow) {
-                    binding.imageViewSystem.setImageResource(R.drawable.ic_down)
-                    binding.systemDetailViews.visibility = View.VISIBLE
-                    isSystemShow = true
+                isSystemShow = if (!isSystemShow) {
+                    showDetailView(binding.systemDetailViews,binding.imageViewSystem)
+                    true
                 } else {
-                    binding.imageViewSystem.setImageResource(R.drawable.ic_forward)
-                    binding.systemDetailViews.visibility = View.GONE
-                    isSystemShow = false
+                    hideDetailView(binding.systemDetailViews,binding.imageViewSystem)
+                    false
                 }
             }
 
             binding.imageViewApp.id, binding.appView.id -> {
-                if (!isAppShow) {
-                    binding.imageViewApp.setImageResource(R.drawable.ic_down)
-                    binding.appDetailViews.visibility = View.VISIBLE
-                    isAppShow = true
+                isAppShow = if (!isAppShow) {
+                    showDetailView(binding.appDetailViews,binding.imageViewApp)
+                    true
                 } else {
-                    binding.imageViewApp.setImageResource(R.drawable.ic_forward)
-                    binding.appDetailViews.visibility = View.GONE
-                    isAppShow = false
+                    hideDetailView(binding.appDetailViews,binding.imageViewApp)
+                    false
                 }
             }
 

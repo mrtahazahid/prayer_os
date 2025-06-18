@@ -55,6 +55,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewReset"
                 android:layout_width="wrap_content"
@@ -166,15 +167,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
+
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/textViewMonthCalender"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="15dp"
-                            android:fontFamily="@font/sf_bold"
+                            android:drawablePadding="4dp"
+                            android:fontFamily="@font/sf_regular"
                             android:text="Jumuah"
                             android:textColor="@color/white"
-                            android:textSize="14sp"
+                            android:textSize="16sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -186,14 +189,18 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageViewJumuah"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="15dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="5dp"
+                            android:padding="6dp"
                             android:src="@drawable/ic_forward"
+                            android:tint="@color/small_icon"
+                            app:layout_constraintBottom_toBottomOf="@+id/textViewMonthCalender"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="@+id/textViewMonthCalender" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/textViewType"
@@ -361,7 +368,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="10dp"
                                 android:layout_marginTop="10dp"
-                                android:layout_marginEnd="5dp"
+                                android:layout_marginEnd="-5dp"
                                 android:scaleX="0.8"
                                 android:checked="false"
                                 android:scaleY="0.8"
@@ -465,18 +472,22 @@
                             android:fontFamily="@font/sf_regular"
                             android:text="Notifications"
                             android:textColor="@color/white"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageViewNotification"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="20dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="5dp"
+                            android:padding="6dp"
                             android:src="@drawable/ic_forward"
+                            android:tint="@color/small_icon"
+                            app:layout_constraintBottom_toBottomOf="@+id/textViewNotification"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="@+id/textViewNotification" />
 
                         <View
                             android:id="@+id/viewNotification"
@@ -492,7 +503,6 @@
                             android:id="@+id/detailViews"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="#2c2c2e"
                             android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -526,23 +536,35 @@
                                 app:layout_constraintStart_toEndOf="@id/textViewReminderSoundTitle"
                                 app:layout_constraintTop_toTopOf="@id/textViewReminderSoundTitle" />
 
+
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textViewNotificationReminderSound"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="8dp"
-                                android:drawableEnd="@drawable/ic_forward"
-                                android:drawablePadding="4dp"
                                 android:fontFamily="@font/sf_regular"
                                 android:gravity="end"
-                                android:paddingVertical="15dp"
+                                android:maxLines="1"
+                                android:ellipsize="end"
                                 android:textColor="@color/app_grey"
                                 android:textSize="14sp"
                                 app:drawableTint="@color/app_grey"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/textViewReminderSoundTitle"
-                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="@+id/textViewReminderSoundTitle"
+                                app:layout_constraintEnd_toStartOf="@+id/imageViewReminderDropDownMenu"
+                                app:layout_constraintStart_toEndOf="@+id/imageViewSoundHelp"
+                                app:layout_constraintTop_toTopOf="@+id/textViewReminderSoundTitle"
                                 tools:text="Tone" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewReminderDropDownMenu"
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:layout_marginEnd="15dp"
+                                android:src="@drawable/ic_forward"
+                                app:tint="@color/app_grey"
+                                app:layout_constraintBottom_toBottomOf="@+id/textViewNotificationReminderSound"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/textViewNotificationReminderSound" />
 
                             <View
                                 android:id="@+id/view1"
@@ -710,7 +732,7 @@
                             android:fontFamily="@font/sf_regular"
                             android:text="Display"
                             android:textColor="@color/white"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/detailViews" />
 
@@ -725,12 +747,15 @@
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageViewDisplay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="20dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="5dp"
+                            android:padding="6dp"
                             android:src="@drawable/ic_forward"
+                            android:tint="@color/small_icon"
+                            app:layout_constraintBottom_toBottomOf="@+id/textViewDisplay"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/detailViews" />
+                            app:layout_constraintTop_toTopOf="@+id/textViewDisplay" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/displayDetailView"

@@ -52,19 +52,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/assalam_o_alekum" />
 
-    <ImageView
-        android:id="@+id/center_image"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="@dimen/_280sdp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:paddingStart="20dp"
-        android:contentDescription="@string/center_image"
-        android:layout_marginBottom="100dp"
-        android:src="@drawable/third_screen"
+        android:layout_marginVertical="@dimen/_15sdp"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sub_heading" />
+        app:layout_constraintTop_toBottomOf="@id/sub_heading" >
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/center_image"
+            android:layout_width="@dimen/_280sdp"
+            android:layout_height="match_parent"
+            android:paddingStart="20dp"
+            android:contentDescription="@string/center_image"
+            android:src="@drawable/third_screen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <TextView
         android:id="@+id/textView"

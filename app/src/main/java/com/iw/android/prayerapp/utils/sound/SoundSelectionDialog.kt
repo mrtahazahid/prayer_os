@@ -140,7 +140,8 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                 isItemSelected = false
             )
         )
-        prayerSoundList[selectedItemPosition].isItemSelected = true
+        val selectedPosition = if (selectedItemPosition == prayerSoundList.size) selectedItemPosition-- else  selectedItemPosition
+        prayerSoundList[selectedPosition].isItemSelected = true
     }
 
     private fun setObserver() {

@@ -301,6 +301,7 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                 bottomSheet.soundName = selectedSoundAdhanName
                 bottomSheet.soundAdhan = soundAdhan ?: R.raw.adhan_abdul_basit_short
                 bottomSheet.soundTones = soundTones ?: R.raw.adhan_abdul_basit_short
+                bottomSheet.lifecycleOwner = viewLifecycleOwner
 
                 bottomSheet.isSilent = isSilentSelected
                 bottomSheet.isForAdhan = isForAdhan

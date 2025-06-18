@@ -1,5 +1,6 @@
 package com.iw.android.prayerapp.ui.main.notificationList.itemView
 
+import android.util.Log
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import com.iw.android.prayerapp.R
@@ -7,6 +8,7 @@ import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.databinding.RowItemNotificationListBinding
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -53,16 +55,24 @@ class RowItemNotificationList(private val data: NotificationData) : ViewType<Not
         }
     }
 
-    fun formatDate(inputDate: String,position: Int): String {
-        return if(inputDate == ""){
-            ""
-        }else{
+    fun formatDate(inputDate: String, position: Int): String {
+        if (inputDate.isBlank()) return ""
+
+        return try {
             val inputFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
             val outputFormat = SimpleDateFormat("dd MMMM", Locale.getDefault())
 
             val date = inputFormat.parse(inputDate)
-            outputFormat.format(date)
+            if (date != null) {
+                outputFormat.format(date)
+            } else {
+                "" // handle null date
+            }
+        } catch (e: ParseException) {
+            // Optional: log the error to debug invalid input
+            Log.e("formatDate", "Failed to parse date: $inputDate", e)
+            ""
         }
-
     }
+
 }

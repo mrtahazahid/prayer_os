@@ -102,7 +102,7 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
 
     override fun setOnClickListener() {
         binding.btnEnableNotification.setOnClickListener {
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 try {
                     binding.progress.show()
                     val location = fusedClient.getCurrentLocationSuspend()

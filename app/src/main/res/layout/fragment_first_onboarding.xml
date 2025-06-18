@@ -63,7 +63,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/assalam_o_alekum" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/center_image"
         android:layout_width="@dimen/_180sdp"
         android:layout_height="0dp"
