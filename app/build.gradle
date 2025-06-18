@@ -18,8 +18,8 @@ android {
         applicationId "com.iw.android.prayerapp"
         minSdk 26
         targetSdk 34
-        versionCode 10
-        versionName "1.3"
+        versionCode 12
+        versionName "1.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
