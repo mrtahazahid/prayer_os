@@ -15,6 +15,7 @@ import com.batoulapps.adhan2.CalculationMethod
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
+import com.iw.android.prayerapp.data.response.LocationData
 import com.iw.android.prayerapp.databinding.FragmentFourthOnboardingBinding
 import com.iw.android.prayerapp.extension.CustomDialog
 import com.iw.android.prayerapp.extension.MethodDialog
@@ -39,6 +40,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     private var isMethodSelected = false
     private var isJurisprudenceSelected = false
     private var isElevationSelected = false
+    private var location: LocationData? = null
 
 
     override fun onCreateView(
@@ -58,6 +60,9 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
     }
 
     override fun initialize() {
+        lifecycleScope.launch {
+            location = GetAdhanDetails.getTimeZoneAndCity(requireContext(), lat, long)
+        }
         val args = arguments
         lat = args?.getDouble("lat") ?: 0.0
         long = args?.getDouble("long") ?: 0.0
@@ -120,7 +125,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
 
 
         binding.txtMethod.setOnClickListener {
-            val location = GetAdhanDetails.getTimeZoneAndCity(requireContext(), lat, long)
+
 
             MethodDialog(
                 requireContext(),
@@ -272,6 +277,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
             }
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -294,7 +300,7 @@ class FourthOnboarding : BaseFragment(R.layout.fragment_fourth_onboarding) {
         binding.textViewIshaTime.text = formatTime(getPrayerTime[5])
     }
 
-    private  fun formatTime(time: String): String {
+    private fun formatTime(time: String): String {
         val inputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
         val outputFormat = SimpleDateFormat("h:mm", Locale.getDefault())
         val date: Date = inputFormat.parse(time) ?: return time

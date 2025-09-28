@@ -27,6 +27,11 @@
     <string name="prayer_time">Prayer time!</string>
     <string name="warning_string"><b>Your device does not support compass functionality.</b>\n This means the Qibla direction cannot be determined using your device’s internal sensors. You can still use other features of the app, but to view the Qibla direction accurately, a device with a magnetic compass sensor is required.</string>
     <string name="warning">Warning!</string>
+    <string name="monthly">Monthly</string>
+    <string name="file_path">android/res/raw/</string>
+    <string name="silent">Silent</string>
+    <string name="vibrate">Vibrate</string>
+    <string name="off">Off</string>
 
     <string-array name="elevation">
         <item>Automatic</item>
@@ -57,21 +62,21 @@
 
 
     <string-array name="methods">
-        <item>Islamic Society of N. America (ISNA)</item>
-        <item>Muslim World League</item>
-        <item>Moonsighting Committee</item>
-        <item>Egyptian General Authority of Survey</item>
-        <item>Algerian Ministry of Awqaf and Religious Affairs</item>
-        <item>Tunisian Ministry of Religious Affairs</item>
-        <item>London Unified Prayer Timetable</item>
-        <item>Umm Al-Quran University</item>
-        <item>Umm Al-Qura University, Makkah</item>
-        <item>Authority of Dubai - UAE</item>
-        <item>Authority of Kuwait</item>
-        <item>Authority of Indonesia, Malaysia, Singapore</item>
-        <item></item>
-        <item>Authority of Qatar</item>
-        <item>Univ. of Islamic Sciences, Karachi</item>
+        <item>Islamic Society of N. America (ISNA)</item>//0
+        <item>Muslim World League</item>//1
+        <item>Moonsighting Committee</item>//2
+        <item>Egyptian General Authority of Survey</item> //3
+        <item>Algerian Ministry of Awqaf and Religious Affairs</item> //4 //other
+        <item>Tunisian Ministry of Religious Affairs</item> //other //5
+        <item>London Unified Prayer Timetable</item> //6
+        <item>Umm Al-Quran University</item> //7
+        <item>Umm Al-Qura University, Makkah</item> //8
+        <item>Authority of Dubai - UAE</item> //9
+        <item>Authority of Kuwait</item> //10
+        <item>Authority of Indonesia, Malaysia, Singapore</item> //11
+        <item>Authority of Qatar</item> //12
+        <item>Univ. of Islamic Sciences, Karachi</item> //13
+        <item>Moroccan Ministry of Awqaf and Islamic Affairs</item> //14
     </string-array>
 
 </resources>

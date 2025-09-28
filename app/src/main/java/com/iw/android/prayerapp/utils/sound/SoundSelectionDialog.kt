@@ -1,9 +1,16 @@
 package com.iw.android.prayerapp.utils.sound
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -14,11 +21,14 @@ import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
 import com.iw.android.prayerapp.data.response.PrayerSoundData
 import com.iw.android.prayerapp.databinding.SoundSelectionDialogBinding
+import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.PrayerEnumType
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.SoundViewModel
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.OnClick
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.RowItemPrayerSound
+import com.iw.android.prayerapp.utils.Helper.updateHeight
 import com.iw.android.prayerapp.utils.copy.CopyBottomSheet
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -87,6 +97,17 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= 35) {
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+            ViewCompat.setOnApplyWindowInsetsListener(binding.mainView) { v: View, insets: WindowInsetsCompat ->
+                val systemBars: Insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(0, systemBars.top, 0, systemBars.bottom)
+                insets
+            }
+        }
+
+        setStatusBarWithBlackIcon(R.color.black)
         initialize()
         setObserver()
         setOnClickListener()
@@ -239,34 +260,65 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
         }
         selectedItemPosition = position
         isDataForSave = true
-        when (position) {
-            2 -> {
-                isVibrateSelected = true
-                isSoundSelected = false
-                isSilentSelected = false
-                isOffSelected = false
-            }
-
-            3 -> {
-                isSilentSelected = true
-                isSoundSelected = false
-                isVibrateSelected = false
-                isOffSelected = false
-            }
-
-            4 -> {
-
-                isOffSelected = true
-                isSoundSelected = false
-                isVibrateSelected = false
-                isSilentSelected = false
-            }
-        }
+        checkPosition(position)
         // Select the clicked item
         prayerSoundList[position].isItemSelected = true
         // Notify the adapter about the change in the entire dataset
         adapter.notifyDataSetChanged()
     }
+
+    private fun checkPosition(position:Int){
+        if (isForNotification){
+            when (position) {
+                2 -> {
+                    isVibrateSelected = true
+                    isSoundSelected = false
+                    isSilentSelected = false
+                    isOffSelected = false
+                }
+
+                3 -> {
+                    isSilentSelected = true
+                    isSoundSelected = false
+                    isVibrateSelected = false
+                    isOffSelected = false
+                }
+
+                4 -> {
+
+                    isOffSelected = true
+                    isSoundSelected = false
+                    isVibrateSelected = false
+                    isSilentSelected = false
+                }
+            }
+        }else{
+            when (position) {
+                1 -> {
+                    isVibrateSelected = true
+                    isSoundSelected = false
+                    isSilentSelected = false
+                    isOffSelected = false
+                }
+
+                2 -> {
+                    isSilentSelected = true
+                    isSoundSelected = false
+                    isVibrateSelected = false
+                    isOffSelected = false
+                }
+
+                3 -> {
+
+                    isOffSelected = true
+                    isSoundSelected = false
+                    isVibrateSelected = false
+                    isSilentSelected = false
+                }
+            }
+        }
+    }
+
 
     override fun onSoundSelected(
         soundName: String,
@@ -322,8 +374,8 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
 
     }
 
-    private fun setData() {
-        lifecycleScope.launch {
+    private fun setData() =lifecycleScope.launch(Dispatchers.IO) {
+
             if (isForNotification) {
                 when (namazName) {
                     "Fajr" -> {
@@ -734,7 +786,7 @@ class SoundSelectionDialog : DialogFragment(), View.OnClickListener,
                 }
             }
 
-        }
+
     }
 
 

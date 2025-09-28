@@ -203,6 +203,7 @@ class DataPreference @Inject constructor(
         const val APPLICATION_ID = "com.iw.android.prayerapp"
 
         val IS_ONBOARDING = booleanPreferencesKey("key_is_onboarding")
+        val IS_FIRST_TIME_APP_LAUNCH = booleanPreferencesKey("key_is_first_app_launch")
         val IS_FIRST_TIME = booleanPreferencesKey("key_is_first_time")
         val BOOLEAN = booleanPreferencesKey("key_boolean")
         val FLOAT = floatPreferencesKey("key_float")

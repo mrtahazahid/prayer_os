@@ -36,30 +36,33 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textViewSize"
+                android:id="@+id/textViewPath"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="2dp"
                 android:fontFamily="@font/sf_regular"
-                android:text="Size"
+                android:text="@string/file_path"
                 android:paddingBottom="10dp"
                 android:textColor="@color/app_grey"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageViewCheck"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_play"
-                android:padding="16dp"
-                android:tint="@color/small_icon"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/sf_regular"
+                tools:text="700 kb"
+                android:textColor="@color/app_grey"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

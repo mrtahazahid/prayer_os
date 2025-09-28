@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="170dp"
+    android:layout_height="170dp"
+    android:orientation="vertical"
+    android:id="@+id/widget_root"
+    android:backgroundTint="#1c1c1e"
+    android:background="@drawable/round_corner_bg"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true">
+        <TextView
+            android:id="@+id/textViewTopLeft"
+            android:text="FJR 8:24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/app_grey"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/textViewTopRight"
+            android:text="FJR 8:24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/app_grey"
+            android:textSize="12sp"
+            android:gravity="end"
+         />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/progress"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_percent_100"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textViewHijri"
+            android:text="9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/progress"
+            android:layout_alignStart="@id/progress"
+            android:textColor="@color/yellow_text"
+            android:textSize="11sp"
+            android:fontFamily="@font/sf_regular"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_alignTop="@id/progress"/>
+
+        <TextView
+            android:id="@+id/textViewCurrentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewHijri"
+            android:layout_alignStart="@id/progress"
+            android:layout_alignEnd="@id/progress"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:fontFamily="@font/sf_medium"
+            android:text="2:14:21"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/textViewLeftTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewCurrentTime"
+            android:layout_alignStart="@id/progress"
+            android:layout_alignEnd="@id/progress"
+            android:gravity="center"
+            android:text="Left Until"
+            android:textColor="@color/white"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/textViewNamazName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewLeftTime"
+            android:layout_alignStart="@id/progress"
+            android:layout_alignEnd="@id/progress"
+            android:gravity="center"
+            android:text="Asr"
+            android:fontFamily="@font/sf_medium"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textViewCurrentNamazTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewNamazName"
+            android:layout_alignStart="@id/progress"
+            android:layout_alignEnd="@id/progress"
+            android:gravity="center"
+            android:text="7:22 pm"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:id="@+id/textViewBottomLeft"
+            android:text="Magh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/app_grey"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/textViewBottomRight"
+            android:text="Isha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:textColor="@color/app_grey"
+            android:textSize="12sp"
+         />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,13 +1,10 @@
 package com.iw.android.prayerapp.ui.main.timeFragment.itemView
 
-import android.app.TimePickerDialog
-import android.content.Context
-import android.content.DialogInterface
-import android.util.Log
+import android.annotation.SuppressLint
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TimePicker
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
@@ -21,24 +18,22 @@ import com.iw.android.prayerapp.data.response.PrayTime
 import com.iw.android.prayerapp.databinding.RowItemPrayTimeBinding
 import com.iw.android.prayerapp.extension.CustomDialog
 import com.iw.android.prayerapp.ui.main.timeFragment.DuaTypeEnum
-import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
 import com.iw.android.prayerapp.utils.anim.hideDetailView
 import com.iw.android.prayerapp.utils.anim.showDetailView
+import com.iw.android.prayerapp.utils.datePicker.openTimePicker
 import com.iw.android.prayerapp.utils.sound.SoundDataPass
 import com.iw.android.prayerapp.utils.sound.SoundSelectionDialog
+import com.iw.android.prayerapp.utils.time.addMinutesToTime
+import com.iw.android.prayerapp.utils.time.extractNumberFromString
+import com.iw.android.prayerapp.utils.time.subtractMinutesFromTime
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 import java.util.Calendar
-import java.util.Locale
 
 class RowItemTime(
     private val data: PrayTime,
     val recyclerView: RecyclerView,
     val activity: FragmentActivity,
-    val viewModel: TimeViewModel
+    val listener: OnTimeDataSave
 ) : ViewType<PrayTime>, SoundDataPass, View.OnClickListener {
     private var isViewShow = false
     private var prayerDetailData: NotificationData? = null
@@ -68,49 +63,7 @@ class RowItemTime(
         }
     }
 
-    private fun setIconByDataType() {
-        if (data.title == "Midnight" || data.title == "Last Third") {
-            if (data.namazDetail.notificationSound != null) {
-                if (data.namazDetail.notificationSound?.selectedSoundItemPosition == 1 || data.namazDetail.notificationSound?.selectedSoundItemPosition == 0) {
-                    _binding.imageView.setImageResource(R.drawable.ic_mike)
-                }
-
-                if (data.namazDetail.notificationSound!!.isSilent) {
-                    _binding.imageView.setImageResource(R.drawable.ic_mute_mike)
-                }
-
-                if (data.namazDetail.notificationSound!!.isOff) {
-                    _binding.imageView.setImageResource(R.drawable.ic_off)
-                }
-
-                if (data.namazDetail.notificationSound!!.isVibrate) {
-                    _binding.imageView.setImageResource(R.drawable.ic_vibrate)
-                }
-
-
-            } else if (data.namazDetail.reminderSound != null) {
-                if (data.namazDetail.reminderSound?.selectedSoundItemPosition == 1 || data.namazDetail.reminderSound?.selectedSoundItemPosition == 0) {
-                    _binding.imageView.setImageResource(R.drawable.ic_mike)
-                }
-
-                if (data.namazDetail.reminderSound!!.isSilent) {
-                    _binding.imageView.setImageResource(R.drawable.ic_mute_mike)
-                }
-
-                if (data.namazDetail.reminderSound!!.isOff) {
-                    _binding.imageView.setImageResource(R.drawable.ic_off)
-                }
-
-                if (data.namazDetail.reminderSound!!.isVibrate) {
-                    _binding.imageView.setImageResource(R.drawable.ic_vibrate)
-                }
-
-            } else {
-                _binding.imageView.setImageResource(R.drawable.ic_notification_mute)
-            }
-        }
-    }
-
+    @SuppressLint("SimpleDateFormat")
     override fun onClick(v: View?) {
         when (v?.id) {
             _binding.imageViewNotificationHelp.id -> {
@@ -156,23 +109,23 @@ class RowItemTime(
 
             _binding.mainView.id -> {
                 isViewShow = if (!isViewShow) {
-                    showDetailView(_binding.detailViews,_binding.imageViewDropDownMenu)
+                    showDetailView(_binding.detailViews, _binding.imageViewDropDownMenu)
                     //toggleDropDown(_binding.detailViews, true)
                     recyclerView.smoothScrollToPosition(0)
                     true
                 } else {
-                    hideDetailView(_binding.detailViews,_binding.imageViewDropDownMenu)
+                    hideDetailView(_binding.detailViews, _binding.imageViewDropDownMenu)
                     false
                 }
             }
 
             _binding.imageViewDropDownMenu.id -> {
                 isViewShow = if (!isViewShow) {
-                    showDetailView(_binding.detailViews,_binding.imageViewDropDownMenu)
+                    showDetailView(_binding.detailViews, _binding.imageViewDropDownMenu)
                     recyclerView.smoothScrollToPosition(0)
                     true
                 } else {
-                    hideDetailView(_binding.detailViews,_binding.imageViewDropDownMenu)
+                    hideDetailView(_binding.detailViews, _binding.imageViewDropDownMenu)
                     false
                 }
             }
@@ -185,7 +138,7 @@ class RowItemTime(
                         subtractMinutesFromTime(data.time, reminderTimeMinutes)
                 }
                 setIconByDataType()
-                savePrayerDetailData()
+                listener.onSave(prayerDetailData,this.data.title,this.data.time)
             }
 
             _binding.imageViewRemove.id -> {
@@ -196,7 +149,7 @@ class RowItemTime(
                         subtractMinutesFromTime(data.time, reminderTimeMinutes)
                 }
                 setIconByDataType()
-                savePrayerDetailData()
+                listener.onSave(prayerDetailData,this.data.title,this.data.time)
             }
 
             _binding.imageViewSecondReminderAdd.id -> {
@@ -208,7 +161,7 @@ class RowItemTime(
                     prayerDetailData?.secondReminderTime =
                         subtractMinutesFromTime(data.time, secondReminderTimeMinutes)
                 }
-                savePrayerDetailData()
+                listener.onSave(prayerDetailData,this.data.title,this.data.time)
             }
 
             _binding.imageViewSecondReminderRemove.id -> {
@@ -220,7 +173,7 @@ class RowItemTime(
                     prayerDetailData?.secondReminderTime =
                         subtractMinutesFromTime(data.time, secondReminderTimeMinutes)
                 }
-                savePrayerDetailData()
+                listener.onSave(prayerDetailData,this.data.title,this.data.time)
             }
 
             _binding.imageViewDuaMinus.id -> {
@@ -233,7 +186,7 @@ class RowItemTime(
                 } else {
                     prayerDetailData?.duaType = DuaTypeEnum.OFF.getValue()
                 }
-                savePrayerDetailData()
+                listener.onSave(prayerDetailData,this.data.title,this.data.time)
             }
 
             _binding.imageViewDuaAdd.id -> {
@@ -246,11 +199,11 @@ class RowItemTime(
                 } else {
                     prayerDetailData?.duaType = DuaTypeEnum.OFF.getValue()
                 }
-                savePrayerDetailData()
+                listener.onSave(prayerDetailData,this.data.title,this.data.time)
             }
 
             _binding.cardViewDuaTime.id -> {
-                openTimePicker(_binding.cardViewDuaTime.context, 12, 0) { hourOfDay, minute ->
+                openTimePicker(_binding.cardViewDuaTime.context ) { hourOfDay, minute ->
                     // Handle the selected time (hourOfDay and minute)
                     val formattedTime =
                         SimpleDateFormat("h:mm a").format(Calendar.getInstance().apply {
@@ -259,7 +212,7 @@ class RowItemTime(
                         }.time)
                     _binding.textViewDuaTime.text = formattedTime
                     prayerDetailData?.duaTime = formattedTime
-                    savePrayerDetailData()
+                    listener.onSave(prayerDetailData,this.data.title,this.data.time)
                 }
             }
 
@@ -274,7 +227,6 @@ class RowItemTime(
     }
 
     private fun initialize() {
-
         when (data.title) {
             "Sunrise" -> {
                 _binding.group.visibility = View.VISIBLE
@@ -303,52 +255,29 @@ class RowItemTime(
         )
 
         _binding.textViewTime.setTextColor(color)
-
-
         _binding.textViewTitle.text = data.title
         _binding.textViewTime.text = data.time
-        //  _binding.textViewNotificationSound.text = data.namazDetail.notificationSound?.soundName
-        // _binding.textViewReminderSound.text = data.namazDetail.reminderSound?.soundName
         _binding.textViewSetTime.text = data.namazDetail.reminderTimeMinutes
         _binding.textViewSecondReminderSetTime.text = data.namazDetail.secondReminderTimeMinutes
         _binding.textViewNotificationSound.text =
             if (data.namazDetail.notificationSound?.isForAdhan == true) data.namazDetail.notificationSound?.soundName
-                ?: "Adhan" else data.namazDetail.notificationSound?.soundToneName ?: "Adhan"
-        if (data.namazDetail.notificationSound?.isSoundSelected == true) {
-            _binding.textViewNotificationSound.text =
-                if (data.namazDetail.notificationSound?.isForAdhan == true) data.namazDetail.notificationSound?.soundName
-                    ?: "Adhan" else data.namazDetail.notificationSound?.soundToneName ?: "Tone"
-        } else {
-            if (data.namazDetail.notificationSound?.isSilent == true) {
-                _binding.textViewNotificationSound.text = "Silent"
-            }
-            if (data.namazDetail.notificationSound?.isVibrate == true) {
-                _binding.textViewNotificationSound.text = "Vibrate"
-            }
+            else data.namazDetail.notificationSound?.soundToneName
+        _binding.textViewReminderSound.text = data.namazDetail.reminderSound?.soundToneName
 
-            if (data.namazDetail.notificationSound?.isOff == true) {
-                _binding.textViewNotificationSound.text = "Off"
-            }
+        if (data.namazDetail.notificationSound?.isSoundSelected == false) {
+            setSoundTextToNonSoundSelect(
+                data.namazDetail.notificationSound,
+                _binding.textViewNotificationSound
+            )
         }
-        _binding.textViewReminderSound.text =
-            if (data.namazDetail.reminderSound?.isForAdhan == true) data.namazDetail.reminderSound?.soundName
-                ?: "Tone" else data.namazDetail.reminderSound?.soundToneName ?: "Tone"
-        if (data.namazDetail.reminderSound?.isSoundSelected == true) {
-            _binding.textViewReminderSound.text =
-                if (data.namazDetail.reminderSound?.isForAdhan == true) data.namazDetail.reminderSound?.soundName
-                    ?: "Adhan" else data.namazDetail.reminderSound?.soundToneName ?: "Tone"
-        } else {
 
-            if (data.namazDetail.reminderSound?.isSilent == true) {
-                _binding.textViewReminderSound.text = "Silent"
-            }
-            if (data.namazDetail.reminderSound?.isVibrate == true) {
-                _binding.textViewReminderSound.text = "Vibrate"
-            }
-            if (data.namazDetail.reminderSound?.isOff == true) {
-                _binding.textViewReminderSound.text = "Off"
-            }
+        if (data.namazDetail.reminderSound?.isSoundSelected == false) {
+            setSoundTextToNonSoundSelect(
+                data.namazDetail.reminderSound,
+                _binding.textViewReminderSound
+            )
         }
+
         _binding.textViewDuaSetTime.text = data.namazDetail.duaReminderMinutes
         spinnerDua()
     }
@@ -370,163 +299,8 @@ class RowItemTime(
         _binding.cardViewDuaTime.setOnClickListener(this)
         _binding.notificationSelectionView.setOnClickListener(this)
         _binding.reminderSelectionView.setOnClickListener(this)
-
     }
 
-    fun extractNumberFromString(input: String): Int {
-        return if (input.isNullOrEmpty() || input == "off") {
-            0
-        } else {
-            val regex = "\\d+".toRegex()  // Find one or more digits
-            regex.find(input)?.value?.toInt() ?: 0
-        }
-
-    }
-
-    private fun savePrayerDetailData() {
-        val fajrData = NotificationData(
-            namazName = data.title,
-            namazTime = data.time,
-            notificationSound = CurrentNamazNotificationData(
-                prayerDetailData?.notificationSound?.currentNamazName ?: "",
-                prayerDetailData?.notificationSound?.soundName ?: "",
-                prayerDetailData?.notificationSound?.soundToneName ?: "",
-                prayerDetailData?.notificationSound?.selectedSoundPosition,
-                prayerDetailData?.notificationSound?.selectedSoundTonePosition,
-                prayerDetailData?.notificationSound?.selectedSoundItemPosition,
-                prayerDetailData?.notificationSound?.isSoundSelected ?: false,
-                prayerDetailData?.notificationSound?.isForAdhan ?: false,
-                prayerDetailData?.notificationSound?.isVibrate ?: false,
-                prayerDetailData?.notificationSound?.isSilent ?: false,
-                prayerDetailData?.notificationSound?.isOff ?: false,
-                prayerDetailData?.notificationSound?.soundAdhan,
-                prayerDetailData?.notificationSound?.soundTone
-            ),
-            reminderSound = prayerDetailData?.reminderSound,
-            reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
-            reminderTime = prayerDetailData?.reminderTime ?: "",
-            secondReminderTimeMinutes = prayerDetailData?.secondReminderTimeMinutes ?: "off",
-            secondReminderTime = prayerDetailData?.secondReminderTime ?: "",
-            duaReminderMinutes = "off",
-            duaTime = "",
-            duaType = "off",
-            createdDate = getCurrentDate(),
-        )
-
-        val sunriseData = NotificationData(
-            namazName = data.title,
-            namazTime = data.time,
-            notificationSound = CurrentNamazNotificationData(
-                prayerDetailData?.notificationSound?.currentNamazName ?: "",
-                prayerDetailData?.notificationSound?.soundName ?: "",
-                prayerDetailData?.notificationSound?.soundToneName ?: "",
-                prayerDetailData?.notificationSound?.selectedSoundPosition,
-                prayerDetailData?.notificationSound?.selectedSoundTonePosition,
-                prayerDetailData?.notificationSound?.selectedSoundItemPosition,
-                prayerDetailData?.notificationSound?.isSoundSelected ?: false,
-                prayerDetailData?.notificationSound?.isForAdhan ?: false,
-                prayerDetailData?.notificationSound?.isVibrate ?: false,
-                prayerDetailData?.notificationSound?.isSilent ?: false,
-                prayerDetailData?.notificationSound?.isOff ?: false,
-                prayerDetailData?.notificationSound?.soundAdhan,
-                prayerDetailData?.notificationSound?.soundTone
-            ),
-            reminderSound = prayerDetailData?.reminderSound,
-            reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
-            reminderTime = prayerDetailData?.reminderTime ?: "",
-            secondReminderTimeMinutes = "off",
-            secondReminderTime = "off",
-            duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
-            duaTime = prayerDetailData?.duaTime ?: "",
-            duaType = prayerDetailData?.duaType ?: "off",
-            createdDate = getCurrentDate(),
-        )
-
-        val saveData = NotificationData(
-            namazName = data.title,
-            namazTime = data.time,
-            notificationSound = CurrentNamazNotificationData(
-                prayerDetailData?.notificationSound?.currentNamazName ?: "",
-                prayerDetailData?.notificationSound?.soundName ?: "",
-                prayerDetailData?.notificationSound?.soundToneName ?: "",
-                prayerDetailData?.notificationSound?.selectedSoundPosition,
-                prayerDetailData?.notificationSound?.selectedSoundTonePosition,
-                prayerDetailData?.notificationSound?.selectedSoundItemPosition,
-                prayerDetailData?.notificationSound?.isSoundSelected ?: false,
-                prayerDetailData?.notificationSound?.isForAdhan ?: false,
-                prayerDetailData?.notificationSound?.isVibrate ?: false,
-                prayerDetailData?.notificationSound?.isSilent ?: false,
-                prayerDetailData?.notificationSound?.isOff ?: false,
-                prayerDetailData?.notificationSound?.soundAdhan,
-                prayerDetailData?.notificationSound?.soundTone
-            ),
-            reminderSound = prayerDetailData?.reminderSound,
-            reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
-            reminderTime = prayerDetailData?.reminderTime ?: "",
-            secondReminderTimeMinutes = "off",
-            secondReminderTime = "",
-            duaReminderMinutes = "off",
-            duaTime = "",
-            duaType = "off",
-            createdDate = getCurrentDate(),
-        )
-
-        when (data.title) {
-            "Fajr" -> viewModel.saveFajrDetail(fajrData)
-
-            "Sunrise" -> viewModel.saveSunriseDetail(sunriseData)
-
-            "Dhuhr" -> viewModel.saveDuhrDetail(saveData)
-
-            "Asr" -> viewModel.saveAsrDetail(saveData)
-
-            "Maghrib" -> viewModel.saveMagribDetail(saveData)
-
-            "Isha" -> viewModel.saveIshaDetail(saveData)
-
-            "Midnight" -> viewModel.saveMidNightDetail(saveData)
-
-            "Last Third" -> viewModel.saveLastNightDetail(saveData)
-        }
-
-    }
-
-
-    private fun openTimePicker(
-        context: Context,
-        initialHour: Int,
-        initialMinute: Int,
-        onTimeSetListener: (hourOfDay: Int, minute: Int) -> Unit
-
-    ) {
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, initialHour)
-        calendar.set(Calendar.MINUTE, initialMinute)
-        val timePickerDialog = TimePickerDialog(
-            context,
-            R.style.DialogTheme, // Apply the custom theme here
-            { _: TimePicker, hourOfDay: Int, minute: Int ->
-                onTimeSetListener(hourOfDay, minute)
-            },
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE),
-            false // Set to true for 24-hour format, false for 12-hour format with AM/PM
-        )
-
-        // Customize the TimePickerDialog
-        timePickerDialog.setTitle("Duha Time")
-
-        timePickerDialog.setOnShowListener {
-            // Get the button instances
-            val cancelButton = timePickerDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-            val okButton = timePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-
-            // Set the text color using your custom color
-            cancelButton.setTextColor(ContextCompat.getColor(context, R.color.app_green))
-            okButton.setTextColor(ContextCompat.getColor(context, R.color.app_green))
-        }
-        timePickerDialog.show()
-    }
 
     private fun openSoundDialogFragment(
         namazName: String,
@@ -587,7 +361,6 @@ class RowItemTime(
     }
 
     private fun spinnerDua() {
-
         val adapter = ArrayAdapter.createFromResource(
             _binding.textViewTime.context,
             R.array.dua,
@@ -595,7 +368,6 @@ class RowItemTime(
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         _binding.spinnerDuaReminderSwitch.adapter = adapter
-
 
         when (data.namazDetail.duaType) {
             DuaTypeEnum.OFF.getValue() -> {
@@ -606,11 +378,11 @@ class RowItemTime(
             }
 
             DuaTypeEnum.MINUTES.getValue() -> {
+                val setDuaTime =  "${prayerDetailData?.duaReminderMinutes} mins"
                 _binding.cardViewDuaAdjustmentTime.visibility = View.GONE
                 _binding.cardViewDuaTime.visibility = View.VISIBLE
                 _binding.textViewDuaSetTime.visibility = View.GONE
-                _binding.textViewDuaSetTime.text =
-                    "${prayerDetailData?.duaReminderMinutes} mins"
+                _binding.textViewDuaSetTime.text = setDuaTime
                 _binding.spinnerDuaReminderSwitch.setSelection(2)
 
             }
@@ -624,7 +396,6 @@ class RowItemTime(
 
             }
         }
-
 
         _binding.spinnerDuaReminderSwitch.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
@@ -655,44 +426,10 @@ class RowItemTime(
                     }
                 }
                 prayerDetailData?.duaType = selectedItem
-                savePrayerDetailData()
+                listener.onSave(prayerDetailData,data.title,data.time)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
-    }
-
-
-    fun getCurrentDate(): String {
-        val currentDate = LocalDate.now()
-        val formatter =
-            DateTimeFormatter.ofPattern("dd MMM yyyy") // Customize the format as needed
-        return currentDate.format(formatter)
-    }
-
-
-    private fun subtractMinutesFromTime(currentTime: String, minutesToSubtract: Int): String {
-        return try {
-            val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
-            val parsedTime = LocalTime.parse(currentTime, formatter)
-            val resultTime = parsedTime.minusMinutes(minutesToSubtract.toLong())
-            resultTime.format(formatter)
-        } catch (e: DateTimeParseException) {
-            Log.d("DateTimeParseException", e.message.toString())
-            currentTime
-        }
-    }
-
-
-    private fun addMinutesToTime(currentTime: String, minutesToAdd: Int): String {
-        return try {
-            val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
-            val parsedTime = LocalTime.parse(currentTime, formatter)
-            val resultTime = parsedTime.plusMinutes(minutesToAdd.toLong())
-            resultTime.format(formatter)
-        } catch (e: DateTimeParseException) {
-            Log.d("DateTimeParseException", e.message.toString())
-            currentTime
         }
     }
 
@@ -751,15 +488,7 @@ class RowItemTime(
             } else {
                 data.soundName = "Adhan"
                 data.soundToneName = "Tones"
-                if (data.isSilent) {
-                    _binding.textViewNotificationSound.text = "Silent"
-                }
-                if (data.isVibrate) {
-                    _binding.textViewNotificationSound.text = "Vibrate"
-                }
-                if (data.isOff) {
-                    _binding.textViewNotificationSound.text = "Off"
-                }
+                setSoundTextToNonSoundSelect(data,_binding.textViewNotificationSound)
             }
 
         } else {
@@ -770,20 +499,73 @@ class RowItemTime(
             } else {
                 data.soundName = "Adhan"
                 data.soundToneName = "Tones"
-                if (data.isSilent) {
-                    _binding.textViewReminderSound.text = "Silent"
-                }
-                if (data.isVibrate) {
-                    _binding.textViewReminderSound.text = "Vibrate"
-                }
-                if (data.isOff) {
-                    _binding.textViewReminderSound.text = "Off"
-                }
+                setSoundTextToNonSoundSelect(data,_binding.textViewReminderSound)
+
             }
         }
         setIconByDataType()
-        savePrayerDetailData()
+        listener.onSave(prayerDetailData,this.data.title,this.data.time)
     }
 
+    private fun setSoundTextToNonSoundSelect(
+        data: CurrentNamazNotificationData?,
+        textView: TextView
+    ) {
+        if (data?.isSilent == true) {
+            textView.text = textView.context.getString(R.string.silent)
+        }
+        if (data?.isVibrate == true) {
+            textView.text = textView.context.getString(R.string.vibrate)
+        }
+        if (data?.isOff == true) {
+            textView.text = textView.context.getString(R.string.off)
+        }
+    }
+    private fun setIconByDataType() {
+        if (data.title == "Midnight" || data.title == "Last Third") {
+            if (data.namazDetail.notificationSound != null) {
+                if (data.namazDetail.notificationSound?.selectedSoundItemPosition == 1 || data.namazDetail.notificationSound?.selectedSoundItemPosition == 0) {
+                    _binding.imageView.setImageResource(R.drawable.ic_mike)
+                }
 
+                if (data.namazDetail.notificationSound!!.isSilent) {
+                    _binding.imageView.setImageResource(R.drawable.ic_mute_mike)
+                }
+
+                if (data.namazDetail.notificationSound!!.isOff) {
+                    _binding.imageView.setImageResource(R.drawable.ic_off)
+                }
+
+                if (data.namazDetail.notificationSound!!.isVibrate) {
+                    _binding.imageView.setImageResource(R.drawable.ic_vibrate)
+                }
+
+
+            } else if (data.namazDetail.reminderSound != null) {
+                if (data.namazDetail.reminderSound?.selectedSoundItemPosition == 1 || data.namazDetail.reminderSound?.selectedSoundItemPosition == 0) {
+                    _binding.imageView.setImageResource(R.drawable.ic_mike)
+                }
+
+                if (data.namazDetail.reminderSound!!.isSilent) {
+                    _binding.imageView.setImageResource(R.drawable.ic_mute_mike)
+                }
+
+                if (data.namazDetail.reminderSound!!.isOff) {
+                    _binding.imageView.setImageResource(R.drawable.ic_off)
+                }
+
+                if (data.namazDetail.reminderSound!!.isVibrate) {
+                    _binding.imageView.setImageResource(R.drawable.ic_vibrate)
+                }
+
+            } else {
+                _binding.imageView.setImageResource(R.drawable.ic_notification_mute)
+            }
+        }
+    }
+
+}
+
+fun interface OnTimeDataSave{
+    fun onSave(data:NotificationData?,namazName:String,namazTime:String)
 }

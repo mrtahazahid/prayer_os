@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/mainView"
         android:background="@color/black"
         tools:context=".ui.main.timeFragment.TimeFragment">
 
@@ -34,6 +35,13 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/app_green" />
 
+            <View
+                android:id="@+id/backView"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewDateTitle"
                 android:layout_width="wrap_content"
@@ -189,6 +197,20 @@
             android:layout_marginHorizontal="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/actionBar">
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:indeterminateTint="@color/app_green"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:elevation="40dp"
+                android:progress="100"
+                />
 
 
             <FrameLayout

@@ -21,10 +21,11 @@ import com.iw.android.prayerapp.databinding.FragmentPrayerSoundBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.OnClick
 import com.iw.android.prayerapp.ui.main.prayerSoundSelectionFragment.itemView.RowItemPrayerSound
-import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
 import com.iw.android.prayerapp.utils.copy.CopyBottomSheet
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.OnClickListener,
@@ -33,7 +34,6 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
     private var _binding: FragmentPrayerSoundBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SoundViewModel by viewModels()
-    private val viewModelTime: TimeViewModel by viewModels()
     var prayerSoundList = arrayListOf<PrayerSoundData>()
     private val args by navArgs<PrayerSoundFragmentArgs>()
 
@@ -133,12 +133,12 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
         when (v?.id) {
             binding.backView.id, binding.imageViewBack.id -> {
                 if (isDataForSave) {
-                    val namazTime = viewModelTime.getPrayerTime(
-                        viewModelTime.userLatLong?.latitude ?: 0.0,
-                        viewModelTime.userLatLong?.longitude ?: 0.0
+                    val namazTime = viewModel.getPrayerTime(
+                        viewModel.userLatLong?.latitude ?: 0.0,
+                        viewModel.userLatLong?.longitude ?: 0.0
                     )
                     binding.progress.show()
-                    lifecycleScope.launch {
+                    lifecycleScope.launch(Dispatchers.IO) {
                         Log.d("saveData", selectedSoundPosition.toString())
                         val savingData = CurrentNamazNotificationData(
                             args.title,
@@ -285,8 +285,11 @@ class PrayerSoundFragment : BaseFragment(R.layout.fragment_prayer_sound), View.O
                             }
                         }
                         delay(3000)
-                        binding.progress.hide()
-                        findNavController().popBackStack()
+                        withContext(Dispatchers.Main){
+                            binding.progress.hide()
+                            findNavController().popBackStack()
+                        }
+
                     }
 
                 } else {

@@ -1,5 +1,6 @@
 package com.iw.android.prayerapp.utils
 
+import android.view.View
 import java.time.LocalDate
 import java.time.Month
 import java.time.ZoneOffset
@@ -28,6 +29,13 @@ object Helper {
     val hijriMonths = arrayOf(
         "Muh", "Saf", "Ra-A", "Ra-T", "Jum-A", "Jum-T", "Raj", "Sha", "Ram", "Sha", "Dhu-Q", "Dhu-H"
     )
+
+    fun View.updateHeight(newHeight: Int) {
+        layoutParams = layoutParams.apply {
+            height = newHeight
+        }
+    }
+
 
     data class DateInfo(
         val dayOfMonth: Int,

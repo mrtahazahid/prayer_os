@@ -431,21 +431,48 @@
                                 app:layout_constraintStart_toEndOf="@id/textViewMethodTitle"
                                 app:layout_constraintTop_toTopOf="@id/textViewMethodTitle" />
 
-                            <androidx.appcompat.widget.AppCompatSpinner
-                                android:id="@+id/spinnerMethod"
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imageViewArrowMethod"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginTop="2dp"
+                                android:src="@drawable/ic_forward"
+                                android:tint="@color/small_icon"
+                                app:layout_constraintBottom_toBottomOf="@+id/textViewMethod"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/textViewMethod"
+                                app:tint="@color/text_color_gray" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/textViewMethod"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="8dp"
+                                android:drawablePadding="4dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/sf_regular"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                android:text="Method"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/textViewMethodTitle"
+                                app:layout_constraintEnd_toStartOf="@+id/imageViewArrowMethod"
+                                app:layout_constraintStart_toEndOf="@+id/imageViewMethodHelp"
+                                app:layout_constraintTop_toTopOf="@+id/textViewMethodTitle" />
+
+                            <View
+                                android:id="@+id/methodView"
                                 android:layout_width="0dp"
                                 android:layout_height="40dp"
-                                android:layout_marginStart="@dimen/_4sdp"
-                                android:backgroundTint="@color/app_green"
-                                android:forceHasOverlappingRendering="false"
-                                android:gravity="end"
-                                android:overlapAnchor="false"
-                                android:spinnerMode="dropdown"
-                                android:textSize="12sp"
-                                app:layout_constraintBottom_toBottomOf="@+id/view"
-                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_marginTop="15dp"
+                                app:layout_constraintBottom_toBottomOf="@+id/textViewMethodTitle"
+                                app:layout_constraintEnd_toEndOf="@+id/imageViewArrowMethod"
                                 app:layout_constraintStart_toEndOf="@+id/imageViewMethodHelp"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="@+id/textViewMethodTitle"  />
 
 
                             <View
@@ -1539,6 +1566,7 @@
                             android:layout_height="wrap_content"
                             android:background="#1c1c1e"
                             android:visibility="gone"
+                            tools:visibility="visible"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/textViewApp"

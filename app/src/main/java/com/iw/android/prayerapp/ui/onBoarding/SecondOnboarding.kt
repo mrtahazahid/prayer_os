@@ -23,6 +23,7 @@ import com.iw.android.prayerapp.extension.NotificationPermissionTextProvider
 import com.iw.android.prayerapp.extension.showPermissionDialog
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
+import com.iw.android.prayerapp.utils.decodeImage.decodeSampledBitmap
 
 class SecondOnboarding : BaseFragment(R.layout.fragment_second_onboarding) {
 
@@ -68,7 +69,8 @@ class SecondOnboarding : BaseFragment(R.layout.fragment_second_onboarding) {
 
     override fun initialize() {
         setOnBackPressedListener()
-
+        val bitmap = decodeSampledBitmap(requireContext(), R.drawable.onboard_qibla, 1024, 1024)
+        binding.centerImage.setImageBitmap(bitmap)
     }
 
     override fun setObserver() {

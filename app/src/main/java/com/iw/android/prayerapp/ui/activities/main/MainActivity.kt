@@ -18,6 +18,10 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
@@ -103,9 +107,17 @@ class MainActivity : BaseActivity() {
         try {
             _binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding?.root)
-
             if (binding != null) {
-                setStatusBarWithBlackIcon(R.color.bg_color)
+                if (Build.VERSION.SDK_INT >= 35) {
+                    WindowCompat.setDecorFitsSystemWindows(this.window, false)
+                    ViewCompat.setOnApplyWindowInsetsListener(binding!!.mainView) { v: View, insets: WindowInsetsCompat ->
+                        val systemBars: Insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                        v.setPadding(0, systemBars.top, 0, 0)
+                        insets
+                    }
+                }
+
+                setStatusBarWithBlackIcon(R.color.black)
                 initialize()
                 setOnClickListener()
             } else {

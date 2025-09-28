@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentQiblaBinding
@@ -19,6 +20,9 @@ import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.qibla.QiblaDegreeListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 class QiblaFragment : BaseFragment(R.layout.fragment_qibla) {
@@ -58,11 +62,17 @@ class QiblaFragment : BaseFragment(R.layout.fragment_qibla) {
         gps = GPSTracker(requireContext())
         currentLatitude = viewModel.getUserLatLong?.latitude ?: 0.0
         currentLongitude = viewModel.getUserLatLong?.longitude ?: 0.0
-        val location = GetAdhanDetails.getTimeZoneAndCity(
-            requireContext(), currentLatitude,
-            currentLongitude
-        )
-        binding.textViewTitle.text = location?.city ?: "City"
+        lifecycleScope.launch {
+            val location = GetAdhanDetails.getTimeZoneAndCity(
+                requireContext(), currentLatitude,
+                currentLongitude
+            )
+            withContext(Dispatchers.Main){
+                binding.textViewTitle.text = location?.city ?: "City"
+            }
+
+        }
+
         getQibla = GetAdhanDetails.getQiblaDirection(currentLatitude, currentLongitude)
         binding.txtQiblaHeading.text =
             "Qibla direction is ${"%.2f".format(getQibla)}\u00B0 from North"

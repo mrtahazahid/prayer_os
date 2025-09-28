@@ -2,6 +2,7 @@ package com.iw.android.prayerapp.ui.onBoarding
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.iw.android.prayerapp.databinding.FragmentFifthOnboardingBinding
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
+import com.iw.android.prayerapp.utils.decodeImage.decodeSampledBitmap
 import kotlinx.coroutines.launch
 
 class FifthOnboarding : BaseFragment(R.layout.fragment_fifth_onboarding) {
@@ -42,7 +44,8 @@ class FifthOnboarding : BaseFragment(R.layout.fragment_fifth_onboarding) {
 
     override fun initialize() {
         setOnBackPressedListener()
-
+        val bitmap = decodeSampledBitmap(requireContext(), R.drawable.seventh_screen, 1024, 1024)
+        binding.centerImage.setImageBitmap(bitmap)
     }
 
     override fun setObserver() {
@@ -51,13 +54,13 @@ class FifthOnboarding : BaseFragment(R.layout.fragment_fifth_onboarding) {
 
     override fun setOnClickListener() {
         binding.btnEnableNotification.setOnClickListener {
-          lifecycleScope.launch {   viewModel.saveIsOnBoarding()}
+            lifecycleScope.launch { viewModel.saveIsOnBoarding() }
             startActivity(Intent(requireActivity(), MainActivity::class.java))
             requireActivity().finish()
         }
 
         binding.notNow.setOnClickListener {
-            startActivity(Intent(requireActivity() , MainActivity::class.java))
+            startActivity(Intent(requireActivity(), MainActivity::class.java))
             requireActivity().finish()
         }
 

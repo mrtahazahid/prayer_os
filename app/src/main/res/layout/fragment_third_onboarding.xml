@@ -66,7 +66,6 @@
             android:layout_height="match_parent"
             android:paddingStart="20dp"
             android:contentDescription="@string/center_image"
-            android:src="@drawable/third_screen"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.activity.BaseActivity
 import com.iw.android.prayerapp.base.prefrence.DataPreference
+import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.IS_FIRST_TIME_APP_LAUNCH
 import com.iw.android.prayerapp.base.prefrence.DataPreference.Companion.IS_ONBOARDING
 import com.iw.android.prayerapp.databinding.ActivitySplashBinding
 import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 class SplashActivity : BaseActivity() {
     private var _binding: ActivitySplashBinding? = null
     private val binding get() = _binding!!
+    private var preference:DataPreference?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +31,13 @@ class SplashActivity : BaseActivity() {
 
     override fun initialize() {
         setStatusBarWithBlackIcon(R.color.bg_color)
+        preference = DataPreference(this)
         lifecycleScope.launch {
-            delay(2000)
-            val activity = if (DataPreference(this@SplashActivity).getBooleanData(IS_ONBOARDING)) {
+            if (preference?.getBooleanData(IS_FIRST_TIME_APP_LAUNCH) == true) {
+                delay(2000)
+                preference?.setBooleanData(IS_FIRST_TIME_APP_LAUNCH, false)
+            }
+            val activity = if (preference?.getBooleanData(IS_ONBOARDING) == true) {
                 MainActivity::class.java
             } else {
                 OnBoardingActivity::class.java

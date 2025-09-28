@@ -33,6 +33,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+            <View
+                android:id="@+id/viewBack"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewDateTitle"
                 android:layout_width="0dp"
@@ -58,6 +67,14 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/viewForward"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -116,6 +133,7 @@
                     android:id="@+id/cardViewMain"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:minHeight="319dp"
                     android:layout_margin="20dp"
                     app:cardBackgroundColor="#1c1c1e"
                     app:cardElevation="10dp"
@@ -123,6 +141,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textViewTitleJuri"
                     app:strokeWidth="0dp">
+
+                    <androidx.core.widget.ContentLoadingProgressBar
+                        android:id="@+id/progress"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:indeterminateTint="@color/app_green"
+                        android:layout_gravity="center"
+                        android:elevation="40dp"
+                        android:progress="100"
+                    />
 
                     <FrameLayout
                         android:id="@+id/frameLayoutRecyclerView"
@@ -140,7 +169,7 @@
                             android:clipToPadding="false"
                             android:orientation="vertical"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            tools:itemCount="2"
+                            tools:itemCount="8"
                             tools:listitem="@layout/row_item_pray_time" />
 
                     </FrameLayout>

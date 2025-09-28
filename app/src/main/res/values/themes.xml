@@ -82,4 +82,10 @@
         <item name="android:textColor">@color/app_green</item>
     </style>
 
+    <style name="WidgetTheme" parent="Theme.Material3.DayNight">
+        <item name="appWidgetRadius">16dp</item>
+        <item name="appWidgetInnerRadius">16dp</item>
+        <item name="appWidgetPadding">0dp</item>
+    </style>
+
 </resources>

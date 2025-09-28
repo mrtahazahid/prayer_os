@@ -1,27 +1,29 @@
 package com.iw.android.prayerapp.utils.asset
 
-import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
-import com.iw.android.prayerapp.data.response.SoundData
 import com.iw.android.prayerapp.databinding.AssetDialogBinding
-import com.iw.android.prayerapp.utils.GetAdhanSound
+import com.iw.android.prayerapp.utils.PaginationScrollListener
 
-class AssetDialog : DialogFragment(), OnItemClick {
+class AssetDialog : DialogFragment() {
     private lateinit var binding: AssetDialogBinding
 
     private var viewTypeArray = ArrayList<ViewType<*>>()
-    private var mediaPlayer: MediaPlayer? = null
-    var arraList = arrayListOf<SoundData>()
-    private var previousPosition: Int? = null
+    private lateinit var viewModel: AssetViewModel
 
     val adapter by lazy {
         GenericListAdapter(object : OnItemClickListener<ViewType<*>> {
@@ -32,6 +34,9 @@ class AssetDialog : DialogFragment(), OnItemClick {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val fragment =
+            parentFragmentManager.fragments[0].childFragmentManager.fragments[0]
+        viewModel = ViewModelProvider(fragment)[AssetViewModel::class.java]
         setStyle(STYLE_NORMAL, R.style.DialogFragmentStyle)
     }
 
@@ -46,26 +51,33 @@ class AssetDialog : DialogFragment(), OnItemClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= 35) {
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+            ViewCompat.setOnApplyWindowInsetsListener(binding.secondView) { v: View, insets: WindowInsetsCompat ->
+                val systemBars: Insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(0, systemBars.top, 0, systemBars.bottom)
+                insets
+            }
+        }
+
         initialize()
         setObserver()
         setOnClickListener()
     }
 
     private fun initialize() {
-        binding.recyclerView.adapter = adapter
-        arraList = GetAdhanSound().assetList
+        setRecyclerView()
     }
 
     private fun setObserver() {
-        viewTypeArray.clear()
-
-
-        for (data in arraList) {
-            viewTypeArray.add(
-                RowItemAsset(data, this)
-            )
+        viewModel.pagedAssetList.observe(viewLifecycleOwner) { pagedList ->
+            viewTypeArray.clear()
+            for (data in pagedList) {
+                viewTypeArray.add(RowItemAsset(data))
+            }
+            adapter.items = viewTypeArray
         }
-        adapter.items = viewTypeArray
     }
 
     private fun setOnClickListener() {
@@ -75,60 +87,18 @@ class AssetDialog : DialogFragment(), OnItemClick {
 
     }
 
-    private fun stopMediaPlayer() {
-        mediaPlayer?.let {
-            if (it.isPlaying) {
-                it.stop()
+
+    private fun setRecyclerView() {
+        binding.recyclerView.adapter = adapter
+        val layoutManager = binding.recyclerView.layoutManager as LinearLayoutManager
+        binding.recyclerView.addOnScrollListener(object :
+            PaginationScrollListener(layoutManager) {
+            override fun onScrolled(dy: Int) {
             }
-            it.release()
-            mediaPlayer = null
-        }
 
+            override fun loadMoreItems() {
+                viewModel.loadNextPage()
+            }
+        })
     }
-
-    private fun startMediaPlayer() {
-        mediaPlayer?.start()
-    }
-
-
-    override fun onClick(isSoundOn: Boolean, data: SoundData, position: Int) {
-        Log.d("isSoundOn",isSoundOn.toString())
-        if (isSoundOn) {
-            stopMediaPlayer()
-            return
-        }
-        previousPosition?.let {
-            arraList[it].isSoundSelected = false
-            adapter.notifyItemChanged(it)
-        }
-
-        // Update current item
-        arraList[position].isSoundSelected = true
-        adapter.notifyItemChanged(position)
-        previousPosition = position
-
-        stopMediaPlayer()
-        mediaPlayer = MediaPlayer.create(requireContext(), data.soundFile)
-        startMediaPlayer()
-
-        // Set an event listener to release the MediaPlayer when playback is completed
-        mediaPlayer?.setOnCompletionListener {
-            stopMediaPlayer()
-            arraList[position].isSoundSelected = false
-            adapter.notifyItemChanged(position)
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        stopMediaPlayer()
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        stopMediaPlayer()
-    }
-
-
 }

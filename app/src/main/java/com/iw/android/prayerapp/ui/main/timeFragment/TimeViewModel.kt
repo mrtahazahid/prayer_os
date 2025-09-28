@@ -1,49 +1,76 @@
 package com.iw.android.prayerapp.ui.main.timeFragment
 
+import android.content.Context
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.batoulapps.adhan2.CalculationParameters
 import com.batoulapps.adhan2.Madhab
 import com.iw.android.prayerapp.R
+import com.iw.android.prayerapp.base.response.LocationResponse
 import com.iw.android.prayerapp.base.viewModel.BaseViewModel
 import com.iw.android.prayerapp.data.repositories.MainRepository
+import com.iw.android.prayerapp.data.response.CurrentNamazNotificationData
+import com.iw.android.prayerapp.data.response.LocationData
 import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.PrayTime
 import com.iw.android.prayerapp.data.response.PrayerTime
 import com.iw.android.prayerapp.data.response.UserLatLong
-import com.iw.android.prayerapp.extension.convertToFunTime
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.dateFormat.convertAndGetCurrentTimeMillis
 import com.iw.android.prayerapp.utils.dateFormat.convertTimeToMillis
 import com.iw.android.prayerapp.utils.dateFormat.formatDateWithCurrentTime
+import com.iw.android.prayerapp.utils.dateFormat.getCurrentDate
 import com.iw.android.prayerapp.utils.method.getMadhab
 import com.iw.android.prayerapp.utils.method.getMethod
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class TimeViewModel @Inject constructor(repository: MainRepository) :
     BaseViewModel(repository) {
-    var userLatLong: UserLatLong? = null
     var selectedPrayerDate = Date()
-    var selectedJurisprudenceFromDB =""
-    var prayTimeArray = arrayListOf<PrayTime>()
+    var selectedJurisprudenceFromDB = ""
+    var selectedMethodFromDB = ""
+
+    var recentLocationList: List<LocationResponse> = emptyList()
+
+    private val _prayTimeArray = MutableLiveData<ArrayList<PrayTime>>()
+    val prayTimeArray: LiveData<ArrayList<PrayTime>> get() = _prayTimeArray
+
+    private val prayerNames =
+        listOf("Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha", "Midnight", "Last Third")
+
+   private val _userLocation = MutableLiveData<UserLatLong?>()
+    val userLocation: LiveData<UserLatLong?> get() = _userLocation
+    var isLoading = MutableLiveData<Boolean>()
+
+    private val _location = MutableLiveData<LocationData?>()
+    val location: LiveData<LocationData?> = _location
+
     private lateinit var method: CalculationParameters
-    private lateinit  var madhab: Madhab
+    private lateinit var madhab: Madhab
 
     init {
-        viewModelScope.launch {
-            userLatLong = getUserLatLong()
-            val selectedMethodFromDB = getPrayerMethod()
+        isLoading.postValue(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            val userLatLong = getUserLatLong()
+            _userLocation.postValue(userLatLong)
+            getRecentLocationDataFromDB()
+             selectedMethodFromDB = getPrayerMethod()
             selectedJurisprudenceFromDB = getPrayerJurisprudence()
             madhab = getMadhab(selectedJurisprudenceFromDB)
             method = getMethod(
                 selectedMethod = selectedMethodFromDB,
                 selectedJurisprudence = selectedJurisprudenceFromDB
             )
-            getPrayList(userLatLong?.latitude?:0.0,userLatLong?.longitude?:0.0)
+            Log.d("pray method",method.toString())
+            getPrayList(userLatLong?.latitude ?: 0.0, userLatLong?.longitude ?: 0.0)
         }
 
     }
@@ -55,144 +82,93 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
             method,
             selectedPrayerDate
         )
-
     }
 
+    fun fetchTimeZoneAndCity(context: Context,lat:Double,long:Double) {
+        viewModelScope.launch {
+            val locationData = withContext(Dispatchers.IO) {
+                GetAdhanDetails.getTimeZoneAndCity(
+                    context,
+                    lat,
+                    long
+                )
+            }
+            _location.postValue(locationData)
+        }
+    }
 
-   suspend fun getPrayList(lat: Double, long: Double) {
-        val getPrayerTime =getPrayerTime(lat,long)
+    fun clearPrayerTimes() {
+        _prayTimeArray.postValue(arrayListOf())
+    }
 
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Fajr",
-                getPrayerTime[0],
-                formatDateWithCurrentTime(selectedPrayerDate),
-                getFajrDetail() ?: NotificationData()
-            )
-        )
+    suspend fun getRecentLocationDataFromDB() {
+        recentLocationList = emptyList()
+        recentLocationList = getRecentLocationData()
+    }
 
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_speaker_zzz,
-                "Sunrise",
-                getPrayerTime[1],
-                formatDateWithCurrentTime(selectedPrayerDate),
-                getSunriseDetail() ?: NotificationData()
-            )
-        )
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Dhuhr",
-                getPrayerTime[2],
-                formatDateWithCurrentTime(selectedPrayerDate),
-                getDuhrDetail() ?: NotificationData()
-            )
-        )
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Asr",
-                getPrayerTime[3],
-                formatDateWithCurrentTime(selectedPrayerDate),
-                getAsrDetail() ?: NotificationData()
-            )
-        )
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Maghrib",
-                getPrayerTime[4],
-                formatDateWithCurrentTime(selectedPrayerDate),
-                getMagribDetail() ?: NotificationData()
-            )
-        )
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_mike,
-                "Isha",
-                getPrayerTime[5],
-                formatDateWithCurrentTime(selectedPrayerDate),
-                getIshaDetail() ?: NotificationData()
-            )
+    suspend fun getPrayList(lat: Double, long: Double) {
+        val getPrayerTime = getPrayerTime(lat, long)
+        val prayTimeArrayList = arrayListOf<PrayTime>()
+
+        val icons = listOf(
+            R.drawable.ic_mike,
+            R.drawable.ic_speaker_zzz,
+            R.drawable.ic_mike,
+            R.drawable.ic_mike,
+            R.drawable.ic_mike,
+            R.drawable.ic_mike,
+            R.drawable.ic_notification_mute,
+            R.drawable.ic_notification_mute
         )
 
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_notification_mute,
-                "Midnight",
-                getPrayerTime[6],
-                formatDateWithCurrentTime(selectedPrayerDate),
-                getMidNightDetail() ?: NotificationData()
-            )
+        val namazDetail = listOf(
+            getFajrDetail(),
+            getSunriseDetail(),
+            getDuhrDetail(),
+            getAsrDetail(),
+            getMagribDetail(),
+            getIshaDetail(),
+            getMidNightDetail(),
+            getLastNightDetail()
         )
 
-        prayTimeArray.add(
-            PrayTime(
-                R.drawable.ic_notification_mute,
-                "Last Third",
-                getPrayerTime[7],
-                formatDateWithCurrentTime(selectedPrayerDate),
-                getLastNightDetail() ?: NotificationData()
-            )
-        )
 
+        prayerNames.forEachIndexed { index, name ->
+            prayTimeArrayList.add(
+                PrayTime(
+                    icons[index],
+                    name,
+                    getPrayerTime[index],
+                    formatDateWithCurrentTime(selectedPrayerDate),
+                    namazDetail[index] ?: NotificationData()
+                )
+            )
+        }
 
         // Get the upcoming namaz using getTimeDifferenceToNextPrayer function
         val upcomingNamaz = getTimeDifferenceToNextPrayer(lat, long)
 
-        // Iterate through the prayTimeArray and set isCurrentNamaz accordingly
-        for (prayTime in prayTimeArray) {
+        // Iterate through the prayTimeArrayList and set isCurrentNamaz accordingly
+        for (prayTime in prayTimeArrayList) {
             prayTime.isCurrentNamaz = prayTime.title == upcomingNamaz.currentNamazName
         }
+        _prayTimeArray.postValue(prayTimeArrayList)
+        isLoading.postValue(false)
     }
 
 
     private fun getTimeDifferenceToNextPrayer(lat: Double, long: Double): PrayerTime {
 
-        val getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
-            lat,
-            long,
-            method
-        )
-
-        val getPrayerTime1 = getPrayerTime(lat,long)
-
-        Log.d("time midnight", getPrayerTime1[6])
-        Log.d("time midnight static", "1712083320000")
-
-        val prayerTimeList = listOf(
-            PrayerTime(
-                "Fajr",
-                convertTimeToMillis(convertToFunTime(getPrayerTime.fajr.toEpochMilliseconds()))
-            ), PrayerTime(
-                "Sunrise",
-                convertTimeToMillis(convertToFunTime(getPrayerTime.sunrise.toEpochMilliseconds()))
-            ),
-            PrayerTime(
-                "Dhuhr",
-                convertTimeToMillis(convertToFunTime(getPrayerTime.dhuhr.toEpochMilliseconds()))
-            ),
-            PrayerTime(
-                "Asr",
-                convertTimeToMillis(convertToFunTime(getPrayerTime.asr.toEpochMilliseconds()))
-            ),
-            PrayerTime(
-                "Maghrib",
-                convertTimeToMillis(convertToFunTime(getPrayerTime.maghrib.toEpochMilliseconds()))
-            ),
-            PrayerTime(
-                "Isha",
-                convertTimeToMillis(convertToFunTime(getPrayerTime.isha.toEpochMilliseconds()))
-            ), PrayerTime(
-                "Midnight",
-                1712083320000
-            ), PrayerTime(
-                "LastThird",
-                1712004000000
+        val namazTime = getPrayerTime(lat, long)
+        val prayerTimeList = arrayListOf<PrayerTime>()
+        prayerNames.forEachIndexed { index, name ->
+            prayerTimeList.add(
+                PrayerTime(
+                    currentNamazName = name,
+                    currentNamazTime = convertTimeToMillis(namazTime[index])
+                )
             )
-        )
+        }
 
         val currentTimeMillis = convertAndGetCurrentTimeMillis()
 
@@ -209,11 +185,13 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
                         currentPrayerTimeIndex = i
                         nextPrayerTimeIndex = i + 1
                     }
+
                     "Isha" -> {
                         previousPrayerTimeIndex = i - 1
                         currentPrayerTimeIndex = i
                         nextPrayerTimeIndex = 0
                     }
+
                     else -> {
                         previousPrayerTimeIndex = i - 1
                         currentPrayerTimeIndex = i
@@ -245,5 +223,116 @@ class TimeViewModel @Inject constructor(repository: MainRepository) :
             timeDifferenceMillis,
             totalDifferenceMillis
         )
+    }
+
+     fun savePrayerDetailData(prayerDetailData:NotificationData?,namazName:String,namazTime:String) {
+         Log.d("prayerDetailData",prayerDetailData.toString())
+         Log.d("namazName",namazName.toString())
+         Log.d("namazTime",namazTime.toString())
+        val fajrData = NotificationData(
+            namazName = namazName,
+            namazTime = namazTime,
+            notificationSound = CurrentNamazNotificationData(
+                prayerDetailData?.notificationSound?.currentNamazName ?: "",
+                prayerDetailData?.notificationSound?.soundName ?: "",
+                prayerDetailData?.notificationSound?.soundToneName ?: "",
+                prayerDetailData?.notificationSound?.selectedSoundPosition,
+                prayerDetailData?.notificationSound?.selectedSoundTonePosition,
+                prayerDetailData?.notificationSound?.selectedSoundItemPosition,
+                prayerDetailData?.notificationSound?.isSoundSelected ?: false,
+                prayerDetailData?.notificationSound?.isForAdhan ?: false,
+                prayerDetailData?.notificationSound?.isVibrate ?: false,
+                prayerDetailData?.notificationSound?.isSilent ?: false,
+                prayerDetailData?.notificationSound?.isOff ?: false,
+                prayerDetailData?.notificationSound?.soundAdhan,
+                prayerDetailData?.notificationSound?.soundTone
+            ),
+            reminderSound = prayerDetailData?.reminderSound,
+            reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
+            reminderTime = prayerDetailData?.reminderTime ?: "",
+            secondReminderTimeMinutes = prayerDetailData?.secondReminderTimeMinutes ?: "off",
+            secondReminderTime = prayerDetailData?.secondReminderTime ?: "",
+            duaReminderMinutes = "off",
+            duaTime = "",
+            duaType = "off",
+            createdDate = getCurrentDate(),
+        )
+
+        val sunriseData = NotificationData(
+            namazName = namazName,
+            namazTime = namazTime,
+            notificationSound = CurrentNamazNotificationData(
+                prayerDetailData?.notificationSound?.currentNamazName ?: "",
+                prayerDetailData?.notificationSound?.soundName ?: "",
+                prayerDetailData?.notificationSound?.soundToneName ?: "",
+                prayerDetailData?.notificationSound?.selectedSoundPosition,
+                prayerDetailData?.notificationSound?.selectedSoundTonePosition,
+                prayerDetailData?.notificationSound?.selectedSoundItemPosition,
+                prayerDetailData?.notificationSound?.isSoundSelected ?: false,
+                prayerDetailData?.notificationSound?.isForAdhan ?: false,
+                prayerDetailData?.notificationSound?.isVibrate ?: false,
+                prayerDetailData?.notificationSound?.isSilent ?: false,
+                prayerDetailData?.notificationSound?.isOff ?: false,
+                prayerDetailData?.notificationSound?.soundAdhan,
+                prayerDetailData?.notificationSound?.soundTone
+            ),
+            reminderSound = prayerDetailData?.reminderSound,
+            reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
+            reminderTime = prayerDetailData?.reminderTime ?: "",
+            secondReminderTimeMinutes = "off",
+            secondReminderTime = "off",
+            duaReminderMinutes = prayerDetailData?.duaReminderMinutes ?: "off",
+            duaTime = prayerDetailData?.duaTime ?: "",
+            duaType = prayerDetailData?.duaType ?: "off",
+            createdDate = getCurrentDate(),
+        )
+
+        val saveData = NotificationData(
+            namazName = namazName,
+            namazTime = namazTime,
+            notificationSound = CurrentNamazNotificationData(
+                prayerDetailData?.notificationSound?.currentNamazName ?: "",
+                prayerDetailData?.notificationSound?.soundName ?: "",
+                prayerDetailData?.notificationSound?.soundToneName ?: "",
+                prayerDetailData?.notificationSound?.selectedSoundPosition,
+                prayerDetailData?.notificationSound?.selectedSoundTonePosition,
+                prayerDetailData?.notificationSound?.selectedSoundItemPosition,
+                prayerDetailData?.notificationSound?.isSoundSelected ?: false,
+                prayerDetailData?.notificationSound?.isForAdhan ?: false,
+                prayerDetailData?.notificationSound?.isVibrate ?: false,
+                prayerDetailData?.notificationSound?.isSilent ?: false,
+                prayerDetailData?.notificationSound?.isOff ?: false,
+                prayerDetailData?.notificationSound?.soundAdhan,
+                prayerDetailData?.notificationSound?.soundTone
+            ),
+            reminderSound = prayerDetailData?.reminderSound,
+            reminderTimeMinutes = prayerDetailData?.reminderTimeMinutes ?: "off",
+            reminderTime = prayerDetailData?.reminderTime ?: "",
+            secondReminderTimeMinutes = "off",
+            secondReminderTime = "",
+            duaReminderMinutes = "off",
+            duaTime = "",
+            duaType = "off",
+            createdDate = getCurrentDate(),
+        )
+
+        when (namazName) {
+            "Fajr" -> saveFajrDetail(fajrData)
+
+            "Sunrise" -> saveSunriseDetail(sunriseData)
+
+            "Dhuhr" -> saveDuhrDetail(saveData)
+
+            "Asr" -> saveAsrDetail(saveData)
+
+            "Maghrib" -> saveMagribDetail(saveData)
+
+            "Isha" -> saveIshaDetail(saveData)
+
+            "Midnight" -> saveMidNightDetail(saveData)
+
+            "Last Third" -> saveLastNightDetail(saveData)
+        }
+
     }
 }

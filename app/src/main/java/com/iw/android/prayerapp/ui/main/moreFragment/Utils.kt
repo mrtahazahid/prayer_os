@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import com.batoulapps.adhan2.CalculationParameters
-import com.iw.android.prayerapp.BuildConfig
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.extension.convertToFunDateTime
 import com.iw.android.prayerapp.extension.convertToFunTime
@@ -15,7 +14,7 @@ import com.iw.android.prayerapp.extension.getDeviceName
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import java.util.Locale
 
-fun sendUserToGmail(
+suspend fun sendUserToGmail(
     context: Context,
     lat: Double,
     lng: Double,
@@ -57,7 +56,7 @@ fun sendUserToGmail(
             intent.putExtra(Intent.EXTRA_EMAIL, recipients)
             intent.putExtra(
                 Intent.EXTRA_SUBJECT,
-                "Feedback For " + context.getString(R.string.app_name)
+                "Android: Feedback For " + context.getString(R.string.app_name)
             )
             intent.putExtra(
                 Intent.EXTRA_TEXT,
@@ -67,7 +66,7 @@ fun sendUserToGmail(
 
 
 ===================
-Version: ${BuildConfig.VERSION_NAME}
+Version: 1.8
 
 -------------------
 Phone Information

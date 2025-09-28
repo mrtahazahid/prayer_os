@@ -1,62 +1,35 @@
 package com.iw.android.prayerapp.ui.main.monthlyCalender
 
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.batoulapps.adhan2.CalculationMethod
-import com.batoulapps.adhan2.Madhab
-import com.batoulapps.adhan2.PrayerTimes
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentMonthlyCalendarBinding
-import com.iw.android.prayerapp.extension.converterForMonthly
-import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
 import com.iw.android.prayerapp.ui.main.monthlyCalender.itemView.RowItemMonthlyCalender
-import com.iw.android.prayerapp.ui.main.timeFragment.TimeViewModel
-import com.iw.android.prayerapp.utils.GetAdhanDetails
-import com.iw.android.prayerapp.utils.Helper.generateDatesAsDateObjects
-import com.iw.android.prayerapp.utils.Helper.generateDayAndWeekInfo
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.chrono.HijrahDate
-import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import com.iw.android.prayerapp.utils.PaginationScrollListener
 
 class FragmentMonthlyCalender : BaseFragment(R.layout.fragment_monthly_calendar),
     View.OnClickListener {
 
-    private lateinit var wholeYearFajarTimeArray: ArrayList<String>
-    private lateinit var wholeYearZoharTimeArray: ArrayList<String>
-    private lateinit var wholeYearAsarTimeArray: ArrayList<String>
-    private lateinit var wholeYearMaghribTimeArray: ArrayList<String>
-    private lateinit var wholeYearIshaTimeArray: ArrayList<String>
-    private lateinit var wholeYearSunriseTimeArray: ArrayList<String>
-    private lateinit var wholeYearMonthArray: ArrayList<String>
-    private lateinit var wholeYearHijriArray: ArrayList<String>
-    private lateinit var wholeYearDateArray: ArrayList<String>
-    private lateinit var wholeYearDayArray: ArrayList<String>
-    private lateinit var wholeYearHijriNameArray: ArrayList<String>
-
-
-    private lateinit var getPrayerTime: PrayerTimes
     private var _binding: FragmentMonthlyCalendarBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: MonthlyViewModel by viewModels()
     private var viewTypeArray = ArrayList<ViewType<*>>()
-
-    val onBoardingViewModel: OnBoardingViewModel by viewModels()
-    private val timeViewModel: TimeViewModel by viewModels()
 
     val adapter by lazy {
         GenericListAdapter(object : OnItemClickListener<ViewType<*>> {
@@ -70,150 +43,21 @@ class FragmentMonthlyCalender : BaseFragment(R.layout.fragment_monthly_calendar)
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMonthlyCalendarBinding.inflate(inflater, container, false)
-        wholeYearFajarTimeArray = ArrayList()
-        wholeYearZoharTimeArray = ArrayList()
-        wholeYearAsarTimeArray = ArrayList()
-        wholeYearMaghribTimeArray = ArrayList()
-        wholeYearIshaTimeArray = ArrayList()
-        wholeYearSunriseTimeArray = ArrayList()
-        wholeYearMonthArray = ArrayList()
-        wholeYearHijriArray = ArrayList()
-        wholeYearDateArray = ArrayList()
-        wholeYearDayArray = ArrayList()
-        wholeYearHijriNameArray = ArrayList()
-
-        getWholeYearFajarTime()
-        getWholeYearZoharTime()
-        getWholeYearAsarTime()
-        getWholeYearMaghribTime()
-        getWholeYearIshaTime()
-        getWholeYearSunriseTime()
-
-        wholeYearHijriArray.add("0")
-
-        val allDateInfo = generateDayAndWeekInfo()
-        allDateInfo.forEach {
-            wholeYearMonthArray.add(it.previousMonth.getDisplayName(TextStyle.SHORT, Locale.ENGLISH))
-            wholeYearDateArray.add(it.dayOfMonth.toString())
-            wholeYearDayArray.add(it.dayOfWeek)
-        }
-        wholeYearHijriNameArray.clear()
-        wholeYearHijriArray.clear()
-        getIslamicDatesForYear().forEach{
-            wholeYearHijriNameArray.add(it.name)
-            wholeYearHijriArray.add(it.date.toString())
-        }
-        binding.textViewTitle.text = "Monthly"
+        binding.textViewTitle.text = getString(R.string.monthly)
         return binding.root
-    }
-
-    fun getCurrentYear(): String {
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        return currentYear.toString()
-    }
-
-    fun getIslamicDateByOffSet(offset: Int): String {
-        val sdf = SimpleDateFormat("yyyy/M/dd")
-        val currentDate = sdf.format(Date())
-
-        val splitDate = currentDate.split("/")
-        val year = splitDate[0].toInt()
-        val month = splitDate[1].toInt()
-        val day = splitDate[2].toInt()
-
-        val gregorianDate: LocalDate = LocalDate.of(year, month, day)
-
-        // Add offset days to the current date
-        val offsetGregorianDate = gregorianDate.plusDays(offset.toLong())
-
-        val hijrahDate = HijrahDate.from(offsetGregorianDate)
-
-        val formatter = DateTimeFormatter.ofPattern("yyyy", Locale.ENGLISH)
-        val formattedHijrahDate = hijrahDate.format(formatter)
-
-        return formattedHijrahDate.replace(" ", " ") // Customize space as needed
-    }
-    private fun getWholeYearFajarTime(){
-        Log.d("getWholeYearFajarTime()",generateDatesAsDateObjects().toList().toString())
-        for (i in generateDatesAsDateObjects()){
-            getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
-                timeViewModel.userLatLong?.latitude ?: 0.0,
-                timeViewModel.userLatLong?.longitude ?: 0.0,
-                onBoardingViewModel.method
-                    ?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = Madhab.SHAFI),
-                i
-            )
-            wholeYearFajarTimeArray.add(converterForMonthly(getPrayerTime.fajr.toEpochMilliseconds()))
-        }
-    }
-
-    private fun getWholeYearZoharTime(){
-        for (i in generateDatesAsDateObjects()){
-            getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
-                timeViewModel.userLatLong?.latitude ?: 0.0,
-                timeViewModel.userLatLong?.longitude ?: 0.0,
-                onBoardingViewModel.method
-                    ?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = Madhab.SHAFI),
-                i
-            )
-            wholeYearZoharTimeArray.add(converterForMonthly(getPrayerTime.dhuhr.toEpochMilliseconds()))
-        }
-    }
-
-    private fun getWholeYearAsarTime(){
-        for (i in generateDatesAsDateObjects()){
-            getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
-                timeViewModel.userLatLong?.latitude ?: 0.0,
-                timeViewModel.userLatLong?.longitude ?: 0.0,
-                onBoardingViewModel.method
-                    ?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = Madhab.SHAFI),
-                i
-            )
-            wholeYearAsarTimeArray.add(converterForMonthly(getPrayerTime.asr.toEpochMilliseconds()))
-        }
-    }
-
-    private fun getWholeYearMaghribTime(){
-        for (i in generateDatesAsDateObjects()){
-            getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
-                timeViewModel.userLatLong?.latitude ?: 0.0,
-                timeViewModel.userLatLong?.longitude ?: 0.0,
-                onBoardingViewModel.method
-                    ?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = Madhab.SHAFI),
-                i
-            )
-            wholeYearMaghribTimeArray.add(converterForMonthly(getPrayerTime.maghrib.toEpochMilliseconds()))
-        }
-    }
-
-    private fun getWholeYearIshaTime(){
-        for (i in generateDatesAsDateObjects()){
-            getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
-                timeViewModel.userLatLong?.latitude ?: 0.0,
-                timeViewModel.userLatLong?.longitude ?: 0.0,
-                onBoardingViewModel.method
-                    ?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = Madhab.SHAFI),
-                i
-            )
-            wholeYearIshaTimeArray.add(converterForMonthly(getPrayerTime.isha.toEpochMilliseconds()))
-        }
-    }
-
-    private fun getWholeYearSunriseTime(){
-        for (i in generateDatesAsDateObjects()){
-            getPrayerTime = GetAdhanDetails.getPrayTimeInLong(
-                timeViewModel.userLatLong?.latitude ?: 0.0,
-                timeViewModel.userLatLong?.longitude ?: 0.0,
-                onBoardingViewModel.method
-                    ?: CalculationMethod.NORTH_AMERICA.parameters.copy(madhab = Madhab.SHAFI),
-                i
-            )
-            wholeYearSunriseTimeArray.add(converterForMonthly(getPrayerTime.sunrise.toEpochMilliseconds()))
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (Build.VERSION.SDK_INT >= 35) {
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+            ViewCompat.setOnApplyWindowInsetsListener(binding.mainView) { v: View, insets: WindowInsetsCompat ->
+                val systemBars: Insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(0, 0, 0, systemBars.bottom)
+                insets
+            }
+        }
+
         initialize()
         setObserver()
         setOnClickListener()
@@ -222,74 +66,67 @@ class FragmentMonthlyCalender : BaseFragment(R.layout.fragment_monthly_calendar)
 
     override fun initialize() {
         setRecyclerView()
+        setOnBackPressedListener()
     }
 
     override fun setObserver() {
-        viewTypeArray.clear()
-        for (data in viewModel.monthlyList) {
-            viewTypeArray.add(
-                RowItemMonthlyCalender(data)
-            )
+        viewModel.pagedData.observe(viewLifecycleOwner) { pagedList ->
+            val previousSize = viewTypeArray.size
+            val newItems = pagedList.drop(previousSize)
+
+            for (data in newItems) {
+                viewTypeArray.add(RowItemMonthlyCalender(data))
+            }
+
+            adapter.items = viewTypeArray
+            viewModel.isLoading.value = false
         }
-        adapter.items = viewTypeArray
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.progress.show()
+            } else {
+                binding.progress.hide()
+            }
+        }
     }
 
 
     override fun setOnClickListener() {
-        binding.imageViewBack.setOnClickListener(this)
+        binding.backView.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            binding.imageViewBack.id -> {
+            binding.backView.id -> {
                 findNavController().popBackStack()
             }
         }
     }
 
     private fun setRecyclerView() {
-        val monthlyAdapter = MonthlyCalenderAdapter(
-            wholeYearMonthArray,
-            wholeYearDayArray,
-            wholeYearDateArray,
-            wholeYearSunriseTimeArray,
-            wholeYearFajarTimeArray,
-            wholeYearZoharTimeArray,
-            wholeYearAsarTimeArray,
-            wholeYearMaghribTimeArray,
-            wholeYearIshaTimeArray,
-            wholeYearHijriArray,
-            wholeYearHijriNameArray
-        )
-        binding.recyclerView.adapter = monthlyAdapter
+
+        binding.recyclerView.adapter = adapter
+        val layoutManager = binding.recyclerView.layoutManager as LinearLayoutManager
+        binding.recyclerView.addOnScrollListener(object :
+            PaginationScrollListener(layoutManager) {
+            override fun onScrolled(dy: Int) {
+            }
+
+            override fun loadMoreItems() {
+                viewModel.loadNextPage()
+            }
+        })
     }
 
-
-    fun getIslamicDatesForYear(): List<IslamicDate> {
-        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH)
-        val islamicDatesList = mutableListOf<IslamicDate>()
-
-        val startDate = LocalDate.now()
-        val endDate = startDate.plusYears(1)
-
-        var currentDate = startDate
-        while (currentDate.isBefore(endDate)) {
-            val hijriDate = HijrahDate.from(currentDate)
-            val formattedHijriDate = hijriDate.format(formatter)
-
-            val splitDate = formattedHijriDate.split(" ")
-            val shortMonth = splitDate[1]  // e.g., "Raj"
-            val day = splitDate[0].toInt() // e.g., "19"
-
-            islamicDatesList.add(IslamicDate(name = shortMonth, date = day))
-            currentDate = currentDate.plusDays(1)
-        }
-
-        return islamicDatesList
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            })
     }
 
 }
-data class IslamicDate(
-    val name: String, // Holds the abbreviated month name
-    val date: Int    // Holds the date
-)
+

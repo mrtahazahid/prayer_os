@@ -9,6 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.model.LatLng
@@ -17,9 +21,11 @@ import com.iw.android.prayerapp.base.adapter.GenericListAdapter
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.base.response.LocationResponse
+import com.iw.android.prayerapp.data.response.LocationData
 import com.iw.android.prayerapp.databinding.LocationDialogBinding
 import com.iw.android.prayerapp.utils.GetAdhanDetails
 import com.iw.android.prayerapp.utils.GooglePlaceHelper
+import com.iw.android.prayerapp.utils.Helper.updateHeight
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -39,6 +45,7 @@ class MapDialog : DialogFragment(),
     var latitude: Double? = null
     var longitude: Double? = null
     var city: String? = null
+    var location: LocationData? = null
 
     private var viewTypeArray = ArrayList<ViewType<*>>()
 
@@ -65,12 +72,28 @@ class MapDialog : DialogFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.viewTopInset.updateHeight(systemBars.top)
+            binding.viewBottomInset.updateHeight(systemBars.bottom)
+
+            insets
+        }
+        requireActivity().window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.black)
         initialize()
         setObserver()
         setOnClickListener()
     }
 
     private fun initialize() {
+        binding.cardView.visibility =  if(recentLocationList.isEmpty())View.GONE else View.VISIBLE
+        lifecycleScope.launch {
+             location = GetAdhanDetails.getTimeZoneAndCity(
+                requireContext(), latitude ?: 0.0,
+                longitude ?: 0.0
+            )
+        }
         binding.recyclerView.adapter = adapter
     }
 
@@ -104,10 +127,9 @@ class MapDialog : DialogFragment(),
             }
 
             binding.textViewDone.id -> {
-                val location = GetAdhanDetails.getTimeZoneAndCity(
-                    requireContext(), latitude ?: 0.0,
-                    longitude ?: 0.0
-                )
+
+
+                Log.d("city",city.toString())
                 sendDataBack(
                     LocationResponse(
                         location?.timeZone ?: "",
@@ -161,11 +183,11 @@ class MapDialog : DialogFragment(),
                     if (!addresses.isNullOrEmpty()) {
                         val address = addresses[0]
                         withContext(Dispatchers.Main) {
-                            Log.d("address", address.toString())
-                            binding.searchTextView.text = "${address.locality}, ${address.countryName}"
+                            val locality = if(address.locality.isNullOrEmpty()) "Unknown" else address.locality
+                            binding.searchTextView.text = "${locality}, ${address.countryName}"
                             latitude = address.latitude
                             longitude = address.longitude
-                            city = "${address.locality}, ${address.countryName}"
+                            city = "${locality}, ${address.countryName}"
                         }
                     }
                 }
@@ -187,8 +209,5 @@ class MapDialog : DialogFragment(),
         fun onDataPassed(data: LocationResponse)
     }
 
-    override fun onItemClick(data: LocationResponse) {
-        listener?.onDataPassed(data)
-        dismiss()
-    }
+    override fun onItemClick(data: LocationResponse) { sendDataBack(data) }
 }

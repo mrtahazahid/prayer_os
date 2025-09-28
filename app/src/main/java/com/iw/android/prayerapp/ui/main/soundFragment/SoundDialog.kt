@@ -1,11 +1,16 @@
 package com.iw.android.prayerapp.ui.main.soundFragment
 
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
@@ -13,6 +18,7 @@ import com.iw.android.prayerapp.base.adapter.OnItemClickListener
 import com.iw.android.prayerapp.base.adapter.ViewType
 import com.iw.android.prayerapp.data.response.SoundData
 import com.iw.android.prayerapp.databinding.DialogSoundBinding
+import com.iw.android.prayerapp.extension.setStatusBarWithBlackIcon
 import com.iw.android.prayerapp.ui.main.soundFragment.itemView.OnItemClick
 import com.iw.android.prayerapp.ui.main.soundFragment.itemView.RowItemSound
 import com.iw.android.prayerapp.utils.GetAdhanSound
@@ -64,6 +70,16 @@ class SoundDialog : DialogFragment(), View.OnClickListener, OnItemClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (Build.VERSION.SDK_INT >= 35) {
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+            ViewCompat.setOnApplyWindowInsetsListener(binding.mainView) { v: View, insets: WindowInsetsCompat ->
+                val systemBars: Insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(0, systemBars.top, 0, systemBars.bottom)
+                insets
+            }
+        }
+
+        setStatusBarWithBlackIcon(R.color.black)
         initialize()
         setObserver()
         setOnClickListener()

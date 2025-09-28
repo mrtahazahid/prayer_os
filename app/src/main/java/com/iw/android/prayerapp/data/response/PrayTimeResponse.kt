@@ -63,7 +63,7 @@ data class PrayerTime(
     val timeDifference: Long = 0,
     val totalTime: Long = 0
 )
-
+@Serializable
 data class NotificationPrayerTime(
     val currentNamazName: String,
     val currentNamazTime: String,

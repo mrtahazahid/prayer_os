@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,10 @@ import android.widget.ArrayAdapter
 import android.widget.TimePicker
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -48,7 +53,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
     val binding
         get() = _binding!!
 
-    private var soundDialog: SoundDialog?=null
+    private var soundDialog: SoundDialog? = null
 
     private val viewModel: IqamaViewModel by viewModels()
     private var viewTypeArray = ArrayList<ViewType<*>>()
@@ -96,6 +101,15 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (Build.VERSION.SDK_INT >= 35) {
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+            ViewCompat.setOnApplyWindowInsetsListener(binding.mainView) { v: View, insets: WindowInsetsCompat ->
+                val systemBars: Insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(0, 0, 0, 0)
+                insets
+            }
+        }
+
         initialize()
         setObserver()
         setOnClickListener()
@@ -150,7 +164,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
                 soundName = it?.soundName ?: "Tone"
                 binding.textViewNotificationSetTime.text = it?.reminderTime ?: "off"
                 if (reminderTime != "off" && !reminderTime.isNullOrBlank()) {
-                    reminderTimeCount = extractMinutes(it?.reminderTime?:"0")
+                    reminderTimeCount = extractMinutes(it?.reminderTime ?: "0")
                 }
             }
 
@@ -236,20 +250,22 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
     @SuppressLint("SimpleDateFormat")
     override fun onClick(v: View?) {
         when (v?.id) {
-            binding.imageViewTimer.id->{
+            binding.imageViewTimer.id -> {
                 CustomDialog(
                     requireContext(),
                     "Timer countdown",
                     "Displays the iqama countdown in \n timers after the adhan."
                 ).show()
             }
-            binding.imageViewShowList.id->{
+
+            binding.imageViewShowList.id -> {
                 CustomDialog(
                     requireContext(),
                     "Show in list",
                     "Display the selected iqama times on\n the Times screen."
                 ).show()
             }
+
             binding.imageViewUpdateInterval1.id -> {
                 CustomDialog(
                     requireContext(),
@@ -364,11 +380,11 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
 
             binding.jummahView.id, binding.imageViewJumuah.id -> {
                 if (!isJummuahDetailShow) {
-                    showDetailView(binding.jummahDetail,binding.imageViewJumuah)
+                    showDetailView(binding.jummahDetail, binding.imageViewJumuah)
                     binding.textViewType.gone()
                     isJummuahDetailShow = true
                 } else {
-                    hideDetailView(binding.jummahDetail,binding.imageViewJumuah)
+                    hideDetailView(binding.jummahDetail, binding.imageViewJumuah)
                     binding.textViewType.show()
                     isJummuahDetailShow = false
                 }
@@ -386,10 +402,10 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
 
             binding.displayView.id, binding.imageViewDisplay.id -> {
                 if (!isDisplayDetailShow) {
-                    showDetailView(binding.displayDetailView,binding.imageViewDisplay)
+                    showDetailView(binding.displayDetailView, binding.imageViewDisplay)
                     isDisplayDetailShow = true
                 } else {
-                    hideDetailView(binding.displayDetailView,binding.imageViewDisplay)
+                    hideDetailView(binding.displayDetailView, binding.imageViewDisplay)
                     isDisplayDetailShow = false
                 }
             }
@@ -397,10 +413,10 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
             binding.notificationView.id, binding.imageViewNotification.id -> {
                 if (!isNotificationDetailShow) {
                     binding.detailViews.show()
-                    showDetailView(binding.detailViews,binding.imageViewNotification)
+                    showDetailView(binding.detailViews, binding.imageViewNotification)
                     isNotificationDetailShow = true
                 } else {
-                    hideDetailView(binding.detailViews,binding.imageViewNotification)
+                    hideDetailView(binding.detailViews, binding.imageViewNotification)
                     isNotificationDetailShow = false
                 }
             }
@@ -609,7 +625,7 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
     }
 
     private fun openSoundDialogFragment() {
-         soundDialog = SoundDialog()
+        soundDialog = SoundDialog()
         soundDialog?.listener = this
         soundDialog?.title = "Reminder Sound"
         soundDialog?.subTitle = "Setting"
@@ -666,9 +682,9 @@ class IqamaFragment : BaseFragment(R.layout.fragment_iqama), View.OnClickListene
         requireActivity().onBackPressedDispatcher.addCallback(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (soundDialog !=null){
+                    if (soundDialog != null) {
                         soundDialog?.dismiss()
-                    }else{
+                    } else {
                         findNavController().popBackStack()
                     }
 

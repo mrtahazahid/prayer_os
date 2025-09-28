@@ -12,6 +12,7 @@ import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.data.response.NotificationSettingData
 import com.iw.android.prayerapp.data.response.TimeData
 import com.iw.android.prayerapp.data.response.UserLatLong
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -35,49 +36,49 @@ abstract class BaseViewModel( val repository: BaseRepository) : ViewModel() {
         repository.saveUserLatLong(userLatLong)
     }
 
-    fun saveFajrDetail(prayerDetail: NotificationData) = viewModelScope.launch {
+    fun saveFajrDetail(prayerDetail: NotificationData) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveFajrDetail(prayerDetail)
     }
 
     suspend fun getFajrDetail() = repository.getFajrDetail()
-    fun saveSunriseDetail(prayerDetail: NotificationData) = viewModelScope.launch {
+    fun saveSunriseDetail(prayerDetail: NotificationData) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveSunriseDetail(prayerDetail)
     }
 
-    fun addCurrentNamazToList(data: NotificationData) = viewModelScope.launch {
+    fun addCurrentNamazToList(data: NotificationData) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveNotificationData(data)
     }
 
     suspend fun getSunriseDetail() = repository.getSunriseDetail()
-    fun saveDuhrDetail(prayerDetail: NotificationData) = viewModelScope.launch {
+    fun saveDuhrDetail(prayerDetail: NotificationData) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveDuhrDetail(prayerDetail)
     }
 
     suspend fun getDuhrDetail() = repository.getDuhrDetail()
-    fun saveAsrDetail(prayerDetail: NotificationData) = viewModelScope.launch {
+    fun saveAsrDetail(prayerDetail: NotificationData) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveAsrDetail(prayerDetail)
     }
 
     suspend fun getAsrDetail() = repository.getAsrDetail()
 
-    fun saveMagribDetail(prayerDetail: NotificationData) = viewModelScope.launch {
+    fun saveMagribDetail(prayerDetail: NotificationData) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveMagribDetail(prayerDetail)
     }
 
     suspend fun getMagribDetail() = repository.getMagribDetail()
-    fun saveIshaDetail(prayerDetail: NotificationData) = viewModelScope.launch {
+    fun saveIshaDetail(prayerDetail: NotificationData) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveIshaDetail(prayerDetail)
     }
 
     suspend fun getIshaDetail() = repository.getIshaDetail()
 
-    fun saveMidNightDetail(prayerDetail: NotificationData) = viewModelScope.launch {
+    fun saveMidNightDetail(prayerDetail: NotificationData) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveMidnightDetail(prayerDetail)
     }
 
     suspend fun getMidNightDetail() = repository.getMidnightDetail()
 
-    fun saveLastNightDetail(prayerDetail: NotificationData) = viewModelScope.launch {
+    fun saveLastNightDetail(prayerDetail: NotificationData) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveLastThirdDetail(prayerDetail)
     }
 
@@ -106,13 +107,13 @@ abstract class BaseViewModel( val repository: BaseRepository) : ViewModel() {
         return repository.getTimeSettingData()
     }
 
-    fun setGeofenceRadius(value: Int) = viewModelScope.launch {
+    fun setGeofenceRadius(value: Int) = viewModelScope.launch(Dispatchers.IO) {
         repository.setGeofenceRadius(value)
     }
 
     suspend fun getGeofenceRadius(): Int = repository.getGeofenceRadius()
 
-    fun saveSettingNotificationData(data: NotificationSettingData) = viewModelScope.launch {
+    fun saveSettingNotificationData(data: NotificationSettingData) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveSettingNotificationData(data)
     }
 

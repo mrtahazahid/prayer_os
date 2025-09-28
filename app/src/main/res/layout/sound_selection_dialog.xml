@@ -8,6 +8,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black">
@@ -36,16 +37,16 @@
                 android:layout_height="wrap_content"
                 android:text="Times"
                 android:textColor="@color/app_green"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageViewBack"
                 app:layout_constraintStart_toEndOf="@+id/imageViewBack"
                 app:layout_constraintTop_toTopOf="@+id/imageViewBack" />
-
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageViewCopy"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_margin="20dp"
+                android:visibility="gone"
                 android:src="@drawable/ic_copy"
                 android:tint="@color/app_green"
                 app:layout_constraintBottom_toBottomOf="parent"

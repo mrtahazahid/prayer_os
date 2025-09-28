@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.databinding.FragmentFirstOnboardingBinding
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
+import com.iw.android.prayerapp.utils.decodeImage.decodeSampledBitmap
 
 class FirstOnboarding : BaseFragment(R.layout.fragment_first_onboarding) {
 
@@ -35,6 +35,8 @@ class FirstOnboarding : BaseFragment(R.layout.fragment_first_onboarding) {
 
     override fun initialize() {
         setOnBackPressedListener()
+        val bitmap = decodeSampledBitmap(requireContext(), R.drawable.prayer_removebg, 1024, 1024)
+        binding.imageView.setImageBitmap(bitmap)
 
     }
 
@@ -42,37 +44,10 @@ class FirstOnboarding : BaseFragment(R.layout.fragment_first_onboarding) {
 
     override fun setOnClickListener() {
         binding.btnGetStarted.setOnClickListener {
-//            startProgress()
             findNavController().navigate(R.id.action_firstOnboarding_to_secondOnboarding)
-
-        }
-
-        binding.skip.setOnClickListener {
-            Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
-//            requireActivity().startActivity(
-//                Intent(
-//                    requireContext(),
-//                    MainActivity::class.java
-//                ).putExtra("skip", "userSkipped")
-//            )
-//            requireActivity().finish()
-
         }
     }
 
-//    private fun startProgress() {
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            stopProgress()
-//            findNavController().navigate(R.id.action_firstOnboarding_to_secondOnboarding)
-//        }, 8000)
-//
-//        binding.pBar.visibility = View.VISIBLE
-//        Toast.makeText(context, "Getting your current location", Toast.LENGTH_SHORT).show()
-//    }
-
-    private fun stopProgress() {
-        binding.pBar.visibility = View.GONE
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

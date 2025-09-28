@@ -39,7 +39,7 @@
                 android:layout_marginStart="10dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/sf_bold"
-                android:maxLines="2"
+                android:maxLines="1"
                 android:text="Fajr"
                 android:textColor="@color/white"
                 android:textSize="13sp"

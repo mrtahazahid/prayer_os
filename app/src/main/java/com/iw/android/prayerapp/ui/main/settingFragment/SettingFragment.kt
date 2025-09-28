@@ -21,7 +21,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.iw.android.prayerapp.BuildConfig
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.fragment.BaseFragment
 import com.iw.android.prayerapp.base.response.LocationResponse
@@ -37,13 +36,15 @@ import com.iw.android.prayerapp.services.gps.GpsStatusListener
 import com.iw.android.prayerapp.services.gps.TurnOnGps
 import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.main.soundFragment.OnDataSelected
-import com.iw.android.prayerapp.utils.GetAdhanDetails.getTimeZoneAndCity
 import com.iw.android.prayerapp.utils.LocationPermissionTextProvider
 import com.iw.android.prayerapp.utils.anim.hideDetailView
 import com.iw.android.prayerapp.utils.anim.showDetailView
 import com.iw.android.prayerapp.utils.asset.AssetDialog
 import com.iw.android.prayerapp.utils.getCurrentLocationSuspend
 import com.iw.android.prayerapp.utils.map.MapDialog
+import com.iw.android.prayerapp.utils.method.MethodSelectionDialog
+import com.iw.android.prayerapp.utils.method.OnMethodSelected
+import com.iw.android.prayerapp.utils.method.getSelectedMethod
 import com.iw.android.prayerapp.utils.showPermissionDialog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -51,7 +52,7 @@ import java.text.DecimalFormat
 import java.util.Locale
 
 class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickListener,
-    OnDataSelected, MapDialog.MapDialogListener {
+    OnDataSelected, MapDialog.MapDialogListener, OnMethodSelected {
 
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!!
@@ -79,8 +80,10 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     private var isPlayOnTap = false
     private var isOpenSetting = false
     private var snooze = ""
+    private var city = ""
+    private var timeZone = ""
     private var turnOnGps: TurnOnGps? = null
-
+    private var methodDialog: MethodSelectionDialog? = null
     private lateinit var fusedClient: FusedLocationProviderClient
     private var gpsStatusListener: GpsStatusListener? = null
 
@@ -102,13 +105,12 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                                 lng
                             )
                         )
-                    }  ?: showToast("Error while getting user location")
+                    } ?: showToast("Error while getting user location")
                 }
             } else {
                 showPermissionDialog(
                     permissionTextProvider = LocationPermissionTextProvider(),
-                    isPermanentlyDeclined = permissions.entries.any {
-                            (permission, _) ->
+                    isPermanentlyDeclined = permissions.entries.any { (permission, _) ->
                         (permission == Manifest.permission.ACCESS_FINE_LOCATION ||
                                 permission == Manifest.permission.ACCESS_COARSE_LOCATION) &&
                                 !shouldShowRequestPermissionRationale(permission)
@@ -132,7 +134,6 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         }
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -154,6 +155,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         fusedClient = LocationServices.getFusedLocationProviderClient(requireContext())
         setOnBackPressedListener()
         binding.textViewLocal1.text = Locale.getDefault().toString()
+        viewModel.fetchTimeZoneAndCity(requireContext())
         lifecycleScope.launch {
             geofence = viewModel.getGeofenceRadius()
 
@@ -181,13 +183,8 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             viewModel.getUserLatLong?.latitude ?: 0.0,
             viewModel.getUserLatLong?.longitude ?: 0.0
         )
-        val location = getTimeZoneAndCity(
-            requireContext(), viewModel.getUserLatLong?.latitude ?: 0.0,
-            viewModel.getUserLatLong?.longitude ?: 0.0
-        )
-        binding.textViewCityName.text = location?.city
-        binding.textViewCityTimeZoneName.text = location?.timeZone
-        binding.textViewVersions.text = BuildConfig.VERSION_NAME
+
+        binding.textViewVersions.text = "1.8"
         binding.textViewCaches1.text =
             convertToFunDateTime(getCacheDirectoryLastModified(requireContext()))
         binding.switchAutomatic.isChecked = viewModel.getAutomaticLocation
@@ -203,9 +200,16 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     }
 
     override fun setObserver() {
-        spinnerMethod()
+        setMethod()
         spinnerElevation()
         spinnerJurisprudence()
+
+        viewModel.location.observe(viewLifecycleOwner) { location ->
+            city = location?.city ?: "City"
+            timeZone = location?.timeZone ?: "Time Zone"
+            binding.textViewCityName.text = location?.city ?: "Unknown City"
+            binding.textViewCityTimeZoneName.text = location?.timeZone ?: "Unknown Timezone"
+        }
     }
 
 
@@ -275,16 +279,8 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                 viewModel.getUserLatLong?.latitude ?: 0.0,
                 viewModel.getUserLatLong?.longitude ?: 0.0
             )
-            val location = getTimeZoneAndCity(
-                requireContext(), viewModel.getUserLatLong?.latitude ?: 0.0,
-                viewModel.getUserLatLong?.longitude ?: 0.0
-            )
-            Log.d(
-                "latLong",
-                "${viewModel.getUserLatLong?.latitude}, ${viewModel.getUserLatLong?.longitude}"
-            )
-            binding.textViewCityName.text = location?.city
-            binding.textViewCityTimeZoneName.text = location?.timeZone
+            binding.textViewCityName.text = city
+            binding.textViewCityTimeZoneName.text = timeZone
             viewModel.setLocationAutomaticValue(binding.switchAutomatic.isChecked)
         }
 
@@ -376,15 +372,11 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             }
 
             binding.imageViewMethodHelp.id -> {
-                val location = getTimeZoneAndCity(
-                    requireContext(), viewModel.getUserLatLong?.latitude ?: 0.0,
-                    viewModel.getUserLatLong?.longitude ?: 0.0
-                )
 
                 MethodDialog(
                     requireContext(),
                     "Method",
-                    "Calculation methods are entirely based \n on location, so it's very important to \n choose the method the best matches \n'${location?.city}'.If none of the method match \n your region, Moonsighting Committee \n or Muslim world League  are suitable \n defaults in most cases, if you notice a \nlarge difference between the prayer \n times in the app and those of your \n local masjid, especially for Fajr and \n Isha, your masjid may be using custom \n twilight angles to generate their prayer \n times, which can be adjusted in the\n Elevation Rule section.You may swipe \n the row and tap recommend to let the \n app suggest a calculation method."
+                    "Calculation methods are entirely based \n on location, so it's very important to \n choose the method the best matches \n'${city}'.If none of the method match \n your region, Moonsighting Committee \n or Muslim world League  are suitable \n defaults in most cases, if you notice a \nlarge difference between the prayer \n times in the app and those of your \n local masjid, especially for Fajr and \n Isha, your masjid may be using custom \n twilight angles to generate their prayer \n times, which can be adjusted in the\n Elevation Rule section.You may swipe \n the row and tap recommend to let the \n app suggest a calculation method."
                 ).show()
             }
 
@@ -500,20 +492,20 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
 
             binding.imageViewSystem.id, binding.systemView.id -> {
                 isSystemShow = if (!isSystemShow) {
-                    showDetailView(binding.systemDetailViews,binding.imageViewSystem)
+                    showDetailView(binding.systemDetailViews, binding.imageViewSystem)
                     true
                 } else {
-                    hideDetailView(binding.systemDetailViews,binding.imageViewSystem)
+                    hideDetailView(binding.systemDetailViews, binding.imageViewSystem)
                     false
                 }
             }
 
             binding.imageViewApp.id, binding.appView.id -> {
                 isAppShow = if (!isAppShow) {
-                    showDetailView(binding.appDetailViews,binding.imageViewApp)
+                    showDetailView(binding.appDetailViews, binding.imageViewApp)
                     true
                 } else {
-                    hideDetailView(binding.appDetailViews,binding.imageViewApp)
+                    hideDetailView(binding.appDetailViews, binding.imageViewApp)
                     false
                 }
             }
@@ -587,7 +579,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             }
 
             binding.assetView.id, binding.imageViewAsset.id -> {
-                AssetDialog().show(this.childFragmentManager, "SoundDialogFragment")
+                AssetDialog().show(requireActivity().supportFragmentManager, "SoundDialogFragment")
             }
         }
     }
@@ -645,57 +637,35 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
     }
 
 
-    private fun spinnerMethod() {
-        // Get the array from resources
-        val methodsArray = resources.getStringArray(R.array.methods)
+    private fun setMethod() {
+        val position =
+            if (viewModel.getSavedPrayerMethod.isNullOrEmpty()) 0 else viewModel.getSavedPrayerMethod.toInt()
+        binding.textViewMethod.text = getSelectedMethod(position).title
 
-        // Filter out the empty item while keeping positions intact
-        val filteredMethods = methodsArray.filter { it.isNotBlank() }
-
-        val adapter = ArrayAdapter(
-            requireContext(),
-            R.layout.custom_spinner,
-            filteredMethods // Use the filtered list
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerMethod.adapter = adapter
-
-        val position = if(viewModel.getSavedPrayerMethod.toInt() == 14) 13 else viewModel.getSavedPrayerMethod.toInt()
-        binding.spinnerMethod.setSelection(position)
-
-        binding.spinnerMethod.onItemSelectedListener = object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                // Adjust position to match the original array index
-                val originalPosition = methodsArray.indexOf(methodsArray[position])
-                lifecycleScope.launch {
-                    viewModel.savePrayerMethod(originalPosition.toString())
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // No action needed
-            }
+        binding.methodView.setOnClickListener {
+            openMethodDialogFragment(position)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        methodDialog = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        methodDialog?.dismiss()
     }
 
     override fun onResume() {
         super.onResume()
-        if (isOpenSetting){
+        if (isOpenSetting) {
             checkPermissions()
         }
 
     }
+
     private fun checkPermissions() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -716,7 +686,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
             enableGPSLocation()
             lifecycleScope.launch {
                 val location = fusedClient.getCurrentLocationSuspend()
-                Log.d("location","$location")
+                Log.d("location", "$location")
                 location?.let {
                     val lat = it.latitude
                     val lng = it.longitude
@@ -727,7 +697,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
                             lng
                         )
                     )
-                }  ?: showToast("Error while getting user location")
+                } ?: showToast("Error while getting user location")
             }
 
         }
@@ -821,7 +791,7 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         startActivity(intent)
     }
 
-   private fun getCacheDirectoryLastModified(context: Context): Long {
+    private fun getCacheDirectoryLastModified(context: Context): Long {
         val cacheDir = context.cacheDir
         return cacheDir.lastModified()
     }
@@ -890,5 +860,21 @@ class SettingFragment : BaseFragment(R.layout.fragment_setting), View.OnClickLis
         }
     }
 
+    private fun openMethodDialogFragment(position: Int) {
+        methodDialog = MethodSelectionDialog()
+        methodDialog?.listener = this
+        methodDialog?.selectedPosition = position
+        methodDialog?.show(childFragmentManager, "SoundDialogFragment")
+    }
+
+    override fun onItemSelected( position: Int,isAnyMethodSelected:Boolean) {
+        if(isAnyMethodSelected){
+            binding.textViewMethod.text = getSelectedMethod(position).title
+            lifecycleScope.launch {
+                viewModel.savePrayerMethod(position.toString())
+            }
+        }
+
+    }
 
 }

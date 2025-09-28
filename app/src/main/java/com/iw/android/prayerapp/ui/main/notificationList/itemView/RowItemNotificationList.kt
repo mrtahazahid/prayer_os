@@ -10,6 +10,7 @@ import com.iw.android.prayerapp.data.response.NotificationData
 import com.iw.android.prayerapp.databinding.RowItemNotificationListBinding
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class RowItemNotificationList(private val data: NotificationData) : ViewType<NotificationData> {
@@ -23,18 +24,11 @@ class RowItemNotificationList(private val data: NotificationData) : ViewType<Not
 
     override fun bind(bi: ViewDataBinding, position: Int, onClickListener: OnItemClickListener<*>) {
         (bi as RowItemNotificationListBinding).also { binding ->
-
-            if (true) {
-                binding.textViewTime.text = "${formatDate(data.createdDate,position)} at ${data.namazTime}"
-                binding.textViewTitle.text = "${data.namazName} at ${data.namazTime}"
-                binding.secondView.visibility = View.GONE
-
-
-            } else {
+            Log.d("data",data.toString())
                 if (data.reminderTime == "") {
+                    binding.textViewTime.text = "${formatDate(data.createdDate)} at ${data.namazTime}"
+                    binding.textViewTitle.text = "${data.namazName} at ${data.namazTime}"
                     binding.secondView.visibility = View.GONE
-
-                    binding.textViewReminderTime.text = "${formatDate(data.createdDate,position)} at ${data.namazTime}"
                 } else {
                     binding.secondView.visibility = View.VISIBLE
                     binding.textViewReminderTitle.text = if (data.reminderTimeMinutes != "off") {
@@ -44,35 +38,39 @@ class RowItemNotificationList(private val data: NotificationData) : ViewType<Not
                     }
 
                     binding.textViewReminderTime.text =
-                        "${formatDate(data.createdDate,position)} at ${data.reminderTime}"
+                        "${formatDate(data.createdDate)} at ${data.reminderTime}"
                 }
-                binding.textViewTime.text = "${formatDate(data.createdDate,position)} at ${data.namazTime}"
+                binding.textViewTime.text = "${formatDate(data.createdDate)} at ${data.namazTime}"
                 binding.textViewTitle.text = "${data.namazName} at ${data.namazTime}"
-
-            }
-
-
         }
     }
 
-    fun formatDate(inputDate: String, position: Int): String {
-        if (inputDate.isBlank()) return ""
+    fun formatDate(inputDate: String): String {
+        val inputFormats = listOf(
+            SimpleDateFormat("dd MMM yyyy", Locale.getDefault()),   // e.g. 23 Jun 2025
+            SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())   // e.g. 23 June 2025
+        )
 
-        return try {
-            val inputFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-            val outputFormat = SimpleDateFormat("dd MMMM", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd MMMM", Locale.getDefault()) // e.g. 23 June
 
-            val date = inputFormat.parse(inputDate)
-            if (date != null) {
-                outputFormat.format(date)
-            } else {
-                "" // handle null date
-            }
-        } catch (e: ParseException) {
-            // Optional: log the error to debug invalid input
-            Log.e("formatDate", "Failed to parse date: $inputDate", e)
-            ""
+        // Use current date if input is blank
+        if (inputDate.isBlank()) {
+            return outputFormat.format(Date())
         }
+
+        for (format in inputFormats) {
+            try {
+                val date = format.parse(inputDate)
+                if (date != null) {
+                    return outputFormat.format(date)
+                }
+            } catch (e: ParseException) {
+                // Try next format
+            }
+        }
+
+        // If parsing fails, fallback to today's date
+        return outputFormat.format(Date())
     }
 
 }

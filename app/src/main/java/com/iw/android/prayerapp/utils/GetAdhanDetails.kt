@@ -16,6 +16,7 @@ import com.batoulapps.adhan2.internal.toDegrees
 import com.batoulapps.adhan2.internal.toRadians
 import com.iw.android.prayerapp.data.response.LocationData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -26,6 +27,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -257,22 +259,47 @@ object GetAdhanDetails : AppCompatActivity() {
 
     }
 
-    fun getTimeZoneAndCity(context: Context, latitude: Double, longitude: Double): LocationData? {
+
+    suspend fun getTimeZoneAndCity(context: Context, latitude: Double, longitude: Double): LocationData? {
+        if (!Geocoder.isPresent()) return null
+
         val geocoder = Geocoder(context, Locale.getDefault())
+        return try {
+            val addresses = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                // API 33+ : use new async API with listener
+                suspendCancellableCoroutine { cont ->
+                    geocoder.getFromLocation(latitude, longitude, 2, object :
+                        Geocoder.GeocodeListener {
+                        override fun onGeocode(addresses: MutableList<android.location.Address>) {
+                            cont.resume(addresses)
+                        }
 
-        try {
-            val addresses = geocoder.getFromLocation(latitude, longitude, 2)
+                        override fun onError(errorMessage: String?) {
+                            cont.resumeWithException(Exception(errorMessage))
+                        }
+                    })
+                }
+            } else {
+                // Older API: fallback to blocking version
+                geocoder.getFromLocation(latitude, longitude, 2)
+            }
 
-            if (addresses!!.isNotEmpty()) {
+            if (!addresses.isNullOrEmpty()) {
                 val timeZone = TimeZone.getDefault().id
-                val cityName = addresses[0].locality ?: extractCityName(addresses[1].locality)
-                return LocationData(timeZone, cityName)
+                val cityName = addresses.firstOrNull()?.locality
+                    ?: addresses.getOrNull(1)?.locality
+                    ?: addresses.firstOrNull()?.adminArea
+                    ?: addresses.firstOrNull()?.countryName
+                    ?: "Unknown City"
+
+                LocationData(timeZone, cityName)
+            } else {
+                null
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            null
         }
-
-        return null
     }
 }
 

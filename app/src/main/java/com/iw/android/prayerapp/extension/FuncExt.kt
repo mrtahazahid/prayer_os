@@ -77,6 +77,35 @@ fun convertToFunTime(timestamp: Long): String {
 }
 
 @SuppressLint("SimpleDateFormat")
+fun convertToFunTimeWithoutAMPM(timestamp: Long): String {
+    val timeZoneID = TimeZone.getDefault().id
+    val formatter = SimpleDateFormat("h:mm")
+    formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
+    return formatter.format(Date(timestamp))
+}
+
+
+@SuppressLint("SimpleDateFormat")
+fun convertFromFunTime(timeString: String): Long {
+    val timeZoneID = TimeZone.getDefault().id
+    val formatter = SimpleDateFormat("h:mm a")
+    formatter.timeZone = TimeZone.getTimeZone(timeZoneID)
+
+    val today = Calendar.getInstance()
+    val date = formatter.parse(timeString) ?: return 0L
+
+    // Set today's date with parsed time
+    val calendar = Calendar.getInstance().apply {
+        time = date
+        set(Calendar.YEAR, today.get(Calendar.YEAR))
+        set(Calendar.MONTH, today.get(Calendar.MONTH))
+        set(Calendar.DAY_OF_MONTH, today.get(Calendar.DAY_OF_MONTH))
+    }
+
+    return calendar.timeInMillis
+}
+
+@SuppressLint("SimpleDateFormat")
 fun converterForMonthly(timestamp: Long): String {
     val timeZoneID = TimeZone.getDefault().id
     val formatter = SimpleDateFormat("h:mm")
@@ -251,6 +280,32 @@ fun getIslamicDateByOffSet(offset: Int): String {
 
     return formattedHijrahDate.replace(" ", " ") // Customize space as needed
 }
+
+@SuppressLint("SimpleDateFormat")
+fun getIslamicDateByOffSet2(offset: Int): String {
+    val sdf = SimpleDateFormat("yyyy/M/dd")
+    val currentDate = sdf.format(Date())
+
+    val splitDate = currentDate.split("/")
+    val year = splitDate[0].toInt()
+    val month = splitDate[1].toInt()
+    val day = splitDate[2].toInt()
+
+    val gregorianDate: LocalDate = LocalDate.of(year, month, day)
+
+    // Add offset days to the current date
+    val offsetGregorianDate = gregorianDate.plusDays(offset.toLong())
+
+    val hijrahDate = HijrahDate.from(offsetGregorianDate)
+
+    val formatter = DateTimeFormatter.ofPattern("dd", Locale.ENGLISH)
+    val formattedHijrahDate = hijrahDate.format(formatter)
+
+    return formattedHijrahDate.replace(" ", " ") // Customize space as needed
+}
+
+
+
 
 fun getRawFileSize(rawResId: Int, context: Context): String {
     val inputStream: InputStream = context.resources.openRawResource(rawResId)

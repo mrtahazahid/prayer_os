@@ -71,11 +71,11 @@ class RowItemPrayerSound(
                 listener.onItemClick(position)
                 when (data.type) {
                     PrayerEnumType.ADHAN.getValue() -> {
-                        openSoundDialogFragment(position, "Adhan Sound", currentNamazName, true)
+                        openSoundDialogFragment(position, "Adhan", currentNamazName, true)
                     }
 
                     PrayerEnumType.TONES.getValue() -> {
-                        openSoundDialogFragment(if(isForNotification)position else 1, if(isForNotification)"$namazName Tones" else "$namazName Reminder", currentNamazName, true)
+                        openSoundDialogFragment(if(isForNotification)position else 1, if(isForNotification)"Tones" else "Reminder", currentNamazName, true)
                     }
 
 

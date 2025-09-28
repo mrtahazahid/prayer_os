@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.iw.android.prayerapp.R
 import com.iw.android.prayerapp.base.adapter.GenericListAdapter
 import com.iw.android.prayerapp.base.adapter.OnItemClickListener
@@ -20,6 +21,7 @@ import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 import com.iw.android.prayerapp.ui.main.moreFragment.itemView.OnClickMoreItem
 import com.iw.android.prayerapp.ui.main.moreFragment.itemView.RowItemMore
+import kotlinx.coroutines.launch
 
 class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener, OnClickMoreItem {
 
@@ -132,14 +134,17 @@ class MoreFragment : BaseFragment(R.layout.fragment_more), View.OnClickListener,
             "Rate this app" -> rateThisApp()
 
             "Request support" -> {
-                sendUserToGmail(
-                    context = requireContext(),
-                    lat = viewModel.userLatLong?.latitude ?: 0.0,
-                    lng = viewModel.userLatLong?.latitude ?: 0.0,
-                    method = viewModel.method!!,
-                    methodInt = viewModel.methodInt!!,
-                    madhab = viewModel.madhabInt!!
-                )
+                lifecycleScope.launch {
+                    sendUserToGmail(
+                        context = requireContext(),
+                        lat = viewModel.userLatLong?.latitude ?: 0.0,
+                        lng = viewModel.userLatLong?.latitude ?: 0.0,
+                        method = viewModel.method!!,
+                        methodInt = viewModel.methodInt!!,
+                        madhab = viewModel.madhabInt!!
+                    )
+                }
+
             }
 
             "Play adhan" -> {

@@ -29,6 +29,7 @@ import com.iw.android.prayerapp.ui.activities.main.MainActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingActivity
 import com.iw.android.prayerapp.ui.activities.onBoarding.OnBoardingViewModel
 import com.iw.android.prayerapp.utils.LocationPermissionTextProvider
+import com.iw.android.prayerapp.utils.decodeImage.decodeSampledBitmap
 import com.iw.android.prayerapp.utils.getCurrentLocationSuspend
 import com.iw.android.prayerapp.utils.showPermissionDialog
 import kotlinx.coroutines.launch
@@ -54,8 +55,7 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
             } else {
                 showPermissionDialog(
                     permissionTextProvider = LocationPermissionTextProvider(),
-                    isPermanentlyDeclined = permissions.entries.any {
-                            (permission, _) ->
+                    isPermanentlyDeclined = permissions.entries.any { (permission, _) ->
                         (permission == Manifest.permission.ACCESS_FINE_LOCATION ||
                                 permission == Manifest.permission.ACCESS_COARSE_LOCATION) &&
                                 !shouldShowRequestPermissionRationale(permission)
@@ -70,8 +70,6 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
                 )
             }
         }
-
-
 
 
     override fun onCreateView(
@@ -90,6 +88,9 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
     }
 
     override fun initialize() {
+        val bitmap = decodeSampledBitmap(requireContext(), R.drawable.third_screen, 1024, 1024)
+
+        binding.centerImage.setImageBitmap(bitmap)
         checkPermissions()
         fusedClient = LocationServices.getFusedLocationProviderClient(requireContext())
         setOnBackPressedListener()
@@ -103,6 +104,7 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
     override fun setOnClickListener() {
         binding.btnEnableNotification.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
+                val binding = _binding ?: return@launch
                 try {
                     binding.progress.show()
                     val location = fusedClient.getCurrentLocationSuspend()
@@ -110,7 +112,7 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
                     location?.let {
                         val lat = it.latitude
                         val lng = it.longitude
-                        Log.d("location","lat $lat lng $lng")
+                        Log.d("location", "lat $lat lng $lng")
                         // Navigate with lat/lng
                         viewModel.saveUserLatLong(
                             UserLatLong(
@@ -124,7 +126,7 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
                             R.id.action_thirdOnboarding_to_fourthOnboarding,
                             args
                         )
-                    } ?:{
+                    }?: run {
                         binding.progress.hide()
                         showToast("Could not fetch location")
                     }
@@ -133,8 +135,7 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
                     showToast("Location permission not granted")
                     showPermissionDialog(
                         permissionTextProvider = LocationPermissionTextProvider(),
-                        isPermanentlyDeclined = !shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)
-                        ,
+                        isPermanentlyDeclined = !shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),
                         onDismiss = {},
                         onOkClick = {
                             openAppSettings()
@@ -146,80 +147,83 @@ class ThirdOnboarding : BaseFragment(R.layout.fragment_third_onboarding) {
             }
         }
 
-            binding.notNow.setOnClickListener {
-                findNavController().navigate(R.id.action_thirdOnboarding_to_fourthOnboarding)
-            }
-
-            binding.skip.setOnClickListener {
-                requireActivity().startActivity(Intent(requireContext(), MainActivity::class.java))
-                requireActivity().finish()
-            }
+        binding.notNow.setOnClickListener {
+            findNavController().navigate(R.id.action_thirdOnboarding_to_fourthOnboarding)
         }
 
-        override fun onDestroyView() {
-            super.onDestroyView()
-            _binding = null
+        binding.skip.setOnClickListener {
+            requireActivity().startActivity(Intent(requireContext(), MainActivity::class.java))
+            requireActivity().finish()
         }
+    }
+
+    override fun onDestroyView() {
+        _binding?.btnEnableNotification?.setOnClickListener(null)
+        _binding?.notNow?.setOnClickListener(null)
+        _binding?.skip?.setOnClickListener(null)
+        _binding = null
+        super.onDestroyView()
+    }
 
     override fun onResume() {
         super.onResume()
-        if (isOpenSetting){
+        if (isOpenSetting) {
             checkPermissions()
             isOpenSetting = false
         }
 
     }
 
-        private fun checkPermissions() {
-            if (ActivityCompat.checkSelfPermission(
-                    requireActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(
-                    requireActivity(),
+    private fun checkPermissions() {
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            locationPermissions.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                locationPermissions.launch(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
                 )
-            } else {
-                enableGPSLocation()
-            }
-        }
-
-        private fun enableGPSLocation() {
-            var isGpsStatusChanged: Boolean? = null
-            gpsStatusListener?.observe(requireActivity()) { isGpsOn ->
-                if (isGpsStatusChanged == null || isGpsStatusChanged != isGpsOn) {
-                    if (!isGpsOn) {
-                        turnOnGps?.startGPS(resultLauncher)
-                    }
-                    isGpsStatusChanged = isGpsOn
-                }
-            }
-        }
-
-        private val resultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { activityResult ->
-                if (activityResult.resultCode == AppCompatActivity.RESULT_CANCELED) {
-                    showToast("GPS is required for location services")
-                }
-            }
-
-        private fun setOnBackPressedListener() {
-            requireActivity().onBackPressedDispatcher.addCallback(
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        if (!(requireActivity() as OnBoardingActivity).data.isNullOrEmpty() &&
-                            (requireActivity() as OnBoardingActivity).data != "null"
-                        ) {
-                            requireActivity().finish()
-                        }
-                    }
-                })
+            )
+        } else {
+            enableGPSLocation()
         }
     }
+
+    private fun enableGPSLocation() {
+        var isGpsStatusChanged: Boolean? = null
+        gpsStatusListener?.observe(requireActivity()) { isGpsOn ->
+            if (isGpsStatusChanged == null || isGpsStatusChanged != isGpsOn) {
+                if (!isGpsOn) {
+                    turnOnGps?.startGPS(resultLauncher)
+                }
+                isGpsStatusChanged = isGpsOn
+            }
+        }
+    }
+
+    private val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { activityResult ->
+            if (activityResult.resultCode == AppCompatActivity.RESULT_CANCELED) {
+                showToast("GPS is required for location services")
+            }
+        }
+
+    private fun setOnBackPressedListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (!(requireActivity() as OnBoardingActivity).data.isNullOrEmpty() &&
+                        (requireActivity() as OnBoardingActivity).data != "null"
+                    ) {
+                        requireActivity().finish()
+                    }
+                }
+            })
+    }
+}

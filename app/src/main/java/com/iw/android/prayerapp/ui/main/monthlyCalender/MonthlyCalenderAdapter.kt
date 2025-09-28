@@ -1,27 +1,20 @@
 package com.iw.android.prayerapp.ui.main.monthlyCalender
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.iw.android.prayerapp.R
+import com.iw.android.prayerapp.data.response.MonthlyPrayerDay
 
 class MonthlyCalenderAdapter(
-    private val wholeYearMonthArray: ArrayList<String>,
-    private val wholeYearDayArray: ArrayList<String>,
-    private val wholeYearDateArray: ArrayList<String>,
-    private val wholeYearSunriseTimeArray: ArrayList<String>,
-    private val wholeYearFajarTimeArray: ArrayList<String>,
-    private val wholeYearZoharTimeArray: ArrayList<String>,
-    private val wholeYearAsarTimeArray: ArrayList<String>,
-    private val wholeYearMaghribTimeArray: ArrayList<String>,
-    private val wholeYearIshaTimeArray: ArrayList<String>,
-    private val wholeYearHijriArray: ArrayList<String>,
-    private val wholeYearHijriNameArray: ArrayList<String>
+    private val data: MutableList<MonthlyPrayerDay>,
 ) : RecyclerView.Adapter<MonthlyCalenderAdapter.MonthlyCalenderViewHolder>() {
 
-    class MonthlyCalenderViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
+    class MonthlyCalenderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val month: AppCompatTextView = itemView.findViewById(R.id.textViewMonth)
         val date: AppCompatTextView = itemView.findViewById(R.id.textViewDate)
         val day: AppCompatTextView = itemView.findViewById(R.id.textViewDay)
@@ -33,51 +26,100 @@ class MonthlyCalenderAdapter(
         val hijri: AppCompatTextView = itemView.findViewById(R.id.textViewHijri)
         val hijriName: AppCompatTextView = itemView.findViewById(R.id.textViewHijriName)
         val sunrise: AppCompatTextView = itemView.findViewById(R.id.textViewSHK)
-        val border: View = itemView.findViewById(R.id.view)
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): MonthlyCalenderViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.row_item_monthly_calender, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.row_item_monthly_calender, parent, false)
         return MonthlyCalenderViewHolder(view)
     }
 
-    override fun onBindViewHolder(
-        holder: MonthlyCalenderViewHolder,
-        position: Int
-    ) {
+    override fun onBindViewHolder(holder: MonthlyCalenderViewHolder, position: Int) {
+        val item = data[position]
 
-        val monthData = wholeYearMonthArray[position]
-        val dayData = wholeYearDayArray[position]
-        val dateData = wholeYearDateArray[position]
-        val sunriseData = wholeYearSunriseTimeArray[position]
-        val fajarData = wholeYearFajarTimeArray[position]
-        val zoharData = wholeYearZoharTimeArray[position]
-        val asarData = wholeYearAsarTimeArray[position]
-        val maghribData = wholeYearMaghribTimeArray[position]
-        val ishaData = wholeYearIshaTimeArray[position]
-        val hijri = wholeYearHijriArray[position]
-        val hijriName = wholeYearHijriNameArray[position]
-        holder.fajar.text = fajarData
-        holder.zohar.text = zoharData
-        holder.asar.text = asarData
-        holder.maghrib.text = maghribData
-        holder.isha.text = ishaData
-        holder.date.text = dateData
-        holder.day.text = dayData
-        holder.month.text = monthData
-        holder.sunrise.text = sunriseData
-        holder.hijri.text =  if(hijri=="0") subtractOneFromString(wholeYearHijriArray[position+1]) else hijri
-        holder.hijriName.text = hijriName
+        // Set basic texts
+        holder.fajar.text = item.fajar
+        holder.zohar.text = item.zohar
+        holder.asar.text = item.asar
+        holder.maghrib.text = item.maghrib
+        holder.isha.text = item.isha
+        holder.date.text = item.date
+        holder.day.text = item.day
+        holder.month.text = item.month
+        holder.sunrise.text = item.sunrise
+        holder.hijri.text = item.hijri
+        holder.hijriName.text = item.hijriName
+
+        val isFirstItem = position == 0
+        val isHijriIsOne = item.hijri == "1"
+        val isMonthIsOne = item.date == "1"
+        val isDayFridayOrRamadan = item.day.equals("Fri", ignoreCase = true) || item.hijriName == "Ram."
+
+        // Typeface
+        val typeface = if (isFirstItem) Typeface.BOLD else Typeface.NORMAL
+        listOf(
+            holder.fajar, holder.zohar, holder.asar, holder.maghrib, holder.isha,
+            holder.date, holder.day, holder.month, holder.sunrise, holder.hijri, holder.hijriName
+        ).forEach { it.setTypeface(null, typeface) }
+
+        // Colors
+        val context = holder.itemView.context
+        val white = ContextCompat.getColor(context, R.color.white)
+        val grey = ContextCompat.getColor(context, R.color.app_grey)
+        val yellow = ContextCompat.getColor(context, R.color.yellow_text)
+        val green = ContextCompat.getColor(context, R.color.app_green)
+
+        when {
+            isDayFridayOrRamadan -> {
+                // Green text for Friday or Ramadan
+                listOf(
+                    holder.fajar, holder.zohar, holder.asar, holder.maghrib, holder.isha,
+                    holder.date, holder.day, holder.month, holder.sunrise,
+                    holder.hijri, holder.hijriName
+                ).forEach { it.setTextColor(green) }
+            }
+
+            isHijriIsOne -> {
+                // Yellow for hijri date = 1
+                holder.hijri.setTextColor(yellow)
+                holder.hijriName.setTextColor(yellow)
+
+                // Reset others
+                listOf(
+                    holder.fajar, holder.zohar, holder.asar, holder.maghrib, holder.isha, holder.sunrise
+                ).forEach { it.setTextColor(grey) }
+
+                listOf(holder.date, holder.day, holder.month).forEach { it.setTextColor(white) }
+            }
+
+            isMonthIsOne -> {
+                // Yellow for month date = 1
+                holder.month.setTextColor(yellow)
+                holder.date.setTextColor(yellow)
+
+                // Reset others
+                listOf(
+                    holder.fajar, holder.zohar, holder.asar, holder.maghrib, holder.isha, holder.sunrise
+                ).forEach { it.setTextColor(grey) }
+
+                listOf(holder.day, holder.hijri, holder.hijriName).forEach { it.setTextColor(white) }
+            }
+
+            else -> {
+                // Default coloring
+                listOf(holder.fajar, holder.zohar, holder.asar, holder.maghrib, holder.isha, holder.sunrise)
+                    .forEach { it.setTextColor(grey) }
+
+                listOf(holder.date, holder.day, holder.month, holder.hijri, holder.hijriName)
+                    .forEach { it.setTextColor(white) }
+            }
+        }
     }
 
-    fun subtractOneFromString(numberString: String): String {
-        // Convert the string to an integer, subtract 1, then convert back to a string
-        return (numberString.toInt() - 1).toString()
-    }
-    override fun getItemCount(): Int {
-       return wholeYearFajarTimeArray.size
-    }
+
+    override fun getItemCount() = data.size
+
 }

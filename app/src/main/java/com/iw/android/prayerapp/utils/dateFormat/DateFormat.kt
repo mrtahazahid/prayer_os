@@ -1,8 +1,10 @@
 package com.iw.android.prayerapp.utils.dateFormat
 
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -53,6 +55,14 @@ import java.util.Locale
       .toInstant()
       .toEpochMilli()
 }
+
+fun getCurrentDate(): String {
+    val currentDate = LocalDate.now()
+    val formatter =
+        DateTimeFormatter.ofPattern("dd MMM yyyy") // Customize the format as needed
+    return currentDate.format(formatter)
+}
+
 
  fun formattedDateForTimeScreen(offset: Int): String {
     val calendar = Calendar.getInstance()
